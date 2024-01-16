@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.319">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>CS 152: Neural Networks - Final project outline</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">CS 152: Neural Networks</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../calendar/calendar.html" rel="" target="">
+ <span class="menu-text">Calendar</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/orgs/CS152-Neural-Networks-Fall-2023/repositories" rel="" target="">
+ <span class="menu-text">Homeworks</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://harveymuddcollege.instructure.com/courses/615/" rel="" target="">
+ <span class="menu-text">Canvas</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/orgs/CS152-Neural-Networks-Fall-2023/" rel="" target="">
+ <span class="menu-text">Github</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools ms-auto">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#proposal-due-wednesday-118-before-class" id="toc-proposal-due-wednesday-118-before-class" class="nav-link active" data-scroll-target="#proposal-due-wednesday-118-before-class">Proposal (<strong>Due Wednesday 11/8 before class</strong>)</a></li>
+  <li><a href="#check-in-due-monday-1120-before-class" id="toc-check-in-due-monday-1120-before-class" class="nav-link" data-scroll-target="#check-in-due-monday-1120-before-class">Check-in (<strong>Due Monday 11/20 before class</strong>)</a></li>
+  <li><a href="#final-deliverables-due-1212-1159pm" id="toc-final-deliverables-due-1212-1159pm" class="nav-link" data-scroll-target="#final-deliverables-due-1212-1159pm">Final deliverables (<strong>Due 12/12, 11:59pm</strong>)</a></li>
+  <li><a href="#possible-projects" id="toc-possible-projects" class="nav-link" data-scroll-target="#possible-projects">Possible projects</a>
+  <ul class="collapse">
+  <li><a href="#neural-style-transfer" id="toc-neural-style-transfer" class="nav-link" data-scroll-target="#neural-style-transfer">Neural style transfer</a></li>
+  <li><a href="#semi-supervised-learning-with-mixmatch" id="toc-semi-supervised-learning-with-mixmatch" class="nav-link" data-scroll-target="#semi-supervised-learning-with-mixmatch">Semi-supervised learning with MixMatch</a></li>
+  <li><a href="#audio-generation-and-classification-with-wavenet" id="toc-audio-generation-and-classification-with-wavenet" class="nav-link" data-scroll-target="#audio-generation-and-classification-with-wavenet">Audio generation and classification with WaveNet</a></li>
+  <li><a href="#u-nets-for-segmentation-depth-prediction-colorization-or-super-resolution" id="toc-u-nets-for-segmentation-depth-prediction-colorization-or-super-resolution" class="nav-link" data-scroll-target="#u-nets-for-segmentation-depth-prediction-colorization-or-super-resolution">U-Nets for segmentation, depth-prediction, colorization or super-resolution</a></li>
+  <li><a href="#object-detection-with-yolo" id="toc-object-detection-with-yolo" class="nav-link" data-scroll-target="#object-detection-with-yolo">Object detection with YOLO</a></li>
+  <li><a href="#image-generation-with-generative-adversarial-networks" id="toc-image-generation-with-generative-adversarial-networks" class="nav-link" data-scroll-target="#image-generation-with-generative-adversarial-networks">Image generation with Generative Adversarial Networks</a></li>
+  <li><a href="#image-classification-with-visual-transformers" id="toc-image-classification-with-visual-transformers" class="nav-link" data-scroll-target="#image-classification-with-visual-transformers">Image classification with visual transformers</a></li>
+  <li><a href="#text-generation-or-classification-with-gpt" id="toc-text-generation-or-classification-with-gpt" class="nav-link" data-scroll-target="#text-generation-or-classification-with-gpt">Text generation or classification with GPT</a></li>
+  <li><a href="#other-possible-projects" id="toc-other-possible-projects" class="nav-link" data-scroll-target="#other-possible-projects">Other possible projects:</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Final project outline</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="proposal-due-wednesday-118-before-class" class="level2">
+<h2 class="anchored" data-anchor-id="proposal-due-wednesday-118-before-class">Proposal (<strong>Due Wednesday 11/8 before class</strong>)</h2>
+<p>The first step for the project will be to form a group and choose a project topic. For your proposal you should:</p>
+<ul>
+<li>Form a group of 2-4 students (ideally 3) and choose a cool team name. If you would like help finding a group, please email me!</li>
+<li>Choose a project topic. You may choose a topic from the list below or you may propose your own topic.</li>
+<li>With your team, write a short (up to 1 page) proposal for your project and submit it on gradescope. Your proposal should include:
+<ul>
+<li>The names of the team members</li>
+<li>A one paragraph high-level description of the goal(s) of the project (e.g.&nbsp;object detection in images, classifying text data, etc.), how this goal could be useful in real-world applications and why this topic interests you.</li>
+<li>A one paragraph description of how you intend to approach this problem and any challenges you forsee. This should include identifying datasets that you might use, identifying at least one referance (academic paper or website) for a technique you intend to try.</li>
+<li>A one paragraph description of how you will evaluate success for your application.</li>
+</ul></li>
+</ul>
+</section>
+<section id="check-in-due-monday-1120-before-class" class="level2">
+<h2 class="anchored" data-anchor-id="check-in-due-monday-1120-before-class">Check-in (<strong>Due Monday 11/20 before class</strong>)</h2>
+<p>As a progress report you and your team will submit a short (1 page) summery of progress on Gradescope. This summary will include: - A high-level description of any updates you have made to the goals of your project. - A description of what methods you have tried and any preliminary results. - A timeline for finishing the remaining goals of your project. - A brief description of the contributions made by each team member.</p>
+</section>
+<section id="final-deliverables-due-1212-1159pm" class="level2">
+<h2 class="anchored" data-anchor-id="final-deliverables-due-1212-1159pm">Final deliverables (<strong>Due 12/12, 11:59pm</strong>)</h2>
+<p>Please see the final project template <a href="./CS152_Project_Template.pdf">here</a>, which includes instructions and guidelines for what to submit. Submissions will be through gradescope.</p>
+</section>
+<section id="possible-projects" class="level2">
+<h2 class="anchored" data-anchor-id="possible-projects">Possible projects</h2>
+<section id="neural-style-transfer" class="level3">
+<h3 class="anchored" data-anchor-id="neural-style-transfer">Neural style transfer</h3>
+<p><strong>Link:</strong> <a href="https://arxiv.org/pdf/1905.02249.pdf">https://arxiv.org/pdf/1508.06576.pdf</a></p>
+<p><strong>Summary:</strong> Style transfer is the process of taking an existing image and applying an artistic style to it, such as making a photograph look like a painting or a drawing (check out the examples in the linked paper!). This can be accomplished with neural networks. For this project you could: implement the neural style transfer algorithm, evaluate it with different kinds of images and compare it to other methods for restyling images.</p>
+<p><strong>Suggested datasets:</strong> Any artistic images you’d like!</p>
+</section>
+<section id="semi-supervised-learning-with-mixmatch" class="level3">
+<h3 class="anchored" data-anchor-id="semi-supervised-learning-with-mixmatch">Semi-supervised learning with MixMatch</h3>
+<p><strong>Link:</strong> <a href="https://arxiv.org/pdf/1905.02249.pdf" class="uri">https://arxiv.org/pdf/1905.02249.pdf</a></p>
+<p><strong>Summary:</strong> Semi-supervised learning is the problem of learning when we don’t have all the labels for our training data. MixMatch is a state-of-the-art approach for semi-supervised image classification. In this project you could: implement the Mix-Match algorithm, compare the different versions of it discussed in the paper and evaluate it on several different datasets. You could also test it on your own proposed semi-supervised learning task.</p>
+<p><strong>Suggested datasets:</strong> <a href="https://pytorch.org/vision/stable/generated/torchvision.datasets.SVHN.html#torchvision.datasets.SVHN">Street view house numbers</a>, <a href="https://pytorch.org/vision/stable/generated/torchvision.datasets.CIFAR10.html">CIFAR-10</a>, <a href="https://pytorch.org/vision/stable/generated/torchvision.datasets.STL10.html#torchvision.datasets.STL10">STL-10</a></p>
+</section>
+<section id="audio-generation-and-classification-with-wavenet" class="level3">
+<h3 class="anchored" data-anchor-id="audio-generation-and-classification-with-wavenet">Audio generation and classification with WaveNet</h3>
+<p><strong>Link:</strong> <a href="https://arxiv.org/pdf/1609.03499.pdf" class="uri">https://arxiv.org/pdf/1609.03499.pdf</a></p>
+<p><strong>Summary:</strong> WaveNet is at network that forms the basis for many text-to-speech systems (think Alexa or Siri) it also allows for classifying audio. For this project you could: implement WaveNet, train it to generate speech (or other audio like music!) and evaluate it compared to existing tools for generation. You could also try to use it to classify speech or music.</p>
+<p><strong>Suggested datasets:</strong> <a href="https://www.tensorflow.org/datasets/catalog/spoken_digit">Spoken digits</a>, <a href="https://pytorch.org/audio/stable/generated/torchaudio.datasets.SPEECHCOMMANDS.html#torchaudio.datasets.SPEECHCOMMANDS">Speech commands</a>, <a href="https://www.tensorflow.org/datasets/catalog/crema_d">Crema-D</a>, <a href="https://www.tensorflow.org/datasets/catalog/gtzan">GTZAN</a></p>
+</section>
+<section id="u-nets-for-segmentation-depth-prediction-colorization-or-super-resolution" class="level3">
+<h3 class="anchored" data-anchor-id="u-nets-for-segmentation-depth-prediction-colorization-or-super-resolution">U-Nets for segmentation, depth-prediction, colorization or super-resolution</h3>
+<p><strong>Link:</strong> <a href="https://arxiv.org/pdf/1505.04597.pdf" class="uri">https://arxiv.org/pdf/1505.04597.pdf</a></p>
+<p><strong>Summary:</strong> U-Nets are a very flexible type of neural network used for many computer vision tasks. They were originally introduced for segmenting different parts of medical images, but can used for everything from colorizing images to upscaling images to predicting depth in am image. For this project you could: implement the U-Net architecture, train a U-Net on one or more of the above tasks and evaluate its performance.</p>
+<p><strong>Suggested datasets:</strong> <a href="https://www.tensorflow.org/datasets/catalog/oxford_flowers102">Oxford flowers</a> <a href="https://www.tensorflow.org/datasets/catalog/imagenet_resized">ImageNet</a>, <a href="https://www.tensorflow.org/datasets/catalog/nyu_depth_v2">NYU Depth</a></p>
+</section>
+<section id="object-detection-with-yolo" class="level3">
+<h3 class="anchored" data-anchor-id="object-detection-with-yolo">Object detection with YOLO</h3>
+<p><strong>Link:</strong> <a href="https://arxiv.org/pdf/1506.02640v5.pdf" class="uri">https://arxiv.org/pdf/1506.02640v5.pdf</a></p>
+<p><strong>Summary:</strong> Object detection is the task of locating objects within an image. This is a step more difficult than just classifying images, but is very useful in practice. For this project you could: implement the YOLO object detection model, test different variations of the model and evaluate it on new data.</p>
+<p><strong>Suggested datasets:</strong> <a href="https://www.tensorflow.org/datasets/catalog/voc">VOC</a>, <a href="https://www.tensorflow.org/datasets/catalog/wider_face">Wider face</a>, <a href="https://www.tensorflow.org/datasets/catalog/kitti">Kitti</a></p>
+</section>
+<section id="image-generation-with-generative-adversarial-networks" class="level3">
+<h3 class="anchored" data-anchor-id="image-generation-with-generative-adversarial-networks">Image generation with Generative Adversarial Networks</h3>
+<p><strong>Link:</strong> <a href="https://arxiv.org/pdf/1406.2661.pdf" class="uri">https://arxiv.org/pdf/1406.2661.pdf</a></p>
+<p><strong>Summary:</strong> Generative adversarial networks (GANs for short) are an effective way to generate realistic looking images using neural networks. They have caused a considerable amount of excitement and concern for their performance in generating realistic images of humans. For this project you could: implement a generative adversarial network, explore reasonable ways to evaluate the performance of GANs and dive into the ethical implications.</p>
+<p><strong>Suggested datasets:</strong> <a href="https://pytorch.org/vision/stable/generated/torchvision.datasets.MNIST.html#torchvision.datasets.MNIST">MNIST</a>, <a href="https://pytorch.org/vision/stable/generated/torchvision.datasets.Omniglot.html#torchvision.datasets.Omniglot">Omniglot</a>, <a href="https://pytorch.org/vision/stable/generated/torchvision.datasets.CIFAR10.html">CIFAR-10</a>, <a href="https://github.com/NVlabs/ffhq-dataset">FFHQ</a></p>
+</section>
+<section id="image-classification-with-visual-transformers" class="level3">
+<h3 class="anchored" data-anchor-id="image-classification-with-visual-transformers">Image classification with visual transformers</h3>
+<p><strong>Link:</strong> <a href="https://arxiv.org/pdf/2010.11929.pdf" class="uri">https://arxiv.org/pdf/2010.11929.pdf</a></p>
+<p><strong>Summary:</strong> Transformer-based neural networks have transformed the field of natural language processing in recent years, as evidenced by the performance of models such as ChatGPT. There is growing evidence that they are also extremely useful for classifying images. For this project you might: implement the visual transformer architecture, compare it to convolutional neural network based architecture for image classification and visualize features to understand the differences in the approaches. You might also consider applying it to your own dataset.</p>
+<p><strong>Suggested datasets:</strong> <a href="https://www.tensorflow.org/datasets/catalog/oxford_flowers102">Oxford flowers</a>, <a href="https://pytorch.org/vision/stable/generated/torchvision.datasets.CIFAR10.html">CIFAR-10</a>, <a href="https://www.tensorflow.org/datasets/catalog/imagenet_resized">ImageNet</a></p>
+</section>
+<section id="text-generation-or-classification-with-gpt" class="level3">
+<h3 class="anchored" data-anchor-id="text-generation-or-classification-with-gpt">Text generation or classification with GPT</h3>
+<p><strong>Link:</strong> <a href="https://www.cs.ubc.ca/~amuham01/LING530/papers/radford2018improving.pdf" class="uri">https://www.cs.ubc.ca/~amuham01/LING530/papers/radford2018improving.pdf</a></p>
+<p><strong>Summary:</strong> Large language models, such at GPT-3 and GPT-4 have gained a lot of attention recently, as their performance in generating plausible text is (debatably) approaching human levels. The GPT model is used by Chat-GPT and many other applications to model language. For this project you could implement and train your own version of the original (GPT-1) model, compare it against available tools such as Chat-GPT and explore how to distinguish generated text from real human writing.</p>
+<p><strong>Suggested datasets:</strong> <a href="https://www.tensorflow.org/datasets/catalog/amazon_us_reviews">Amazon reviews</a> <a href="https://www.tensorflow.org/datasets/catalog/imdb_reviews">IMDB reviews</a></p>
+</section>
+<section id="other-possible-projects" class="level3">
+<h3 class="anchored" data-anchor-id="other-possible-projects">Other possible projects:</h3>
+<section id="machine-learning-with-differential-privacy" class="level4">
+<h4 class="anchored" data-anchor-id="machine-learning-with-differential-privacy">Machine learning with differential privacy</h4>
+<p><a href="https://arxiv.org/pdf/1607.00133.pdf" class="uri">https://arxiv.org/pdf/1607.00133.pdf</a></p>
+</section>
+<section id="graph-neural-networks" class="level4">
+<h4 class="anchored" data-anchor-id="graph-neural-networks">Graph neural networks</h4>
+<p><a href="https://arxiv.org/pdf/1810.00826.pdf" class="uri">https://arxiv.org/pdf/1810.00826.pdf</a></p>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

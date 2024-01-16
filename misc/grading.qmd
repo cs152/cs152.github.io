@@ -1,0 +1,56 @@
+---
+title: "Hint for homework 1: Q7"
+---
+
+{{< include ../code/ojs.qmd >}}
+
+
+
+::: {.columns}
+::: {.column width=70%}
+:::
+::: {.column width=30%}
+```{ojs}
+//| echo: false
+
+form_inputs = [
+  Inputs.range([0, 255], {step: 1, label: "r"}),
+  Inputs.range([0, 255], {step: 1, label: "g"}),
+  Inputs.range([0, 255], {step: 1, label: "b"})
+]
+```
+```{ojs}
+//| echo: false
+viewof rgb = Inputs.form(form_inputs)
+```
+
+:::
+:::
+
+
+::: {.columns}
+::: {.column width=70%}
+```{=htmlstop}
+<iframe id="notebook" width="780" height="500" src="https://quarto.org/" title="Quarto Documentation"></iframe>
+```
+:::
+::: {.column width=30%}
+```{ojs}
+//| echo: false
+viewof replay = Inputs.button("Replay")
+```
+
+```{ojs}
+//| echo: false
+progress = {
+  replay;
+  console.log(form_inputs)
+  if (replay > 0){
+    form_inputs.push(Inputs.range([0, 255], {step: 1, label: "r"}));
+    (viewof rgb).dispatchEvent(new Event("input", {bubbles: true}))
+    //document.getElementById('notebook').src = "https://nytimes.com";}
+  }
+}
+```
+:::
+:::

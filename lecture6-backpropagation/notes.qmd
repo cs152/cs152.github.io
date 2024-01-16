@@ -1,0 +1,1883 @@
+---
+title: "Lecture 6: Deep neural networks and backpropagation"
+format:
+    html:
+        toc: true
+        toc-depth: 3
+---
+
+{{< include ../code/ojs.qmd >}}
+
+```{python}
+#| echo: false
+import pandas as pd
+
+```
+
+```{python}
+#| echo: false
+import warnings
+warnings.filterwarnings("ignore")
+import os
+import contextlib
+with open(os.devnull, "w") as f, contextlib.redirect_stdout(f):
+    from manim import *
+import autograd.numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+
+class LectureScene(Scene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.camera.background_color = "#ffffff"
+        self.template = TexTemplate()
+        self.template.add_to_preamble(r"\usepackage{amsmath}")
+
+class ThreeDLectureScene(ThreeDScene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.camera.background_color = "#ffffff"
+        self.template = TexTemplate()
+        self.template.add_to_preamble(r"\usepackage{amsmath}")
+    
+
+class VectorScene(LectureScene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.ax = Axes(
+            x_range=[-7.5, 7.5, 1],
+            y_range=[-5, 5, 1],
+            x_length=12,
+            y_length=8,
+            axis_config={"color": GREY},
+        )
+        
+        #axes_labels.set_color(GREY)
+        self.add(self.ax)
+
+class PositiveVectorScene(LectureScene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.ax = Axes(
+            x_range=[-2.5, 12.5, 1],
+            y_range=[-1, 9, 1],
+            x_length=12,
+            y_length=8,
+            axis_config={"color": GREY},
+        )
+                #axes_labels.set_color(GREY)
+        self.add(self.ax)
+
+class ComparisonVectorScene(LectureScene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.ax1 = Axes(
+            x_range=[-5, 5, 1],
+            y_range=[-5, 5, 1],
+            x_length=6,
+            y_length=6,
+            axis_config={"color": GREY},
+        )
+        self.ax2 = Axes(
+            x_range=[-5, 5, 1],
+            y_range=[-5, 5, 1],
+            x_length=6,
+            y_length=6,
+            axis_config={"color": GREY},
+        )
+        axgroup = Group(self.ax1, self.ax2)
+        axgroup.arrange_in_grid(buf=2)
+        
+        #axes_labels.set_color(GREY)
+        self.add(axgroup)
+```
+
+# Neural networks
+
+## Neural networks with matrices
+
+Let's return to our simple neural network example, where we have 2 inputs and 3 neurons (transforms): $$\mathbf{x} = \begin{bmatrix} x_1\\ x_2 \end{bmatrix}, \quad \mathbf{w}_0 = \begin{bmatrix} w_{01} \\ w_{02} \end{bmatrix}$$ $$
+f(\mathbf{x})=\phi(\mathbf{x})^T \mathbf{w}_0,\quad \phi(\mathbf{x}) = \begin{bmatrix}  \sigma(\mathbf{x}^T \mathbf{w}_1) \\ \sigma(\mathbf{x}^T \mathbf{w}_2) \\ \sigma(\mathbf{x}^T \mathbf{w}_3) \end{bmatrix} = 
+\begin{bmatrix}  \sigma(x_1 w_{11} + x_2 w_{12}) \\ \sigma(x_1 w_{21} + x_2 w_{22}) \\ \sigma(x_1 w_{31} + x_2 w_{32}) \end{bmatrix}
+$$
+
+Again, we can represent this pictorially again as a node-link diagram:
+
+```{python}
+#| echo : false
+%%manim -sqh -v CRITICAL --progress_bar none Viz
+
+class LectureScene(Scene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.camera.background_color = "#ffffff"
+        self.template = TexTemplate()
+        self.template.add_to_preamble(r"\usepackage{amsmath}")
+
+class Viz(LectureScene):
+    def __init__(self, bias=True, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.bias = False
+        self.title = 'Linear regression'
+        self.output = '\sigma(\phi(\mathbf{x})^T\mathbf{w}_0)'
+
+    def construct(self):
+        foutput = Circle(radius=0.4, color=BLACK).move_to((5, 0, 0))
+        foutput_label = MathTex(self.output, color=BLACK).next_to(foutput, UP).scale(0.8)
+        self.add(foutput, foutput_label)
+
+        for j, (yo) in enumerate(np.linspace(2, -2, 3)):
+            output = Circle(radius=0.4, color=BLACK).move_to((0, yo, 0))
+            output_label = MathTex('\sigma(\mathbf{x}^T\mathbf{w}_%d)' %j, color=BLACK).next_to(output, UP).scale(0.8)
+            self.add(output, output_label)
+
+            line = Line(output.get_center(), foutput.get_center(), color=BLACK, path_arc=0)
+            line.set_length(line.get_length() - 0.8)
+            point = 0.45 * (foutput.get_center() - output.get_center()) + output.get_center()
+            line_label = MathTex('w_{1%d}' % (j + 1), color=BLACK).scale(0.8).next_to(point, UP)
+            self.add(line, line_label)
+
+            ils = ['x_1', 'x_2']
+            for i, (y, l) in enumerate(zip(np.linspace(1, -1, 2), ils)):
+                circle = Circle(radius=0.4, color=BLACK, fill_color=WHITE).move_to((-5, y, 0))
+                label = MathTex(l, color=BLACK).move_to(circle.get_center())
+                line = Line(circle.get_center(), output.get_center(), color=BLACK, path_arc=0)
+                line.set_length(line.get_length() - 0.8)
+                point = (0.7 if i == 0 else 0.5) * (output.get_center() - circle.get_center()) + circle.get_center()
+                line_label = MathTex('w_{0%d}' % (i + 1), color=BLACK).scale(0.7).next_to(point, UP)
+                self.add(circle, label, line, line_label)
+
+        
+```
+
+Let's look at a more compact way to write this, using a weight *matrix* for the neural network layer. Let's look at the transform before we apply the sigmoid function:
+
+$$
+ \begin{bmatrix}  \mathbf{x}^T \mathbf{w}_1 \\ \mathbf{x}^T \mathbf{w}_2 \\ \mathbf{x}^T \mathbf{w}_3 \end{bmatrix} = 
+\begin{bmatrix}  x_1 w_{11} + x_2 w_{12} \\ x_1 w_{21} + x_2 w_{22} \\ x_1 w_{31} + x_2 w_{32} \end{bmatrix} = \begin{bmatrix} w_{11} & w_{12} \\w_{21} & w_{22} \\ w_{31} & w_{32} \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix}
+$$
+
+If we define a matrix $\mathbf{W}$ for all of the weights as:
+
+$$
+\mathbf{W} = \begin{bmatrix} w_{11} & w_{12} \\w_{21} & w_{22} \\ w_{31} & w_{32} \end{bmatrix}
+$$
+
+we get:
+
+$$
+\begin{bmatrix}  \mathbf{x}^T \mathbf{w}_1 \\ \mathbf{x}^T \mathbf{w}_2 \\ \mathbf{x}^T \mathbf{w}_3 \end{bmatrix} = \mathbf{W}\mathbf{x} = (\mathbf{x}^T\mathbf{W}^T)^T
+$$\
+If we let $h$ be the number of neuron (or hidden layer units) then this is a $h \times d$ matrix. Therefore, we can write our transform as:
+
+$$
+\phi(\mathbf{x}) = \sigma(\mathbf{x}^T\mathbf{W}^T)^T, \quad f(\mathbf{x}) = \sigma(\mathbf{x}^T\mathbf{W}^T) \mathbf{w}_0
+$$
+
+Recall that if we have multiple observations, as in a dataset, we define them together as an $N \times d$ matrix $\mathbf{X}$ such that each *row* is an observation:
+
+$$
+\mathbf{X} = \begin{bmatrix} \mathbf{x}_1^T \\ \mathbf{x}_2^T \\ \mathbf{x}_3^T  \\ \vdots  \end{bmatrix}
+$$
+
+Therefore, we can transform all of these observations at once by multiplying this matrix by $\mathbf{W}^T$.
+
+$$
+\phi(\mathbf{X}) = \sigma(\mathbf{X}\mathbf{W}^T)^T = \begin{bmatrix} \sigma(\mathbf{x}_1^T\mathbf{w}_1) & \sigma(\mathbf{x}_1^T\mathbf{w}_2) & \dots  & \sigma(\mathbf{x}_1^T\mathbf{w}_h \\
+\sigma(\mathbf{x}_2^T\mathbf{w}_1) & \sigma(\mathbf{x}_2^T\mathbf{w}_2) & \dots  & \sigma(\mathbf{x}_2^T\mathbf{w}_h) \\
+\vdots & \vdots & \ddots  & \vdots \\
+\sigma(\mathbf{x}_N^T\mathbf{w}_1) & \sigma(\mathbf{x}_N^T\mathbf{w}_2) & \dots  & \sigma(\mathbf{x}_N^T\mathbf{w}_h)
+ \end{bmatrix} 
+$$
+
+We see that this is an $N \times h$ matrix where each row is a transformed observation! We can then write our full prediction function as
+
+$$
+\quad f(\mathbf{x}) = \sigma(\mathbf{X}\mathbf{W}^T) \mathbf{w}_0
+$$
+
+To summarize:
+
+-   $\mathbf{X}: \quad N \times d$ matrix of observations
+
+-   $\mathbf{W}: \quad h \times d$ matrix of network weights
+
+-   $\mathbf{w}_0: \quad h\ (\times 1)$ vector of linear regression weights
+
+If we check that our dimensions work for matrix multiplication we see that we get the $N\times 1$ vector of predictions we are looking for!
+
+$$
+(N \times d) (h \times d)^T (h \times 1) \rightarrow (N \times d) (d \times h) (h \times 1) \rightarrow (N \times h) (h \times 1)
+$$
+
+$$
+ \longrightarrow (N \times1)
+$$
+
+## Benefits of neural networks
+
+We've seen that the neural network transform is still fairly restrictive, with a limited number of neurons we can't fit any arbitrary function. In fact, if we choose our feature transforms wisely we can do better than than a neural network.
+
+For example, consider the simple 3-neuron network above. We can see that if we try to fit a circular dataset with it, it performs worse than an explicit transform with $x_1^2$ and $x_2^2$.
+
+-   [Circle dataset with neural network](https://playground.tensorflow.org/#activation=sigmoid&batchSize=10&dataset=circle&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=3&seed=0.46216&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=false&xSquared=false&ySquared=false&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false&showTestData_hide=true&stepButton_hide=true&activation_hide=true&problem_hide=true&noise_hide=true&batchSize_hide=true&dataset_hide=true&regularization_hide=true&resetButton_hide=true&learningRate_hide=true&regularizationRate_hide=true&percTrainData_hide=true&numHiddenLayers_hide=true)
+
+-   [Circle dataset with](https://playground.tensorflow.org/#activation=tanh&batchSize=10&dataset=circle&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=&seed=0.10871&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=false&xSquared=true&ySquared=true&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false&showTestData_hide=true&stepButton_hide=true&activation_hide=true&problem_hide=true&noise_hide=true&resetButton_hide=true&regularization_hide=true&dataset_hide=true&batchSize_hide=true&learningRate_hide=true&percTrainData_hide=true&regularizationRate_hide=true&numHiddenLayers_hide=true) $x_1^2$ and $x_2^2$:
+
+Similarly, for a cross dataset, we can do better with the feature transform that includes $x_1x_2$ as a feature:
+
+-   [Cross dataset with neural network](https://playground.tensorflow.org/#activation=sigmoid&batchSize=10&dataset=xor&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=3&seed=0.46216&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=false&xSquared=false&ySquared=false&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false&showTestData_hide=true&stepButton_hide=true&activation_hide=true&problem_hide=true&noise_hide=true&batchSize_hide=true&dataset_hide=true&regularization_hide=true&resetButton_hide=true&learningRate_hide=true&regularizationRate_hide=true&percTrainData_hide=true&numHiddenLayers_hide=true)
+
+-   [Cross dataset with](https://playground.tensorflow.org/#activation=tanh&batchSize=10&dataset=xor&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=&seed=0.26985&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=true&xSquared=false&ySquared=false&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false&showTestData_hide=true&stepButton_hide=true&activation_hide=true&problem_hide=true&noise_hide=true&resetButton_hide=true&regularization_hide=true&dataset_hide=true&batchSize_hide=true&learningRate_hide=true&regularizationRate_hide=true&percTrainData_hide=true&numHiddenLayers_hide=true) $x_1x_2$
+
+However, if we choose the *wrong* feature transform for a given dataset, we do far worse.
+
+-   [Circle dataset with](https://playground.tensorflow.org/#activation=tanh&batchSize=10&dataset=circle&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=&seed=0.10871&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=true&xSquared=false&ySquared=false&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false&showTestData_hide=true&stepButton_hide=true&activation_hide=true&problem_hide=true&noise_hide=true&resetButton_hide=true&regularization_hide=true&dataset_hide=true&batchSize_hide=true&learningRate_hide=true&percTrainData_hide=true&regularizationRate_hide=true&numHiddenLayers_hide=true) $x_1 x_2$
+
+-   [Cross dataset with](https://playground.tensorflow.org/#activation=tanh&batchSize=10&dataset=xor&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=&seed=0.06128&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=false&xSquared=true&ySquared=true&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false&showTestData_hide=true&stepButton_hide=true&activation_hide=true&problem_hide=true&noise_hide=true&resetButton_hide=true&regularization_hide=true&dataset_hide=true&batchSize_hide=true&learningRate_hide=true&regularizationRate_hide=true&percTrainData_hide=true&numHiddenLayers_hide=true) $x_1^2$ and $x_2^2$
+
+We see that the real power of the neural network here is the ability to adapt the transform to the given dataset, without needing to carefully choose the correct transform!
+
+## Deep Neural Networks
+
+What we've seen so far is a neural network with a *single* hidden layer, meaning that we create a feature transform for our data and then simply use that to make our prediction. We see that each individual feature transform is a bit limited, being just a logistic regression function.
+
+$$\phi(\mathbf{x})_i = \sigma(\mathbf{x}^T \mathbf{w}_i)$$\
+No matter what we set $\mathbf{w}_i$ this transform would not be able to replicate a transform like $\phi(\mathbf{x})_i = x_i^2$. However, we've already seen a way to make logistic regression more expressive: **neural networks**!
+
+The idea behind a *deep* or *multi-layer* neural network is that we can apply this idea of neural network feature transforms recursively:
+
+$$\phi(\mathbf{x})_i = \sigma(\sigma(\mathbf{x}^T\mathbf{W}^T) \mathbf{w}_i)$$
+
+Here we've transformed our input before computing our feature transform. In terms of a dataset we can write the full prediction function for this *2-layer* network as:
+
+$$
+f(\mathbf{X}) = \sigma(\sigma(\mathbf{X}\mathbf{W}_1^T)\mathbf{W}_2^T)\mathbf{w}_0
+$$
+
+We've now defined a set of weight parameters for each of our 2 *hidden layers* $\mathbf{W}_1$ and $\mathbf{W}_2$. It's a little easier to see what's happening here if we look a our diagram for this case:
+
+```{python}
+#| echo : false
+%%manim -sqh -v CRITICAL --progress_bar none Viz
+
+class LectureScene(Scene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.camera.background_color = "#ffffff"
+        self.template = TexTemplate()
+        self.template.add_to_preamble(r"\usepackage{amsmath}")
+
+class Viz(LectureScene):
+    def __init__(self, bias=True, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.bias = False
+        self.title = 'Linear regression'
+        self.output = '\sigma(\phi(\mathbf{x})^T\mathbf{w}_0)'
+
+    def construct(self):
+        foutput = Circle(radius=0.4, color=BLACK).move_to((5, 0, 0))
+        foutput_label = MathTex(self.output, color=BLACK).next_to(foutput, UP).scale(0.8)
+        self.add(foutput, foutput_label)
+
+        for j, (yo) in enumerate(np.linspace(2, -2, 3)):
+            output = Circle(radius=0.4, color=BLACK).move_to((-2, yo, 0))
+            output_label = MathTex('\sigma(\mathbf{x}^T\mathbf{W}_{1%d})' %j, color=BLACK).next_to(output, UP).scale(0.6)
+            self.add(output, output_label)
+
+
+            ils = ['x_1', 'x_2']
+            for i, (y, l) in enumerate(zip(np.linspace(1, -1, 2), ils)):
+                circle = Circle(radius=0.4, color=BLACK, fill_color=WHITE).move_to((-5, y, 0))
+                label = MathTex(l, color=BLACK).move_to(circle.get_center())
+                line = Line(circle.get_center(), output.get_center(), color=BLACK, path_arc=0)
+                line.set_length(line.get_length() - 0.8)
+                point = (0.7 if i == 0 else 0.5) * (output.get_center() - circle.get_center()) + circle.get_center()
+                self.add(circle, label, line )
+
+
+        for j, (yo) in enumerate(np.linspace(2, -2, 3)):
+            output = Circle(radius=0.4, color=BLACK).move_to((2, yo, 0))
+            output_label = MathTex('\sigma(\ \cdot\ \mathbf{W}_{2%d})' %j, color=BLACK).next_to(output, UP).scale(0.6)
+            self.add(output, output_label)
+
+            line = Line(output.get_center(), foutput.get_center(), color=BLACK, path_arc=0)
+            line.set_length(line.get_length() - 0.8)
+            point = 0.45 * (foutput.get_center() - output.get_center()) + output.get_center()
+            self.add(line)
+
+            for j, (yo2) in enumerate(np.linspace(2, -2, 3)):
+                houtput = Circle(radius=0.4, color=BLACK).move_to((-2, yo2, 0))
+                line = Line(houtput.get_center(), output.get_center(), color=BLACK, path_arc=0)
+                line.set_length(line.get_length() - 0.8)
+                point = 0.45 * (output.get_center() - houtput.get_center()) + houtput.get_center()
+                self.add(line)
+
+        
+```
+
+We can see that stacking these transforms allows us to fit even more complicated functions [here](https://playground.tensorflow.org/#activation=tanh&batchSize=10&dataset=spiral&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=4,4,4,4&seed=0.88060&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=false&xSquared=false&ySquared=false&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false). Note that we are still not limited to doing this twice! We can fit many layers of transforms:
+
+![](nn(5).svg)
+
+Later on in the semester we'll talk in more depth about the effect of the number of layers and the number of neurons per layer!
+
+## Optimizing neural networks
+
+We can still define a **loss function** for a neural network in the same way we did with our simpler linear models. The only difference is that now we have more parameters to choose:
+
+$$
+\mathbf{Loss}(\mathbf{w}_0,\mathbf{W}_1,...)
+$$
+
+Let's look at the logistic regression negative log-likelihood loss for the simple neural network we saw above (for simplicity we'll just call the network weights $\mathbf{W}$). The probability of class 1 is estimated as:
+
+$$
+p(y=1\mid \mathbf{x}, \mathbf{w}_0,\mathbf{W})=\sigma(\phi(\mathbf{x})^T \mathbf{w}_0) = \sigma(\sigma(\mathbf{x}^T \mathbf{W}^T) \mathbf{w}_0),\quad \phi(\mathbf{x}) = \begin{bmatrix}  \sigma(\mathbf{x}^T \mathbf{W}_{1}) \\ \sigma(\mathbf{x}^T \mathbf{W}_{2}) \\ \sigma(\mathbf{x}^T \mathbf{W}_{3}) \end{bmatrix} 
+$$ $$ = \sigma\big(w_{01} \cdot\sigma(x_1 W_{11} + x_2 W_{12}) + w_{02} \cdot\sigma(x_1 W_{21} + x_2 W_{22})+ w_{03} \cdot\sigma(x_1 W_{31} + x_2 W_{32}) \big)$$
+
+Therefore the negative log-likelihood is:
+
+$$
+\mathbf{NLL}(\mathbf{w}_0,\mathbf{W}, \mathbf{X}, \mathbf{y}) = -\sum_{i=1}^N \bigg[ y_i\log p(y=1\mid \mathbf{x}, \mathbf{w}_0,\mathbf{W}) + (1-y_i)\log p(y=0\mid \mathbf{x}, \mathbf{w}_0,\mathbf{W}) \bigg]
+$$
+
+$$
+= -\sum_{i=1}^N \log \sigma\big((2y_i-1) \phi(\mathbf{x}_i)^T \mathbf{w}\big)
+$$
+
+We see that we can write out a full expression for this loss in term of all the inputs and weights. We can even define the gradient of this loss with respect to all the weights:
+
+$$
+\nabla_{\mathbf{w}_0} \mathbf{NLL}(\mathbf{w}_0,\mathbf{W}, \mathbf{X}, \mathbf{y}) = \begin{bmatrix} \frac{\partial \mathbf{NLL}}{\partial w_{01}} \\ \frac{\partial \mathbf{NLL}}{\partial w_{02}} \\ \frac{\partial \mathbf{NLL}}{\partial w_{03}} \\ \vdots\end{bmatrix}, \quad \nabla_{\mathbf{W}}\mathbf{NLL}(\mathbf{w}_0,\mathbf{W}, \mathbf{X}, \mathbf{y}) = 
+\begin{bmatrix} \frac{\partial \mathbf{NLL}}{\partial W_{11}} &  \frac{\partial \mathbf{NLL}}{\partial W_{12}} & \dots & \frac{\partial \mathbf{NLL}}{\partial W_{1d}}  \\ 
+\frac{\partial \mathbf{NLL}}{\partial W_{21}} &  \frac{\partial \mathbf{NLL}}{\partial W_{22}} & \dots & \frac{\partial \mathbf{NLL}}{\partial W_{2d}} \\
+\vdots & \vdots & \ddots & \vdots \\
+\frac{\partial \mathbf{NLL}}{\partial W_{h1}} &  \frac{\partial \mathbf{NLL}}{\partial W_{h2}} & \dots & \frac{\partial \mathbf{NLL}}{\partial W_{hd}} 
+\end{bmatrix}
+$$
+
+Note that as $\mathbf{W}$ is a matrix, the gradient with respect to $\mathbf{W}$ is also a matrix! Our gradient descent algorithm can proceed in the same way it did for our linear models, but here we now need to update both sets of parameters:
+
+$$
+\mathbf{w}_0^{(k+1)} \longleftarrow \mathbf{w}_0^{(k)} -\alpha \nabla_{\mathbf{w}_0} \mathbf{NLL}(\mathbf{w}_0,\mathbf{W}, \mathbf{X}, \mathbf{y}), \quad \mathbf{W}^{(k+1)} \longleftarrow \mathbf{W}^{(k)} -\alpha \nabla_{\mathbf{W}} \mathbf{NLL}(\mathbf{w}_0,\mathbf{W}, \mathbf{X}, \mathbf{y})
+$$
+
+The important question now becomes: *how do we compute these gradients?*
+
+# Automatic Differentiation
+
+In this section we'll derive *algorithms* for computing the derivative of *any* function.
+
+## Motivation
+
+We saw above that the NLL for logistic regression with a neural network is:
+
+$$
+\mathbf{NLL}(\mathbf{w}_0,\mathbf{W}, \mathbf{X}, \mathbf{y}) = -\sum_{i=1}^N \log \sigma\big((2y_i-1) \phi(\mathbf{x}_i)^T \mathbf{w}\big)
+$$
+
+If we write this out in terms of the individual values we get:
+
+$$
+= -\sum_{i=1}^N \log \sigma\big((2y_i-1)\sigma\big(w_{01} \cdot\sigma(x_1 W_{11} + x_2 W_{12}) + w_{02} \cdot\sigma(x_1 W_{21} + x_2 W_{22})+ w_{03} \cdot\sigma(x_1 W_{31} + x_2 W_{32}) \big)\big)
+$$
+
+We could use the same approach as usual to find the derivative of this loss with respect to each individual weight parameter, but it would be very tedious and this is only a *single-layer network*! Things would only get more complicated with more layers. Furthermore if we changed some aspect of the network, like the activation function, we'd have to do it all over again.
+
+Ideally we'd like a programmatic way to compute derivatives. Knowing that we compute derivatives using a fixed set of known rules, this should be possible!
+
+## The chain rule revisited
+
+While we often think about the chain rule in terms of functions:
+
+$$
+\frac{d}{dx}f(g(x)) = f'(g(x))g'(x)
+$$
+
+It's often easier to view it imperatively, in terms of individual values. For example we might say:
+
+$$
+b = g(x)
+$$
+
+$$
+a = f(b)
+$$
+
+In this case we can write the chain rule as:
+
+$$
+\frac{da}{dx} = \frac{da}{db}\frac{db}{dx}
+$$
+
+This corresponds with how we might think about this in code. For example we might have the code:
+
+```{python}
+#| eval: false
+b = x ** 2
+a = log(b)
+```
+
+In this case we have:
+
+$$
+a = \log(b), \quad b = x^2
+$$
+
+We can compute the derivative of $a$ with respect to $x$ using the chain rule as:
+
+$$
+\frac{da}{db} = \frac{1}{b}, \quad \frac{db}{dx} = 2x
+$$
+
+$$
+\frac{da}{dx} = \bigg(\frac{1}{b}\bigg)(2x) = \frac{2x}{x^2} = \frac{2}{x} 
+$$
+
+## Composing many operations
+
+For more complex functions, we might be composing many more operations, but we can break down derivative computations in the same way. For example, if we want the derivative with respect to $x$ of some simple loss:
+
+$$
+L=-\log \sigma\big(w x^2\big)
+$$
+
+We can break this down into each individual operation that we apply:
+
+$$
+a = x^2
+$$
+
+$$
+b=wa
+$$
+
+$$
+c=\sigma(b)
+$$
+
+$$
+g= \log c
+$$
+
+$$
+L=-g
+$$\
+The chain rule tells us that:
+
+$$
+\frac{dL}{dx} = \frac{dL}{dg}\frac{dg}{dc}\frac{dc}{db}\frac{db}{da}\frac{da}{dx}
+$$\
+Since each step is a single operation with a known derivative, we can easily compute every term above! Thus, we begin to see a recipe for computing derivatives programatically. Every time we perform some operation, we will also compute the derivative with respect to the input (we can't just compute the derivatives because each derivative needs the preceding value, e.g. $\frac{dg}{dc}=\frac{1}{c}$, so we need to first compute $c$).
+
+We can visually look at the chain of computation that we're performing as a diagram that shows each step and the result.
+
+```{python}
+#| echo : false
+%%manim -sqh -v CRITICAL --progress_bar none Viz
+
+class LectureScene(Scene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.camera.background_color = "#ffffff"
+        self.template = TexTemplate()
+        self.template.add_to_preamble(r"\usepackage{amsmath}")
+
+class Viz(LectureScene):
+    def construct(self):
+        points = np.linspace(-6, 6, 6)
+        names = ['x', 'a', 'b', 'c', 'g', 'L']
+        ops = ['', 'x^2', 'wa', '\sigma(b)', '\log c', '-g']
+
+        prev = None
+        for i in range(6):
+            node = Circle(radius=0.4, color=BLACK, fill_color=WHITE).move_to((points[i], 0, 0))
+            self.add(MathTex(names[i], color=BLACK).next_to(node, UP))
+            self.add(node)
+
+            if i > 0:
+                self.add(MathTex(r'\frac{d%s}{d%s}' % (names[i], names[i-1]), color=BLACK).next_to(node, DOWN).scale(0.6))
+
+            
+            if not prev is None:
+                self.add(Arrow(prev, node, color=BLACK, path_arc=0))
+                self.add(MathTex(ops[i], color=BLACK).scale(0.5).next_to(Arrow(prev, node, color=BLACK, path_arc=0), UP))
+            prev = node
+```
+
+We call this structure the **computational graph**.
+
+## Forward and reverse mode automatic differentiation
+
+We are not actually interested in all of the intermediate derivatives ( $\frac{db}{da}, \frac{dc}{db}$ etc.), so it doesn't make much sense to compute all of them and then multiply them together. Instead, we'd rather just incrementally compute the value we're interested in $\frac{dL}{dx}$, as we go.
+
+There are 2 ways we could consider doing this. One way is to always keep track of the derivative of the current value with respect to $x$. So in the diagram above, each time we perform a new operation we will also compute the derivative of the operation and then update our knowledge of the derivative with respect to $x$. For example for the operation going from $b$ to $c$:
+
+$$
+c \leftarrow \sigma(b), \quad \frac{dc}{dx} \leftarrow \frac{dc}{db}\cdot\frac{db}{dx}
+$$
+
+We call this approach **forward-mode automatic differentiation**.
+
+The alternative approach is to work backwards, first compute $L$ and $\frac{dL}{dg}$ and then go backwards through the chain updating the derivative of the final output with respect to each input for the $b$ to $c$ operation this looks like:
+
+$$
+c \leftarrow \sigma(b), \quad \frac{dL}{db} \leftarrow \frac{dc}{db}\cdot\frac{dL}{dc}
+$$
+
+This means we need to do our computation in 2 passes. First we need to go through the chain of operations to compute $L$, then we need to go backwards through the chain to compute $\frac{dL}{dx}$. Note that computing each intermediate derivative requires the a corresponding intermediate value (e.g. $\frac{dc}{db}$ requires $b$ to compute). So we need to store all the intermediate values as we go. The approach is called **reverse-mode automatic differentiation** or more commonly: **backpropagation**. We can summarize both approaches below:
+
+```{python}
+#| echo : false
+%%manim -sqh -v CRITICAL --progress_bar none Viz
+
+class LectureScene(Scene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.camera.background_color = "#ffffff"
+        self.template = TexTemplate()
+        self.template.add_to_preamble(r"\usepackage{amsmath}")
+
+class Viz(LectureScene):
+    def construct(self):
+        points = np.linspace(-6, 5, 6)
+        names = ['x', 'a', 'b', 'c', 'g', 'L']
+        ops = ['', 'x^2', 'wa', '\sigma(b)', '\log c', '-g']
+
+        self.add(Text('Forward mode', color=GREEN).scale(0.8).to_corner(UL).shift(0.1 * UP))
+        self.add(Text('Reverse mode', color=RED).scale(0.8).to_corner(LEFT).shift(0.5 * DOWN))
+
+        prev = None
+        for i in range(6):
+            node = Circle(radius=0.4, color=BLACK, fill_color=WHITE).move_to((points[i], 2, 0))
+            self.add(MathTex(names[i], color=BLACK).next_to(node, UP))
+            self.add(node)
+
+            if i > 0:
+                self.add(MathTex(r'\frac{d%s}{d%s}' % (names[i], names[i-1]), color=BLACK).next_to(node, DOWN).scale(0.6))
+
+            
+            if not prev is None:
+                self.add(Arrow(prev, node, color=BLACK, path_arc=0))
+               
+            if not prev is None:
+                farr =Arrow(prev, node, color=GREEN, path_arc=0).shift(0.5 * DOWN)
+                self.add(MathTex(r'\frac{d%s}{dx}' % (names[i-1]), color=GREEN).next_to(farr, DOWN).shift(0.2*UP).scale(0.6))
+                self.add(farr)
+            prev = node
+        self.add(MathTex(r'\frac{dL}{dx}', color=GREEN).move_to((6, 2, 0)).scale(0.75))
+
+        points = np.linspace(-5, 6, 6)
+        prev = None
+        for i in range(6):
+            node = Circle(radius=0.4, color=BLACK, fill_color=WHITE).move_to((points[i], -2, 0))
+            self.add(MathTex(names[i], color=BLACK).next_to(node, UP))
+            self.add(node)
+
+            if i > 0:
+                self.add(MathTex(r'\frac{d%s}{d%s}' % (names[i], names[i-1]), color=BLACK).next_to(node, DOWN).scale(0.6))
+
+            
+            if not prev is None: 
+                self.add(Arrow(prev, node, color=BLACK, path_arc=0))
+                
+            if not prev is None:
+                farr =Arrow(node, prev, color=RED, path_arc=0).shift(0.5 * DOWN)
+                self.add(MathTex(r'\frac{dL}{d%s}' % (names[i]), color=RED).next_to(farr, DOWN).shift(0.2*UP).scale(0.6))
+                self.add(farr)
+            prev = node
+        self.add(MathTex(r'\frac{dL}{dx}', color=RED).move_to((-6, -2, 0)).scale(0.75))
+```
+
+## Automatic differentiation with multiple inputs
+
+You might wonder why we'd ever use reverse-mode when it seems to require much more complication in keeping track of all the intermediate values. To see why it is useful, lets's consider the common case where we would like to take derivatives with respect to multiple inputs at the same time. For example we might have an expression like:
+
+$$
+-\log \sigma (w_1 x_1+w_2x_2 +w_3x_3)
+$$
+
+In this case we want to find the gradient:
+
+$$
+\frac{dL}{d\mathbf{x}} = \begin{bmatrix}\frac{dL}{dx_1} \\ \frac{dL}{dx_2} \\ \frac{dL}{dx_3} \end{bmatrix}
+$$
+
+We see that in forward mode, we now need to keep a vector of gradients at many steps if we want to compute the derivative with respect to every input!
+
+```{python}
+#| echo : false
+%%manim -sqh -v CRITICAL --progress_bar none Viz
+
+class LectureScene(Scene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.camera.background_color = "#ffffff"
+        self.template = TexTemplate()
+        self.template.add_to_preamble(r"\usepackage{amsmath}")
+
+class Viz(LectureScene):
+    def construct(self):
+        points = np.linspace(-6, 5, 6)
+        names = ['x_2', 'a_2', 'b', 'c', 'g', 'L']
+
+        node = Circle(radius=0.4, color=BLACK, fill_color=WHITE).move_to((points[0], 2.5, 0))
+        self.add(MathTex('x_1', color=BLACK).next_to(node, UP))
+        self.add(node)
+
+        next = Circle(radius=0.4, color=BLACK, fill_color=WHITE).move_to((points[1], 2.5, 0))
+        self.add(MathTex('a_1', color=BLACK).next_to(next, UP))
+        self.add(next)
+
+        self.add(Arrow(node, next, color=BLACK, path_arc=0))
+        self.add(Arrow(next, Circle().move_to((points[2], 0, 0)), color=BLACK, path_arc=0))
+        farr = Arrow(next, Circle().move_to((points[2], 0, 0)), color=GREEN, path_arc=0).shift(0.3 * UR)
+        self.add(Arrow(node, next, color=GREEN, path_arc=0).shift(0.5 * DOWN))
+        self.add(MathTex(r'\frac{db}{da_1}', color=GREEN).next_to(farr, UR).shift(0.6 * DL).scale(0.6))
+        self.add(farr)
+
+
+        node = Circle(radius=0.4, color=BLACK, fill_color=WHITE).move_to((points[0], -2.5, 0))
+        self.add(MathTex('x_3', color=BLACK).next_to(node, DOWN))
+        self.add(node)
+
+        next = Circle(radius=0.4, color=BLACK, fill_color=WHITE).move_to((points[1], -2.5, 0))
+        self.add(MathTex('a_3', color=BLACK).next_to(next, DOWN ))
+        self.add(next)
+
+        self.add(Arrow(node, next, color=BLACK, path_arc=0))
+        self.add(Arrow(next, Circle().move_to((points[2], 0, 0)), color=BLACK, path_arc=0))
+        farr = Arrow(next, Circle().move_to((points[2], 0, 0)), color=GREEN, path_arc=0).shift(0.3 * DR)
+        self.add(Arrow(node, next, color=GREEN, path_arc=0).shift(0.5 * DOWN))
+        self.add(MathTex(r'\frac{db}{da_3}', color=GREEN).next_to(farr, DR).shift(0.6 * UL).scale(0.6))
+        self.add(farr)
+
+        prev = None
+        for i in range(6):
+            node = Circle(radius=0.4, color=BLACK, fill_color=WHITE).move_to((points[i], 0, 0))
+            self.add(MathTex(names[i], color=BLACK).next_to(node, UP))
+            self.add(node)
+
+            if i > 0:
+                self.add(MathTex(r'\frac{d%s}{d%s}' % (names[i], names[i-1]), color=BLACK).next_to(node, DOWN).scale(0.6))
+
+            
+            if not prev is None:
+                self.add(Arrow(prev, node, color=BLACK, path_arc=0))
+
+            if not prev is None:
+                farr =Arrow(prev, node, color=GREEN, path_arc=0).shift(0.5 * DOWN)
+                if i > 2:
+                    self.add(MathTex(r'\begin{bmatrix}\frac{d%s}{dx_1}\\ \frac{d%s}{dx_2} \\ \frac{d%s}{dx_3} \end{bmatrix}' % (names[i-1], names[i-1], names[i-1]), color=GREEN).next_to(farr, DOWN).shift(0.2*UP).scale(0.6))
+                self.add(farr)
+
+                
+            prev = node
+        self.add(MathTex(r'\frac{dL}{d\mathbf{x}}', color=GREEN).move_to((6, 0, 0)).scale(0.75))
+```
+
+In reverse mode, however we only ever need to keep the derivative of the *loss* with respect to the current value. If we assume that the loss is always a single value, this is much more efficient!
+
+```{python}
+#| echo : false
+%%manim -sqh -v CRITICAL --progress_bar none Viz
+
+class LectureScene(Scene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.camera.background_color = "#ffffff"
+        self.template = TexTemplate()
+        self.template.add_to_preamble(r"\usepackage{amsmath}")
+
+class Viz(LectureScene):
+    def construct(self):
+        points = np.linspace(-5, 6, 6)
+        names = ['x_2', 'a_2', 'b', 'c', 'g', 'L']
+
+        node = Circle(radius=0.4, color=BLACK, fill_color=WHITE).move_to((points[0], 2.5, 0))
+        self.add(MathTex('x_1', color=BLACK).next_to(node, UP))
+        self.add(node)
+
+        next = Circle(radius=0.4, color=BLACK, fill_color=WHITE).move_to((points[1], 2.5, 0))
+        self.add(MathTex('a_1', color=BLACK).next_to(next, UP))
+        self.add(next)
+
+        self.add(Arrow(node, next, color=BLACK, path_arc=0))
+        self.add(Arrow(next, Circle().move_to((points[2], 0, 0)), color=BLACK, path_arc=0))
+        farr = Arrow( Circle().move_to((points[2], 0, 0)), next, color=RED, path_arc=0).shift(0.3 * UR)
+        self.add(Arrow(next, node, color=RED, path_arc=0).shift(0.5 * DOWN))
+        self.add(MathTex(r'\frac{db}{da_1}', color=RED).next_to(farr, UR).shift(0.6 * DL).scale(0.6))
+        self.add(farr)
+
+
+        node = Circle(radius=0.4, color=BLACK, fill_color=WHITE).move_to((points[0], -2.5, 0))
+        self.add(MathTex('x_3', color=BLACK).next_to(node, DOWN))
+        self.add(node)
+
+        next = Circle(radius=0.4, color=BLACK, fill_color=WHITE).move_to((points[1], -2.5, 0))
+        self.add(MathTex('a_3', color=BLACK).next_to(next, DOWN ))
+        self.add(next)
+
+        self.add(Arrow(next, node, color=BLACK, path_arc=0))
+        self.add(Arrow(next, Circle().move_to((points[2], 0, 0)), color=BLACK, path_arc=0))
+        farr = Arrow(Circle().move_to((points[2], 0, 0)), next, color=RED, path_arc=0).shift(0.3 * DR)
+        self.add(Arrow(node, next, color=RED, path_arc=0).shift(0.5 * DOWN))
+        self.add(MathTex(r'\frac{db}{da_3}', color=RED).next_to(farr, DR).shift(0.6 * UL).scale(0.6))
+        self.add(farr)
+
+        prev = None
+        for i in range(6):
+            node = Circle(radius=0.4, color=BLACK, fill_color=WHITE).move_to((points[i], 0, 0))
+            self.add(MathTex(names[i], color=BLACK).next_to(node, UP))
+            self.add(node)
+
+            if i > 0:
+                self.add(MathTex(r'\frac{d%s}{d%s}' % (names[i], names[i-1]), color=BLACK).next_to(node, DOWN).scale(0.6))
+
+            
+            if not prev is None:
+                self.add(Arrow(prev, node, color=BLACK, path_arc=0))
+
+            if not prev is None:
+                farr =Arrow(node, prev, color=RED, path_arc=0).shift(0.5 * DOWN)
+                if i > 2:
+                    self.add(MathTex(r'\frac{dL}{d%s}' % (names[i-1]), color=RED).next_to(farr, DOWN).shift(0.2*UP).scale(0.6))
+                self.add(farr)
+
+                
+            prev = node
+        self.add(MathTex(r'\frac{dL}{dx_2}', color=RED).move_to((-6, 0, 0)).scale(0.75))
+        self.add(MathTex(r'\frac{dL}{dx_1}', color=RED).move_to((-6, 2.5, 0)).scale(0.75))
+        self.add(MathTex(r'\frac{dL}{dx_3}', color=RED).move_to((-6, -2.5, 0)).scale(0.75))
+```
+
+## Reusing values
+
+One thing we need to consider is the fact that values can be used in multiple different operations. For example, consider the code below.
+
+```{python}
+def loss(x):
+    a = x ** 2
+    b = 5 * a
+    c = log(a)
+    g = b * c
+    L = -g
+    return L
+```
+
+This corresponds to the following sequence of operations:
+
+$$
+a = x^2
+$$
+
+$$
+b=5a
+$$
+
+$$
+c=\log a
+$$
+
+$$
+g = bc
+$$
+
+$$
+L=-b
+$$
+
+We see that both $b$ *and* $c$ depend on $a$. Leading to the following computational graph:
+
+```{python}
+#| echo : false
+%%manim -sqh -v CRITICAL --progress_bar none Viz
+
+class LectureScene(Scene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.camera.background_color = "#ffffff"
+        self.template = TexTemplate()
+        self.template.add_to_preamble(r"\usepackage{amsmath}")
+
+class Viz(LectureScene):
+    def construct(self):
+        scene = self
+        class node:
+            def __init__(self, name, x, y=0, parents=[]):
+                self.name = name
+                self.circle = Circle(radius=0.4, color=BLACK, fill_color=WHITE).move_to((x, y, 0))
+                scene.add(MathTex(name, color=BLACK).next_to(self.circle, UP))
+                scene.add(self.circle)
+                label = []
+                for p in parents:
+                    scene.add(Arrow(p.circle, self.circle, color=BLACK, path_arc=0))
+                    label.append(r'\frac{d%s}{d%s}' % (self.name, p.name))
+                scene.add(MathTex(','.join(label), color=BLACK).scale(0.6).next_to(self.circle, DOWN))
+                
+        xr = list(np.linspace(-6, 6, 5))
+        xpoints = [xr[0], xr[1], xr[2], xr[2], xr[3], xr[4]]
+        ypoints = [0, 0, 2, -2, 0, 0]
+        names = ['x', 'a', 'b', 'c', 'g', 'L']
+        x = node('x', xr[0])
+        a = node('a', xr[1], parents=[x])
+        b = node('b', xr[2], 2, parents=[a])
+        c = node('c', xr[2], -2, parents=[a])
+        g = node('g', xr[3], parents=[b, c])
+        L = node('L', xr[4], parents=[g])
+        
+        
+```
+
+In forward mode this means that we compute 2 different values for $\frac{dg}{dx}$, one from $b$ $(\frac{dg}{db}\cdot\frac{db}{dx})$ and one from $c$ $(\frac{dg}{dc}\cdot\frac{dc}{dx})$.
+
+```{python}
+#| echo : false
+%%manim -sqh -v CRITICAL --progress_bar none Viz
+
+class LectureScene(Scene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.camera.background_color = "#ffffff"
+        self.template = TexTemplate()
+        self.template.add_to_preamble(r"\usepackage{amsmath}")
+
+class Viz(LectureScene):
+    def construct(self):
+        scene = self
+        class node:
+            def __init__(self, name, x, y=0, parents=[]):
+                self.name = name
+                self.circle = Circle(radius=0.4, color=BLACK, fill_color=WHITE).move_to((x, y, 0))
+                scene.add(MathTex(name, color=BLACK).next_to(self.circle, UP))
+                scene.add(self.circle)
+                label = []
+                for p in parents:
+                    scene.add(Arrow(p.circle, self.circle, max_stroke_width_to_length_ratio=2.5, max_tip_length_to_length_ratio=.2, color=BLACK, path_arc=0))
+                    vec = self.circle.get_center() - p.circle.get_center()
+                    
+                    vecp = np.array((vec[1], -vec[0], 0))
+                    farr = Arrow(p.circle, self.circle, max_stroke_width_to_length_ratio=2.5, max_tip_length_to_length_ratio=.2, color=GREEN, path_arc=0).shift(0.15 * vecp)
+                    scene.add(farr)
+                    scene.add(MathTex(r'\frac{d%s}{dx}' % (self.name), color=GREEN).next_to(farr, DOWN).shift(0.5 * UP).scale(0.6))
+                    label.append(r'\frac{d%s}{d%s}' % (self.name, p.name))
+                scene.add(MathTex(','.join(label), color=BLACK).scale(0.6).next_to(self.circle, DOWN))
+                
+        xr = list(np.linspace(-6, 6, 5))
+        xpoints = [xr[0], xr[1], xr[2], xr[2], xr[3], xr[4]]
+        ypoints = [0, 0, 2, -2, 0, 0]
+        names = ['x', 'a', 'b', 'c', 'g', 'L']
+        x = node('x', xr[0])
+        a = node('a', xr[1], parents=[x])
+        b = node('b', xr[2], 2, parents=[a])
+        c = node('c', xr[2], -2, parents=[a])
+        g = node('g', xr[3], parents=[b, c])
+        L = node('L', xr[4], parents=[g])
+        
+```
+
+In reverse mode this means that we compute 2 different values for $\frac{dL}{da}$, one from $b$ $(\frac{dL}{db}\cdot\frac{db}{da})$ and one from $c$ $(\frac{dL}{dc}\cdot\frac{dc}{da})$.
+
+```{python}
+#| echo : false
+%%manim -sqh -v CRITICAL --progress_bar none Viz
+
+class LectureScene(Scene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.camera.background_color = "#ffffff"
+        self.template = TexTemplate()
+        self.template.add_to_preamble(r"\usepackage{amsmath}")
+
+class Viz(LectureScene):
+    def construct(self):
+        scene = self
+        class node:
+            def __init__(self, name, x, y=0, parents=[]):
+                self.name = name
+                self.circle = Circle(radius=0.4, color=BLACK, fill_color=WHITE).move_to((x, y, 0))
+                scene.add(MathTex(name, color=BLACK).next_to(self.circle, UP))
+                scene.add(self.circle)
+                label = []
+                for p in parents:
+                    scene.add(Arrow(p.circle, self.circle, max_stroke_width_to_length_ratio=2.5, max_tip_length_to_length_ratio=.2, color=BLACK, path_arc=0))
+                    vec = self.circle.get_center() - p.circle.get_center()
+                    
+                    vecp = np.array((vec[1], -vec[0], 0))
+                    farr = Arrow(self.circle, p.circle, max_stroke_width_to_length_ratio=2.5, max_tip_length_to_length_ratio=.2, color=RED, path_arc=0).shift(0.15 * vecp)
+                    scene.add(farr)
+                    scene.add(MathTex(r'\frac{dL}{d%s}' % (p.name), color=RED).next_to(farr, DOWN).shift(0.5 * UP).scale(0.6))
+                    label.append(r'\frac{d%s}{d%s}' % (self.name, p.name))
+                scene.add(MathTex(','.join(label), color=BLACK).scale(0.6).next_to(self.circle, DOWN))
+                
+        xr = list(np.linspace(-6, 6, 5))
+        xpoints = [xr[0], xr[1], xr[2], xr[2], xr[3], xr[4]]
+        ypoints = [0, 0, 2, -2, 0, 0]
+        names = ['x', 'a', 'b', 'c', 'g', 'L']
+        x = node('x', xr[0])
+        a = node('a', xr[1], parents=[x])
+        b = node('b', xr[2], 2, parents=[a])
+        c = node('c', xr[2], -2, parents=[a])
+        g = node('g', xr[3], parents=[b, c])
+        L = node('L', xr[4], parents=[g])
+        
+```
+
+The resolution in both cases is simple! Just add the two terms. So in forward mode:
+
+$$\frac{dg}{dx} = \frac{dg}{db}\cdot \frac{db}{dx} +\frac{dg}{dc}\cdot \frac{dc}{dx}$$
+
+In reverse mode:
+
+$$\frac{dL}{da} = \frac{dL}{db}\cdot \frac{db}{da} + \frac{dL}{dc}\cdot \frac{dc}{da} $$
+
+The forward case for this example is just an application of the product rule:
+
+$$
+g =bc
+$$
+
+$$
+\frac{dg}{dx} =\frac{dg}{db}\cdot \frac{db}{dx} +\frac{dg}{dc}\cdot \frac{dc}{dx} = c\cdot \frac{db}{dx} +b \cdot \frac{dc}{dx}
+$$
+
+For reverse mode we need to expand an rearrange a bit:
+
+$$
+\frac{dL}{da} =\frac{dL}{dg}\cdot \frac{dg}{da}
+$$
+
+$$
+\frac{dg}{da} =\frac{dg}{db}\cdot \frac{db}{da} +\frac{dg}{dc}\cdot \frac{dc}{da}
+$$
+
+$$
+\frac{dL}{da} =\frac{dL}{dg}\bigg( \frac{dg}{db}\cdot \frac{db}{da} +\frac{dg}{dc}\cdot \frac{dc}{da} \bigg)
+$$
+
+$$
+=\frac{dL}{dg} \frac{dg}{db} \frac{db}{da} + \frac{dL}{dg}\frac{dg}{dc} \frac{dc}{da} 
+$$
+
+$$
+ =\frac{dL}{db}\cdot \frac{db}{da} + \frac{dL}{dc}\cdot \frac{dc}{da} 
+$$
+
+This also works for addition:
+
+$$
+g =b + c
+$$
+
+$$
+\frac{dg}{dx} =\frac{dg}{db}\cdot \frac{db}{dx} +\frac{dg}{dc}\cdot \frac{dc}{dx}
+$$
+
+$$
+\frac{dg}{db}=1,\ \frac{dg}{dc}=1
+$$
+
+$$
+\frac{dg}{dx} =\frac{db}{dx} + \frac{dc}{dx}
+$$
+
+And in general any binary operation! (Division, powers etc.).
+
+## Partial and total derivatives
+
+So far we've been a bit sloppy in our discussion of derivatives. To see why, let's consider one more case:
+
+$$
+a = x^2
+$$
+
+$$
+b=5a
+$$
+
+$$
+c = a b
+$$
+
+$$
+L=-c
+$$
+
+```{python}
+#| echo : false
+%%manim -sqh -v CRITICAL --progress_bar none Viz
+
+class LectureScene(Scene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.camera.background_color = "#ffffff"
+        self.template = TexTemplate()
+        self.template.add_to_preamble(r"\usepackage{amsmath}")
+
+class Viz(LectureScene):
+    def construct(self):
+        scene = self
+        class node:
+            def __init__(self, name, x, y=0, parents=[]):
+                self.name = name
+                self.circle = Circle(radius=0.4, color=BLACK, fill_color=WHITE).move_to((x, y, 0))
+                scene.add(MathTex(name, color=BLACK).next_to(self.circle, UP))
+                scene.add(self.circle)
+                label = []
+                for p in parents:
+                    scene.add(Arrow(p.circle, self.circle, color=BLACK, path_arc=0))
+                    label.append(r'\frac{d%s}{d%s}' % (self.name, p.name))
+
+                if len(parents) < 2:                                      
+                    scene.add(MathTex(','.join(label), color=BLACK).scale(0.6).next_to(self.circle, DOWN))
+                else:
+                    scene.add(MathTex(','.join(label), color=RED).scale(0.6).next_to(self.circle, DOWN))
+                                                      
+        xr = list(np.linspace(-6, 6, 5))
+        xpoints = [xr[0], xr[1], xr[2], xr[3], xr[4]]
+        ypoints = [0, 1, 0, 0, 0]
+        names = ['x', 'a', 'b', 'c', 'g', 'L']
+        x = node('x', xr[0])
+        a = node('a', xr[1], parents=[x])
+        b = node('b', xr[2], 2, parents=[a])
+        c = node('c', xr[3], 0, parents=[a, b])
+        L = node('L', xr[4], parents=[c])
+        
+```
+
+Saying that $\frac{dc}{da}=b$ isn't quite correct, because $b$ *also* depends on $a$, really $\frac{dc}{da} =\frac{dc}{da}+\frac{dc}{db}\frac{db}{da}$. We already account for this in our automatic differentiation though, so we want a way to talk about the derivative of an operation with respect to it's inputs *ignoring how the inputs may depend on each other*.
+
+This is where the notion of a **partial derivative** comes in, the *partial* *derivative* of function with respect to an input is the derivative ignoring any dependencies between inputs. We've already seen how we denote this:
+
+$$
+\frac{\partial c}{\partial a} = b =5a
+$$
+
+The **total derivative** is the derivative where we do account for this. In our example:
+
+$$
+\frac{dc}{da} =\frac{\partial c}{\partial a}+\frac{\partial c}{\partial b}\frac{\partial b}{\partial a} = 5a + 5a = 10a
+$$\
+In our earlier examples, we typically had partial derivatives equal to total derivatives, so the distinction wasn't really important. This example shows why it is.
+
+Let's see our earlier example, but this time we'll make the distinction between partial and total derivatives explicit
+
+```{python}
+#| echo : false
+%%manim -sqh -v CRITICAL --progress_bar none Viz
+
+class LectureScene(Scene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.camera.background_color = "#ffffff"
+        self.template = TexTemplate()
+        self.template.add_to_preamble(r"\usepackage{amsmath}")
+
+class Viz(LectureScene):
+    def construct(self):
+        scene = self
+        class node:
+            def __init__(self, name, x, y=0, parents=[]):
+                self.name = name
+                self.circle = Circle(radius=0.4, color=BLACK, fill_color=WHITE).move_to((x, y, 0))
+                scene.add(MathTex(name, color=BLACK).next_to(self.circle, UP))
+                scene.add(self.circle)
+                label = []
+                for p in parents:
+                    scene.add(Arrow(p.circle, self.circle, max_stroke_width_to_length_ratio=2.5, max_tip_length_to_length_ratio=.2, color=BLACK, path_arc=0))
+                    vec = self.circle.get_center() - p.circle.get_center()
+                    
+                    vecp = np.array((vec[1], -vec[0], 0))
+                    farr = Arrow(p.circle, self.circle, max_stroke_width_to_length_ratio=2.5, max_tip_length_to_length_ratio=.2, color=GREEN, path_arc=0).shift(0.15 * vecp)
+                    scene.add(farr)
+                    scene.add(MathTex(r'\frac{d%s}{dx}' % (self.name), color=GREEN).next_to(farr, DOWN).shift(0.5 * UP).scale(0.6))
+                    label.append(r'\frac{\partial %s}{\partial d%s}' % (self.name, p.name))
+                scene.add(MathTex(','.join(label), color=BLACK).scale(0.6).next_to(self.circle, DOWN))
+                
+        xr = list(np.linspace(-6, 6, 5))
+        xpoints = [xr[0], xr[1], xr[2], xr[2], xr[3], xr[4]]
+        ypoints = [0, 0, 2, -2, 0, 0]
+        names = ['x', 'a', 'b', 'c', 'g', 'L']
+        x = node('x', xr[0])
+        a = node('a', xr[1], parents=[x])
+        b = node('b', xr[2], 2, parents=[a])
+        c = node('c', xr[2], -2, parents=[a])
+        g = node('g', xr[3], parents=[b, c])
+        L = node('L', xr[4], parents=[g])
+        
+```
+
+```{python}
+#| echo : false
+%%manim -sqh -v CRITICAL --progress_bar none Viz
+
+class LectureScene(Scene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.camera.background_color = "#ffffff"
+        self.template = TexTemplate()
+        self.template.add_to_preamble(r"\usepackage{amsmath}")
+
+class Viz(LectureScene):
+    def construct(self):
+        scene = self
+        class node:
+            def __init__(self, name, x, y=0, parents=[]):
+                self.name = name
+                self.circle = Circle(radius=0.4, color=BLACK, fill_color=WHITE).move_to((x, y, 0))
+                scene.add(MathTex(name, color=BLACK).next_to(self.circle, UP))
+                scene.add(self.circle)
+                label = []
+                for p in parents:
+                    scene.add(Arrow(p.circle, self.circle, max_stroke_width_to_length_ratio=2.5, max_tip_length_to_length_ratio=.2, color=BLACK, path_arc=0))
+                    vec = self.circle.get_center() - p.circle.get_center()
+                    
+                    vecp = np.array((vec[1], -vec[0], 0))
+                    farr = Arrow(self.circle, p.circle, max_stroke_width_to_length_ratio=2.5, max_tip_length_to_length_ratio=.2, color=RED, path_arc=0).shift(0.15 * vecp)
+                    scene.add(farr)
+                    scene.add(MathTex(r'\frac{dL}{d%s}' % (p.name), color=RED).next_to(farr, DOWN).shift(0.5 * UP).scale(0.6))
+                    label.append(r'\frac{\partial %s}{\partial %s}' % (self.name, p.name))
+                scene.add(MathTex(','.join(label), color=BLACK).scale(0.6).next_to(self.circle, DOWN))
+                
+        xr = list(np.linspace(-6, 6, 5))
+        xpoints = [xr[0], xr[1], xr[2], xr[2], xr[3], xr[4]]
+        ypoints = [0, 0, 2, -2, 0, 0]
+        names = ['x', 'a', 'b', 'c', 'g', 'L']
+        x = node('x', xr[0])
+        a = node('a', xr[1], parents=[x])
+        b = node('b', xr[2], 2, parents=[a])
+        c = node('c', xr[2], -2, parents=[a])
+        g = node('g', xr[3], parents=[b, c])
+        L = node('L', xr[4], parents=[g])
+```
+
+This is also why we specify gradients in terms of partial derivatives! If we're taking the gradient of a function with respect to multiple inputs, we don't know where these inputs come from. They might depend on each other! By specifying gradients at partial derivatives, we make it clear that we're not accounting for that.
+
+## Implementing reverse-mode automatic differentiation
+
+We'll start by developing an automatic differentiation class that uses *reverse-mode automatic differentiation*, as this is what will be most useful for neural networks.
+
+Recall that for reverse-mode AD to work, everytime we perform an operation on one or more numbers we need to store the result of that operation as well as the *parent values* (the inputs to the operation). We also need to be able to compute the derivative of that operation. Since for every operation we need to store several pieces of data and several functions, it makes sense to define a *class* to represent the result of an operation.
+
+For example, if we want to make a class that represents the operation `c=a+b` our class needs several properties:
+
+-   `value`: The value of the operation (`c`)
+-   `parents`: The parent operations (`a` and `b`)
+-   `grad`: The derivative of the final loss with respect to `c` ($\frac{dL}{dc}$)
+-   `func`: A function that computes the operation (`a+b`)
+-   `grads`: A function that computes the derivatives of the operation ($\frac{dc}{da}$ and $\frac{dc}{db}$)
+
+For this example, we'll call our class `AutogradValue`. This will be the base class for all of our possible operations and represents declaring a variable with a value (`a = 5`). This is useful because it lets us define values that we might want to find derivatives with respect to.
+
+Let's see how this will work in practice. If we want to take derivatives we will first define the inputs using `AutogradValue`.
+
+```{python}
+#| eval : false
+a = AutogradValue(5)
+b = AutogradValue(2)
+```
+
+Then we can perform whatever operations we want on these inputs:
+
+```{python}
+#| eval : false
+c = a + b
+L = log(c)
+```
+
+Each of these operations will produce a new `AutogradValue` object representing the result of that operation.
+
+Finally we can run the backward pass by running a method `backward()` (that we will write) on the outout `L`. This will compute the gradients of `L` with respect to each input that we defined ($\frac{dL}{da}$ and $\frac{dL}{db}$). Rather than returning these derivatives, the `backward()` method will *update* the `grad` property of `a` and `b`, making it easy to access the correct derivative.
+
+```{python}
+#| eval : false
+L.backward()
+dL_da = a.grad
+```
+
+We'll also be able to compute operations with non-AutogradValue numbers, but obviously won't be able to compute derivaitives with respect to these values.
+
+```{python}
+#| eval : false
+s = 4
+L = s * a
+dL_da = a.grad # Will work because a is an AutogradValue
+dL_ds = s.grad # Will give an error because s is not an AutogradValue
+```
+
+Let's look at one possible implementation for `AutogradValue`:
+
+```{python}
+#| eval : false
+class AutogradValue:
+    '''
+    Base class for automatic differentiation operations. 
+    Represents variable delcaration. Subclasses will overwrite 
+    func and grads to define new operations.
+
+    Properties:
+        parents (list):  A list of the inputs to the operation, 
+                         may be AutogradValue or float
+        args    (list):  A list of raw values of each 
+                         input (as floats)
+        grad    (float): The derivative of the final loss with 
+                         respect to this value (dL/da)
+        value   (float): The value of the result of this operation
+    '''
+
+    def __init__(self, *args):
+        self.parents = list(args)
+        self.args = [arg.value if isinstance(arg, AutogradValue) 
+                     else arg 
+                     for arg in self.parents]
+        self.grad = 0.
+        self.value = self.forward_pass()
+
+    def forward_pass(self):
+        # Calls func to compute the value of this operation 
+        return self.func(*self.args)
+```
+
+For convenience, in this implementation we've also defined a property `args` which simply stores the `value` of each parent. Note that we can also allow parents to be either be `AutogradValue` or a primitive data type like `float`. This will allow us to do things like multiply an `AutogradValue` variable with a `float`, e.g. `a * 5`.
+
+The `forward_pass` function computes the actual value of the node given it's parents. This will depend on what kind of operation we're doing (addition, subtraction, multiplication, etc.), so we'll define a `func` method that we can override that does the actual calculation. In the base case we'll just directly assign the value:
+
+```{python}
+#| eval : false
+class AutogradValue:
+    def func(self, input):
+        '''
+        Compute the value of the operation given the inputs.
+        For declaring a variable, this is just the identity 
+        function (return the input).
+
+        Args:
+            input (float): The input to the operation
+        Returns:
+            value (float): The result of the operation
+        '''
+        return input
+```
+
+In subclasses we'll override `func`:
+
+```{python}
+#| eval : false
+
+class _square(AutogradValue):
+    # Square operator (a ** 2)
+    def func(self, a):
+        return a ** 2
+
+class _mul(AutogradValue):
+    # Multiply operator (a * b)
+    def func(self, a, b):
+        return a * b
+```
+
+Let's consider what the computational graph will look like for the following code:
+
+```{python}
+#| eval : false
+x = AutogradValue(2)
+a = x ** 2
+b = 5 * a
+c = b * a
+L = -c
+```
+
+![](images/paste-1.png)
+
+Here the blue nodes represent constants (of type `float`), while the black nodes are `AutogradValue` objects. We see that every `AutogradValue` is populated with the value, parents and args, but that after this first pass `grad` is still `0` for each object, so we have not computed $\frac{dL}{dx}$. To do so, we need to run the backward pass by calling `L.backward()`.
+
+```{python}
+#| eval : false
+L.backward()
+print('dL_dx', x.grad)
+```
+
+In the backward pass, each node needs to update the `grad` property of its parents.
+
+![](images/paste-2.png)
+
+So first $L$ needs to update the `grad` property for $c$, which represents $\frac{dL}{dc}$. Then $c$ is able to update the `grad` property of $a$ and $b$ ($\frac{dL}{da}$ and $\frac{dL}{db}$).
+
+**Note that the order we perform these updates matters!** $\frac{dL}{da}$ will not be correct until both $b$ *and* $c$ have updated $a$, thus $a$ cannot perform the update to $\frac{dL}{dx}$ until both $b$ and $c$ have updated $a$.
+
+For each operation, we see that we also need to be able to compute the appropriate local derivatives of the value with respect to each input. For instance $a$ needs to be able to compute $\frac{da}{dx}$ , $c$ needs to be able to compute $\frac{dc}{da}$ and $\frac{dc}{db}$. We will definite another method `grads` that can compute these values for a given operation and override it for each subclass. Since `grads` might need to compute multiple derivatives (as for multiplication or addition) we'll have it return a `tuple`.
+
+```{python}
+#| eval : false
+class AutogradValue:
+        def grads(self, *args):
+        '''
+        Compute the derivative of the operation with respect to each input.
+        In the base case the derivative of the identity function is just 1. (da/da = 1).
+
+        Args:
+            input (float): The input to the operation
+        Returns:
+            grads (tuple): The derivative of the operation with respect to each input
+                            Here there is only a single input, so we return a length-1 tuple.
+        '''
+        return (1,)
+      
+class _square(AutogradValue):
+    # Square operator (a ** 2)
+    def grads(self, a):
+        return (2 * a,)
+
+class _mul(AutogradValue):
+    # Multiply operator (a * b)
+    def grads(self, a, b):
+        return (b, a)
+
+
+```
+
+With this in hand we can write a function that performs the backward update for a given operation. We'll call this method `backward_pass`.
+
+## Computational graphs of vectors
+
+As we've seen, in the context of neural networks we typically perform operations on large collections of values such as vectors. For example, we might perform an element-wise square on a large vector:
+
+```{python}
+#| eval : false
+x = np.ones((500,))
+a = x ** 2
+```
+
+In this case we are performing 500 individual square operations, so our computational graph would look like:
+
+![](images/paste-3.png){width="300"}
+
+Remember for our automatic differentiation implementation we would need an object for each of these values.
+
+```{python}
+#| eval : false
+x = np.array([AutogradValue(1), AutogradValue(1), ...])
+a = x ** 2
+```
+
+Each of these object introduces some overhead as each object needs to be constructed individually and needs to store not just the value and gradients, but also the parents. Furthermore our backward pass needs to determine the order of nodes to visit. For a large neural network, having a node for every single value would be computationally very complex.
+
+Since we're performing the same operation on each entry of the vector, there's really no need to have a separate node for each entry. Therefore we might instead prefer each node in our computational graph to represent a **vector** or **matrix** and for our operations to correspond to vector or matrix operations:
+
+```{python}
+#| eval : false
+x = AutogradValue(np.ones((500,)))
+a = x ** 2
+```
+
+In this case the computational graph for this operation would be:
+
+![](images/paste-4.png){width="500"}
+
+Our derivative calculations can similarly be performed as element-wise operations:
+
+$$
+\begin{bmatrix} \frac{da_1}{dx_1} \\ \frac{da_2}{dx_2} \\ \vdots \\ \frac{da_{500}}{dx_{500}} \end{bmatrix} =
+\begin{bmatrix} 2x_1 \\ 2x_2 \\ \vdots \\ 2x_{500} \end{bmatrix} = 2\mathbf{x}
+$$
+
+So in fact, for this case, we don't actually need to change our `AutogradValue` implementation for square at all!
+
+```{python}
+#| eval : false
+
+class _square(AutogradValue):
+    # Square operator (a ** 2)
+    def func(self, a):
+        return a ** 2
+
+    # Returns a vector of the element-wise derivatives!
+    def grads(self, a):
+        return (a ** 2,)
+       
+```
+
+## Automatic differentiation for linear regression
+
+Let's take a look at a concrete example how reverse-mode automatic differentiation with vectors would work. Specifically let's look at taking the gradient of the **mean squared error** loss we used for linear regression.
+
+$$
+L = \frac{1}{N}\sum_{i=1}^N (y_i - \mathbf{x}_i^T\mathbf{w})^2 = \frac{1}{N}\sum_{i=1}^N (\mathbf{y} - \mathbf{X}\mathbf{w})_i^2
+$$
+
+Here the right-hand side of the expression corresponds to how we might write this formula using numpy:
+
+```{python}
+#| eval : false
+se = (y - np.dot(X, w)) ** 2
+mse = np.sum(se) / X.shape[0] 
+```
+
+We are interested in the gradient with respect to $\mathbf{w}$, or $\frac{dL}{d\mathbf{w}}$ for optimizing our model. Let's start by looking at the simplest sequence of operations:
+
+$$
+\mathbf{a} = \mathbf{X}\mathbf{w}
+$$
+
+$$
+\mathbf{b} = \mathbf{y} - \mathbf{a}
+$$
+
+$$
+\mathbf{c} = \mathbf{b}^2
+$$
+
+$$
+g = \sum_{i=1}^N c_i
+$$
+
+$$
+L = \frac{1}{N}g
+$$
+
+We can setup our computational graph and reverse mode algorithm exactly as we did before, only in this case some of the operations will be on vectors! ($g$ and $L$ are still scalars, but $\mathbf{w}$, $\mathbf{a}$, $\mathbf{b}$ and $\mathbf{c}$ are vectors)
+
+```{python}
+#| echo : false
+%%manim -sqh -v CRITICAL --progress_bar none Viz
+
+class LectureScene(Scene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.camera.background_color = "#ffffff"
+        self.template = TexTemplate()
+        self.template.add_to_preamble(r"\usepackage{amsmath}")
+
+class Viz(LectureScene):
+    def construct(self):
+        points = np.linspace(-6, 5, 6)
+        names = ['\mathbf{w}', '\mathbf{a}', '\mathbf{b}', '\mathbf{c}', 'g', 'L']
+        ops = ['', '\mathbf{X}\mathbf{w}', '\mathbf{y} - \mathbf{a}', '\mathbf{b}^2', '\sum_{i=1}^n c_i', r'\frac{1}{N}g']
+
+        self.add(Text('Reverse mode', color=RED).scale(0.8).to_corner(LEFT).shift(0.5 * DOWN))
+
+        prev = None
+        for i in range(6):
+            node = Circle(radius=0.4, color=BLACK, fill_color=WHITE).move_to((points[i], 2, 0))
+            self.add(MathTex(names[i], color=BLACK).next_to(node, UP))
+            self.add(node)
+
+            if i > 0:
+                self.add(MathTex(r'\frac{d%s}{d%s}' % (names[i], names[i-1]), color=BLACK).next_to(node, DOWN).scale(0.6))
+
+            
+            if not prev is None:
+                self.add(MathTex(ops[i], color=BLACK).scale(0.5).next_to(Arrow(prev, node, color=BLACK, path_arc=0), UP))
+                self.add(Arrow(prev, node, color=BLACK, path_arc=0))
+            prev = node
+
+        points = np.linspace(-5, 6, 6)
+        prev = None
+        for i in range(6):
+            node = Circle(radius=0.4, color=BLACK, fill_color=WHITE).move_to((points[i], -2, 0))
+            self.add(MathTex(names[i], color=BLACK).next_to(node, UP))
+            self.add(node)
+
+            if i > 0:
+                self.add(MathTex(r'\frac{d%s}{d%s}' % (names[i], names[i-1]), color=BLACK).next_to(node, DOWN).scale(0.6))
+
+            
+            if not prev is None: 
+               
+                self.add(Arrow(prev, node, color=BLACK, path_arc=0))
+                
+            if not prev is None:
+                farr =Arrow(node, prev, color=RED, path_arc=0).shift(0.5 * DOWN)
+                self.add(MathTex(r'\frac{dL}{d%s}' % (names[i]), color=RED).next_to(farr, DOWN).shift(0.2*UP).scale(0.6))
+                self.add(farr)
+            prev = node
+        self.add(MathTex(r'\frac{dL}{d\mathbf{w}}', color=RED).move_to((-6, -2, 0)).scale(0.75))
+```
+
+Let's walk through the computation of $\frac{dL}{d\mathbf{w}}$.
+
+**Computing** $\frac{dL}{dg}$**:** The first step in the backward pass is straightforward:
+
+$$
+\frac{dL}{dg} = \frac{1}{N}
+$$
+
+**Computing** $\frac{dL}{d\mathbf{c}}$**:**
+
+$$
+\frac{dL}{d\mathbf{c}}= \frac{dL}{dg}\frac{dg}{d\mathbf{c}}
+$$
+
+Since $\mathbf{c}$ is a vector, $\frac{dg}{d\mathbf{c}}$ and $\frac{dL}{d\mathbf{c}}$ must be *vectors* of the derivative of $L$ or $g$ with respect to each entry of $\mathbf{c}$. In other words $\frac{dg}{d\mathbf{c}}$ and $\frac{dL}{d\mathbf{c}}$ are **gradients**!
+
+$$
+\frac{dL}{d\mathbf{c}}= \begin{bmatrix} \frac{dL}{dc_1} \\ \frac{dL}{dc_2} \\ \vdots \\ \frac{dL}{dc_N}  \end{bmatrix} = \frac{dL}{dg} \begin{bmatrix} \frac{dg}{dc_1} \\ \frac{dg}{dc_2} \\ \vdots \\ \frac{dg}{dc_N}  \end{bmatrix} = \frac{dL}{dg}\frac{dg}{d\mathbf{c}}
+$$
+
+We know that the derivative of a sum with respect to a single element is $1$, as in: $\frac{d}{dc_1}(c_1+c_2)=1$, so it follows that the gradient of our summation is simply a vector of 1s.
+
+$$
+\frac{dg}{d\mathbf{c}} =\begin{bmatrix} 1 \\ 1 \\ \vdots \\ 1 \end{bmatrix}, \quad \frac{dL}{d\mathbf{c}} =\begin{bmatrix} 1 \\ 1 \\ \vdots \\ 1 \end{bmatrix}\frac{1}{N} = \begin{bmatrix} \frac{1}{N} \\ \frac{1}{N} \\ \vdots \\ \frac{1}{N} \end{bmatrix}
+$$\
+**Computing** $\frac{dL}{d\mathbf{b}}$**:**
+
+Since $\mathbf{b}^2$ is an element-wise operation $(c_i=b_i^2)$ we know that:
+
+$$
+\frac{dL}{db_i}=\frac{dL}{dc_i}\frac{dc_i}{db_i} = \frac{1}{N}(2b_i)
+$$
+
+Therefore:
+
+$$
+\frac{dL}{d\mathbf{b}} = \begin{bmatrix} \frac{dL}{dc_1}\frac{dc_1}{db_1}  \\ \frac{dL}{dc_2}\frac{dc_2}{db_2}  \\ \vdots \\ \frac{dL}{dc_N}\frac{dc_N}{db_N}   \end{bmatrix} = \begin{bmatrix} \frac{2}{N}b_1  \\ \frac{2}{N}b_2  \\ \vdots \\ \frac{2}{N}b_N   \end{bmatrix}
+$$
+
+**Computing** $\frac{dL}{d\mathbf{a}}$**:**
+
+Since $\mathbf{y}-\mathbf{a}$ is also an element-wise operation $(b_i=y_i-a_i)$ we similarly see that:
+
+$$
+\frac{dL}{da_i}=\frac{dL}{db_i}\frac{db_i}{da_i} = \frac{2b_i}{N}(-1)
+$$
+
+$$
+\frac{dL}{d\mathbf{a}} = \begin{bmatrix} \frac{dL}{db_1}\frac{db_1}{da_1}  \\ \frac{dL}{dc_2}\frac{db_2}{da_2}  \\ \vdots \\ \frac{dL}{dc_N}\frac{db_N}{da_N}   \end{bmatrix} = \begin{bmatrix} \frac{-2}{N}b_1  \\ \frac{-2}{N}b_2  \\ \vdots \\ \frac{-2}{N}b_N   \end{bmatrix}
+$$
+
+**Computing** $\frac{dL}{d\mathbf{w}}$**:**
+
+This last calculation is less straightforward. $\mathbf{X}\mathbf{w}$ is **not** an element-wise operation, so we can't just apply the chain rule element-wise. We need a new approach! Let's break down the general problem that we see here.
+
+## Vector-valued functions
+
+A **vector-valued function** is a function that takes in a vector and *returns* a vector:
+
+$$
+\mathbf{y} = f(\mathbf{x}), \quad f: \mathbb{R}^n\rightarrow\mathbb{R}^m
+$$
+
+For example the matrix-vector product we've just seen is a simple vector-valued function:
+
+$$
+f(\mathbf{w}) =\mathbf{X}\mathbf{w}
+$$
+
+If $\mathbf{X}$ is an $(N\times d)$ matrix and $\mathbf{w}$ is a length- $d$ vector, then $f(\mathbf{w})=\mathbf{X}\mathbf{w}$ is a mapping $\mathbb{R}^d\rightarrow \mathbb{R}^N$
+
+## Jacobians
+
+A the **Jacobian** $(\mathbf{J})$ of a vector-valued function is the matrix of partial derivatives of every output with respect to every input. We can think of it as an extension of the gradient for vector-valued functions. If we have a vector-valued function $f$ and $\mathbf{a}$ is the result of applying $f$ to $\mathbf{w}$:
+
+$$
+\mathbf{a}=f(\mathbf{w}), \quad f:\mathbb{R}^d\rightarrow \mathbb{R}^N
+$$
+
+The corresponding Jacobian is:
+
+$$\frac{d\mathbf{a}}{d\mathbf{w}} = \begin{bmatrix} \frac{\partial a_1}{\partial w_1} & \frac{\partial a_1}{\partial w_2}& \dots& \frac{\partial a_1}{\partial w_d} \\
+\frac{\partial a_2}{\partial w_1} & \frac{\partial a_2}{\partial w_2}& \dots& \frac{\partial a_2}{\partial w_d} \\
+\vdots & \vdots & \ddots & \vdots \\
+\frac{\partial a_N}{\partial w_1} & \frac{\partial a_N}{\partial w_2}& \dots& \frac{\partial a_N}{\partial w_d} \\
+ \end{bmatrix}$$
+
+In general:
+
+$$
+\bigg(\frac{d\mathbf{a}}{d\mathbf{w}}\bigg)_{ij} = \frac{\partial a_i}{\partial w_j}
+$$
+
+Let's consider the Jacobian of a matrix-vector product:
+
+$$
+\mathbf{a} = \mathbf{X}\mathbf{w}
+$$
+
+We can find each entry in the Jacobian by taking the corresponding partial derivative.
+
+$$
+a_i =\sum_{j=1}^d X_{ij}w_j, \quad \frac{\partial a_i}{\partial w_j}=X_{ij}
+$$
+
+In this case we see that the Jacobian is just $\mathbf{X}$!
+
+## Vector-Jacobian products
+
+Let's return to our linear regression example:
+
+```{python}
+#| echo : false
+%%manim -sqh -v CRITICAL --progress_bar none Viz
+
+class LectureScene(Scene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.camera.background_color = "#ffffff"
+        self.template = TexTemplate()
+        self.template.add_to_preamble(r"\usepackage{amsmath}")
+
+class Viz(LectureScene):
+    def construct(self):
+        points = np.linspace(-6, 5, 6)
+        names = ['\mathbf{w}', '\mathbf{a}', '\mathbf{b}', '\mathbf{c}', 'g', 'L']
+        ops = ['', '\mathbf{X}\mathbf{w}', '\mathbf{y} - \mathbf{a}', '\mathbf{b}^2', '\sum_{i=1}^n c_i', r'\frac{1}{N}g']
+
+        self.add(Text('Reverse mode', color=RED).scale(0.8).to_corner(LEFT).shift(0.5 * DOWN))
+
+        prev = None
+        for i in range(6):
+            node = Circle(radius=0.4, color=BLACK, fill_color=WHITE).move_to((points[i], 2, 0))
+            self.add(MathTex(names[i], color=BLACK).next_to(node, UP))
+            self.add(node)
+
+            if i > 0:
+                self.add(MathTex(r'\frac{d%s}{d%s}' % (names[i], names[i-1]), color=BLACK).next_to(node, DOWN).scale(0.6))
+
+            
+            if not prev is None:
+                self.add(MathTex(ops[i], color=BLACK).scale(0.5).next_to(Arrow(prev, node, color=BLACK, path_arc=0), UP))
+                self.add(Arrow(prev, node, color=BLACK, path_arc=0))
+            prev = node
+
+        points = np.linspace(-5, 6, 6)
+        prev = None
+        for i in range(6):
+            node = Circle(radius=0.4, color=BLACK, fill_color=WHITE).move_to((points[i], -2, 0))
+            self.add(MathTex(names[i], color=BLACK).next_to(node, UP))
+            self.add(node)
+
+            if i > 0:
+                self.add(MathTex(r'\frac{d%s}{d%s}' % (names[i], names[i-1]), color=BLACK).next_to(node, DOWN).scale(0.6))
+
+            
+            if not prev is None: 
+               
+                self.add(Arrow(prev, node, color=BLACK, path_arc=0))
+                
+            if not prev is None:
+                farr =Arrow(node, prev, color=RED, path_arc=0).shift(0.5 * DOWN)
+                self.add(MathTex(r'\frac{dL}{d%s}' % (names[i]), color=RED).next_to(farr, DOWN).shift(0.2*UP).scale(0.6))
+                self.add(farr)
+            prev = node
+        self.add(MathTex(r'\frac{dL}{d\mathbf{w}}', color=RED).move_to((-6, -2, 0)).scale(0.75))
+```
+
+We see that $\frac{d\mathbf{a}}{d\mathbf{w}}$ is actually a Jacobian that we now know how to compute, so the remaining question is how to combine it with $\frac{dL}{d\mathbf{a}}$ in order to get the gradient we're looking for $\frac{dL}{d\mathbf{w}}$? The answer turns out to be simple: use the vector-matrix product:
+
+$$
+\frac{dL}{d\mathbf{w}} = \frac{dL}{d\mathbf{a}}^T\frac{d\mathbf{a}}{d\mathbf{w}}
+$$
+
+We might be curious why this is the right thing to do as opposed to a matrix-vector product or some other function. To see why, let's consider what an entry of our final gradient $\frac{dL}{d\mathbf{w}}$ should be. We've previously seen that when a value is use by more than one child operation, we need to *sum* the contribution of each child to the total derivative. So in this case, for a given entry of $\mathbf{w}$ we need to sum the gradient contribution from every element of $\mathbf{a}$:
+
+$$
+\frac{dL}{dw_j} = \frac{dL}{da_1} \frac{da_1}{dw_j}+\frac{dL}{da_2} \frac{da_2}{dw_j}+...\frac{dL}{da_N} \frac{da_N}{dw_j} = \sum_{i=1}^N \frac{dL}{da_i} \frac{da_i}{dw_j}
+$$
+
+Which we can see is equivalent to an entry in the vector matrix product:
+
+$$
+\frac{dL}{d\mathbf{w}} = \begin{bmatrix} \frac{dL}{da_1} & \frac{dL}{da_2} & ... & \frac{dL}{da_N} \end{bmatrix}\begin{bmatrix} \frac{\partial a_1}{\partial w_1} & \frac{\partial a_1}{\partial w_2}& \dots& \frac{\partial a_1}{\partial w_d} \\
+\frac{\partial a_2}{\partial w_1} & \frac{\partial a_2}{\partial w_2}& \dots& \frac{\partial a_2}{\partial w_d} \\
+\vdots & \vdots & \ddots & \vdots \\
+\frac{\partial a_N}{\partial w_1} & \frac{\partial a_N}{\partial w_2}& \dots& \frac{\partial a_N}{\partial w_d} \\
+ \end{bmatrix} = \frac{dL}{d\mathbf{a}}^T\frac{d\mathbf{a}}{d\mathbf{w}}
+$$
+
+We call this a **vector-Jacobian product** or VJP for short. We see that because it's simply derived from our basic gradient rules, it's valid for *any* vector-valued operation, as long as we can compute the Jacobian! We can use this to perform the final step in the backward pass for the MSE.
+
+**Computing** $\frac{dL}{d\mathbf{w}}$**:**
+
+From our *vector-Jacobian product* rule we know that:
+
+$$
+\frac{dL}{d\mathbf{w}} = \frac{dL}{d\mathbf{a}}^T\frac{d\mathbf{a}}{d\mathbf{w}}= \frac{-2}{N}\mathbf{b}^T\mathbf{X}
+$$
+
+If we substitute back in $\mathbf{b}=\mathbf{y}-\mathbf{X}\mathbf{w}$ we see that this is equivalent to the gradient we derived in a previous class!
+
+$$ \frac{dL}{d\mathbf{w}} = \frac{-2}{N}(\mathbf{y}-\mathbf{X}\mathbf{w})^T\mathbf{X} $$
+
+## VJPs for element-wise operations
+
+It's worth noting that element-wise operations are still vector-valued functions.
+
+$$
+\mathbf{c}=\mathbf{b}^2, \quad \mathbb{R}^n\rightarrow\mathbb{R}^n
+$$
+
+So why didn't we need to do a vector-Jaobian product for that operation? The answer is that we did, just implicitly! If we consider the Jacobian for this operation we see that because each entry of $\mathbf{c}$ only depends on the corresponding entry of $\mathbf{b}$, the Jacobian for this operation is $0$ everywhere except the main diagonal:
+
+$$
+\frac{d\mathbf{c}}{d\mathbf{b}} = \begin{bmatrix} \frac{\partial c_1}{\partial b_1} & 0 & \dots& 0 \\
+0 & \frac{\partial c_2}{\partial b_2}& \dots& 0\\
+\vdots & \vdots & \ddots & \vdots \\
+0& 0& \dots& \frac{\partial c_N}{\partial b_d} \\
+ \end{bmatrix}
+$$
+
+This means that we can write the vector-Jacobian product as we did before:
+
+$$
+\frac{dL}{d\mathbf{c}}\frac{d\mathbf{c}}{d\mathbf{b}}=\begin{bmatrix} \frac{dL}{dc_1}\frac{dc_1}{db_1}  \\ \frac{dL}{dc_2}\frac{dc_2}{db_2}  \\ \vdots \\ \frac{dL}{dc_N}\frac{dc_N}{db_N}   \end{bmatrix}
+$$
+
+This is a big computational savings over explicitly constructing the full Jacobian and performing a vector-matrix multiplication.
+
+## VJPs for matrices
+
+So far we've seen VJPs with respect to vectors. What if in the formulation above, we were to take the derivative with respect to $\mathbf{X}$ instead of $\mathbf{w}$?
+
+$$
+\mathbf{a}=\mathbf{X}\mathbf{w},\quad \frac{d\mathbf{a}}{d\mathbf{X}}
+$$
+
+In this case $\mathbf{X}$ is an $N\times d$ matrix, so if we were to consider all the partial derivatives making up the Jacobian $\frac{d\mathbf{a}}{d\mathbf{X}}$ there would be $N\times N\times d$ values, while the gradient $\frac{dL}{d\mathbf{X}}$ is itself an $N\times d$ matrix of the derivative of $L$ with respect to each value of $\mathbf{X}$.
+
+Let's look at how we can formulate the vector-Jacobian product:
+
+$$
+\frac{dL}{d\mathbf{X}} = \frac{dL}{d\mathbf{a}}^T\frac{d\mathbf{a}}{d\mathbf{X}}
+$$
+
+We know that for a given entry of $\frac{dL}{d\mathbf{X}}$, we can again compute the derivative by summing the contribution from each child, in this case every entry of $\mathbf{a}$
+
+$$
+\frac{dL}{dX_{jk}} = \sum_{i=1}^N \frac{\partial L}{\partial a_{i}} \frac{\partial a_i}{\partial X_{jk}}
+$$
+
+This suggests that we can compute the VJP by *flattening* the Jacobian from an $N\times N \times d$ structure into a $N \times Nd$ matrix. Therefore performing the vector-matrix product will give us a length $Nd$ vector with the appropriate values for us to reshape into our $N \times d$ Jacobian $\frac{dL}{d\mathbf{X}}$.
+
+In code this could look like:
+
+```{python}
+#| eval : false
+dL_da, da_dx  # The computed gradients/jacobians
+da_dx = da_dx.reshape((da_dx.shape[0], -1))
+dL_dx = np.dot(dL_da, da_dx)
+dL_dx = dL_dx.reshape(x.shape)
+```
+
+Let's return to our example:
+
+$$\mathbf{a}=\mathbf{X}\mathbf{w}$$
+
+Do we need to instantiate the full Jacobian here? **No!** In our original operation:
+
+$$
+a_i = \sum_{k=1}^d X_{ik}w_k
+$$
+
+Thus $\frac{\partial a_i}{\partial X_{jk}}$ is only nonzero when $j=i$. Taking the derivative we get:
+
+$$
+\frac{\partial a_i}{\partial X_{jk}} = \frac{\partial}{\partial X_{jk}}\sum_{k=1}^d X_{ik}w_k = \mathbb{I}(i=j)w_k
+$$
+
+We can therefore write the vector-Jacobian product as:
+
+$$
+\frac{\partial L}{\partial X_{ik}}=\frac{\partial L}{\partial a_i}\frac{\partial a_i}{\partial X_{ik}} = \frac{\partial L}{\partial a_i}w_k
+$$
+
+In code we could write this as:
+
+```{python}
+#| eval : false
+w_mat = w.reshape((1, -1)) # reshape w to 1 x d
+dL_da_mat = dL_da.reshape((-1, 1)) # reshape dL_da to N x 1
+dL_dx = w_mat * dL_da_mat # dL_dx becomes N x d, entry ik = dL_da_i * w_k
+```
+
+## Forward mode AD with vectors
+
+What about forward mode for our linear regression example?
+
+$$
+\mathbf{a} = \mathbf{X}\mathbf{w}
+$$
+
+$$
+\mathbf{b} = \mathbf{y} - \mathbf{a}
+$$
+
+$$
+\mathbf{c} = \mathbf{b}^2
+$$
+
+$$
+g = \sum_{i=1}^N c_i
+$$
+
+$$
+L = \frac{1}{N}g
+$$
+
+```{python}
+#| echo : false
+%%manim -sqh -v CRITICAL --progress_bar none Viz
+
+class LectureScene(Scene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.camera.background_color = "#ffffff"
+        self.template = TexTemplate()
+        self.template.add_to_preamble(r"\usepackage{amsmath}")
+
+class Viz(LectureScene):
+    def construct(self):
+        points = np.linspace(-6, 5, 6)
+        names = ['\mathbf{w}', '\mathbf{a}', '\mathbf{b}', '\mathbf{c}', 'g', 'L']
+        ops = ['', '\mathbf{X}\mathbf{w}', '\mathbf{y} - \mathbf{a}', '\mathbf{b}^2', '\sum_{i=1}^n c_i', r'\frac{1}{N}g']
+
+        prev = None
+        for i in range(6):
+            node = Circle(radius=0.4, color=BLACK, fill_color=WHITE).move_to((points[i], 2, 0))
+            self.add(MathTex(names[i], color=BLACK).next_to(node, UP))
+            self.add(node)
+
+            if i > 0:
+                self.add(MathTex(r'\frac{d%s}{d%s}' % (names[i], names[i-1]), color=BLACK).next_to(node, DOWN).scale(0.6))
+
+            
+            if not prev is None:
+                self.add(MathTex(ops[i], color=BLACK).scale(0.5).next_to(Arrow(prev, node, color=BLACK, path_arc=0), UP))
+                self.add(Arrow(prev, node, color=BLACK, path_arc=0))
+            prev = node
+
+
+        self.add(Text('Forward mode', color=GREEN).scale(0.8).to_corner(LEFT).shift(0.5 * DOWN))
+
+        prev = None
+        for i in range(6):
+            node = Circle(radius=0.4, color=BLACK, fill_color=WHITE).move_to((points[i], -2, 0))
+            self.add(MathTex(names[i], color=BLACK).next_to(node, UP))
+            self.add(node)
+
+            if i > 0:
+                self.add(MathTex(r'\frac{d%s}{d%s}' % (names[i], names[i-1]), color=BLACK).next_to(node, DOWN).scale(0.6))
+
+            
+            if not prev is None:
+                self.add(Arrow(prev, node, color=BLACK, path_arc=0))
+               
+            if not prev is None:
+                farr =Arrow(prev, node, color=GREEN, path_arc=0).shift(0.5 * DOWN)
+                self.add(MathTex(r'\frac{d%s}{d\mathbf{w}}' % (names[i-1]), color=GREEN).next_to(farr, DOWN).shift(0.2*UP).scale(0.6))
+                self.add(farr)
+            prev = node
+        self.add(MathTex(r'\frac{dL}{dx}', color=GREEN).move_to((6, -2, 0)).scale(0.75))
+```
+
+As we've seen $\frac{d\mathbf{a}}{d\mathbf{w}}$ is an $N\times d$ Jacobian matrix. After computing this, the next step will be to compute:
+
+$$\frac{d\mathbf{b}}{d\mathbf{w}}=\frac{d\mathbf{b}}{d\mathbf{a}}\frac{d\mathbf{a}}{d\mathbf{w}}$$
+
+Here we are multiplying the $N\times N$ Jacobian $\frac{d\mathbf{b}}{d\mathbf{a}}$ with the $N\times d$ gradient $\frac{d\mathbf{a}}{d\mathbf{w}}$ to get the $N\times d$ gradient $\frac{d\mathbf{b}}{d\mathbf{w}}$. We can again verify that this is the correct computation by checking an individual element of $\frac{d\mathbf{b}}{d\mathbf{w}}$:
+
+$$
+\frac{db_i}{dw_j}=\sum_{k=1}^N \frac{db_i}{da_k}\frac{da_k}{dw_j}
+$$
+
+We call this operation a **Jacobian-vector product** or JVP.

@@ -1,0 +1,390 @@
+---
+title: "Lecture 5: Introduction to Neural Networks"
+format:
+    html:
+        toc: true 
+        toc-depth: 3
+---
+
+{{< include ../code/ojs.qmd >}}
+
+```{python}
+#| echo: false
+import warnings
+warnings.filterwarnings("ignore")
+import os
+import contextlib
+with open(os.devnull, "w") as f, contextlib.redirect_stdout(f):
+    from manim import *
+import autograd.numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+
+class LectureScene(Scene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.camera.background_color = "#ffffff"
+        self.template = TexTemplate()
+        self.template.add_to_preamble(r"\usepackage{amsmath}")
+
+class ThreeDLectureScene(ThreeDScene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.camera.background_color = "#ffffff"
+        self.template = TexTemplate()
+        self.template.add_to_preamble(r"\usepackage{amsmath}")
+    
+
+class VectorScene(LectureScene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.ax = Axes(
+            x_range=[-7.5, 7.5, 1],
+            y_range=[-5, 5, 1],
+            x_length=12,
+            y_length=8,
+            axis_config={"color": GREY},
+        )
+        
+        #axes_labels.set_color(GREY)
+        self.add(self.ax)
+
+class PositiveVectorScene(LectureScene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.ax = Axes(
+            x_range=[-2.5, 12.5, 1],
+            y_range=[-1, 9, 1],
+            x_length=12,
+            y_length=8,
+            axis_config={"color": GREY},
+        )
+                #axes_labels.set_color(GREY)
+        self.add(self.ax)
+
+class ComparisonVectorScene(LectureScene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.ax1 = Axes(
+            x_range=[-5, 5, 1],
+            y_range=[-5, 5, 1],
+            x_length=6,
+            y_length=6,
+            axis_config={"color": GREY},
+        )
+        self.ax2 = Axes(
+            x_range=[-5, 5, 1],
+            y_range=[-5, 5, 1],
+            x_length=6,
+            y_length=6,
+            axis_config={"color": GREY},
+        )
+        axgroup = Group(self.ax1, self.ax2)
+        axgroup.arrange_in_grid(buf=2)
+        
+        #axes_labels.set_color(GREY)
+        self.add(axgroup)
+```
+
+# The story so far
+
+## Data
+
+$$
+\text{Honda Accord: } \begin{bmatrix} \text{Weight:} & \text{2500 lbs} \\ \text{Horsepower:} & \text{ 123 HP} \\ \text{Displacement:} & \text{ 2.4 L} \\ \text{0-60mph:} & \text{ 7.8 Sec} \end{bmatrix} \longrightarrow \text{   MPG: ?}
+$$
+
+$$
+\text{Dodge Aspen: } \begin{bmatrix} \text{Weight:} & \text{3800 lbs} \\ \text{Horsepower:} & \text{ 155 HP} \\ \text{Displacement:} & \text{ 3.2 L} \\ \text{0-60mph:} & \text{ 6.8 Sec} \end{bmatrix} \longrightarrow \text{   MPG: ?}
+$$
+
+$$
+\vdots \quad \vdots
+$$
+
+$$
+\mathcal{D}  = \{ (\mathbf{x}_1, y_1),\ (\mathbf{x}_2, y_2),\ ...\ (\mathbf{x}_N, y_N)\} = \big(\mathbf{X}, \mathbf{y}\big)
+$$
+
+::: columns
+::: {.column width="60%"}
+#### Inputs
+
+::: {style="zoom: 0.5;"}
+```{python}
+#| echo: false
+mpg_data = pd.read_csv('data/auto-mpg.csv', na_values='?').set_index('car name')[['weight', 'horsepower', 'displacement', 'acceleration', 'mpg']]
+mpg_data = mpg_data[~mpg_data.index.duplicated(keep='first')]
+data = mpg_data[['weight', 'horsepower', 'displacement', 'acceleration']]
+def custom_style(row):
+    color = 'white'
+    if row.values[-1] == 12:
+        color = 'yellow'
+
+    return ['background-color: %s' % color]*len(row.values)
+
+#data = data.style.apply(custom_style, axis=1)
+X = data.values
+data
+```
+
+$$ \mathbf{X} = 
+\begin{bmatrix} 
+                X_{11} & X_{12} & X_{13} & X_{14} \\ 
+                X_{21} & X_{22} & X_{23} & X_{24} \\
+                X_{31} & X_{32} & X_{33} & X_{34} \\
+                \vdots & \vdots & \vdots & \vdots \\
+                X_{N1} & X_{N2} & X_{N3} & X_{N4} \\
+                                 \end{bmatrix} \underset{\text{Car data}}{\longrightarrow}
+\begin{bmatrix} 
+                3504 & 130 & 307.0 & 12.0 \\ 
+                3693 & 165 & 350.0 & 11.5 \\
+                3493 & 150 & 318.0 & 11.0 \\
+                \vdots & \vdots & \vdots & \vdots \\
+                2720 & 82 & 119.0 & 19.4 \\
+                                 \end{bmatrix}$$
+
+$$\mathbf{X}:\ N \times d \ \text{matrix} , \quad (\mathbf{X} \in \mathbb{R}^{N\times d})$$ $$ N: \text{number of observations}, \quad d: \text{number of features}$$
+
+```{python}
+print(X)
+```
+:::
+:::
+
+::: {.column width="10%"}
+:::
+
+::: {.column width="30%"}
+#### Outputs
+
+::: {style="zoom: 0.5;"}
+```{python}
+#| echo: false
+ydata = mpg_data[['mpg']]
+y = ydata.values
+ydata
+```
+
+$$ \mathbf{y} = 
+\begin{bmatrix} 
+                y_{1} \\ 
+                y_{2} \\
+                y_{3} \\
+                \vdots \\
+                y_{N} \\
+                                 \end{bmatrix} \underset{\text{Car data}}{\longrightarrow}
+\begin{bmatrix} 
+                18.0  \\ 
+                15.0  \\
+                16.0  \\
+                \vdots \\
+                31.0 \\
+                                 \end{bmatrix}$$
+
+$$\mathbf{y}:\ N \ \text{vector}, \quad (\mathbf{y} \in \mathbb{R}^N)$$ $$ N: \text{number of observations}$$
+
+```{python}
+#| echo: false
+y_old = y
+y = np.concatenate([y, y, y, y, y, y]).flatten()
+```
+
+```{python}
+#| eval: true
+print(y)
+```
+:::
+:::
+:::
+
+::: columns
+::: {.column width="60%"}
+#### Inputs
+
+::: {style="zoom: 0.5;"}
+```{python}
+#| echo: false
+
+def custom_style(row):
+    color = 'white'
+    if row.values[0] == 3433:
+        color = 'gold'
+
+    return ['background-color: %s' % color]*len(row.values)
+data.head().style.apply(custom_style, axis=1)
+```
+
+$$\mathbf{x}_3 = \begin{bmatrix} 3433 \\ 150 \\ 304 \\ 12 \end{bmatrix}, \quad (d \text{ vector})$$
+
+```{python}
+print(X[3])
+```
+
+### As a column vector
+
+$$\mathbf{x}_3 = \begin{bmatrix} 3433 \\ 150 \\ 304 \\ 12 \end{bmatrix}, \quad (d \text{ vector})\quad \underset{\text{same notation!}}{\longleftrightarrow} \quad \mathbf{x}_3 = \begin{bmatrix} 3433 \\ 150 \\ 304 \\ 12 \end{bmatrix}, \quad (d \times 1 \text{ matrix}) $$
+
+```{python}
+print(X[3].reshape((-1, 1)))
+```
+
+### As a row vector
+
+$$\mathbf{x}_3^T = \begin{bmatrix} 3433 & 150 & 304 & 12 \end{bmatrix}, \quad (d \times 1 \text{ matrix}) $$
+
+```{python}
+print(X[3].reshape((1, -1)))
+```
+
+$$\mathbf{X} = \begin{bmatrix} \mathbf{x}_1^T \\ \mathbf{x}_2^T \\ \vdots \\ \mathbf{x}_N^ T \end{bmatrix}$$
+:::
+:::
+
+::: {.column width="10%"}
+:::
+
+::: {.column width="30%"}
+#### Outputs
+
+::: {style="zoom: 0.5;"}
+```{python}
+#| echo: false
+
+def custom_style(row):
+    color = 'white'
+    if row.values[0] == 16:
+        color = 'gold'
+
+    return ['background-color: %s' % color]*len(row.values)
+ydata.head().style.apply(custom_style, axis=1)
+```
+
+$$y_3 = 16, \quad (\text{scalar})$$
+
+```{python}
+print(y[3])
+```
+:::
+:::
+:::
+
+::: columns
+::: {.column width="60%"}
+#### Inputs
+
+::: {style="zoom: 0.5;"}
+```{python}
+#| echo: false
+
+def custom_style(row):
+    return ['background-color: %s' % 'gold'] + ['background-color: %s' % 'white']*(len(row.values) - 1)
+data.head().style.apply(custom_style, axis=1)
+```
+
+```{python}
+weight = X[:, 0]
+print(weight[:5])
+```
+:::
+:::
+
+::: {.column width="10%"}
+:::
+
+::: {.column width="30%"}
+#### Outputs
+
+::: {style="zoom: 0.5;"}
+```{python}
+#| echo: false
+y = y_old
+def custom_style(row):
+    color = 'gold'
+    return ['background-color: %s' % color]*len(row.values)
+ydata.head().style.apply(custom_style, axis=1)
+```
+
+```{python}
+print(y[:5])
+
+```
+:::
+:::
+:::
+
+```{python}
+f = plt.scatter(weight, y)
+
+```
+
+### Linear predictions
+
+Find simple function that predicts output $$f(\mathbf{X}) = \mathbf{x}^T \mathbf{w}$$ $$\mathbf{x}: \text{input} (d \text{ vector}), \quad\mathbf{w}: \text{weights or parameters} (d \text{ vector})$$
+
+```{python}
+#| echo: false
+
+def custom_style(row):
+    color = 'white'
+    if row.values[0] == 3433:
+        color = 'gold'
+
+    return ['background-color: %s' % color]*len(row.values)
+data.head().style.apply(custom_style, axis=1)
+```
+
+$$f(\mathbf{x}_4) = \mathbf{x}_4^T \mathbf{w} =  \begin{bmatrix} 3433 \\ 150 \\ 304 \\ 12 \end{bmatrix}^T \begin{bmatrix} w_1 \\ w_2 \\ w_3 \\ w_4 \end{bmatrix} = 3433 w_1  +  150 w_2 + 304  w_3 + 12w_4 $$
+
+```{python}
+w = np.array([0.02, 0.2, -0.1, -1.5])
+
+def f(x, w):
+    # Transpose not needed because x and w are 1-dimensional vectors
+    # (Not column/row vectors!)
+    return np.dot(x, w)
+
+print(f(X[3], w))
+```
+
+```{python}
+# Make everything explicit column vectors
+w = w.reshape((-1, 1))
+x3 = X[3].reshape((-1, 1))
+
+# Works!
+def f(x, w):
+    return np.dot(x.T, w)
+
+f(X[3], w)
+```
+
+Find simple function that predicts output $$f(\mathbf{X}) = \mathbf{X} \mathbf{w}$$ $$\mathbf{x}: \text{all inputs} (N\times d \text{ matrix}), \quad\mathbf{w}: \text{weights or parameters} (d \text{ vector})$$
+
+```{python}
+#| echo: false
+
+def custom_style(row):
+    color = 'gold'
+    return ['background-color: %s' % color]*len(row.values)
+data.head().style.apply(custom_style, axis=1)
+```
+
+$$f(\mathbf{X}) = \mathbf{X} \mathbf{w} =  \begin{bmatrix} 3504 & 130 & 307 & 12 \\
+3693 & 165 & 350 & 11.5 \\
+3436 & 150 & 318 & 11 \\
+3433 & 150 & 304 & 12 \\
+\vdots & \vdots & \vdots & \vdots \\
+ \end{bmatrix} \begin{bmatrix} w_1 \\ w_2 \\ w_3 \\ w_4 \end{bmatrix}  $$
+
+```{python}
+w = np.array([0.02, 0.2, -0.1, -1.5])
+
+def f(x, w):
+    return np.dot(x, w)
+
+print(f(X, w) [:4])
+```
+
+Find x

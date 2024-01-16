@@ -1,0 +1,828 @@
+---
+title: "Lecture 4: Feature transforms"
+format:
+    html:
+        toc: true
+        toc-depth: 3
+---
+
+{{< include ../code/ojs.qmd >}}
+
+```{ojs}
+//| echo: false
+data = FileAttachment("data/auto-mpg.csv").csv({typed: true})
+```
+
+```{python}
+#| echo: false
+import warnings
+warnings.filterwarnings("ignore")
+import os
+import contextlib
+with open(os.devnull, "w") as f, contextlib.redirect_stdout(f):
+    from manim import *
+import autograd.numpy as np
+
+
+class LectureScene(Scene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.camera.background_color = "#ffffff"
+        self.template = TexTemplate()
+        self.template.add_to_preamble(r"\usepackage{amsmath}")
+
+class ThreeDLectureScene(ThreeDScene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.camera.background_color = "#ffffff"
+        self.template = TexTemplate()
+        self.template.add_to_preamble(r"\usepackage{amsmath}")
+    
+
+class VectorScene(LectureScene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.ax = Axes(
+            x_range=[-7.5, 7.5, 1],
+            y_range=[-5, 5, 1],
+            x_length=12,
+            y_length=8,
+            axis_config={"color": GREY},
+        )
+        
+        #axes_labels.set_color(GREY)
+        self.add(self.ax)
+
+class PositiveVectorScene(LectureScene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.ax = Axes(
+            x_range=[-2.5, 12.5, 1],
+            y_range=[-1, 9, 1],
+            x_length=12,
+            y_length=8,
+            axis_config={"color": GREY},
+        )
+                #axes_labels.set_color(GREY)
+        self.add(self.ax)
+
+class ComparisonVectorScene(LectureScene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.ax1 = Axes(
+            x_range=[-5, 5, 1],
+            y_range=[-5, 5, 1],
+            x_length=6,
+            y_length=6,
+            axis_config={"color": GREY},
+        )
+        self.ax2 = Axes(
+            x_range=[-5, 5, 1],
+            y_range=[-5, 5, 1],
+            x_length=6,
+            y_length=6,
+            axis_config={"color": GREY},
+        )
+        axgroup = Group(self.ax1, self.ax2)
+        axgroup.arrange_in_grid(buf=2)
+        
+        #axes_labels.set_color(GREY)
+        self.add(axgroup)
+```
+
+# Evaluating models
+
+## Training and test datasets
+
+In machine learning we are typically less interested in how our model predicts the data we've already seen than we are in how well it makes predictions for *new* data. One way to estimate how well our model our model will generalize to new data is to *hold out* data while fitting our model. To do this we will split our dataset into two smaller datasets: a *training dataset* that we will use to fit our model, and a *test* or *held-out* dataset that we will only use to evaluate our model. By computing the loss on this test dataset, we can get a sense of how well our model will make prediction for new data.
+
+$$\mathcal{D} = \{ (\mathbf{x}_1, y_1),\ (\mathbf{x}_2, y_2),\ ... \,(\mathbf{x}_N, y_N) \}\quad \longrightarrow \quad
+$$
+
+$$
+\mathcal{D}_{train} = \{ (\mathbf{x}_1, y_1),\ (\mathbf{x}_2, y_2),\ ... \,(\mathbf{x}_{Ntrain}, y_{Ntrain}) \},\  
+\mathcal{D}_{test} = \{ (\mathbf{x}_1, y_1),\ (\mathbf{x}_2, y_2),\ ... \,(\mathbf{x}_{Ntest}, y_{Ntest}) \}
+$$
+
+::: columns
+::: {.column width="45%"}
+#### Training data
+```{python}
+#| echo : false
+import pandas as pd
+mpg_data = pd.read_csv('data/auto-mpg.csv')
+mpg_data[['car name', 'weight', 'displacement', 'horsepower', 'acceleration']][:300]
+```
+:::
+::: {.column width="10%"}
+:::
+::: {.column width="45%"}
+#### Test data
+```{python}
+#| echo : false
+import pandas as pd
+mpg_data = pd.read_csv('data/auto-mpg.csv')
+mpg_data[['car name', 'weight', 'displacement', 'horsepower', 'acceleration']][300:]
+```
+:::
+:::
+
+
+For example, we might see that our model does well on the data it was fit on and poorly on new data.
+
+:::: columns
+::: {.column width="49%"}
+
+#### Training data
+```{ojs}
+//| echo: false
+
+regressionPlot(data.slice(0,300), [45.32, -0.0077], ["weight"], x => x.mpg, 0, se, "crimson")
+```
+
+:::
+::: {.column width="49%"}
+
+#### Test data
+```{ojs}
+//| echo: false
+
+regressionPlot(data.slice(300), [45.32, -0.0077], ["weight"], x => x.mpg, 0, se, "crimson")
+```
+
+:::
+::::
+
+## Spliting data in practice
+In general a good rule of thumb is to reserve $30\%$ of you data for evaluation, but anywhere from $10\%$ to $50\%$ is common in practice. 
+
+It is also very import very important to **split data at random**. Often real-world data is stored in a meaningul order and we don't want this order to bias our results. In fact, the previous example was **not** split randomly. We see that if we do split randomly our evaluation looks much better.
+
+::: columns
+::: {.column width="50%"}
+
+#### Training data
+```{ojs}
+//| echo: false
+
+sdata = data.slice()
+a = shuffle(sdata)
+regressionPlot(sdata.slice(0,300), [45.32, -0.0077], ["weight"], x => x.mpg, 0, se, "crimson")
+```
+:::
+::: {.column width="50%"}
+
+#### Test data
+```{ojs}
+//| echo: false
+regressionPlot(sdata.slice(300), [45.32, -0.0077], ["weight"], x => x.mpg, 0, se, "crimson")
+```
+:::
+:::
+
+In numpy we can accomplish this splitting by creating a random order of observations and applying it to both $X$ and $y$
+```{python}
+#| eval: false
+order = np.arange(X.shape[0])    # Get an array of indices (1...N)
+numTrain = int(X.shape[0] * 0.7) # Get the number of training obs. (70%)
+trainInds = order[:numTrain]     # Get the indices of training obs. (70%)
+testInds = order[numTrain:]      # Get the indices of test obs. (30%)
+
+# Get the data and labels for each split
+trainX, trainy = X[trainInds], y[trainInds]
+testX, testy = X[testInds], y[testInds]
+``` 
+
+
+# Feature Transforms
+
+## Linear predictions
+
+In the previous two lectures, we looked at examples of *linear* models. For example, we saw that the *linear regression* model makes predictions of the form:
+
+$$
+f(\mathbf{x}) = \mathbf{x}^T\mathbf{w} = \sum_{i=1}^n x_i w_i
+$$
+
+Meaning that the output will be a weighted sum of the *features* of the input. In the case of our car example, we will made predictions as:
+
+$$
+\text{Predicted MPG} = f(\mathbf{x})= 
+$$
+
+$$
+(\text{weight})w_1 + (\text{horsepower})w_2 + (\text{displacement})w_3 + (\text{0-60mph})w_4 + b
+$$
+
+Graphically we see this corresponds to a prediction function that is a *line* or a *plane*.
+
+```{ojs}
+//| echo: false
+regressionPlot(data, [45.32, -0.0077], ["weight"], x => x.mpg, 0, se, "crimson")
+```
+
+## Non-linear data
+
+Unfortunately, in the real world the relationship between inputs and outputs is not always linear. For example, what if we tried to fit a linear model to the following dataset.
+
+
+```{ojs}
+//| echo: false
+viewof form_quadratic = Inputs.form(
+  [
+    Inputs.range([-10, 10], {step: 0.01, label: "b", value: 2.89}),
+    Inputs.range([-10, 10], {step: 0.0001, label: "w", value: 2.0165}),
+  ]
+)
+
+```
+
+```{python}
+#| echo: false
+x = np.random.random((100,)) * 6 - 3
+y = x ** 2 + np.random.randn(*x.shape) * 0.5
+ojs_define(quadratic_data = np.stack([x, y]).T.tolist())
+```
+
+```{ojs}
+//| echo: false
+regressionPlot(quadratic_data, form_quadratic, ["0"], "1", 0, se)
+```
+
+We see that there is no straight line that is a good fit to our data. We see this with our real-world fuel efficiency dataset as well: we can find a line that reasonably approximates the relationship between weight and efficiency, but a curve would fit the data better.
+
+```{ojs}
+//| echo: false
+viewof form_mpg_linear = Inputs.form(
+  [
+    Inputs.range([-10, 100], {step: 0.01, label: "b", value: 45.32}),
+    Inputs.range([-0.03, 0.03], {step: 0.0001, label: "w", value: -0.0077}),
+  ]
+)
+
+```
+
+```{ojs}
+//| echo: false
+regressionPlot(data, form_mpg_linear, ["weight"], "mpg", 0, se)
+```
+
+## Polynomial functions
+
+If we're trying to approximate a non-linear relationship between inputs and outputs, it follows that we may want to fit a non-linear approximation.
+
+One of the simplest types of non-linear functions we could use are ***polynomial*** **functions.** A polynomial function is simply a function that can be expressed as a polynomial, meaning that it allows for (integer) powers of the input.
+
+The simplest type of non-linear polynomial is a *quadratic function*, which involves powers of up to $2$. A quadratic function of a single variable can be written as:
+
+$$
+f(x) = w_2 x^2 + w_1x +b
+$$
+
+```{python}
+#| echo: false
+%%manim -sqh -v CRITICAL --progress_bar none VectorAddition
+
+class VectorAddition(Scene):
+    def construct(self):
+        self.camera.background_color = "#ffffff"
+        axes = Axes(
+            x_range=[-8, 8, 1],
+            y_range=[-8, 8, 1],
+            x_length=12,
+            y_length=8,
+            axis_config={"color": GREY},
+        )
+        
+        axes_labels = axes.get_axis_labels()
+        #axes_labels.set_color(GREY)
+        self.add(axes, axes_labels)
+
+        plot = axes.plot(lambda x: 0.75 * x ** 2 + 2 * x - 3, color=BLUE)
+        self.add(plot)
+        
+        eq = Tex(r'$f(x)=0.75x^2 + 2x -3$', color=BLUE).to_corner(UR)
+        self.add(eq)
+```
+
+A quadratic function of $2$ variables can be written as:
+
+$$
+f(x, y) = w_5 x^2 + w_4y^2 + w_3 xy + w_2x + w_1y +b
+$$
+
+Similarly a *cubic* function involves powers up to 3:
+
+$$
+f(x) = w_3 x^3 + w_2 x^2 + w_1x +b
+$$
+
+```{python}
+#| echo: false
+%%manim -sqh -v CRITICAL --progress_bar none VectorAddition
+
+class VectorAddition(Scene):
+    def construct(self):
+        self.camera.background_color = "#ffffff"
+        axes = Axes(
+            x_range=[-10, 10, 1],
+            y_range=[-10, 10, 1],
+            x_length=12,
+            y_length=8,
+            axis_config={"color": GREY},
+        )
+        
+        axes_labels = axes.get_axis_labels()
+        #axes_labels.set_color(GREY)
+        self.add(axes, axes_labels)
+
+        #plot1 = axes.plot(lambda x: 0.5 * x ** 2 + 2 * x - 3, color=BLUE)
+        #self.add(plot1)
+        
+        eq1 = Tex(r'$f(x)=-0.1x^3+0.5x^2 + 2x -7$', color=RED).to_corner(UR)
+        self.add(eq1)
+
+        plot = axes.plot(lambda x: -0.1* x **3 + 0.5 * x ** 2 + 2 * x - 7, color=RED)
+        self.add(plot)
+        
+        #eq = Tex(r'$f(x)=0.5x^2 + 2x -3$', color=BLUE).next_to(eq1, DOWN)
+        #self.add(eq)
+
+        
+```
+
+In general the *degree* of a polynomial is the largest exponent in any term of the polynomial (or sum of exponents for terms involving more than 1 input). For example we can look at 2 different degree 4 polynomial functions:
+
+$$
+f(x, y) = 3 x^4 + 2 xy + y - 2
+$$
+
+$$
+f(x, y) = -2 x^2y^2 + 2 x^3 + y^2 - 5
+$$
+
+## Polynomial functions as vector functions
+
+We can also write polynomial functions as vector-input functions. For example a quadratic function of two variables could be written as:
+
+$$
+f(\mathbf{x}) = w_5 x_2^2 + w_4x_1^2 + w_3 x_1 x_2 + w_2x_2 + w_1x_1 +b
+$$
+
+From this form we see that a polynomial is a weighted sum of powers of $\mathbf{x}$! This means we could write a vector polynomial as a dot product between a weight vector and a vector containing all the powers of $\mathbf{x}$:
+
+$$
+ w_5 x_2^2 + w_4x_1^2 + w_3 x_1 x_2 + w_2x + w_1y +b = \begin{bmatrix}  x_1 \\ x_2 \\ x_1 x_2 \\ x_1^2 \\ x_2^2 \\  1 \end{bmatrix} \cdot \begin{bmatrix}  w_1 \\ w_2 \\ w_3 \\ w_4 \\ w_5 \\  b \end{bmatrix}
+$$
+
+## Quadratic feature transforms
+
+Let's consider the mapping from $\mathbf{x}$ to powers of the elements of $\mathbf{x}$. We'll call this mapping $\phi$:
+
+$$
+\begin{bmatrix}  x_1 \\ x_2 \end{bmatrix}\underset{\phi}{\longrightarrow}\begin{bmatrix}  x_1 \\ x_2 \\ x_1 x_2 \\ x_1^2 \\ x_2^2 \\  1 \end{bmatrix}
+$$
+
+In this quadratic example $\phi$ is a *non-linear* function that maps vectors to vectors $(\mathbb{R}^2 \rightarrow \mathbb{R}^6)$. We call this a **quadratic feature transform**
+
+$$
+\phi(\mathbf{x}) = \begin{bmatrix}  x_1 \\ x_2 \\ x_1 x_2 \\ x_1^2 \\ x_2^2 \\  1 \end{bmatrix}
+$$
+
+With this mapping we can our quadratic prediction function simply as:
+
+$$
+f(\mathbf{x})=\phi(\mathbf{x})^T \mathbf{w}
+$$
+
+This is a linear function of $\phi(\mathbf{x})$ and $\mathbf{w}$!
+
+As a simpler example, let's look at the case where our input has only a single element $(x_1)$.
+
+$$
+f(\mathbf{x})=\phi(\mathbf{x})^T \mathbf{w} = w_2 x_1^2 + w_1x_1 +b, \quad
+\phi(\mathbf{x}) = \begin{bmatrix}  x_1 \\ x_1^2 \\  1 \end{bmatrix} 
+$$
+
+```{ojs}
+//| echo: false
+viewof form_quadratic_2 = Inputs.form(
+  [
+    Inputs.range([-10, 10], {step: 0.01, label: "b", value: 2.89}),
+    Inputs.range([-10, 10], {step: 0.0001, label: "w_1", value: 2.0165}),
+    Inputs.range([-10, 10], {step: 0.0001, label: "w_2", value: 0}),
+  ]
+)
+```
+
+```{ojs}
+//| echo: false
+regressionPlot(quadratic_data, form_quadratic_2, [["0", x => x], ["0", x => x * x]], "1", 0, se)
+```
+
+## Fitting quadratic regression
+
+If we treat $\phi(\mathbf{x})$ as our new set of inputs, we see that we can apply all the same tools of linear regression that we learned before. Again our new prediction function is:
+
+$$
+f(\mathbf{x})=\phi(\mathbf{x})^T \mathbf{w}, \quad
+\phi(\mathbf{x}) = \begin{bmatrix}  x_1 \\ x_2 \\ x_1 x_2 \\ x_1^2 \\ x_2^2 \\  1 \end{bmatrix}
+$$
+
+We can then define a quadratic probabilistic model as:
+
+$$
+y_i \sim \mathcal{N}\big(\phi(\mathbf{x}_i)^T\mathbf{w}, \sigma^2\big)
+$$
+
+The corresponding negative log-likelihood loss becomes
+
+$$
+\textbf{Loss}(\mathbf{w})=\textbf{NLL}(\mathbf{w}, \mathbf{X}, \mathbf{y})=- \sum_{i=1}^N \log p(y_i \mid \mathbf{x}_i, \mathbf{w})
+$$
+
+$$
+ = \frac{1}{2\sigma^2} \sum_{i=1}^N\big(y_i - \phi(\mathbf{x}_i)^T\mathbf{w}\big)^2 + N \log \sigma \sqrt{2 \pi}
+$$
+
+We can now find the optimal $\mathbf{w}$ by once again minimizing this loss!
+
+$$
+\mathbf{w}^* = \underset{\mathbf{w}}{\text{argmin}} \textbf{NLL}(\mathbf{w}, \mathbf{X}, \mathbf{y})
+$$
+
+We see that the gradient doesn't change, it simply involves $\phi(\mathbf{x}_i)$ instead of $\mathbf{x}_i$.
+
+$$
+\nabla_{\mathbf{w}}\textbf{NLL}(\mathbf{w}, \mathbf{X}, \mathbf{y}) 
+= \frac{1}{2\sigma^2}\sum_{i=1}^N \big(\phi(\mathbf{x}_i)^T\mathbf{w} - y_i\big)\phi(\mathbf{x}_i)
+$$ This is because we are only taking the gradient with respect to $\mathbf{w}$. From the perspective of $\mathbf{w}$, the prediction funciton is still linear.
+
+## Quadratic regression on real data
+
+Let's look at our new quadratic regression model on the problem of predicting fuel efficiency from a car's weight. In this case because our input has only $1$ entry our quadratic feature transform will be simpler:
+
+$$
+\begin{bmatrix}  x_1  \end{bmatrix}\underset{\phi}{\longrightarrow}\begin{bmatrix}  x_1 \\ x_1^2 \\  1 \end{bmatrix}
+$$
+
+Our prediction function will be:
+
+$$
+f(\mathbf{x})=\phi(\mathbf{x})^T \mathbf{w} = w_2 x_1^2 + w_1x_1 +b, \quad
+\phi(\mathbf{x}) = \begin{bmatrix}  x_1 \\ x_1^2 \\  1 \end{bmatrix} 
+$$
+
+We see that by varying $w_2$, we can now fit a curve to our data and get a better overall loss!
+
+```{ojs}
+//| echo: false
+viewof form_mpg_2 = Inputs.form(
+  [
+    Inputs.range([-10, 100], {step: 0.01, label: "b", value: 45.32}),
+    Inputs.range([-0.03, 0.03], {step: 0.0001, label: "w_1", value: -0.0077}),
+    Inputs.range([-0.03, 0.03], {step: 0.0001, label: "w_2", value: 0}),
+  ]
+)
+```
+
+```{ojs}
+//| echo: false
+regressionPlot(data, form_mpg_2, ["weight", ["weight", x => (x / 100) * (x / 100)]], "mpg", 0, se)
+```
+
+## Quadratic logistic regression
+
+Just like with our regression example, we can apply our quadratic feature transform to the logistic regression model as well! In this case our prediction function becomes:
+
+$$
+f(\mathbf{x}) = \mathbb{I}(\phi(\mathbf{x})^T\mathbf{w} \geq 0), \quad \phi(\mathbf{x}) = \begin{bmatrix}  x_1 \\ x_2 \\ x_1 x_2 \\ x_1^2 \\ x_2^2 \\  1 \end{bmatrix}
+$$
+
+Our Bernoulli probabilistic model becomes:
+
+$$
+y_i \sim \mathbf{Bernoulli}\big(\mathbf{ \sigma(\phi(\mathbf{x}_i)^T\mathbf{w} })\big), \quad p(y_i = 1\mid \mathbf{x}_i, \mathbf{w}) = \sigma\big(\phi(\mathbf{x}_i)^T\mathbf{w}\big)
+$$
+
+The corresponding negative log-likelihood is:
+
+$$
+\mathbf{NLL}(\mathbf{w}, \mathbf{X}, \mathbf{y}) = -\sum_{i=1}^N \log\sigma\big((2y_i-1)\phi(\mathbf{x}_i)^T\mathbf{w}\big)
+$$
+
+Which we can once again optimize with gradient descent.
+
+With this approach our decision boundary is no longer restricted to be a line!
+
+```{python}
+#| echo : false
+from  sklearn.datasets import make_circles
+
+X, y = make_circles(n_samples=200, noise=0.05, factor=0.7)
+circles = np.concatenate([X, y[:, None].astype(float)], axis=1)
+ojs_define(circles=circles.tolist())
+```
+
+```{ojs}
+//| echo: false
+viewof form_circles = Inputs.form(
+  [
+    Inputs.range([-100, 100], {step: 0.01, label: "b", value: 0}),
+    Inputs.range([-100, 100], {step: 0.0001, label: "w_1", value: 20}),
+    Inputs.range([-100, 100], {step: 0.0001, label: "w_2", value: 20}),
+      Inputs.range([-100, 100], {step: 0.0001, label: "w_1", value: 0}),
+      Inputs.range([-100, 100], {step: 0.0001, label: "w_1", value: 0}),
+  ]
+)
+```
+
+::: columns
+::: {.column width="50%"}
+```{ojs}
+//| echo: false
+logisticPlot2d(circles, form_circles, ["0", "1", ["0", x=>x*x], ["1", x=>x*x]], "2")
+```
+:::
+
+::: {.column width="50%"}
+```{ojs}
+//| echo: false
+logisticLossPlot2d(circles, form_circles, ["0", "1", ["0", x=>x*x], ["1", x=>x*x]], "2")
+```
+:::
+:::
+
+We can see where this circular decision boundary comes from if we think about the problem in 3-dimensions.
+
+Recall that our linear classifier made predictions by thresholding a *linear function*. Our quadratic classifer thresholds a *quadratic function* of 1 or more variables, producing the curve that we see above.
+
+::: columns
+::: {.column width="50%"}
+#### Linear decision boundary
+
+```{python}
+#| echo: false
+%%manim -sqh -v CRITICAL --progress_bar none ThreeDSurfacePlot
+
+class ThreeDSurfacePlot(ThreeDLectureScene):
+    def construct(self):
+        resolution_fa = 24
+        self.set_camera_orientation(phi=75 * DEGREES, theta=-30 * DEGREES)
+        
+
+        def param_max(u, v):
+            x = u
+            y = v
+            return np.array([x, y,max( -0.6 * x + -0.2 * y - 1., 0)])
+
+        max_plane = Surface(
+            param_max,
+            resolution=(resolution_fa, resolution_fa),
+            v_range=[-4, +4],
+            u_range=[-4, +4]
+        )
+
+        max_plane.scale(1, about_point=ORIGIN)
+        max_plane.set_style(fill_opacity=1, stroke_color=BLACK)
+        max_plane.set_fill_by_checkerboard(RED, GREY, opacity=0.5)
+        self.add(max_plane)
+
+        def param_min(u, v):
+            x = u
+            y = v
+            return np.array([x, y, min(-0.6 * x + -0.2 * y - 1.,0)])
+
+        min_plane = Surface(
+            param_min,
+            resolution=(resolution_fa, resolution_fa),
+            v_range=[-4, +4],
+            u_range=[-4, +4]
+        )
+
+        min_plane.scale(1, about_point=ORIGIN)
+        min_plane.set_style(fill_opacity=1, stroke_color=BLACK)
+        min_plane.set_fill_by_checkerboard(RED, GREY, opacity=0.5)
+        self.add(min_plane)
+
+
+        axes = ThreeDAxes()
+        axes.set_color(GREY)
+        labels = axes.get_axis_labels(x_label="x_1", y_label="x_2", z_label="y = f(\mathbf{x}) \geq 0")
+        labels.set_color(GREY)
+        #labels[0].rotate(75 * DEGREES, RIGHT)
+        #labels[0].rotate(-30 * DEGREES, IN)
+        #
+        #labels[1].rotate(-30 * DEGREES, IN)
+
+        eq = MathTex(r'f(\mathbf{x})= \frac{-3}{5} x_1 - \frac{1}{5} x_2 - 1', color=BLACK, tex_template=self.template)
+        eq.to_corner(UL)
+        eq.scale(0.8)
+        #self.add_fixed_in_frame_mobjects(eq)
+        self.add_fixed_orientation_mobjects(labels[0])
+        labels[1].rotate(90 * DEGREES, IN)
+        self.add_fixed_orientation_mobjects(labels[1])
+        labels[2].rotate(90 * DEGREES, LEFT)
+        self.add_fixed_orientation_mobjects(labels[2])
+        self.add(axes, )
+
+        def param_cutoff(u, v):
+            x = u
+            y = v
+            return np.array([x, y, 0.])
+
+        cutoff_plane = Surface(
+            param_cutoff,
+            resolution=(resolution_fa, resolution_fa),
+            v_range=[-4, +4],
+            u_range=[-4, +4]
+        )
+
+        cutoff_plane.scale(1, about_point=ORIGIN)
+        cutoff_plane.set_style(fill_opacity=1, stroke_color=BLACK)
+        #cutoff_plane.set_fill_by_checkerboard(RED, GREY, opacity=0.5)
+        self.add( cutoff_plane)
+        
+```
+:::
+
+::: {.column width="50%"}
+#### Quadratic decision boundary
+
+```{python}
+#| echo: false
+%%manim -sqh -v CRITICAL --progress_bar none ThreeDSurfacePlot
+
+class ThreeDSurfacePlot(ThreeDLectureScene):
+    def construct(self):
+        resolution_fa = 24
+        self.set_camera_orientation(phi=75 * DEGREES, theta=-30 * DEGREES)
+        
+
+        def param_max(u, v):
+            x = u
+            y = v
+            return np.array([x, y, max(0.2 * y**2 + 0.25 * x**2 -0.6 * x + -0.2 * y - 1.5, 0)])
+
+        max_plane = Surface(
+            param_max,
+            resolution=(resolution_fa, resolution_fa),
+            v_range=[-4, +4],
+            u_range=[-4, +4]
+        )
+
+        max_plane.scale(1, about_point=ORIGIN)
+        max_plane.set_style(fill_opacity=1, stroke_color=BLACK)
+        max_plane.set_fill_by_checkerboard(RED, GREY, opacity=0.5)
+        self.add(max_plane)
+
+        def param_min(u, v):
+            x = u
+            y = v
+            return np.array([x, y, min(0.2 * y**2 + 0.25 * x**2 -0.6 * x + -0.2 * y - 1.5, 0)])
+
+        min_plane = Surface(
+            param_min,
+            resolution=(resolution_fa, resolution_fa),
+            v_range=[-4, +4],
+            u_range=[-4, +4]
+        )
+
+        min_plane.scale(1, about_point=ORIGIN)
+        min_plane.set_style(fill_opacity=1, stroke_color=BLACK)
+        min_plane.set_fill_by_checkerboard(RED, GREY, opacity=0.5)
+        self.add(min_plane)
+
+        axes = ThreeDAxes()
+        axes.set_color(GREY)
+        labels = axes.get_axis_labels(x_label="x_1", y_label="x_2", z_label="y = f(\mathbf{x}) \geq 0")
+        labels.set_color(GREY)
+        #labels[0].rotate(75 * DEGREES, RIGHT)
+        #labels[0].rotate(-30 * DEGREES, IN)
+        #
+        #labels[1].rotate(-30 * DEGREES, IN)
+
+        eq = MathTex(r'f(\mathbf{x})= \frac{-3}{5} x_1 - \frac{1}{5} x_2 - 1', color=BLACK, tex_template=self.template)
+        eq.to_corner(UL)
+        eq.scale(0.8)
+        #self.add_fixed_in_frame_mobjects(eq)
+        self.add_fixed_orientation_mobjects(labels[0])
+        labels[1].rotate(90 * DEGREES, IN)
+        self.add_fixed_orientation_mobjects(labels[1])
+        labels[2].rotate(90 * DEGREES, LEFT)
+        self.add_fixed_orientation_mobjects(labels[2])
+        self.add(axes, )
+
+        def param_cutoff(u, v):
+            x = u
+            y = v
+            return np.array([x, y, 0.])
+
+        cutoff_plane = Surface(
+            param_cutoff,
+            resolution=(resolution_fa, resolution_fa),
+            v_range=[-4, +4],
+            u_range=[-4, +4]
+        )
+
+        cutoff_plane.scale(1, about_point=ORIGIN)
+        cutoff_plane.set_style(fill_opacity=1, stroke_color=BLACK)
+        #cutoff_plane.set_fill_by_checkerboard(WHITE, GREY)
+        self.add( cutoff_plane)
+        
+```
+:::
+:::
+
+## General polynomial transforms
+
+We've now seen how to define quadratic models by defining a function $\phi$ that maps inputs to new new inputs with quadratic terms. However we're not restricted to just quadratic transform! For example, for a model with $1$ input, we could definite a *cubic* f*eature transform* as:
+
+$$
+\begin{bmatrix}  x_1  \end{bmatrix}\underset{\phi}{\longrightarrow}\begin{bmatrix}  x_1 \\ x_1^2 \\ x_1^3\\  1 \end{bmatrix}
+$$
+
+Our prediction function will be:
+
+$$
+f(\mathbf{x})=\phi(\mathbf{x})^T \mathbf{w} = w_3 x_1^3 + w_2 x_1^2 + w_1x_1 +b, \quad
+\phi(\mathbf{x}) = \begin{bmatrix}  x_1 \\ x_1^2\\ x_1^3 \\  1 \end{bmatrix} 
+$$
+
+We can apply this to our regression model for fuel efficiency as before.
+
+```{ojs}
+//| echo: false
+viewof form_mpg_3 = Inputs.form(
+  [
+    Inputs.range([-10, 100], {step: 0.01, label: "b", value: 45.32}),
+    Inputs.range([-0.03, 0.03], {step: 0.0001, label: "w_1", value: -0.0077}),
+    Inputs.range([-0.03, 0.03], {step: 0.0001, label: "w_2", value: 0}),
+    Inputs.range([-0.05, 0.05], {step: 0.0001, label: "w_3", value: 0}),
+  ]
+)
+```
+
+```{ojs}
+//| echo: false
+regressionPlot(data, form_mpg_3, ["weight", ["weight", x => (x / 100) * (x / 100)], ["weight", x => (x / 250) * (x / 250) * (x / 250)]], "mpg", 0, se)
+```
+
+We can also similarly define *general polynomial transforms* using polynomials of higher degrees. Note that the number of features in the transformed input grows very quickly with the degree of the polynomial and the number of original input features. We'll often just use a subset of the possible polynomial terms in our transform. For example we might use only powers of individual elements (i.e. $x_i^k$) with out considering the cross terms (i.e. $x_i^kx_j^p$).
+
+For example we might define the following quadratic transform for 3-feature inputs:
+
+$$
+\phi(\mathbf{x}) = \begin{bmatrix}  x_1 \\ x_2 \\ x_3 \\ x_1^2\\ x_2^2 \\  x_3^2 \\ 1 \end{bmatrix} 
+$$
+
+## General feature transforms
+
+It's also not necessary to restrict ourselves to transforms defined by integer powers of the inputs. We can use any scalar non-linear functions we want. For example we could define a transform using $\sin$ and $\cos$:
+
+$$
+\phi(\mathbf{x}) = \begin{bmatrix}  x_1 \\ x_2 \\ \sin(x_1) \\ \sin(x_2) \\ \cos(x_1) \\ \cos(x_2) \\ 1 \end{bmatrix} 
+$$
+
+Or using the sigmoid function:
+
+$$
+\phi(\mathbf{x}) = \begin{bmatrix}  x_1 \\ x_2 \\ \sigma(x_1) \\ \sigma(x_2)  \\ 1 \end{bmatrix} 
+$$
+
+We can see how different features allow us to define different nonlinear functions. In the example below we'll try the prediction function:
+
+$$
+f(\mathbf{x})=\phi(\mathbf{x})^T \mathbf{w} = w_3 e^{x_1} + w_2 \sin(x_1) + w_1x_1^2 +b ,\quad \phi(\mathbf{x}) = \begin{bmatrix}  x_1 \\ x_1^2 \\ \sin(x_1) \\ e^{x_1}  \\ 1 \end{bmatrix} 
+$$
+
+```{ojs}
+//| echo: false
+viewof form_mpg_4 = Inputs.form(
+  [
+    Inputs.range([-10, 10], {step: 0.01, label: "b", value: 1}),
+    Inputs.range([-10, 10], {step: 0.0001, label: "w_1", value: -0.0077}),
+    Inputs.range([-10, 10], {step: 0.0001, label: "w_2", value: 0}),
+    Inputs.range([-10, 10], {step: 0.0001, label: "w_3", value: 0}),
+    Inputs.range([-0.5, 0.5], {step: 0.0001, label: "w_4", value: 0}),
+  ]
+)
+```
+
+```{ojs}
+//| echo: false
+regressionPlot(quadratic_data, form_mpg_4, ["0", ["0", x => (x) * (x)], ["0", x => Math.sin(x)], ["0", x => Math.exp(x)]], "1", 0, se)
+```
+
+```{python}
+#| eval: false
+sin_X = np.sin(X)               # sin(x)
+squared_X = X ** 2              # x^2
+exp_X = np.exp(X)               # e^x
+ones = np.ones((X.shape[0], 1)) # Column of 1s
+
+transformedX = np.concatenate([X, squared_X, sin_X, exp_X, ones], axis=1)
+```
+
+# Kernel methods
+On the board!

@@ -1,0 +1,103 @@
+---
+title: "Final project outline"
+format:
+    html:
+        toc: true
+        toc-depth: 3
+---
+
+## Proposal (**Due Wednesday 11/8 before class**)
+
+The first step for the project will be to form a group and choose a project topic. For your proposal you should:
+
+-   Form a group of 2-4 students (ideally 3) and choose a cool team name. If you would like help finding a group, please email me!
+-   Choose a project topic. You may choose a topic from the list below or you may propose your own topic.
+-   With your team, write a short (up to 1 page) proposal for your project and submit it on gradescope. Your proposal should include:
+    -   The names of the team members
+    -   A one paragraph high-level description of the goal(s) of the project (e.g. object detection in images, classifying text data, etc.), how this goal could be useful in real-world applications and why this topic interests you.
+    -   A one paragraph description of how you intend to approach this problem and any challenges you forsee. This should include identifying datasets that you might use, identifying at least one referance (academic paper or website) for a technique you intend to try.
+    -   A one paragraph description of how you will evaluate success for your application.
+
+## Check-in (**Due Monday 11/20 before class**)
+
+As a progress report you and your team will submit a short (1 page) summery of progress on Gradescope. This summary will include: - A high-level description of any updates you have made to the goals of your project. - A description of what methods you have tried and any preliminary results. - A timeline for finishing the remaining goals of your project. - A brief description of the contributions made by each team member.
+
+## Final deliverables (**Due 12/12, 11:59pm**)
+
+Please see the final project template [here](./CS152_Project_Template.pdf), which includes instructions and guidelines for what to submit. Submissions will be through gradescope.
+
+## Possible projects
+
+### Neural style transfer
+
+**Link:** [https://arxiv.org/pdf/1508.06576.pdf](https://arxiv.org/pdf/1905.02249.pdf)
+
+**Summary:** Style transfer is the process of taking an existing image and applying an artistic style to it, such as making a photograph look like a painting or a drawing (check out the examples in the linked paper!). This can be accomplished with neural networks. For this project you could: implement the neural style transfer algorithm, evaluate it with different kinds of images and compare it to other methods for restyling images.
+
+**Suggested datasets:** Any artistic images you'd like!
+
+### Semi-supervised learning with MixMatch
+
+**Link:** <https://arxiv.org/pdf/1905.02249.pdf>
+
+**Summary:** Semi-supervised learning is the problem of learning when we don't have all the labels for our training data. MixMatch is a state-of-the-art approach for semi-supervised image classification. In this project you could: implement the Mix-Match algorithm, compare the different versions of it discussed in the paper and evaluate it on several different datasets. You could also test it on your own proposed semi-supervised learning task.
+
+**Suggested datasets:** [Street view house numbers](https://pytorch.org/vision/stable/generated/torchvision.datasets.SVHN.html#torchvision.datasets.SVHN), [CIFAR-10](https://pytorch.org/vision/stable/generated/torchvision.datasets.CIFAR10.html), [STL-10](https://pytorch.org/vision/stable/generated/torchvision.datasets.STL10.html#torchvision.datasets.STL10)
+
+### Audio generation and classification with WaveNet
+
+**Link:** <https://arxiv.org/pdf/1609.03499.pdf>
+
+**Summary:** WaveNet is at network that forms the basis for many text-to-speech systems (think Alexa or Siri) it also allows for classifying audio. For this project you could: implement WaveNet, train it to generate speech (or other audio like music!) and evaluate it compared to existing tools for generation. You could also try to use it to classify speech or music.
+
+**Suggested datasets:** [Spoken digits](https://www.tensorflow.org/datasets/catalog/spoken_digit), [Speech commands](https://pytorch.org/audio/stable/generated/torchaudio.datasets.SPEECHCOMMANDS.html#torchaudio.datasets.SPEECHCOMMANDS), [Crema-D](https://www.tensorflow.org/datasets/catalog/crema_d), [GTZAN](https://www.tensorflow.org/datasets/catalog/gtzan)
+
+### U-Nets for segmentation, depth-prediction, colorization or super-resolution
+
+**Link:** <https://arxiv.org/pdf/1505.04597.pdf>
+
+**Summary:** U-Nets are a very flexible type of neural network used for many computer vision tasks. They were originally introduced for segmenting different parts of medical images, but can used for everything from colorizing images to upscaling images to predicting depth in am image. For this project you could: implement the U-Net architecture, train a U-Net on one or more of the above tasks and evaluate its performance.
+
+**Suggested datasets:** [Oxford flowers](https://www.tensorflow.org/datasets/catalog/oxford_flowers102) [ImageNet](https://www.tensorflow.org/datasets/catalog/imagenet_resized), [NYU Depth](https://www.tensorflow.org/datasets/catalog/nyu_depth_v2)
+
+### Object detection with YOLO
+
+**Link:** <https://arxiv.org/pdf/1506.02640v5.pdf>
+
+**Summary:** Object detection is the task of locating objects within an image. This is a step more difficult than just classifying images, but is very useful in practice. For this project you could: implement the YOLO object detection model, test different variations of the model and evaluate it on new data.
+
+**Suggested datasets:** [VOC](https://www.tensorflow.org/datasets/catalog/voc), [Wider face](https://www.tensorflow.org/datasets/catalog/wider_face), [Kitti](https://www.tensorflow.org/datasets/catalog/kitti)
+
+### Image generation with Generative Adversarial Networks
+
+**Link:** <https://arxiv.org/pdf/1406.2661.pdf>
+
+**Summary:** Generative adversarial networks (GANs for short) are an effective way to generate realistic looking images using neural networks. They have caused a considerable amount of excitement and concern for their performance in generating realistic images of humans. For this project you could: implement a generative adversarial network, explore reasonable ways to evaluate the performance of GANs and dive into the ethical implications.
+
+**Suggested datasets:** [MNIST](https://pytorch.org/vision/stable/generated/torchvision.datasets.MNIST.html#torchvision.datasets.MNIST), [Omniglot](https://pytorch.org/vision/stable/generated/torchvision.datasets.Omniglot.html#torchvision.datasets.Omniglot), [CIFAR-10](https://pytorch.org/vision/stable/generated/torchvision.datasets.CIFAR10.html), [FFHQ](https://github.com/NVlabs/ffhq-dataset)
+
+### Image classification with visual transformers
+
+**Link:** <https://arxiv.org/pdf/2010.11929.pdf>
+
+**Summary:** Transformer-based neural networks have transformed the field of natural language processing in recent years, as evidenced by the performance of models such as ChatGPT. There is growing evidence that they are also extremely useful for classifying images. For this project you might: implement the visual transformer architecture, compare it to convolutional neural network based architecture for image classification and visualize features to understand the differences in the approaches. You might also consider applying it to your own dataset.
+
+**Suggested datasets:** [Oxford flowers](https://www.tensorflow.org/datasets/catalog/oxford_flowers102), [CIFAR-10](https://pytorch.org/vision/stable/generated/torchvision.datasets.CIFAR10.html), [ImageNet](https://www.tensorflow.org/datasets/catalog/imagenet_resized)
+
+### Text generation or classification with GPT
+
+**Link:** <https://www.cs.ubc.ca/~amuham01/LING530/papers/radford2018improving.pdf>
+
+**Summary:** Large language models, such at GPT-3 and GPT-4 have gained a lot of attention recently, as their performance in generating plausible text is (debatably) approaching human levels. The GPT model is used by Chat-GPT and many other applications to model language. For this project you could implement and train your own version of the original (GPT-1) model, compare it against available tools such as Chat-GPT and explore how to distinguish generated text from real human writing.
+
+**Suggested datasets:** [Amazon reviews](https://www.tensorflow.org/datasets/catalog/amazon_us_reviews) [IMDB reviews](https://www.tensorflow.org/datasets/catalog/imdb_reviews)
+
+### Other possible projects:
+
+#### Machine learning with differential privacy
+
+<https://arxiv.org/pdf/1607.00133.pdf>
+
+#### Graph neural networks
+
+<https://arxiv.org/pdf/1810.00826.pdf>

@@ -1,0 +1,489 @@
+---
+title: "Lecture 5: Neural networks"
+format:
+    html:
+        toc: true
+        toc-depth: 3
+---
+
+{{< include ../code/ojs.qmd >}}
+
+```{python}
+#| echo: false
+import pandas as pd
+ojs_define(data_raw=pd.read_csv('data/auto-mpg.csv'))
+```
+
+```{ojs}
+//| echo: false
+data = transpose(data_raw)
+```
+
+```{python}
+#| echo: false
+import warnings
+warnings.filterwarnings("ignore")
+import os
+import contextlib
+with open(os.devnull, "w") as f, contextlib.redirect_stdout(f):
+    from manim import *
+import autograd.numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+
+class LectureScene(Scene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.camera.background_color = "#ffffff"
+        self.template = TexTemplate()
+        self.template.add_to_preamble(r"\usepackage{amsmath}")
+
+class ThreeDLectureScene(ThreeDScene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.camera.background_color = "#ffffff"
+        self.template = TexTemplate()
+        self.template.add_to_preamble(r"\usepackage{amsmath}")
+    
+
+class VectorScene(LectureScene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.ax = Axes(
+            x_range=[-7.5, 7.5, 1],
+            y_range=[-5, 5, 1],
+            x_length=12,
+            y_length=8,
+            axis_config={"color": GREY},
+        )
+        
+        #axes_labels.set_color(GREY)
+        self.add(self.ax)
+
+class PositiveVectorScene(LectureScene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.ax = Axes(
+            x_range=[-2.5, 12.5, 1],
+            y_range=[-1, 9, 1],
+            x_length=12,
+            y_length=8,
+            axis_config={"color": GREY},
+        )
+                #axes_labels.set_color(GREY)
+        self.add(self.ax)
+
+class ComparisonVectorScene(LectureScene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.ax1 = Axes(
+            x_range=[-5, 5, 1],
+            y_range=[-5, 5, 1],
+            x_length=6,
+            y_length=6,
+            axis_config={"color": GREY},
+        )
+        self.ax2 = Axes(
+            x_range=[-5, 5, 1],
+            y_range=[-5, 5, 1],
+            x_length=6,
+            y_length=6,
+            axis_config={"color": GREY},
+        )
+        axgroup = Group(self.ax1, self.ax2)
+        axgroup.arrange_in_grid(buf=2)
+        
+        #axes_labels.set_color(GREY)
+        self.add(axgroup)
+```
+
+# Neural networks
+
+## Background and a new visualization
+
+So far in this class we have seen how to make predictions of some output $y$ given an input $\mathbf{x}$ using **linear models**. We saw that a reasonable model for continuous outputs $(y\in\mathbb{R})$ is **linear regression**.
+
+$$
+\textbf{Predict } y\in \textbf{ as } \begin{cases} y = \mathbf{x}^T\mathbf{w}\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad (\text{prediction function}) \\ 
+\\ p(y\mid \mathbf{x}, \mathbf{w}, \sigma^2) = \mathcal{N}\big(y\mid \mathbf{x}^T\mathbf{w}, \sigma^2) \quad (\text{probabilistic view})  \end{cases}
+$$
+
+A reasonable model for *binary* outputs $(y\in\{0,1\})$ is **logistic regression**:
+
+$$
+\textbf{Predict } y\in \textbf{ as } \begin{cases} y = \mathbb{I}(\mathbf{x}^T\mathbf{w} > 0)\ \quad\quad\quad\quad\quad (\text{prediction function}) \\ 
+\\ p(y=1 \mid \mathbf{x}, \mathbf{w}) = \sigma(\mathbf{x}^T\mathbf{w}) \quad (\text{probabilistic view})  \end{cases}
+$$
+
+A reasonable model for *categorical* outputs $(y\in\{0,1,…,C\})$ is **multinomial logistic regression**:
+
+$$
+\textbf{Predict } y\in \textbf{ as } \begin{cases} y = \underset{c}{\text{argmax}} \ \mathbf{x}^T\mathbf{w}_c \ \quad\quad\quad\quad\quad\quad\quad\ \  (\text{prediction function}) \\ 
+\\ p(y=c \mid \mathbf{x}, \mathbf{w}) = \text{softmax}(\mathbf{x}^T\mathbf{W})_c \quad (\text{probabilistic view})  \end{cases}
+$$
+
+In each of these cases, the core of our prediction is a linear function $(\mathbf{x}^T\mathbf{w})$ *parameterized* by a set of weights $\mathbf{w}$, with possibly some nonlinear function (e.g. $\sigma(\cdot)$), applied to the result. This type of function is commonly depicted using a diagram like the one shown below.
+
+```{python}
+#| echo : false
+%%manim -sqh -v CRITICAL --progress_bar none Viz
+
+class LectureScene(Scene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.camera.background_color = "#ffffff"
+        self.template = TexTemplate()
+        self.template.add_to_preamble(r"\usepackage{amsmath}")
+
+class Viz(LectureScene):
+    def __init__(self, bias=True, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.bias = False
+        self.title = 'Linear regression'
+        self.output = 'f(\mathbf{x}^T\mathbf{w})'
+
+    def construct(self):
+        output = Circle(radius=0.4, color=BLACK).move_to((4, 0, 0))
+        output_label = MathTex(self.output, color=BLACK).next_to(output, UP)
+        output_label2 = Text('Prediction', color=BLACK).scale(0.5).next_to(output, DOWN)
+        self.add(output, output_label, output_label2)
+        for i, y in enumerate(np.linspace(2, -2, 4)):
+            circle = Circle(radius=0.4, color=BLACK, fill_color=WHITE).move_to((-4, y, 0))
+            label = MathTex('x_%d' % (i + 1), color=BLACK).move_to((-4, y, 0))
+            line = Line(circle.get_center(), output.get_center(), color=BLACK, path_arc=0)
+            line.set_length(line.get_length() - 0.8)
+            point = 0.3 * (output.get_center() - circle.get_center()) + circle.get_center()
+            line_label = MathTex('w_%d' % (i + 1), color=BLACK).next_to(point, UP)
+            self.add(circle, label, line, line_label)
+
+        brace = Brace(line, color=BLACK).shift(0.5 *  DOWN)
+        bracetext = brace.get_text(r"Weights ($\mathbf{w}$)").set_color(BLACK).scale(0.75)
+        input_text = Tex(r'Inputs ($\mathbf{x}$)').scale(0.75).rotate(PI / 2).move_to((-5, 0, 0)).set_color(BLACK)
+        title = Text(self.title, color=BLACK).scale(0.8).to_corner(UP)
+        self.add(brace, bracetext, input_text)
+
+        if self.bias:
+            circle = Circle(radius=0.4, color=BLACK).move_to((1.5, -1.5, 0))
+            line = Line(circle.get_center(), output.get_center(), color=BLACK, path_arc=0)
+            line.set_length(line.get_length() - 0.8)
+            bias_text = MathTex('b', color=BLACK).next_to(circle).shift(UR * 0.2)
+            bias_label = MathTex('1', color=BLACK).move_to(circle.get_center())
+            self.add(circle, line, bias_text, bias_label)
+```
+
+Each node corresponds to a scalar value: the nodes on the left correspond to each input dimension and the node on the right corresponds to the prediction. Each edge represents multiplying the value on the left with a corresponding weight.
+
+## Feature transforms revisited
+
+In the last lecture we saw that we can define more complex and expressive functions by transforming the inputs in various ways. For example, we can define a function as:
+
+$$
+f(\mathbf{x})=\phi(\mathbf{x})^T \mathbf{w} ,\quad \phi(\mathbf{x})  = \begin{bmatrix}  x_1 \\ x_2 \\ x_1^2 \\ x_2^2 \\ x_1x_2 \\ \sin(x_1) \\ \sin(x_2) \end{bmatrix} 
+$$
+
+Writing this out we get:
+
+$$
+f(\mathbf{x}) = w_1 x_1 + w_2 x_2 + w_3 x_1^2 + w_4 x_2^2 + w_5 x_1 x_2 + w_6 \sin(x_1) + w_7 \sin(x_2)
+$$
+
+```{python}
+#| echo: false
+x = np.random.random((100,)) * 6 - 3
+y = x ** 2 + np.random.randn(*x.shape) * 0.5
+ojs_define(quadratic_data = np.stack([x, y]).T.tolist())
+```
+
+In code, we could consider transforming an entire dataset as follows:
+
+```{python}
+#| eval: false
+squared_X = X ** 2              # x^2
+cross_X = X[:, :1] * X[:, 1:2]  # x_1 * x_2
+sin_X = np.sin(X)               # sin(x)
+
+transformedX = np.concatenate([X, squared_X, cross_X, sin_X], axis=1)
+```
+
+## Non-linear logistic regression
+
+We can create a non-linear logistic regression model using the feature-transfor approach as:
+
+$$
+p(y=1\mid \mathbf{x}, \mathbf{w}) = \sigma\big( \phi(\mathbf{x})^T\mathbf{w} \big)
+$$
+
+Pictorally, we can represent this using the diagram we just introduced as:
+
+```{python}
+#| echo : false
+%%manim -sqh -v CRITICAL --progress_bar none Viz
+
+class LectureScene(Scene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.camera.background_color = "#ffffff"
+        self.template = TexTemplate()
+        self.template.add_to_preamble(r"\usepackage{amsmath}")
+
+class Viz(LectureScene):
+    def __init__(self, bias=True, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.bias = False
+        self.title = 'Linear regression'
+        self.output = '\sigma(\phi(\mathbf{x})^T\mathbf{w})'
+
+    def construct(self):
+        output = Circle(radius=0.4, color=BLACK).move_to((4, 0, 0))
+        output_label = MathTex(self.output, color=BLACK).next_to(output, UP)
+        output_label2 = Text('Prediction\n', color=BLACK).scale(0.5).next_to(output, DOWN)
+        output_label3 = Tex(r'$p(y=1\mid \mathbf{x}, \mathbf{w})$', color=BLACK).next_to(output_label2, DOWN).scale(0.5)
+        self.add(output, output_label)
+
+        ils = ['x_1', 'x_2', 'x_1^2', 'x_2^2', 'x_1x_2', r'\sin(x_1)', r'\sin(x_2)']
+        for i, (y, l) in enumerate(zip(np.linspace(3.5, -3.5, 7), ils)):
+            circle = Circle(radius=0.4, color=BLACK, fill_color=WHITE).move_to((-4, y, 0))
+            label = MathTex(l, color=BLACK).next_to(circle, LEFT)
+            line = Line(circle.get_center(), output.get_center(), color=BLACK, path_arc=0)
+            line.set_length(line.get_length() - 0.8)
+            point = 0.25 * (output.get_center() - circle.get_center()) + circle.get_center()
+            line_label = MathTex('w_%d' % (i + 1), color=BLACK).next_to(point, UP)
+            self.add(circle, label, line, line_label)
+
+        brace = Brace(line, color=BLACK).shift(0.5 *  DOWN)
+        bracetext = brace.get_text(r"Weights ($\mathbf{w}$)").set_color(BLACK).scale(0.75)
+        input_text = Tex(r'Inputs ($\mathbf{x}$)').scale(0.75).rotate(PI / 2).move_to((-5, 0, 0)).set_color(BLACK)
+        title = Text(self.title, color=BLACK).scale(0.8).to_corner(UP)
+        self.add()
+
+        if self.bias:
+            circle = Circle(radius=0.4, color=BLACK).move_to((1.5, -1.5, 0))
+            line = Line(circle.get_center(), output.get_center(), color=BLACK, path_arc=0)
+            line.set_length(line.get_length() - 0.8)
+            bias_text = MathTex('b', color=BLACK).next_to(circle).shift(UR * 0.2)
+            bias_label = MathTex('1', color=BLACK).move_to(circle.get_center())
+            self.add(circle, line, bias_text, bias_label)
+```
+
+[This](https://playground.tensorflow.org/#activation=tanh&batchSize=12&dataset=spiral&regDataset=reg-plane&learningRate=0.003&regularizationRate=0&noise=0&networkShape=&seed=0.35411&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=true&xSquared=true&ySquared=true&cosX=false&sinX=true&cosY=false&sinY=true&collectStats=false&problem=classification&initZero=false&hideText=false&showTestData_hide=true&stepButton_hide=true&activation_hide=true&noise_hide=true&discretize_hide=false&regularization_hide=true&batchSize_hide=true&learningRate_hide=false&regularizationRate_hide=true&percTrainData_hide=true&numHiddenLayers_hide=true&resetButton_hide=false) demo application allows us to learn logistic regression models with different feature transforms. Hit the play button to start gradient descent!
+
+This approach raises a big question though: how do we actually choose what transforms of our inputs to use?
+
+## Learned feature transforms
+
+We've already seen that we can *learn* a function by defining our function in terms of a set of *parameters* $\mathbf{w}$: $$f(\mathbf{x}) = \mathbf{x}^T\mathbf{w}$$ and then minimizing a *loss* as a function of $\mathbf{w}$ $$\mathbf{w}^* = \underset{\mathbf{w}}{\text{argmin}}\ \mathbf{Loss}(\mathbf{w})$$ Which we can do with gradient descent: $$\mathbf{w}^{(k+1)} \longleftarrow \mathbf{w}^{(k)} - \alpha \nabla_{\mathbf{w}} \mathbf{Loss}(\mathbf{w})$$
+
+So we didn't choose $\mathbf{w}$ explicitly, we let our algorithm find the optimal values. Ideally, we could do the same thing for our feature transforms: let our algorithm choose the optimal functions to use. This raises the question:
+
+**Can we *learn* the functions in our feature transform?** The answer is yes! To see how, let's start by writing out what this would look like. We'll start with the feature transform framework we've already introduced, but now let's replace the individual transforms with functions that we can learn.
+
+$$
+f(\mathbf{x})=\phi(\mathbf{x})^T \mathbf{w} ,\quad \phi(\mathbf{x}) = \begin{bmatrix}  g_1(x_1) \\ g_2(x_1) \\ g_3(x_1) \\ g_4(x_1) \end{bmatrix} 
+$$
+
+The key insight we'll use here is that we've already seen how to learn functions: this is exactly what our regression models are doing! So if we want to learn a feature transform, we can try using one of these functions that we know how to learn this case: *logistic regression*. $$g_i(\mathbf{x}) = \sigma(\mathbf{x}^T \mathbf{w}_i)$$ With this form, we get a new feature transform: $$
+f(\mathbf{x})=\phi(\mathbf{x})^T \mathbf{w}_0,\quad \phi(\mathbf{x}) = \begin{bmatrix}  \sigma(\mathbf{x}^T \mathbf{w}_1) \\ \sigma(\mathbf{x}^T \mathbf{w}_2) \\ \sigma(\mathbf{x}^T \mathbf{w}_3) \\ \sigma(\mathbf{x}^T \mathbf{w}_4) \end{bmatrix} 
+$$
+
+Here we'll call our original weight vector $\mathbf{w}_0$ to distinguish it from the others. If we choose different weights for these different transform functions, we can have different feature transforms!
+
+Let's look at a very simple example: $$\mathbf{x} = \begin{bmatrix} x_1\\ x_2 \end{bmatrix}, \quad \mathbf{w}_0 = \begin{bmatrix} w_{01} \\ w_{02} \end{bmatrix}$$ $$
+f(\mathbf{x})=\phi(\mathbf{x})^T \mathbf{w}_0,\quad \phi(\mathbf{x}) = \begin{bmatrix}  \sigma(\mathbf{x}^T \mathbf{w}_1) \\ \sigma(\mathbf{x}^T \mathbf{w}_2) \\ \sigma(\mathbf{x}^T \mathbf{w}_3) \end{bmatrix} = 
+\begin{bmatrix}  \sigma(x_1 w_{11} + x_2 w_{12}) \\ \sigma(x_1 w_{21} + x_2 w_{22}) \\ \sigma(x_1 w_{31} + x_2 w_{32}) \end{bmatrix}
+$$
+
+In this case, we can write out our prediction function explicitly as: $$f(\mathbf{x}) = w_{01} \cdot\sigma(x_1 w_{11} + x_2 w_{12}) + w_{02} \cdot\sigma(x_1 w_{21} + x_2 w_{22})+ w_{03} \cdot\sigma(x_1 w_{31} + x_2 w_{32}) $$
+
+We can represent this pictorially again as a node-link diagram:
+
+```{python}
+#| echo : false
+%%manim -sqh -v CRITICAL --progress_bar none Viz
+
+class LectureScene(Scene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.camera.background_color = "#ffffff"
+        self.template = TexTemplate()
+        self.template.add_to_preamble(r"\usepackage{amsmath}")
+
+class Viz(LectureScene):
+    def __init__(self, bias=True, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.bias = False
+        self.title = 'Linear regression'
+        self.output = '\sigma(\phi(\mathbf{x})^T\mathbf{w}_0)'
+
+    def construct(self):
+        foutput = Circle(radius=0.4, color=BLACK).move_to((5, 0, 0))
+        foutput_label = MathTex(self.output, color=BLACK).next_to(foutput, UP).scale(0.8)
+        self.add(foutput, foutput_label)
+
+        for j, (yo) in enumerate(np.linspace(2, -2, 3)):
+            output = Circle(radius=0.4, color=BLACK).move_to((0, yo, 0))
+            output_label = MathTex('\sigma(\mathbf{x}^T\mathbf{w}_%d)' %j, color=BLACK).next_to(output, UP).scale(0.8)
+            self.add(output, output_label)
+
+            line = Line(output.get_center(), foutput.get_center(), color=BLACK, path_arc=0)
+            line.set_length(line.get_length() - 0.8)
+            point = 0.45 * (foutput.get_center() - output.get_center()) + output.get_center()
+            line_label = MathTex('w_{1%d}' % (j + 1), color=BLACK).scale(0.8).next_to(point, UP)
+            self.add(line, line_label)
+
+            ils = ['x_1', 'x_2']
+            for i, (y, l) in enumerate(zip(np.linspace(1, -1, 2), ils)):
+                circle = Circle(radius=0.4, color=BLACK, fill_color=WHITE).move_to((-5, y, 0))
+                label = MathTex(l, color=BLACK).move_to(circle.get_center())
+                line = Line(circle.get_center(), output.get_center(), color=BLACK, path_arc=0)
+                line.set_length(line.get_length() - 0.8)
+                point = (0.7 if i == 0 else 0.5) * (output.get_center() - circle.get_center()) + circle.get_center()
+                line_label = MathTex('w_{0%d}' % (i + 1), color=BLACK).scale(0.7).next_to(point, UP)
+                self.add(circle, label, line, line_label)
+
+        
+```
+
+We often omit the labels for compactness, which make it easy to draw larger models:![](nn_2.svg)
+
+## Neural networks
+
+What we've just seen *is* a **neural network**!
+
+Terminology-wise we call a single feature transform like $\sigma(x_1 w_{11} + x_2 w_{12})$ a **neuron**.
+
+We call the whole set of transformed features the **hidden layer**: $$\begin{bmatrix}  \sigma(\mathbf{x}^T \mathbf{w}_1) \\ \sigma(\mathbf{x}^T \mathbf{w}_2) \\ \sigma(\mathbf{x}^T \mathbf{w}_3) \\ \sigma(\mathbf{x}^T \mathbf{w}_4) \end{bmatrix} $$
+
+We call $\mathbf{x}$ the **input** and $f(\mathbf{x})$ the **output**.
+
+![](nn_3.svg)
+
+## Optimizing neural networks
+
+We can still define a **loss function** for a neural network in the same way we did with our simpler linear models. The only difference is that now we have more parameters to choose:
+
+$$
+\mathbf{Loss}(\mathbf{w}_0,\mathbf{w}_1,\mathbf{w}_2,…)
+$$
+
+Let's look at the logistic regression negative log-likelihood loss for the simple neural network we saw above:
+
+$$
+p(y=1\mid \mathbf{x}, \mathbf{w}_0,\mathbf{w}_1,\mathbf{w}_2, \mathbf{w}_3)=\sigma(\phi(\mathbf{x})^T \mathbf{w}_0),\quad \phi(\mathbf{x}) = \begin{bmatrix}  \sigma(\mathbf{x}^T \mathbf{w}_1) \\ \sigma(\mathbf{x}^T \mathbf{w}_2) \\ \sigma(\mathbf{x}^T \mathbf{w}_3) \end{bmatrix}
+$$ $$ = \sigma\big(w_{01} \cdot\sigma(x_1 w_{11} + x_2 w_{12}) + w_{02} \cdot\sigma(x_1 w_{21} + x_2 w_{22})+ w_{03} \cdot\sigma(x_1 w_{31} + x_2 w_{32}) \big)$$
+
+$$
+\mathbf{NLL}(\mathbf{w}_0,..., \mathbf{X}, \mathbf{y}) = -\sum_{i=1}^N \bigg[ y_i\log p(y=1\mid \mathbf{x}, \mathbf{w}_0,...) + (1-y_i)\log p(y=0\mid \mathbf{x}, \mathbf{w}_0,...) \bigg]
+$$
+
+We see that we can write out a full expression for this loss in term of all the inputs and weights. We can even define the gradient of this loss with respect to all the weights:
+
+$$
+\nabla_{\mathbf{w}_0...} = \begin{bmatrix} \frac{\partial \mathbf{NLL}}{\partial w_{01}} \\ \frac{\partial \mathbf{NLL}}{\partial w_{02}} \\ \frac{\partial \mathbf{NLL}}{\partial w_{03}} \\ \vdots\end{bmatrix}
+$$
+
+While computing this gradient by hand would be tedious, this does mean we can update all of these weights as before using gradient descent! In future classes, we'll look at how to automate the process of computing this gradient.
+
+We can see this in action for this network [here](https://playground.tensorflow.org/#activation=sigmoid&batchSize=10&dataset=circle&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=3&seed=0.76435&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=false&xSquared=false&ySquared=false&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false&showTestData_hide=true&activation_hide=true&problem_hide=true&noise_hide=true&regularization_hide=true&batchSize_hide=true&regularizationRate_hide=true&percTrainData_hide=true&numHiddenLayers_hide=true).
+
+## Neural networks with matrix notation
+
+It is often more convenient to write all of the weights that are used to create our hidden layer as a single large matrix:
+
+$$\mathbf{W}_1 = \begin{bmatrix} \mathbf{w}_1^T \\ \mathbf{w}_2^T \\ \mathbf{w}_3^T \\ \vdots \end{bmatrix}$$ With this, we can write our general neural network more compactly as: $$f(\mathbf{x})= \sigma( \mathbf{W}_1 \mathbf{x})^T \mathbf{w_0} $$ Or for a whole dataset: $$\mathbf{X} = \begin{bmatrix} \mathbf{x}_1^T \\ \mathbf{x}_2^T \\ \mathbf{x}_3^T \\ \vdots \end{bmatrix}$$
+
+$$f(\mathbf{x})= \sigma( \mathbf{X}\mathbf{W}_1 )\mathbf{w_0}$$
+
+## Linear transforms
+
+Thus far we've looked at a *logistic regression* feature transform as the basis of our neural network. Can we use *linear* regression as a feature transform?
+
+Let's see what happens in our simple example: $$\mathbf{x} = \begin{bmatrix} x_1\\ x_2 \end{bmatrix}, \quad \mathbf{w}_0 = \begin{bmatrix} w_{01} \\ w_{02} \end{bmatrix}$$ $$
+f(\mathbf{x})=\phi(\mathbf{x})^T \mathbf{w}_0,\quad \phi(\mathbf{x}) = \begin{bmatrix}  \mathbf{x}^T \mathbf{w}_1 \\ \mathbf{x}^T \mathbf{w}_2 \\ \mathbf{x}^T \mathbf{w}_3 \\ \end{bmatrix} = 
+\begin{bmatrix}  x_1 w_{11} + x_2 w_{12} \\ x_1 w_{21} + x_2 w_{22} \\ x_1 w_{31} + x_2 w_{32} \\\end{bmatrix}
+$$ In this case, we can write out our prediction function explicitly as: $$f(\mathbf{x}) = w_{01}\cdot (x_1 w_{11} + x_2 w_{12}) + w_{02} \cdot(x_1 w_{21} + x_2 w_{22})+ w_{03} \cdot(x_1 w_{31} + x_2 w_{32}) $$ $$= (w_{11}w_{01}) x_1 +(w_{12}w_{01}) x_2 +  (w_{21}w_{02}) x_1 +(w_{22}w_{02}) x_2  +(w_{31}w_{03}) x_1 +(w_{32}w_{03}) x_2 $$
+
+$$
+= (w_{11}w_{01} + w_{21}w_{02} + w_{31}w_{03}) x_1 + (w_{12}w_{01} + w_{22} w_{02} + w_{32} w_{03}) x_2
+$$
+
+We see that we ultimately just end up with another linear function of $\mathbf{x}$ and we're no better off than in our orginal case. We can see this in practice [here](https://playground.tensorflow.org/#activation=linear&batchSize=10&dataset=spiral&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=3&seed=0.39091&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=false&xSquared=false&ySquared=false&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false&showTestData_hide=true&activation_hide=true&problem_hide=true&noise_hide=true&regularization_hide=true&batchSize_hide=true&regularizationRate_hide=true&percTrainData_hide=true&numHiddenLayers_hide=true).
+
+In general: $$
+f(\mathbf{x})=\phi(\mathbf{x})^T \mathbf{w}_0,\quad \phi(\mathbf{x}) = \begin{bmatrix}  \mathbf{x}^T \mathbf{w}_1 \\ \mathbf{x}^T \mathbf{w}_2\\ \mathbf{x}^T \mathbf{w}_3 \\ \mathbf{x}^T \mathbf{w}_4\end{bmatrix} 
+$$
+
+$$
+f(\mathbf{x})= w_{01} (\mathbf{x}^T \mathbf{w}_1) +  w_{02} (\mathbf{x}^T \mathbf{w}_2) +...
+$$ $$= \mathbf{x}^T ( w_{01}\mathbf{w}_1) +  \mathbf{x}^T (w_{02} \mathbf{w}_2) +...
+$$ Which is again just a linear function. The motivates the need for using a non-linear function like $\sigma(\cdot)$ in our neurons.
+
+## Activation functions
+
+While we need a non-linear function as part of our neural network feature transform, it does *not* need to be the sigmoid function. A few other common choices are:
+
+$$
+\textbf{Sigmoid:}\quad \sigma(x) = \frac{1}{1+e^{-x}}
+$$
+
+$$
+\textbf{Hyperbolic tangent:}\quad \tanh(x) = \frac{e^{2x}-1}{e^{2x}+1}
+$$
+
+$$
+\textbf{Rectifed linear:}\quad \text{ReLU}(x) = \max(x,\ 0)
+$$
+
+```{python}
+#| echo: false
+%%manim -sqh -v CRITICAL --progress_bar none VectorAddition
+
+class VectorAddition(Scene):
+    def construct(self):
+        self.camera.background_color = "#ffffff"
+        axes = Axes(
+            x_range=[-5, 5, 1],
+            y_range=[-2, 2, 1],
+            x_length=12,
+            y_length=8,
+            axis_config={"color": GREY},
+        )
+        
+        axes_labels = axes.get_axis_labels()
+        #axes_labels.set_color(GREY)
+        self.add(axes, axes_labels)
+
+        #plot1 = axes.plot(lambda x: 0.5 * x ** 2 + 2 * x - 3, color=BLUE)
+        #self.add(plot1)
+        
+        eq1 = Tex(r'ReLU($x$)', color=RED).to_corner(DR)
+        self.add(eq1)
+
+        plot = axes.plot(lambda x: max(x, 0), color=RED)
+        self.add(plot)
+
+        eq1 = Tex(r'tanh($x$)', color=BLUE).next_to(eq1, UP)
+        self.add(eq1)
+
+        plot = axes.plot(lambda x: np.tanh(x), color=BLUE)
+        self.add(plot)
+
+        eq1 = Tex(r'$\sigma$($x$)', color=GREEN).next_to(eq1, UP)
+        self.add(eq1)
+
+        plot = axes.plot(lambda x: 1 / (1 + np.exp(-x)), color=GREEN)
+        self.add(plot)
+        
+        #eq = Tex(r'$f(x)=0.5x^2 + 2x -3$', color=BLUE).next_to(eq1, DOWN)
+        #self.add(eq)
+
+        
+```
+
+We call these non-linear functions **activation functions** when used in neural networks. We'll see other examples over the course of this class
+
+Try out different activation functions [here](https://playground.tensorflow.org/#activation=relu&batchSize=10&dataset=circle&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=3&seed=0.10788&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=false&xSquared=false&ySquared=false&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false&showTestData_hide=true&activation_hide=false&problem_hide=true&noise_hide=true&regularization_hide=true&batchSize_hide=true&regularizationRate_hide=true&percTrainData_hide=true&numHiddenLayers_hide=true).
+
+## Multi-layer neural networks
+
+What we've seen so far is a *single hidden-layer* neural network. But there's no reason we're restricted to a single layer!

@@ -1,0 +1,407 @@
+---
+title: "Course Syllabus"
+---
+
+# Course Description
+
+In this course, we will introduce neural networks as a tool for machine learning and function approximation. We will start with the fundamentals of how to build and train a neural network from scratch. We will work our way towards discussing state-of-the-art neural networks including networks that power applications like object recognition, image generation and large language models. Throughout the course we will keep a strong focus on the implications of these models and how to apply them responsibly.
+
+**[Final project description](/assignments/final-project/outline.qmd)**
+
+## Instructor
+
+![](pictures/gabe.png){fig-align="left" width="300"}
+
+Prof. Gabe Hope (he/him)
+
+**Email:** ghope\@g.hmc.edu
+
+**Office:** MacGregor 322
+
+**Course Slack:** <https://join.slack.com/t/slack-hox8054/shared_invite/zt-220qv4i92-wFrivrGQBQbtzy0fSElV~w>
+
+### About me
+
+-   You can call me any combination of Prof./Professor/Dr. and Hope/Gabe. My full name is actually John Gabriel Hope.
+
+-   I am originally from New York City
+
+-   I have a Bachelor of Science (BS) in computer science and finance from Washington University in St. Louis.
+
+-   I have a Master of Science (MS) from Brown University (This was actually the start of my Ph.D.)
+
+-   I earned my Ph.D. from the University of California, Irvine advised by [Erik Sudderth](https://www.ics.uci.edu/~sudderth/). I graduated just this June!
+
+-   My research focuses on using neural networks to find interpretable structures in data. I mainly focus on image data, though I have also worked on analyzing motion-capture, audio and climate data among other things!
+
+## Grutor
+
+![](pictures/max.png){width="300"}
+
+Max McKnight (he/they)
+
+**Email:** mmcknigh\@pitzer.edu
+
+## Topics covered (tentative)
+
+-   Linear and logistic regression
+
+-   Gradient descent and optimization
+
+-   Feature transforms and feed-forward networks
+
+-   Performance tuning and analysis for neural networks
+
+-   Convolutional neural networks
+
+-   Regularization and normalization
+
+-   Residual networks and large-scale architectures
+
+-   Attention and transformers
+
+-   Biases and fairness in machine learning
+
+## Textbook (not required)
+
+[Probabilistic Machine Learning](https://probml.github.io/pml-book/) by Kevin Murphy. Full text for [book 1](https://probml.github.io/pml-book/book1.html) and [book 2](https://probml.github.io/pml-book/book2.html) are available for free online.
+
+## Office hours
+
+#### Prof. Gabe Hope
+
+**Mondays 4-5:30pm MacGregor 322**
+
+**Thursdays 5:30-6:30pm MacGregor 322**
+
+#### Max (Grutor)
+
+**Tuesdays 8-9pm MacGregor lab 203**
+
+**Open door policy:** If my door is open, feel free to stop in, say hi and ask questions about the course, research or any other academic issues. If the door is closed, feel free to knock. I often like to close my door to focus, but it does not always mean I am unable to talk. If I don't answer promptly I am either out of office or in a meeting and am unable to talk. If in doubt, feel free contact me on slack. Note that I generally prefer to keep longer discussion of course materials to designated office hours.
+
+# Software and tools
+
+## VSCode (Optional)
+
+[Visual Studio Code](https://code.visualstudio.com/) is a free development environment developed by Microsoft. It is available for Mac, Windows and Linux, and provides convenient tools for working with Python, Git and Jupyter. It is what I use to develop the materials for this course, and it is what I would recommend using for homework assignments. This is completely optional however. You are welcome to use whatever environment you feel most comfortable with.
+
+Here are resources for getting started:
+
+-   Recommended extensions for data science and working with Jupyter notebooks are listed [here](https://code.visualstudio.com/docs/datascience/overview).
+
+-   Instructions for setting up Python in VSCode are [here](https://code.visualstudio.com/docs/python/python-tutorial).
+
+-   Instructions for working with Jupyter notebooks in VSCode are [here](https://code.visualstudio.com/docs/datascience/jupyter-notebooks).
+
+-   Instructions for setting up Git in VSCode are [here](https://code.visualstudio.com/docs/sourcecontrol/intro-to-git).
+
+## Python
+
+Assignments and projects in this course will be based on Python 3. We will be using the following packages throughout this course:
+
+-   [**Numpy**](https://numpy.org/): The industry-standard Python library for working with vectors, matrices and general numerical computing.
+
+-   [**Matplotlib**](https://matplotlib.org/): The most popular and widely supported library for data visualization in Python.
+
+-   [**SciKit-Learn**](https://scikit-learn.org/stable/): A popular library for basic machine learning.
+
+-   [**PyTorch**](https://pytorch.org/): A deep learning library. Currently the most popular library for neural networks research and competitive with TensorFlow in terms of industry deployment.
+
+You can find this course's requirements file here. It will also be included in homework distributions. You can install the full set of packages using the command:
+
+```{bash}
+pip install -r requirements.txt
+```
+
+## Jupyter
+
+Most homework assignments will be distributed and submitted as [Jupyter](https://jupyter.org/) notebooks. Jupyterlab is included in the course requirements.txt file, but instructions for installing it are also available [here](https://jupyter.org/install). Once installed, you can launch a JupyterLab server locally on you computer using the command:
+
+``` bash
+jupyter lab
+```
+
+This will open the Jupyter Lab application in a web browser. From there you can navigate to the homework's `main.ipynb` file. Resources and documentation for working with Jupyter notebooks are available [here](https://docs.jupyter.org/en/latest/).
+
+## Latex (style) equations
+
+Homework assignments will ask you to submit answers requiring mathematical derivations as typeset Latex-style equations. Latex equations are supported directly within Jupyter. To write an equation in a text/markdown cell, simply surround the equation with `$` symbols as: `$y = x^2 + 1$`, which produces the output: $y=x^2 +1$. You can write block equation using double dollar-signs as `$$y = x^2 + 1$$`, which puts the equation on its own centered line.
+
+An extensive reference for Latex equations is available [here](http://tug.ctan.org/info/undergradmath/undergradmath.pdf).
+
+In general, only the final answer to such problems will be required to be submitted in this way, intermediate steps in derivations can be submitted separately as handwritten notes. To do this, scan or photograph (clearly!) the handwritten derivations and include them as a `derivations.pdf` file in the homework repository. You may also include separate files for each question with the format `derivations-q1.pdf`. PNG and JPG files are also acceptable. You may also omit intermediate steps altogether, but this is not recommended as it may limit your ability to earn partial credit if your answer is incorrect.
+
+## Git and GitHub
+
+Assignments for this course will be distributed and collected via [GitHub](https://github.com/). You can sign up for a GitHub account at the link. If you have an existing GitHub account you may use it; you are not required to use an account associated with your Harvey Mudd (or 5Cs) email. As soon as possible please provide me with your Github username using [this form](https://forms.gle/aReVB1nbdxFcQG2NA).
+
+After the first class you will receive an email inviting you to a GitHub organization for this course. Please accept the invite as soon as possible. Once you have joined the organization, personal repositories for each homework will appear in your GitHub account under the organization ([this link](https://github.com/orgs/CS152-Neural-Networks-Fall-2023/repositories) should take you to a list of your repositories for each homework, provided you are logged into GitHub).
+
+The workflow for each homework should be as follows:
+
+-   **Clone the repository:** You can find your repository for each homework using the link above. Running `git clone REPOSITORY_URL` will copy the repository to your computer. In VSCode, you can simply select `Clone Git Repository...`under the start menu.
+
+-   **Complete the assignment:** Typically the only file you will need to edit will be `main.ipynb` in each homework's repository. This is a Jupyter notebook which will contain instructions for where to answer each question. Other supporting files may be distributed in the repository as well.
+
+-   **Commit your changes:** From the command line in the repository directory run the command: `git add main.ipynb`to stage the changes to made to the assignment with your answers. Then run the command `git commit -m "COMMIT_MESSAGE"` to save a checkpoint of your changes with the provided message. You can make as many commits as you want. In VSCode you can commit by navigating to the "source control" menu in the toolbar (typically on the left side of the window) and clicking the `commit` or check mark button.
+
+-   **Push your changes:** Before the deadline, submit your assignment by running `git push origin main` in the assignment directory. You may push updated solutions multiple times, but please do not push after the deadline. Your last push before the deadline will be considered your submission. Submitting after the deadline will cause issues for me and the gruders. In VSCode you can similarly push your assignment from the source control panel and selecting "push".
+
+## Course GPU Server
+
+We have a GPU server for this course that will be available to you for your final projects. (Thank you to our system administrator Tim Buchheim for setting this up!). The server is located at teapot.cs.hmc.edu (named for the [Utah teapot](https://en.wikipedia.org/wiki/Utah_teapot)). We will discuss how to allocate resources on this machine at the start of the course project. You will not need GPU access for most homework assignments.
+
+# Course grades
+
+I will be assigning course grades based on four categories: homework assignments, midterm exams, final project and participation. The breakdown of how the grade will be computed is:
+
+## Homework assignments (40% of course grade)
+
+**Frequency:** Homeworks will be assigned on a weekly basis throughout the semester, with the exception of weeks where midterms and final projects are due.
+
+**Due dates and late policy:** Homeworks are assigned on Mondays and must be submitted by the end of the following Tuesday (11:59pm Tuesday). Late assignments will not be accepted, but the lowest 2 homework scores will be dropped unconditionally. For cases of illness, injury, family emergency or other extenuating circumstances, please contact me for exceptions to this policy.
+
+**Submission** Homework assignments are submitted by pushing to the corresponding Github repository. For each homework, I will consider the last push **before** the submission deadline to be your submission.
+
+## Midterm exam (20% of course grade)
+
+This course will have a single in-class midterm exam on **Wednesday, November 8th**. Details will be discussed closer to the exam date.
+
+## Participation (10% of course grade)
+
+This course is not generally a discussion-based class, however there will be certain lectures with open-ended discussions throughout the semester. The participation grade will be based on the following factors:
+
+-   Participation in open-ended discussion sessions during class
+
+-   Contriubting to the learning environment by asking or answering questions during regular lectures
+
+-   Following the guidelines for respectful discussion (as outlined in course policies)
+
+-   Class attendance
+
+-   Attending office hours outside class
+
+Earning a perfect participation grade will *not* require full marks for all of these criteria. A perfect participation grade will be earned by any student who: attends class regularly (\> 80% of the time) and participates respectfully in class at least every 1-2 weeks. Attending office hours is not strictly required, but if you are struggling to participate in class, I will assign bonus points to your participation grade for attending. If you have questions about your participation grade at any point, please contact me.
+
+## Final Project (30% of course grade)
+
+The culmination of this course will be a final project completed in teams of 2-4 students. Full project description to follow. Your grade for the final project will depend on:
+
+-   The strength of your team's final presentation and write-up
+
+-   Your strength as a team-member (determined by self, peer and instructor evaluations)
+
+-   Initial project proposal
+
+-   Mid-project check-ins
+
+Students enter this class with highly varying backgrounds and prior experiences with neural networks, so I will help each team determine an appropriate scope for their project. Grades will be evaluated for each team individually based on how the team approached, analyzed and executed on the goals of the project. The relative technical sophistication of other teams projects will *not* be considered.
+
+## Letter grade assignments
+
+As this course is still under active development I cannot yet guarantee exact cutoffs for each grade. Harvey Mudd does not impose expectations for the grade distribution, so every student that meets the requirements for a given grade will earn it. The following is the maximum cutoff of each letter grade, the actual cutoff for each grade may be lower that what is listed below:
+
+-   \>90%: A
+
+-   \>80%: B
+
+-   \>70%: C
+
+-   \>60%: D
+
+As the semester progresses, I will update this guide to provide a clearer picture of how grades will be assigned.
+
+# Guidelines and policies
+
+## Course feedback
+
+This is my first time teaching a college course, so I will need your help! I want to make sure that we go through the material at an appropriate pace and that concepts are presented in a clear and understandable way. To do this, I will be continuously soliciting feedback from you throughout the semester on both the lectures and assignments. I ask that you provide feedback honestly, but kindly. There are three mechanisms I will use for feedback:
+
+**In-class:** In class we will use a thumbs-up, thumbs down system. When I ask if people are following the lecture you can put your thumb *up* to indicate that you feel you are understanding the material being presented, *down* to indicate that you are lost or the lecture is confusing, and *sideways* to indicate that you followed some parts, but not all. You are, of course, also encouraged to give verbal feedback if appropriate.
+
+**With homework:** Each homework will include a link to a survey to give feedback on that week's assignment and lectures. Submitting this form is a required part of the homework, but your answers will not be tracked or accounted for in grades. This gives you a chance to indicate any issues (or things you like) with the class.
+
+**General anonymous feedback:** If you have an issue with the course that you would like me to be aware of, but do not want your name to be associated with, you can use [this form](https://forms.gle/va11f5tLSvNpN16z9) to submit an anonymous issue. Please continue to remain constructive and kind when submitting feedback in this way.
+
+## Academic issues and wellness
+
+My primary goal is for every student to understand the material to the best extent possible and hopefully enjoy learning the material at the same time. If at any point you are concerned about your grade or feel you are struggling for any reason I encourage you to reach out to me either via slack/email or during office hours. I will also try to reach out to you if I notice you are struggling with the material or are not on track to pass the class.
+
+I also want you to prioritize your mental and physical well-being. The college has several resources that can help you with this. The academic deans (academicdeans\@g.hmc.edu) can help you keep on top of your academic progress. The office of health and wellness (<https://www.hmc.edu/health-wellness/>) can help you with a wide range of physical and metal health issues. I encourage you to be proactive, if you are starting to feel anxious, overwhelmed or depressed seeking help early can be extremely valuable. If you are unsure where to go, I can help guide you to the appropriate resource. The [Claremont Care Guide](https://www.hmc.edu/student-life/wp-content/uploads/sites/4/2013/05/The-Claremont-Colleges-Care-Guide.pdf), provides a useful guide if you or someone you know is in urgent distress.
+
+## Accommodations
+
+If you have a disability (for example, mental health, learning, chronic health, physical, hearing, vision, neurological, etc.) and expect barriers related to this course, it is important to request accommodations and establish a plan. Requests for accommodations must go through the [Office of Accessible Education](https://www.hmc.edu/student-success/accessible-education/requesting-accommodations/). I am happy to work with them to establish an appropriate plan for this course. I also encourage reaching out to them if you are unsure of your eligibility for accommodations, they can help determine what is appropriate for you.
+
+Remember that requests for accommodations must be made each semester. If you are not already registered this process can take time and accommodations cannot be applied retroactively, so starting the process early is important.
+
+## Attendence
+
+Attendence is **strongly** encouraged as it is beneficial for both your own learning and that of your peers who may learn from your knowledge and viewpoints. Not only is attendance reflected in your participation grade, it is also highly correlated with performance on exams and homework. That said, I understand that there are times where student may miss class for a variety of reasons. If you miss a class (or several) please contact me by email or slack and we can work out a plan to catch you up on the material. Up to 1 unexcused absence per month will not affect your participation grade, neither will excused absences due to illness, injury, etc.
+
+## Guidelines for respectful class discussion
+
+The goal of in-class discussions to understand each others perspectives and to contribute to both our own learning and that of our peers. To make sure that in-class discussions are aligned with these goals please be mindful of the following guidelines:
+
+-   **Avoid judgment:** Students enter this class with a variety of backgrounds, experience and viewpoints. Be positive and encouraging to your peers even if you feel they are incorrect. Strive to make sure those around you feel comfortable answering questions even if they are not completely sure of their answer and give opinions that they are not sure others will agree with. Remember that giving an answer different from what the instructor was looking for can lead to productive and informative discussions.
+
+-   **Allow everyone a chance to speak:** We want to give every student a chance to participate in the class and in discussions. If you find yourself speaking, answering or asking questions far more than your peers, consider encouraging others to speak instead. Remember that in-class time is not your only opportunity to discuss this material and you are welcome to ask more questions in office hours.
+
+-   **Practice active listening:** When having in-class discussions make sure to acknowledge the answers and opinions of others before offering your own. Avoid interrupting others. Your thoughts deserve to be heard and understood, so it's important that we work together to make sure everyone's contributions are considered.
+
+-   **Be kind:** Do not use harsh or disparaging language in class. Avoid blame or speculation about other students. Aim to be charitable in your interpretations of other peoples words. Respect the boundaries set by others.
+
+-   **Be inclusive:** Be respectful of everyone's background and identity. Avoid making assumptions or generalizations based on someone's (perceived) social group. Do not ask individuals to speak for their social group.
+
+## Collaboration policy
+
+You are encouraged to discuss homework assignments with other students, but the final work that you submit for each assignment must be still be your own. This means you **may**:
+
+-   Discuss published course materials and topics
+
+-   Discuss approaches to problems with other students, including while working on the assignments
+
+-   Share helpful examples and resources with other students
+
+-   Help other students with technical issues such as setting up GitHub and Python environments.
+
+-   View another student's code for the purpose of debugging small technical issues (exceptions, syntax errors etc.)
+
+You **may not:**
+
+-   Copy/paste another student's answers to any problem or allow another student to copy/paste your answers
+
+-   Share answers to completed problems with other students
+
+-   Distribute or post online any assignments, problems and/or solutions.
+
+This collaboration policy is covered by the Harvey Mudd honor code and violations will be referred to the honor code board.
+
+Each homework will have space for you to indicate who you discussed the assignment with. If you would like help finding other students to study with, please let me know and I can work to set you up with a study group.
+
+## AI Policy
+
+In this course we will be learning the fundamental tools for building large language models and chat AIs, such as ChatGPT. Therefore I encourage you to experiment with ChatGPT and it's competitors during this course. However, I consider these models to be covered by the above collaboration policy. That means you may interact with them to discuss course materials, but you may not share assignment problems with them, nor may you copy/paste answers from them. If you have any questions about what is appropriate, please reach out to me.
+
+## COVID Safety
+
+College policy states that masks are no longer required indoors for the upcoming semester. I will not require masks in class, but students who prefer to continue wearing masks are should do so. If you are feeling sick please stay home and let me know so that I can provide you with the relevant course materials.
+
+# Final Project
+
+As stated in the course grades section, this course will culminate in a final group project. More information about this project will be distributed prior to the official assignment of the project.
+
+# External Resources
+
+Useful resources for neural networks and deep learning (compiled by the wonderful [Tony Clark](https://cs.pomona.edu/~ajc/)).
+
+## Courses
+
+-   [fastai (website)](https://course.fast.ai/)
+
+-   [Deep Learning Specialization (Coursera MOOC)](https://www.deeplearning.ai/)
+
+-   [Deep Learning (Stanford CS230 course)](https://cs230.stanford.edu/)
+
+-   [Convolutional Neural Networks for Visual Recognition (Stanford CS231n course)](http://cs231n.stanford.edu/)
+
+-   [Introduction to Deep Learning (MIT 6.S191 course)](http://introtodeeplearning.com/)
+
+-   [MIT Deep Learning and Artificial Intelligence Lectures (MIT course)](https://deeplearning.mit.edu/)
+
+-   [Deep Reinforcement Learning (Berkeley CS 285 course)](http://rail.eecs.berkeley.edu/deeprlcourse/)
+
+-   [Deep Reinforcement Learning (free online course)](https://simoninithomas.github.io/deep-rl-course/)
+
+-   [Deep Learning Systems](https://dlsyscourse.org/ "Deep Learning Systems")
+
+## Books
+
+-   [Dive into Deep Learning (UC Berkeley book)](https://d2l.ai/)
+
+-   [Deep Learning (free book)](https://www.deeplearningbook.org/)
+
+-   [First steps towards Deep Learning with PyTorch (free book)](https://github.com/vaibhawvipul/First-steps-towards-Deep-Learning)
+
+-   [Neural Networks and Deep Learning (free book)](http://neuralnetworksanddeeplearning.com/)
+
+-   [Deep Learning With PyTorch (pdf)](https://pytorch.org/assets/deep-learning/Deep-Learning-with-PyTorch.pdf)
+
+-   [Annotated Algorithms in Python (free book)](https://github.com/mdipierro/nlib)
+
+-   [Learn Python the Right way (free book)](https://learnpythontherightway.com/#read "Learn Python the Right way")
+
+-   [The Linux Command Line by William Shotts](https://linuxcommand.org/tlcl.php "Linux Command Line Books by William Shotts")
+
+## Math
+
+-   [The Matrix Calculus You Need For Deep Learning (website)](https://explained.ai/matrix-calculus/index.html)
+
+-   [The Mechanics of Machine Learning (free book)](https://mlbook.explained.ai/)
+
+-   [Mathematics for Machine Learning (free book)](https://mml-book.github.io/)
+
+-   [Seeing Theory: A Visual Introduction To Probability And Statistics (free book)](https://seeing-theory.brown.edu/)
+
+## Extras
+
+-   [Cheatsheet (website)](https://stanford.edu/~shervine/teaching/cs-229/cheatsheet-deep-learning)
+
+-   [TensorFlow 2.0 Complete Course - Python Neural Networks for Beginners Tutorial (YouTube)](https://www.youtube.com/watch?v=tPYj3fFJGjk)
+
+-   [Neural Networks (3blue1brown YouTube)](https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi)
+
+-   [Machine Learning From Scratch (website)](https://mlfromscratch.com/)
+
+-   [A visual introduction to machine learning (website)](http://www.r2d3.us/visual-intro-to-machine-learning-part-1/)
+
+## Python
+
+-   [Google's Python Class](https://developers.google.com/edu/python)
+
+-   [Introduction to Python \| Microsoft Learn](https://learn.microsoft.com/en-us/training/modules/intro-to-python/)
+
+-   [List of free free Python books](https://github.com/pamoroso/free-python-books)
+
+-   [Python Programming Tutorials](https://pythonprogramming.net/python-fundamental-tutorials/)
+
+-   [Learn Python - Full Course for Beginners (YouTube)](https://www.youtube.com/watch?v=rfscVS0vtbw)
+
+-   [Python In 1 Minute (YouTube)](https://www.youtube.com/playlist?list=PLR-OQ6L6UEF6CMXxp22TdfR-ZXxwMhgZe)
+
+-   [Automate the Boring Stuff With Python (book)](https://automatetheboringstuff.com/2e/)
+
+-   [Introduction to Python Programming (free course)](https://www.udacity.com/course/introduction-to-python--ud1110#)
+
+-   [A Whirlwind Tour of Python (Jupyter Notebooks)](https://github.com/jakevdp/WhirlwindTourOfPython)
+
+-   [Python for Everybody Specialization (free course)](https://www.coursera.org/specializations/python)
+
+-   [Introduction to Computer Science and Programming Using Python (MIT course)](https://www.edx.org/course/introduction-to-computer-science-and-programming-7)
+
+## Ethics
+
+-   [Awful AI](https://github.com/daviddao/awful-ai)
+
+-   [Learning from the past to create Responsible AI](https://romanlutz.github.io/ResponsibleAI/)
+
+-   [Practical Data Ethics](https://ethics.fast.ai)
+
+-   [Fair ML Book](https://fairmlbook.org/)
+
+-   [Machine Ethics Podcast](https://www.machine-ethics.net/podcast/)
+
+-   [ACM Code of Ethics and Professional Conduct](https://www.acm.org/code-of-ethics)
+
+-   [IEEE Code of Ethics](https://www.ieee.org/about/corporate/governance/p7-8.html)
+
+-   [Code of Conduct for Professional Data Scientists](https://www.datascienceassn.org/code-of-conduct.html)
+
+## Libraries/Frameworks/Tools
+
+-   [Mlxtend (machine learning extensions)](https://rasbt.github.io/mlxtend/)
+
+-   [Streamlit (Turn data scripts into sharable web apps in minutes)](https://www.streamlit.io/)
+
+-   [Deepnote (The notebook you'll love to use)](https://deepnote.com/)

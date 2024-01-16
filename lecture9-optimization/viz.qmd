@@ -1,0 +1,909 @@
+---
+title: "Stochastic Gradient descent visualization"
+format:
+    html:
+        toc: true
+        toc-depth: 3
+---
+
+```{ojs}
+//| echo: false
+//| 
+MathJax = {
+  const MathJax = await require('mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML')
+    .catch(() => window.MathJax)
+  
+  // configure MathJax
+  MathJax.Hub.Config({
+    tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+    displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+    processEscapes: true
+  })  
+  return MathJax
+}
+
+Plotly = require("https://cdn.plot.ly/plotly-latest.min.js");
+tfbase = require('@tensorflow/tfjs@4.11.0')
+pyodide = {
+  const p =
+    await require("https://cdn.jsdelivr.net/pyodide/v0.22.1/full/pyodide.js");
+  console.log(p);
+  return p.loadPyodide();
+}
+
+PyScope = function() {
+  let scope = pyodide.toPy({});
+  
+  let py = async (strings, ...expressions) => {
+    let globals = {};
+    const code = strings.reduce((result, string, index) => {
+      if (expressions[index]) {
+        const name = `x${index}`;
+        globals[name] = expressions[index];
+        return result + string + name;
+      }
+      return result + string;
+    }, '');
+    await pyodide.loadPackagesFromImports(code);
+    scope.update(pyodide.globals);
+    const result = await pyodide.runPythonAsync(
+      code,
+      {
+        globals: scope
+      }
+    );
+    if (result?.t2Js) return result.t2Js();
+    if (result?.toJs) return result.toJs();
+    return result;
+  };
+  
+  return py;
+}
+
+py = {
+  let testscope = PyScope();
+  let py = async (strings, ...expressions) => {
+    let globals = {};
+    const code = strings.reduce((result, string, index) => {
+      if (expressions[index]) {
+        const name = `x${index}`;
+        globals[name] = expressions[index];
+        return result + string + name;
+      }
+      return result + string;
+    }, '');
+    await pyodide.loadPackagesFromImports(code);
+    pyodide.globals.update(pyodide.toPy(globals))
+    const result = await pyodide.runPythonAsync(
+      code,
+      {globals: pyodide.globals}
+    );
+    if (result?.t2Js) return result.t2Js();
+    if (result?.toJs) return result.toJs();
+    return result;
+  };
+
+  const sigmoidGradConfig  = {
+    kernelName: tfbase.Sigmoid,
+    inputsToSave: ['x'],
+    gradFunc: (dy, saved) => {
+      const [x] = saved;
+      const y = tfbase.sigmoid(x);
+      return {x: () => tfbase.mul(dy, tfbase.mul(y, tfbase.sub(tfbase.scalar(1), y)))};
+    }
+  };
+  tfbase.registerGradient(sigmoidGradConfig);
+
+  const tanhGradConfig = {
+    kernelName: tfbase.Tanh,
+    inputsToSave: ['x'],
+    gradFunc: (dy, saved) => {
+      const [x] = saved;
+      const y = tfbase.tanh(x);
+      return {x: () => tfbase.mul(tfbase.sub(tfbase.scalar(1), tfbase.square(y)), dy)};
+    }
+  };
+  tfbase.registerGradient(tanhGradConfig);
+   const expGradConfig = {
+    kernelName: tfbase.Exp,
+    inputsToSave: ['x'],
+    gradFunc: (dy, saved) => {
+      const [x] = saved;
+      const y = tfbase.exp(x);
+      return {x: () => tfbase.mul(dy, y)};
+    }
+  }; 
+  tfbase.registerGradient(expGradConfig);
+
+  function dispatchEvent(element){
+    element.dispatchEvent(new Event("input", {bubbles: true}));
+  }
+  pyodide.globals.update(pyodide.toPy({Plotbase: Plot, tfbase: tfbase, Plotlybase: Plotly, dispatchEvent: dispatchEvent, d3base: d3}))
+  
+await py`
+from pyodide.ffi import create_once_callable
+from types import SimpleNamespace
+from pyodide.ffi import to_js
+from js import Object, document
+import pandas
+import numpy as np
+
+tfbase = SimpleNamespace(**tfbase)
+
+def convert_tensor(a, *args):
+  if isinstance(a, Parameter):
+    a = a.value.value
+  if isinstance(a, Tensor):
+    a = a.value
+  if isinstance(a, np.ndarray):
+    a = a.tolist()
+  return to_js(a)
+
+def convert(a):
+  if isinstance(a, Parameter):
+    a = a.value.value
+  if isinstance(a, Tensor):
+    a = a.value
+  if isinstance(a, np.ndarray):
+    a = a.tolist()
+  return to_js(a, dict_converter=Object.fromEntries, default_converter=convert_tensor)
+
+def convert_start(shape, start):
+  start = start or 0
+  if start < 0:
+    start = shape + start
+  start = min(start, shape - 1)
+  return start
+
+def convert_end(shape, start, end): 
+  start = convert_start(shape, start)
+  if end is None:
+    end = shape
+  else:
+    end = convert_start(shape, end)
+  return end - start
+
+class Tensor:
+  keepall = False
+
+  class Keep:
+    def __enter__(self):
+        self.value = Tensor.keepall
+        Tensor.keepall = True
+    
+    def __exit__(self, *args):
+        Tensor.keepall = self.value
+
+  def __init__(self, *args, value=None, keep=None, **kwargs):
+    if keep is None:
+      self.keep = Tensor.keepall
+    else:
+      self.keep = keep
+
+    if not (value is None):
+      self.value = value
+    elif len(args) and isinstance(args[0], Tensor):
+      self.value = tfbase.add(args[0].value, 0)
+    elif len(args) and args[0] is None:
+      self.value = tfbase.tensor(0.)
+    else:
+      args = [convert(a) for a in args]
+      kwargs = {k: convert(a) for (k, a) in kwargs.items()}
+      self.value = tfbase.tensor(*args, **kwargs)
+
+  def __getattr__(self, name):
+    if name == 'T':
+      return self.transpose()
+    attr = getattr(self.value, name)
+    if callable(attr):
+      def run(*args, **kwargs):
+        args = [convert(a) for a in args]
+        kwargs = {k: convert(a) for (k, a) in kwargs.items()}
+        output = attr(*args, **kwargs)
+        return Tensor(value=output)
+      # Prevent premature garbage collection
+      run._ref = self
+      return run
+    return attr
+
+  def __add__(a, b):
+    return Tensor(value=tfbase.add(convert(a), convert(b)))
+  def __radd__(a, b):
+    return Tensor(value=tfbase.add(convert(b), convert(a)))
+  def __sub__(a, b):
+    return Tensor(value=tfbase.sub(convert(a), convert(b)))
+  def __rsub__(a, b):
+    return Tensor(value=tfbase.sub(convert(b), convert(a)))
+  def __mul__(a, b):
+    return Tensor(value=tfbase.mul(convert(a), convert(b)))
+  def __rmul__(a, b):
+    return Tensor(value=tfbase.mul(convert(b), convert(a)))
+  def __truediv__(a, b):
+    return Tensor(value=tfbase.div(convert(a), convert(b)))
+  def __rtruediv__(a, b):
+    return Tensor(value=tfbase.div(convert(b), convert(a)))
+  def __floordiv__(a, b):
+    return Tensor(value=tfbase.floorDiv(convert(a), convert(b)))
+  def __rfloordiv__(a, b):
+    return Tensor(value=tfbase.floorDiv(convert(b), convert(a)))
+  def __pow__(a, b):
+    return Tensor(value=tfbase.pow(convert(a), convert(b)))
+  def __rpow__(a, b):
+    return Tensor(value=tfbase.pow(convert(b), convert(a)))
+  def __neg__(a):
+    return Tensor(value=tfbase.neg(convert(a)))
+  def __eq__(a, b):
+    return Tensor(value=tfbase.equal(convert(a), convert(b)))
+  def __neq__(a, b):
+    return Tensor(value=tfbase.notEqual(convert(a), convert(b)))
+  def __lt__(a, b):
+    return Tensor(value=tfbase.less(convert(a), convert(b)))
+  def __gt__(a, b):
+    return Tensor(value=tfbase.greater(convert(a), convert(b)))
+  def __leq__(a, b):
+    return Tensor(value=tfbase.lessEqual(convert(a), convert(b)))
+  def __geq__(a, b):
+    return Tensor(value=tfbase.greaterEqual(convert(a), convert(b)))
+
+  def __del__(self):
+    if hasattr(self.value, 'dispose') and not self.keep:
+      self.value.dispose()
+
+  def __iter__(self):
+    for x in self.value.arraySync():
+        yield Tensor(x)
+
+  def __getitem__(self, args):
+    tosqueeze = []
+    starts, ends, steps = [], [], []
+    value = self
+    
+    if not (type(args) is tuple):
+      args = (args,)
+    
+    for ind in range(len(args)):
+      if args[ind] is Ellipsis:
+        start = args[:ind]
+        rest = args[(ind + 1):]
+        args = start + tuple([slice(None)] * (len(self.value.shape) - (len(start) + len(rest)))) + rest
+        break
+    
+    for i, (shape, dim) in enumerate(zip(self.value.shape, args)):
+      if isinstance(dim, slice):
+        starts.append(dim.start or 0)
+        ends.append(dim.stop or shape)
+        steps.append(dim.step or 1)
+      elif Tensor(dim).shape:
+        t = Tensor(dim)
+        if t.value.dtype == 'bool':
+          inds = [ind for (ind, e) in enumerate(t.value.arraySync()) if e]
+          inds = tf.cast(tf.reshape(Tensor(inds), [-1]), 'int32')
+          value = tf.gather(value, inds, i)
+        else:
+          inds = tf.cast(tf.reshape(t, [-1]), 'int32')
+          value = tf.gather(value, inds, i)
+      else:
+        starts.append(dim)
+        ends.append(dim + 1)
+        steps.append(1)
+        tosqueeze.append(i)
+    value = tf.stridedSlice(value, convert(starts), convert(ends), convert(steps))
+    if len(tosqueeze) > 0:
+      value = tf.squeeze(value, tosqueeze)
+    return value
+
+  def t2Js(self):
+    return to_js(self.value.arraySync())
+
+class wrapper:
+  def __init__(self, f):
+    self.f = f
+
+  def __call__(self, x, *args, **kwargs):
+    with Tensor.Keep():
+      return convert(self.f(Tensor(value=x), *args, **kwargs))
+
+class grad:
+  def __init__(self, f):
+    self.f = f
+    self.wrapper = wrapper(f)
+
+  def __call__(self, x, *args, **kwargs):
+    output = tfbase.grad(create_once_callable(self.wrapper))(x.value, *args, **kwargs)
+    return Tensor(value=output)
+
+class wrappers:
+  def __init__(self, f):
+    self.f = f
+
+  def __call__(self, *args):
+    with Tensor.Keep():
+      wrapped_args = [Tensor(value=x) for x in args]
+      return convert(self.f(*wrapped_args))
+
+class grads:
+  def __init__(self, f):
+    self.f = f
+    self.wrapper = wrappers(f)
+
+  def __call__(self, *args):
+    output = tfbase.grads(create_once_callable(self.wrapper))(to_js([arg.value for arg in args]))
+    return [Tensor(value=x) for x in output]
+
+tf = Tensor(value=tfbase)
+Plotbase = SimpleNamespace(**Plotbase)
+Plotlybase = SimpleNamespace(**Plotlybase)
+d3base = SimpleNamespace(**d3base)
+
+def meshgrid(*args):
+  return tuple([Tensor(value=a) for a in tfbase.meshgrid(*[convert(arg) for arg in args])])
+tf.meshgrid = meshgrid
+
+def default_convert(obj, default_f, other):
+  if isinstance(obj, Tensor):
+    obj = obj.t2Js()
+  if isinstance(obj, pandas.DataFrame):
+    obj = obj.to_dict('records') 
+  return default_f(obj)
+
+def plotconvert(a):
+  return to_js(a, dict_converter=Object.fromEntries, default_converter=default_convert)
+
+class PlotWrapper:
+  def __init__(self, base=None):
+    self.base = base
+    
+  def __getattr__(self, name):
+    attr = getattr(self.base, name)
+    if callable(attr):
+      def run(*args, **kwargs):
+        args = [plotconvert(a) for a in args]
+        kwargs = {k: plotconvert(a) for (k, a) in kwargs.items()}
+        return attr(*args, **kwargs)
+      return run
+    return attr
+
+Plot = PlotWrapper(Plotbase)
+Plotly = PlotWrapper(Plotlybase)
+d3 = PlotWrapper(d3base)
+
+def PlotlyFigure(width=800, height=None, hide_toolbar=True, overlay=True):
+  if height is None:
+    height = 0.75 * width
+
+  width, height = int(width), int(height)
+  container = document.createElement('div')
+  container.style.width = str(width) + 'px'
+  container.style.height = str(height) + 'px'
+  
+  lineplot = document.createElement('div')
+  lineplot.classList.add("plotlydiv")
+
+  if hide_toolbar:
+    container.classList.add("hidetoolbar")
+
+  container.append(lineplot)
+  if overlay:
+    overlay = document.createElement('div')
+    overlay.classList.add("plotlyoverlay")
+    
+    container.append(overlay)
+    
+    container.style.position = 'relative'
+    overlay.style.top = '0'
+    overlay.style.bottom = '0'
+    overlay.style.width = '100%'
+    overlay.style.position = 'absolute'
+  return container
+  
+def PlotlyInput(width=800, height=None, hide_toolbar=True, sync=None):
+  container = PlotlyFigure(width, height, hide_toolbar)
+  lineplot, overlay = container.childNodes[0], container.childNodes[1]
+  if sync is None:
+    sync = container
+
+  class mover:
+    def __init__(self):
+      self.mousedown = False
+    
+    def __call__(self, event):
+      if event.type == 'mousedown':
+        self.mousedown = True
+      if event.type == 'mouseleave':
+        self.mousedown = False
+      if event.type == 'mouseup':
+        self.mousedown = False
+  
+      if self.mousedown:
+        x = float(lineplot._fullLayout.xaxis.p2c(event.layerX - lineplot._fullLayout.margin.l))
+        y = float(lineplot._fullLayout.yaxis.p2c(event.layerY - lineplot._fullLayout.margin.t))
+        sync.value = to_js([x, y])
+        dispatchEvent(sync)
+        
+  
+  e = mover()
+  overlay.addEventListener('mousemove', to_js(e))
+  overlay.addEventListener('mousedown', to_js(e))
+  overlay.addEventListener('mouseup', to_js(e))
+  overlay.addEventListener('mouseleave', to_js(e))
+  container.value = to_js([0., 0.])
+  return container
+
+def PlotlyReactive(container, traces=[], layout={}, options={}):
+  full_layout = dict(width=int(container.style.width.replace('px', '')), height=int(container.style.height.replace('px', '')))
+  full_layout.update(layout)
+  full_options = {'displayModeBar' : not container.classList.contains('hidetoolbar')}
+  full_options.update(options)
+  plot = container.childNodes[0]
+  Plotly.react(plot, traces, full_layout, full_options)
+
+def colorMap(t, cmap='inferno', cmin=None, cmax=None, scale='linear', res=100):
+  import matplotlib.cm as cm
+  if cmin is None:
+    cmin = tf.min(t)
+  if cmax is None:
+    cmax = tf.max(t)
+  
+  t = (t - cmin) / (cmax - cmin)
+  if scale == 'log':
+    e = tf.exp(1)
+    t = t * (e - 1) + 1
+    t = tf.log(t)
+  cmap = Tensor(cm.get_cmap(cmap, res + 1)(range(res + 1)))
+  t = t * res
+  shape = t.shape
+  tflat = tf.reshape(t, [-1])
+  tfloor = tf.gather(cmap, tf.floor(tflat).cast('int32'))
+  tceil = tf.gather(cmap, tf.ceil(tflat).cast('int32'))
+  tfrac = tf.reshape(tflat - tf.floor(tflat), [-1, 1])
+  tflat = tfrac * tceil + (1. - tfrac) * tfloor
+  t = tf.reshape(tflat, list(shape) + [4])
+  return t
+
+def plotTensor(t, canvas, size=None, cmap=None, interpolation='nearest', **kwargs):
+  if not (cmap is None):
+    t = colorMap(t, cmap, **kwargs)
+  if size is None:
+    size = (canvas.height, canvas.width)
+  if interpolation == 'bilinear':
+    t = tfbase.image['resizeBilinear'](t.value, list(size))
+  else:
+    t = tfbase.image['resizeNearestNeighbor'](t.value, list(size))
+  tfbase.browser['toPixels'](t, canvas)
+
+from itertools import chain
+import math
+
+class Module:
+    def __init__(self):
+        self._submodules = dict()
+        self.eval = False
+        self._store = False
+
+    def parameters(self):
+        return chain.from_iterable(map(lambda x: x.parameters(), self._submodules.values()))
+    
+    def __setattr__(self, name, value):
+        if isinstance(value, Module):
+            self._submodules[name] = value
+        super().__setattr__(name, value)
+
+    def __call__(self, *args, **kwargs):
+        value = self.forward(*args, **kwargs)
+        self._store = False
+        return value
+    
+    def forward(self):
+        raise NotImplementedError()
+    
+    def train(self):
+        self.eval = False
+        for sm in self._submodules.values():
+            sm.train()
+    
+    def eval(self):
+        self.eval = True
+        for sm in self._submodules.values():
+            sm.eval()
+
+    def store(self):
+        self.store = True
+        for sm in self._submodules.values():
+            sm.eval()
+
+class Parameter(Module):
+    def __init__(self, value):
+        super().__init__()
+        self.value = value
+        self.temp = None
+        self.grad = None
+
+    def parameters(self):
+        return [self]
+    
+class Sequential(Module):
+    def __init__(self, *args):
+        super().__init__()
+        self.sequence = []
+        for arg in args:
+            if isinstance(arg, Module):
+                self.sequence.append(arg)
+            else:
+                self.sequence.extend(arg)
+        
+        self._submodules = {k: v for (k,v) in enumerate(self.sequence)}
+
+    def __getitem__(self, index):
+        return self.sequence[index]
+
+    def forward(self, X):
+        for m in self.sequence:
+            X = m(X)
+        return X
+    
+ModuleList = Sequential
+
+class Sigmoid(Module):
+    def forward(self, X):
+        return tf.sigmoid(X)
+    
+class ReLU(Module):
+    def forward(self, X):
+        return tf.relu(X)
+    
+class Tanh(Module):
+    def forward(self, X):
+        return tf.tanh(X)
+    
+class Linear(Module):
+    def __init__(self, in_features, out_features):
+        super().__init__()
+        # Kaiming He initialization
+        self.W = Parameter(tf.randomNormal([in_features, out_features]) * math.sqrt((2 / out_features) / 3))
+        self.b = Parameter(tf.randomNormal([out_features]) * math.sqrt((2 / out_features) / 3))
+        self.input = None
+
+    def forward(self, x):
+        # Returns a new Matrix
+        self.input = None
+        return tf.dot(x, self.W) + self.b
+
+
+
+        
+class Optimizer:
+    def __init__(self, model, loss=None, store=False):
+        self.parameters = list(model.parameters())
+        self.model = model
+        self.loss = loss
+        self.store = store
+
+    def _grads(self, loss, *args, **kwargs):
+        def loss_internal(*params):
+            for val, param in zip(params, self.parameters):
+                param.temp = param.value
+                param.value = val
+            try:
+                l = loss(self.model, *args, **kwargs)
+            finally:
+                for param in self.parameters:
+                    param.value = param.temp
+                    param.temp = None
+            return l
+        
+        return grads(loss_internal)(*map(lambda p: p.value, self.parameters))
+    
+    def _step(self, grads):
+        raise NotImplementedError()
+    
+    def step(self, *args, **kwargs):
+        grads = self._grads(self.loss, *args, **kwargs)
+        if self.store:
+          for grad, param in zip(grads, self.parameters):
+            param.grad = grad
+        return self._step(grads)
+    
+    def stepWithLoss(self, loss, *args, **kwargs):
+        grads = self._grads(loss, *args, **kwargs)
+        return self._step(grads)
+    
+class SGD(Optimizer):
+    def __init__(self, model, loss, lr=0.001, store=False):
+        super().__init__(model, loss, store)
+        self.lr = lr
+
+    def _step(self, grads):
+        for grad, param in zip(grads, self.parameters):
+            param.value = param.value - self.lr * grad
+`
+  
+  return py;
+}
+```
+
+```{ojs}
+//| echo : false
+mpg = FileAttachment("auto-mpg.csv").csv()
+```
+
+
+::: {.column-screen .columns}
+::: {.column width="33%"}
+```{ojs}
+//| echo : false
+scatter = py`
+# Scatterplot figure
+scatterfig = PlotlyFigure()
+scatterfig
+`
+```
+```{ojs}
+//| echo : false
+viewof batchsize = Inputs.range([1, 250], {value: 5, step: 1, label: " Batch size"})
+```
+```{ojs}
+//| echo : false
+viewof learningrate = Inputs.range([0, 3], {value: 1, step: 0.01, label: " Learning rate"})
+```
+```{ojs}
+//| echo : false
+viewof steps = Inputs.range([1, 10], {value: 1, step: 1, label: "  Steps"})
+```
+```{ojs}
+//| echo : false
+viewof threed = Inputs.toggle({value: false, label: "Show 3D"})
+```
+:::
+
+::: {.column width="33%"}
+```{ojs}
+//| echo : false
+
+plots = py`
+lossplot = PlotlyInput()
+batchlossplot = PlotlyInput(sync=lossplot)
+
+threedlossplot = PlotlyFigure(hide_toolbar=False, overlay=False)
+threedbatchlossplot = PlotlyFigure(hide_toolbar=False, overlay=False)
+`
+
+viewof weights = py`
+# ${plots}
+lossplot
+`
+```
+
+
+```{ojs}
+//| echo : false
+viewof l2 = Inputs.range([0, 10], {value: 0, step: 0.01, label: "  L2 weight"})
+```
+
+```{ojs}
+//| echo : false
+viewof l1 = Inputs.range([0, 10], {value: 0, step: 0.01, label: "  L1 weight"})
+```
+
+```{ojs}
+//| echo : false
+viewof momentum = Inputs.range([0, 1], {value: 0, step: 0.01, label: " Momentum"})
+```
+
+```{ojs}
+//| echo : false
+viewof rmsprop = Inputs.range([0, 1], {value: 0, step: 0.01, label: " RMSProp"})
+```
+
+```{ojs}
+//| echo : false
+py`
+# ${plots}
+threedlossplot  if bool(${threed}) else ''
+`
+```
+:::
+
+::: {.column width="33%"}
+```{ojs}
+//| echo : false
+batchloss = py`
+# ${plots}
+batchlossplot
+`
+```
+```{ojs}
+//| echo : false
+viewof newbatch = Inputs.button('New Batch')
+```
+
+```{ojs}
+//| echo : false
+viewof transform = Inputs.select(['none', 'sin', 'cos', 'square'], {label: 'Weight transform'})
+```
+```{ojs}
+//| echo : false
+viewof bscale = Inputs.range([0, 10], {value: 1, step: 0.01, label: " Bias scale"})
+```
+```{ojs}
+//| echo : false
+py`
+# ${plots}
+threedbatchlossplot if bool(${threed}) else ''
+`
+```
+:::
+:::
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{ojs}
+//| echo : false
+//| output: false
+data = py`
+# ${plots}
+# Setup the data and prediction functions
+import pandas as pd
+df = pd.DataFrame(${mpg})[['weight', 'mpg']]
+df = df.astype(float).dropna().values
+
+x, y = df[:, :1], df[:, 1:]
+x = Tensor((x - x.mean()) / x.std())
+y = Tensor((y - y.mean()) / y.std())
+
+def get_batch(batchsize, x, y):
+  batchinds = tf.randomUniformInt((batchsize,), 0, x.shape[0])
+  xbatch = tf.gather(x, batchinds)
+  ybatch = tf.gather(y, batchinds)
+  return xbatch, ybatch
+
+transforms = dict(none=lambda a: a, sin=tf.sin, cos=tf.cos, square=tf.square)
+transform = transforms[str(${transform})]
+scale = Tensor([[float(${bscale}), 1.]])
+
+def predict(w, x):
+  w = transform(w.reshape((-1, 2)) * scale)
+  x = x.reshape((-1, 1))
+  x = tf.concat([x, tf.onesLike(x)], 1)
+  return tf.dot(x, w.T)
+
+wrange = tf.linspace(-3, 3, 25)
+brange = tf.linspace(-3, 3, 25)
+ww, bb = tf.meshgrid(wrange, brange)
+paramgrid = tf.stack([ww.flatten(), bb.flatten()]).T
+eyetheta = 0
+
+(x, y)
+`
+
+surfaces = py`
+# ${batch} ${plots}
+# Plot the loss surface
+
+
+l1weight = float(${l1})
+l2weight = float(${l2})
+
+
+def loss(w, x, y):
+  w = w.reshape((-1, 2))
+  return (tf.mean((predict(w, x) - y) ** 2, 0)) + l1weight * tf.abs(w).sum(1) + l2weight * (w ** 2).sum(1) 
+
+lossgrid = loss(paramgrid, x, y).reshape(ww.shape)
+losscontour = plotconvert(dict(x=wrange, y=brange, z=lossgrid, type='contour', ncontours=25, ))
+losssurface = plotconvert(dict(x=wrange, y=brange, z=lossgrid, type='surface', showlegend=False, showscale=False, opacity=0.8, contours=dict(x=dict(show=True), y=dict(show=True))))
+
+batchlossgrid = loss(paramgrid, xbatch, ybatch).reshape(ww.shape)
+batchlosscontour = plotconvert(dict(x=wrange, y=brange, z=batchlossgrid, type='contour', ncontours=25,))
+batchlosssurface = plotconvert(dict(x=wrange, y=brange, z=batchlossgrid, showlegend=False, showscale=False, type='surface', opacity=0.8, contours=dict(x=dict(show=True), y=dict(show=True))))
+`
+
+py`
+# ${surfaces}
+
+cweights = ${weights}
+startpoint = dict(x=[cweights[0]], y=[cweights[1]], mode='markers', showlegend=False, marker=dict(color='firebrick', size=10, line= {'color': 'black', 'width': 3}))
+
+lr = float(${learningrate})
+fullweightlist = [Tensor(cweights)]
+batchweightlist = [Tensor(cweights)]
+steps = int(${steps})
+
+momentum = float(${momentum})
+nxbatch, nybatch = batches[0]
+batchgrad = grad(lambda t: loss(t, nxbatch, nybatch))(batchweightlist[-1])
+beta = float(${rmsprop})
+velocity = batchgrad
+magnitude = batchgrad ** 2
+if beta > 0:
+  batchgrad = batchgrad / tf.sqrt(magnitude + 1e-8)
+
+for i, (nxbatch, nybatch) in zip(range(max(1, steps)), batches):
+  fullgrad = lr * grad(lambda t: loss(t, x, y))(fullweightlist[-1])
+
+  bgrad = grad(lambda t: loss(t, nxbatch, nybatch))(batchweightlist[-1])
+  velocity = momentum * velocity + (1 - momentum) * bgrad
+  magnitude = beta * magnitude + (1. - beta) * (bgrad ** 2)
+  batchgrad = velocity
+  if beta > 0:
+    batchgrad = velocity / tf.sqrt(magnitude + 1e-8)
+  
+  fullweightlist.append((fullweightlist[-1] - fullgrad).flatten())
+  batchweightlist.append((batchweightlist[-1] - lr * batchgrad).flatten())
+  
+
+fullweights = tf.stack(fullweightlist)
+batchweights = tf.stack(batchweightlist)
+
+gradplot = dict(x=fullweights[:, 0], y=fullweights[:, 1], showlegend=False, line=dict(color='black'))
+batchgradplot = dict(x=batchweights[:, 0], y=batchweights[:, 1], showlegend=False, line=dict(color='orange'))
+
+
+zloss = loss(fullweights, x, y)
+batchzloss = loss(batchweights, x, y)
+threedgradplot = dict(x=fullweights[:, 0], y=fullweights[:, 1], z=zloss, showlegend=False, marker=dict(size=4), line=dict(color='black', width=4), type='scatter3d')
+threedbatchgradplot = dict(x=batchweights[:, 0], y=batchweights[:, 1], z=batchzloss, showlegend=False, marker=dict(size=4), line=dict(color='orange', width=4), type='scatter3d')
+
+PlotlyReactive(lossplot, [losscontour, startpoint, gradplot, batchgradplot], {'xaxis': {'range': [-3, 3]}, 'yaxis': {'range': [-3, 3]}})
+PlotlyReactive(batchlossplot, [batchlosscontour, startpoint, gradplot, batchgradplot], {'xaxis': {'range': [-3, 3]}, 'yaxis': {'range': [-3, 3]}})
+
+threed = bool(${threed})
+if threed:
+  PlotlyReactive(threedlossplot, [losssurface, threedgradplot, threedbatchgradplot], {'scene': {'hovermode' : False, 'xaxis': {'range': [-3, 3], 'visible': False}, 'yaxis': {'range': [-3, 3], 'visible': False}, 'zaxis': {'visible': False}}})
+  PlotlyReactive(threedbatchlossplot, [batchlosssurface], {'scene': {'hovermode' : False, 'xaxis': {'range': [-3, 3], 'visible': False}, 'yaxis': {'range': [-3, 3], 'visible': False}, 'zaxis': {'visible': False}}})
+else:
+  PlotlyReactive(threedlossplot, [])
+  PlotlyReactive(threedbatchlossplot, [])
+`
+
+py`
+# ${batch}
+# Plot the data scatterplot and prediction function
+scatterdata = dict(x=x.reshape((-1,)), y=y.reshape((-1,)), mode='markers', label='All data', marker=dict(color='rgba(17, 157, 255,0.5)'))
+batchdata = dict(x=xbatch.reshape((-1,)), y=ybatch.reshape((-1,)), mode='markers', marker=dict(color='firebrick'))
+
+xrange = tf.linspace(-2, 3, 50)
+cweights = Tensor(${weights})
+pfunction = dict(x=xrange.flatten(), y=predict(cweights, xrange).flatten(), line=dict(color='black'))
+PlotlyReactive(scatterfig, [scatterdata, batchdata, pfunction], {'xaxis': {'range': [-2, 3]}, 'yaxis': {'range': [-2, 3]}})
+`
+
+batch = py`
+# ${data}, ${newbatch}
+batchsize = int(${batchsize})
+batches = [get_batch(batchsize, x, y) for i in range(int(${steps}))]
+xbatch, ybatch = batches[0]
+`
+```
+
+```{ojs}
+//| echo : false
+py`
+#eyetheta += 0.01
+
+threed = bool(${threed})
+if False:
+  def rotate_z(x, y, z, theta):
+    w = x+1j*y
+    return np.real(np.exp(1j*theta)*w), np.imag(np.exp(1j*theta)*w), z
+
+  xe, ye, ze = rotate_z(1.25, 1.25, 1.25, eyetheta)
+
+  Plotly.relayout(threedlossplot.childNodes[0], to_js({'scene': {'hovermode' : False, 'xaxis': {'range': [-3, 3], 'visible': False}, 'yaxis': {'range': [-3, 3], 'visible': False}, 'zaxis': {'visible': False}, 'dragmode': False, 'camera': {'eye': {'x': float(xe), 'y': float(ye), 'z': float(ze)}}}}, dict_converter=Object.fromEntries))
+  Plotly.relayout(threedbatchlossplot.childNodes[0], to_js({'scene': {'hovermode' : False, 'xaxis': {'range': [-3, 3], 'visible': False}, 'yaxis': {'range': [-3, 3], 'visible': False}, 'zaxis': {'visible': False}, 'dragmode': False, 'camera': {'eye': {'x': float(xe), 'y': float(ye), 'z': float(ze)}}}}, dict_converter=Object.fromEntries))
+`
+```

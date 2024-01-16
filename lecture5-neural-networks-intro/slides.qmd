@@ -1,0 +1,322 @@
+---
+title: "Lecture 4: Feature transforms"
+format: 
+  revealjs:
+    width: 1920
+    height: 1080
+    slide-number: true
+    incremental: false
+    echo: true
+    theme: ["theme.scss"]
+    revealjs-plugins:
+---
+
+
+{{< include ../code/ojs.qmd >}}
+
+```{python}
+#| echo: false
+import pandas as pd
+ojs_define(data_raw=pd.read_csv('data/auto-mpg.csv'))
+```
+
+```{ojs}
+//| echo: false
+data = transpose(data_raw)
+```
+
+```{python}
+#| echo: false
+import warnings
+warnings.filterwarnings("ignore")
+import os
+import contextlib
+with open(os.devnull, "w") as f, contextlib.redirect_stdout(f):
+    from manim import *
+import autograd.numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+
+class LectureScene(Scene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.camera.background_color = "#ffffff"
+        self.template = TexTemplate()
+        self.template.add_to_preamble(r"\usepackage{amsmath}")
+
+class ThreeDLectureScene(ThreeDScene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.camera.background_color = "#ffffff"
+        self.template = TexTemplate()
+        self.template.add_to_preamble(r"\usepackage{amsmath}")
+    
+
+class VectorScene(LectureScene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.ax = Axes(
+            x_range=[-7.5, 7.5, 1],
+            y_range=[-5, 5, 1],
+            x_length=12,
+            y_length=8,
+            axis_config={"color": GREY},
+        )
+        
+        #axes_labels.set_color(GREY)
+        self.add(self.ax)
+
+class PositiveVectorScene(LectureScene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.ax = Axes(
+            x_range=[-2.5, 12.5, 1],
+            y_range=[-1, 9, 1],
+            x_length=12,
+            y_length=8,
+            axis_config={"color": GREY},
+        )
+                #axes_labels.set_color(GREY)
+        self.add(self.ax)
+
+class ComparisonVectorScene(LectureScene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.ax1 = Axes(
+            x_range=[-5, 5, 1],
+            y_range=[-5, 5, 1],
+            x_length=6,
+            y_length=6,
+            axis_config={"color": GREY},
+        )
+        self.ax2 = Axes(
+            x_range=[-5, 5, 1],
+            y_range=[-5, 5, 1],
+            x_length=6,
+            y_length=6,
+            axis_config={"color": GREY},
+        )
+        axgroup = Group(self.ax1, self.ax2)
+        axgroup.arrange_in_grid(buf=2)
+        
+        #axes_labels.set_color(GREY)
+        self.add(axgroup)
+```
+
+
+# Neural networks
+
+## Feature transforms revisited
+
+In the last lecture we saw that we can define more complex and expressive functions by transforming the inputs in various ways. For example, we can define a function as:
+
+$$
+f(\mathbf{x})=\phi(\mathbf{x})^T \mathbf{w} = w_4 e^{x_1} + w_3 \sin(x_1) + w_2x_1^2 + w_1 x_1 + b ,\quad \phi(\mathbf{x}) = \begin{bmatrix}  x_1 \\ x_1^2 \\ \sin(x_1) \\ e^{x_1}  \\ 1 \end{bmatrix} 
+$$
+
+## Feature transforms revisited
+```{python}
+#| echo: false
+x = np.random.random((100,)) * 6 - 3
+y = x ** 2 + np.random.randn(*x.shape) * 0.5
+ojs_define(quadratic_data = np.stack([x, y]).T.tolist())
+```
+
+```{ojs}
+//| echo: false
+viewof form_mpg_4 = Inputs.form(
+  [
+    Inputs.range([-10, 10], {step: 0.01, label: "b", value: 1}),
+    Inputs.range([-10, 10], {step: 0.0001, label: "w_1", value: -0.0077}),
+    Inputs.range([-10, 10], {step: 0.0001, label: "w_2", value: 0}),
+    Inputs.range([-10, 10], {step: 0.0001, label: "w_3", value: 0}),
+    Inputs.range([-0.5, 0.5], {step: 0.0001, label: "w_4", value: 0}),
+  ]
+)
+```
+
+```{ojs}
+//| echo: false
+regressionPlot(quadratic_data, form_mpg_4, ["0", ["0", x => (x) * (x)], ["0", x => Math.sin(x)], ["0", x => Math.exp(x)]], "1", 0, se)
+```
+
+We see that by varying the weights $w_1...w_4$, we can get a variety of complex, non-linear functions of our input $\mathbf{x}$!
+
+## Feature transforms revisited
+How do we actually choose what transforms of our inputs to use?
+
+## Learned feature transforms
+
+We've already seen that we can *learn* a function by defining our function in terms of a set of *parameters* $\mathbf{w}$: $$f(\mathbf{x}) = \mathbf{x}^T\mathbf{w}$$ and then minimizing a *loss* as a function of $\mathbf{w}$ $$\mathbf{w}^* = \underset{\mathbf{w}}{\text{argmin}}\ \mathbf{Loss}(\mathbf{w})$$ Which we can do with gradient descent: $$\mathbf{w}^{(k+1)} \longleftarrow \mathbf{w}^{(k)} - \alpha \nabla_{\mathbf{w}} \mathbf{Loss}(\mathbf{w})$$
+
+So we didn't choose $\mathbf{w}$ explicitly, we let our algorithm find the optimal values. Ideally, we could do the same thing for our feature transforms: let our algorithm choose the optimal functions to use.
+
+## Feature transforms revisited
+
+**Can we *learn* the functions in our feature transform?**
+
+## Feature transforms revisited
+$$
+f(\mathbf{x})=\phi(\mathbf{x})^T \mathbf{w} ,\quad \phi(\mathbf{x}) = \begin{bmatrix}  g_1(x_1) \\ g_2(x_1) \\ g_3(x_1) \\ g_4(x_1) \\ 1 \end{bmatrix} 
+$$
+
+The key insight we'll use here is that we've already seen how to learn functions: this is exactly what our regression models are doing!  $$g_i(\mathbf{x}) = \sigma(\mathbf{x}^T \mathbf{w}_i)$$ With this form we get a new feature transform: $$
+f(\mathbf{x})=\phi(\mathbf{x})^T \mathbf{w}_0,\quad \phi(\mathbf{x}) = \begin{bmatrix}  \sigma(\mathbf{x}^T \mathbf{w}_1) \\ \sigma(\mathbf{x}^T \mathbf{w}_2) \\ \sigma(\mathbf{x}^T \mathbf{w}_3) \\ \sigma(\mathbf{x}^T \mathbf{w}_4) \\ 1 \end{bmatrix} 
+$$
+
+## Feature transforms revisited
+
+Let's look at a very simple example: $$\mathbf{x} = \begin{bmatrix} x_1\\ 1 \end{bmatrix}, \quad \mathbf{w}_0 = \begin{bmatrix} w_{01} \\ b_0 \end{bmatrix}$$ $$
+f(\mathbf{x})=\phi(\mathbf{x})^T \mathbf{w}_0,\quad \phi(\mathbf{x}) = \begin{bmatrix}  \sigma(\mathbf{x}^T \mathbf{w}_1) \\ \sigma(\mathbf{x}^T \mathbf{w}_2) \\ 1 \end{bmatrix} = 
+\begin{bmatrix}  \sigma(x_1 w_{11} + b_1) \\ \sigma(x_1 w_{21} + b_2) \\ 1 \end{bmatrix}
+$$ In this case, we can write out our prediction function explicitly as: $$f(\mathbf{x}) = w_{01} \cdot\sigma(x_1 w_{11} + b_1) + w_{02}\cdot \sigma(x_1 w_{21} + b_2) + b_0 $$
+
+## Feature transforms revisited
+$$f(\mathbf{x}) = w_{01} \cdot\sigma(x_1 w_{11} + b_1) + w_{02}\cdot \sigma(x_1 w_{21} + b_2) + b_0 $$
+
+::: columns
+::: {.column width="40%"}
+```{ojs}
+//| echo: false
+viewof form_nn = Inputs.form(
+  [
+    Inputs.range([-10, 10], {step: 0.01, label: "b_0", value: 0.33}),
+    Inputs.range([-10, 10], {step: 0.0001, label: "w_01", value: 9.2376}),
+    Inputs.range([-10, 10], {step: 0.0001, label: "w_02", value: 8.3719}),
+    Inputs.range([-10, 10], {step: 0.0001, label: "w_11", value: -2.4219}),
+    Inputs.range([-10, 10], {step: 0.0001, label: "b_1", value: -5.457}),
+    Inputs.range([-10, 10], {step: 0.0001, label: "w_21", value: 2.6795}),
+    Inputs.range([-10, 10], {step: 0.0001, label: "b_2", value: -5.4557}),
+    Inputs.checkbox(["Show feature transforms"], {}),
+
+  ]
+)
+```
+:::
+::: {.column width="60%"}
+
+```{python}
+#| echo: false
+x = np.random.random((100,)) * 6 - 3
+y = x ** 2 + np.random.randn(*x.shape) * 0.5
+ojs_define(quadratic_data2 = np.stack([x, y]).T.tolist())
+```
+
+```{ojs}
+//| echo: false
+function nnPlot(data, weights, keys, label, l2, f=se, stroke="", options=[]) {
+  let loss = mean_loss(f, data, weights, keys, label, l2);
+  let isString = value => typeof value === 'string';
+  
+  let accessors = get_accessors(keys);
+  let index_accessors = get_accessors(keys, true);
+  let domains = get_domains(data, get_accessors([label].concat(keys)));
+  const get_label = isString(label) ? (x => x[label]) : label;
+
+  let stroke_shade = stroke;
+  if (stroke == "") {
+    stroke_shade = (x => f(predict(x, weights, keys), get_label(x)))
+  }
+
+  let a = []
+  if (options.indexOf("Show feature transforms") >= 0){
+    a = [Plot.line(sample((x) =>  keys[1][1](x), domains[1][0], domains[1][1]), {stroke: 'red'}),
+      Plot.line(sample((x) => keys[2][1](x), domains[1][0], domains[1][1]), {stroke: 'blue'})]
+  }
+  
+  return Plot.plot({
+    y: {domain: domains[0]},
+    title: "Loss: " + loss.toFixed(3),
+    color: {type: "linear", legend: true, label: "Loss", scheme: "BuRd", domain: [0, 100]},
+    marks: [
+      Plot.line(sample((x) => predict([x], weights, index_accessors), domains[1][0], domains[1][1]), {stroke: 'black'}),
+      Plot.dot(data, {x: accessors[0], y: get_label, stroke: stroke_shade })
+    ].concat(a)
+  })
+}
+```
+
+```{ojs}
+//| echo: false
+
+nnPlot(quadratic_data2, [form_nn[0], 0, form_nn[1], form_nn[2]],
+    
+        ["0", ["0", x => sigmoid(form_nn[3] * x + form_nn[4], 0)], 
+        ["0", x => sigmoid(form_nn[5] * x + form_nn[6], 0)], 
+        ], "1", 0, se, "", form_nn[7])
+```
+:::
+:::
+
+## Feature transforms revisited
+
+
+If we let $$\mathbf{W}_1 = \begin{bmatrix} \mathbf{w}_1^T \\ \mathbf{w}_2^T \mathbf{w}_3^T \\ \vdots \end{bmatrix}$$ We can write this more compactly as: $$f(\mathbf{x})= \sigma(\mathbf{x}^T \mathbf{W}_1^T)^T \mathbf{w_0}  $$ Or for a whole dataset: $$\mathbf{X} = \begin{bmatrix} \mathbf{x}_1^T \\ \mathbf{x}_2^T \mathbf{x}_3^T \\ \vdots \end{bmatrix}$$ $$f(\mathbf{X})= \sigma(\mathbf{X} \mathbf{W}_1^T)^T \mathbf{w_0}  $$
+
+## Neural networks
+
+What we've just seen *is* a **neural network**!
+
+Terminology-wise we call a single feature transform like $$\sigma(x_1 w_{11} + b_1)$$ a **neuron**.
+
+We call the whole set of transformed features the **hidden layer**: $$\begin{bmatrix}  \sigma(\mathbf{x}^T \mathbf{w}_1) \\ \sigma(\mathbf{x}^T \mathbf{w}_2) \\ \sigma(\mathbf{x}^T \mathbf{w}_3) \\ \sigma(\mathbf{x}^T \mathbf{w}_4) \\ 1 \end{bmatrix} $$
+
+We call $\mathbf{X}$ the **input** and $f(\mathbf{X})$ the **output**.
+
+We often describe neural networks using a node-link diagram:
+
+![](nn.svg){fig-align="center"}
+
+## Linear transforms
+
+Can we use *linear* regression as a feature transform?
+
+Let's see what happens in our simple example: $$\mathbf{x} = \begin{bmatrix} x_1\\ 1 \end{bmatrix}, \quad \mathbf{w}_0 = \begin{bmatrix} w_{01} \\ b_0 \end{bmatrix}$$ $$
+f(\mathbf{x})=\phi(\mathbf{x})^T \mathbf{w}_0,\quad \phi(\mathbf{x}) = \begin{bmatrix}  \mathbf{x}^T \mathbf{w}_1 \\ \mathbf{x}^T \mathbf{w}_2 \\ 1 \end{bmatrix} = 
+\begin{bmatrix}  x_1 w_{11} + b_1 \\ x_1 w_{21} + b_2 \\ 1 \end{bmatrix}
+$$ In this case, we can write out our prediction function explicitly as: $$f(\mathbf{x}) = w_{01} \cdot x_1 w_{11} + b_1 + w_{02}\cdot x_1 w_{21} + b_2 + b_0 $$ $$= (w_{11}w_{01}) x_1 + (w_{21}w_{02}) x_1 + (b_0 + b_1 + b2)$$
+
+## Linear transforms
+
+::: columns
+::: {.column width="40%"}
+```{ojs}
+//| echo: false
+viewof form_lnn = Inputs.form(
+  [
+    Inputs.range([-10, 10], {step: 0.01, label: "b_0", value: 0.33}),
+    Inputs.range([-10, 10], {step: 0.0001, label: "w_01", value: 9.2376}),
+    Inputs.range([-10, 10], {step: 0.0001, label: "w_02", value: 8.3719}),
+    Inputs.range([-10, 10], {step: 0.0001, label: "w_11", value: -2.4219}),
+    Inputs.range([-10, 10], {step: 0.0001, label: "b_1", value: -5.457}),
+    Inputs.range([-10, 10], {step: 0.0001, label: "w_21", value: 2.6795}),
+    Inputs.range([-10, 10], {step: 0.0001, label: "b_2", value: -5.4557}),
+    Inputs.checkbox(["Show feature transforms"], {}),
+
+  ]
+)
+```
+:::
+::: {.column width="60%"}
+```{ojs}
+//| echo: false
+
+nnPlot(quadratic_data2, [form_lnn[0], 0, form_lnn[1], form_lnn[2]],
+    
+        ["0", ["0", x => form_lnn[3] * x + form_lnn[4]], 
+        ["0", x => form_lnn[5] * x + form_lnn[6]], 
+        ], "1", 0, se, "", form_lnn[7])
+```
+:::
+:::
+
+## Linear transforms
+In general: $$
+f(\mathbf{x})=\phi(\mathbf{x})^T \mathbf{w}_0,\quad \phi(\mathbf{x}) = \begin{bmatrix}  \mathbf{x}^T \mathbf{w}_1 \\ \mathbf{x}^T \mathbf{w}_2\\ \mathbf{x}^T \mathbf{w}_3 \\ \mathbf{x}^T \mathbf{w}_4\\ 1 \end{bmatrix} 
+$$
+
+$$
+f(\mathbf{x})= w_{01} (\mathbf{x}^T \mathbf{w}_1) +  w_{02} (\mathbf{x}^T \mathbf{w}_2) +...
+$$ $$= \mathbf{x}^T ( w_{01}\mathbf{w}_1) +  \mathbf{x}^T (w_{02} \mathbf{w}_2) +...
+$$ Which is again just a linear function. The motivates the need for using a non-linear function like $\sigma(\cdot)$ in our neurons. We'll see more about this next week!

@@ -1,0 +1,1532 @@
+---
+title: "Lecture 2: Linear regression"
+format: 
+  revealjs:
+    width: 1920
+    height: 1080
+    slide-number: true
+    incremental: false
+    echo: true
+    theme: ["theme.scss"]
+    revealjs-plugins:
+---
+
+# Logistics
+
+```{python}
+#| echo: false
+import warnings
+warnings.filterwarnings("ignore")
+from manim import *
+import autograd.numpy as np
+
+class LectureScene(Scene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.camera.background_color = "#ffffff"
+        self.template = TexTemplate()
+        self.template.add_to_preamble(r"\usepackage{amsmath}")
+
+class ThreeDLectureScene(ThreeDScene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.camera.background_color = "#ffffff"
+        self.template = TexTemplate()
+        self.template.add_to_preamble(r"\usepackage{amsmath}")
+    
+
+class VectorScene(LectureScene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.ax = Axes(
+            x_range=[-7.5, 7.5, 1],
+            y_range=[-5, 5, 1],
+            x_length=12,
+            y_length=8,
+            axis_config={"color": GREY},
+        )
+        
+        #axes_labels.set_color(GREY)
+        self.add(self.ax)
+
+class PositiveVectorScene(LectureScene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.ax = Axes(
+            x_range=[-2.5, 12.5, 1],
+            y_range=[-1, 9, 1],
+            x_length=12,
+            y_length=8,
+            axis_config={"color": GREY},
+        )
+                #axes_labels.set_color(GREY)
+        self.add(self.ax)
+
+class ComparisonVectorScene(LectureScene):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.ax1 = Axes(
+            x_range=[-5, 5, 1],
+            y_range=[-5, 5, 1],
+            x_length=6,
+            y_length=6,
+            axis_config={"color": GREY},
+        )
+        self.ax2 = Axes(
+            x_range=[-5, 5, 1],
+            y_range=[-5, 5, 1],
+            x_length=6,
+            y_length=6,
+            axis_config={"color": GREY},
+        )
+        axgroup = Group(self.ax1, self.ax2)
+        axgroup.arrange_in_grid(buf=2)
+        
+        #axes_labels.set_color(GREY)
+        self.add(axgroup)
+```
+
+## Logistics
+
+-   Homework 1 due **next Tuesday 9/5 at 11:59pm**
+
+-   Fill out Github username survey!
+
+-   Office hours **tomorrow 4-5:30pm in MacGregor 322**
+
+-   [Course calendar](https://harveymuddcollege.instructure.com/courses/615/pages/course-calendar) added to website with lecture notes.
+
+-   Lecture notes are [open source](https://github.com/CS152-Neural-Networks-Fall-2023/CS152-Neural-Networks-Fall-2023.github.io)!
+
+# Linear regression
+
+## Functions revisited
+
+$$
+y=f(\mathbf{x}), \quad \text{Input: } \mathbf{x} \in\mathbb{R}^n \longrightarrow \text{ Output: }y \in\mathbb{R}
+$$
+
+```{python}
+#| echo: false
+%%manim -sqh -v CRITICAL --progress_bar none BasicFunction
+
+class BasicFunction(PositiveVectorScene):
+    def construct(self):
+        fx = self.ax.plot(lambda x: 2 * (x / 5) ** 3 - 5 * (x / 6) ** 2 + 4, color=RED)
+        eq = MathTex(r'f(\mathbf{x})=2(\frac{x_1}{5})^3 -5 (\frac{x_1}{6})^2 + 4', color=BLACK, tex_template=self.template).to_edge(UP + 2 * UP)
+        #eq.move_to(*self.ax.c2p([8, 7, 0]))
+        labels = self.ax.get_axis_labels(x_label="x_1", y_label="y = f(\mathbf{x})")
+        labels.set_color(GREY)
+        labels.set_tex_template(self.template)
+        self.add(fx, eq, labels)
+        
+        
+```
+
+## Linear Functions
+
+A *linear function* is any function $f$ where the following conditions always hold: $$ f(\mathbf{x} + \mathbf{y}) =f(\mathbf{x}) + f(\mathbf{y})$$ and $$ f(a\mathbf{x}) = a f(\mathbf{x})$$ For a linear function, the output can be defined as a weighted sum of the inputs.
+
+$$
+f(\mathbf{x}) = \sum_{i=1}^n x_iw_i + b
+$$
+
+Here, $w_i$ and $b$ are the **parameters** of the function.
+
+## Linear Functions
+
+We can also write a linear function using a dot-product between our input $\mathbf{x}$ and parameter vector $\mathbf{w}$ as:
+
+$$
+f(\mathbf{x}) = \mathbf{x} \cdot \mathbf{w} + b \quad \text{or} \quad f(\mathbf{x}) = \mathbf{x}^T  \mathbf{w} + b
+$$
+
+We typically refer to $\mathbf{w}$ specifically as the **weight vector** (or weights) and $b$ as the **bias**.
+
+$$
+\textbf{Linear function:  }f(\mathbf{x}) = \mathbf{x}^T\mathbf{w}+b,\quad \textbf{Parameters:}\quad \big(\text{Weights:  } \mathbf{w},\ \text{Bias:  } b \big)
+$$
+
+## Linear Functions
+
+In one dimension, a linear function is always a line, for example:
+
+```{python}
+#| echo: false
+%%manim -sqh -v CRITICAL --progress_bar none LinearFunction
+
+class LinearFunction(PositiveVectorScene):
+    def construct(self):
+        fx = self.ax.plot(lambda x: 0.5 * x + 1, color=RED)
+        eq = MathTex(r'f(\mathbf{x})= \frac{1}{2} x_1 + 1', color=BLACK, tex_template=self.template).to_edge(UP + 2 * UP)
+        #eq.move_to(*self.ax.c2p([8, 7, 0]))
+        labels = self.ax.get_axis_labels(x_label="x_1", y_label="y = f(\mathbf{x})")
+        labels.set_color(GREY)
+        labels.set_tex_template(self.template)
+        self.add(fx, eq, labels)
+        
+```
+
+## Linear Functions
+
+In higher dimensions, it is a plane or hyperplane:
+
+```{python}
+#| echo: false
+#| fig-align: center
+%%manim -sqh -v CRITICAL --progress_bar none ThreeDSurfacePlot
+
+class ThreeDSurfacePlot(ThreeDLectureScene):
+    def construct(self):
+        resolution_fa = 24
+        self.set_camera_orientation(phi=75 * DEGREES, theta=-30 * DEGREES)
+        
+
+        def param_gauss(u, v):
+            x = u
+            y = v
+            return np.array([x, y, -0.6 * x + -0.2 * y - 1.])
+
+        gauss_plane = Surface(
+            param_gauss,
+            resolution=(resolution_fa, resolution_fa),
+            v_range=[-3, +3],
+            u_range=[-3, +3]
+        )
+
+        gauss_plane.scale(1, about_point=ORIGIN)
+        gauss_plane.set_style(fill_opacity=1, stroke_color=BLACK)
+        gauss_plane.set_fill_by_checkerboard(RED, GREY, opacity=0.5)
+        axes = ThreeDAxes()
+        axes.set_color(GREY)
+        labels = axes.get_axis_labels(x_label="x_1", y_label="x_2", z_label="y = f(\mathbf{x})")
+        labels.set_color(GREY)
+        #labels[0].rotate(75 * DEGREES, RIGHT)
+        #labels[0].rotate(-30 * DEGREES, IN)
+        #
+        #labels[1].rotate(-30 * DEGREES, IN)
+
+        eq = MathTex(r'f(\mathbf{x})= \frac{-3}{5} x_1 - \frac{1}{5} x_2 - 1', color=BLACK, tex_template=self.template)
+        eq.to_corner(UL)
+        eq.scale(0.8)
+        self.add_fixed_in_frame_mobjects(eq)
+        self.add_fixed_orientation_mobjects(labels[0])
+        labels[1].rotate(90 * DEGREES, IN)
+        self.add_fixed_orientation_mobjects(labels[1])
+        labels[2].rotate(90 * DEGREES, LEFT)
+        self.add_fixed_orientation_mobjects(labels[2])
+        self.add( gauss_plane, axes, )
+        
+```
+
+## Linear Functions
+
+In numpy we can easily write a linear function of this form:
+
+```{python}
+def f(x):
+    w = np.array([-0.6, -0.2])
+    b = -1
+    return np.dot(x, w) + b
+```
+
+## Handling bias compactly
+
+$$
+\mathbf{x} = \begin{bmatrix} x_1 \\ x_2 \\ \vdots \\ x_n \end{bmatrix} \longrightarrow \mathbf{x}_{aug}= \begin{bmatrix} x_1 \\ x_2 \\ \vdots \\ x_n \\ 1 \end{bmatrix} \quad \text{and} \quad \mathbf{w} = \begin{bmatrix} w_1 \\ w_2 \\ \vdots \\ w_n \end{bmatrix} \longrightarrow \mathbf{w}_{aug}=  \begin{bmatrix} w_1 \\ w_2 \\ \vdots \\ w_n \\ b \end{bmatrix}
+$$
+
+We can easily see then that using this notation:
+
+$$
+f(\mathbf{x}) = \mathbf{x}^T \mathbf{w} +b = \mathbf{x}_{aug}^T \mathbf{w}_{aug}
+$$
+
+We won't bother with the $aug$ notation and just assume that any linear function defined as $f(\mathbf{x})=\mathbf{x}^T\mathbf{w}$ can be defined to include a bias implicitly.
+
+In numpy this is similarly straightforward:
+
+```{python}
+def f(x):
+    w = np.array([-0.6, -0.2, -1])
+    x = np.pad(x, ((0,1),), constant_values=1)
+    return np.dot(x, w)
+```
+
+## Datasets and observations
+
+**Dataset** $\mathbf{D}$ made up of $N$ pairs of inputs ( $\mathbf{x}$ ) and outputs ( $y$ ):
+
+$$
+\mathbf{D} = \{ (\mathbf{x}_1, y_1),\ (\mathbf{x}_2, y_2),\ ...\ (\mathbf{x}_N, y_N)\}
+$$
+
+We call each of these pairs an **observation**.
+
+## Fuel efficiency
+
+Let's imagine we're designing a car and we would like to know what the fuel efficiency of the car we're designing will be in *miles per gallon* (MPG). Ideally we would have access to a function that would give us the MPG rating if we provide some **features**.
+
+$$
+\text{mpg} = f(\text{weight},\ \text{horsepower}...)
+$$
+
+We don't know the exact relationship between a car's features and fuel efficiency. However, we can look at other cars on the market and see what the corresponding inputs and outputs would be:
+
+$$
+\text{Honda Accord: } \begin{bmatrix} \text{Weight:} & \text{2500 lbs} \\ \text{Horsepower:} & \text{ 123 HP} \\ \text{Displacement:} & \text{ 2.4 L} \\ \text{0-60mph:} & \text{ 7.8 Sec} \end{bmatrix} \longrightarrow \text{   MPG: 33mpg}
+$$
+
+$$
+\text{Dodge Aspen: } \begin{bmatrix} \text{Weight:} & \text{3800 lbs} \\ \text{Horsepower:} & \text{ 155 HP} \\ \text{Displacement:} & \text{ 3.2 L} \\ \text{0-60mph:} & \text{ 6.8 Sec} \end{bmatrix} \longrightarrow \text{   MPG: 21mpg}
+$$
+
+$$
+\vdots \quad \vdots
+$$
+
+## Fuel efficiency
+
+Our dataset will be this collection of data that we have for all other cars. In general, each *observation* in this dataset will correspond to a car.
+
+$$
+\text{Dataset: } \mathbf{D}=\{(\mathbf{x}_i,\ y_i) \text{  for  } i\in 1...N\}
+$$
+
+$$
+\text{Input: } \mathbf{x}_i= \begin{bmatrix} \text{Weight} \\ \text{Horsepower} \\ \text{Displacement} \\ \text{0-60mph}  \end{bmatrix}, \quad \text{Output: } y_i = MPG
+$$
+
+## Fuel efficiency
+
+Let's take a look at a single feature: *the weight of a car*.
+
+```{python}
+#| echo: false
+#| fig-align: center
+%%manim -sqh -v CRITICAL --progress_bar none HP_MPG
+import pandas as pd
+mpg_data = pd.read_csv('data/auto-mpg.csv')
+data = mpg_data.sort_values(by=['weight'])[::50]
+
+class HP_MPG(Scene):
+    def construct(self):
+        self.camera.background_color = "#ffffff"
+        self.ax = Axes(
+            x_range=[1000, 5000, 500],
+            y_range=[10, 40, 10],
+            x_length=12,
+            y_length=8,
+            axis_config={"color": GREY},
+        )
+        self.add(self.ax)
+        
+        
+        coords = [[c1, c2] for (c1, c2) in zip(data['weight'], data['mpg'])]
+        dots = VGroup(*[Dot(color=BLACK).move_to(self.ax.c2p(coord[0],coord[1])) for coord in coords])
+        labels = self.ax.get_axis_labels(x_label="Weight\ (lbs)", y_label="MPG")
+        labels.set_color(GREY)
+        self.add(dots,  labels)
+        for coord, name in list(zip(coords, data['car name'])):
+            if name in ['honda accord cvcc', 'dodge aspen']:
+                d = Dot(color=RED).move_to(self.ax.c2p(coord[0], coord[1]))
+                label = Text('  '.join([n.capitalize() for n in name.split()[:2]]), color=RED, font_size=24).next_to(d, UR)
+                self.add(d, label)
+```
+
+## Prediction functions
+
+#### *How do we **predict** the output for an input that we haven't seen before?*
+
+```{python}
+#| echo: false
+#| fig-align: center
+%%manim -sqh -v CRITICAL --progress_bar none HP_MPG
+import pandas as pd
+mpg_data = pd.read_csv('data/auto-mpg.csv')
+data = mpg_data.sort_values(by=['weight'])[::50]
+
+class HP_MPG(Scene):
+    def construct(self):
+        self.camera.background_color = "#ffffff"
+        self.ax = Axes(
+            x_range=[1000, 5000, 500],
+            y_range=[10, 40, 10],
+            x_length=12,
+            y_length=8,
+            axis_config={"color": GREY},
+        )
+        self.add(self.ax)
+        
+        
+        coords = [[c1, c2] for (c1, c2) in zip(data['weight'], data['mpg'])]
+        dots = VGroup(*[Dot(color=BLACK).move_to(self.ax.c2p(coord[0],coord[1])) for coord in coords])
+
+        query = Line(self.ax.c2p(3100, 10), self.ax.c2p(3100, 40), color=GREEN)
+        qdot = Dot(self.ax.c2p(3100, 40))
+        label = Text('Weight = 3100 lbs\nMPG = ?', color=GREEN, font_size=24).next_to(qdot, DR)
+        self.add(label)
+        
+        self.add(query)
+        labels = self.ax.get_axis_labels(x_label="Weight\ (lbs)", y_label="MPG")
+        labels.set_color(GREY)
+        self.add(dots,  labels)
+        for coord, name in list(zip(coords, data['car name'])):
+            if name in ['honda accord cvcc', 'dodge aspen']:
+                d = Dot(color=RED).move_to(self.ax.c2p(coord[0], coord[1]))
+                label = Text('  '.join([n.capitalize() for n in name.split()[:2]]), color=RED, font_size=24).next_to(d, UR)
+                self.add(d, label)
+                
+```
+
+## Prediction functions
+
+**Model** our unknown function with a known function that we can evaluate at any input. Chose a function $f$ such that for any observation our dataset, the output of this function *approximates* the true **target** output that we observed.
+
+$$
+f(\mathbf{x}_i) \approx y_i, \quad \forall (\mathbf{x}_i, y_i) \in \mathbf{D}
+$$
+
+## Linear interpolation
+
+```{python}
+#| echo: false
+#| fig-align: center
+%%manim -sqh -v CRITICAL --progress_bar none HP_MPG
+import pandas as pd
+mpg_data = pd.read_csv('data/auto-mpg.csv')
+data = mpg_data.sort_values(by=['weight'])[::50]
+
+class HP_MPG(Scene):
+    def construct(self):
+        self.camera.background_color = "#ffffff"
+        self.ax = Axes(
+            x_range=[1000, 5000, 500],
+            y_range=[10, 40, 10],
+            x_length=12,
+            y_length=8,
+            axis_config={"color": GREY},
+        )
+        self.add(self.ax)
+        
+        
+        coords = [[c1, c2] for (c1, c2) in zip(data['weight'], data['mpg'])]
+        all_dots = [Dot(color=BLACK).move_to(self.ax.c2p(coord[0],coord[1])) for coord in coords]
+        dots = VGroup(*all_dots)
+        labels = self.ax.get_axis_labels(x_label="Weight\ (lbs)", y_label="MPG")
+        labels.set_color(GREY)
+        for d1, d2 in zip(all_dots[:-1], all_dots[1:]):
+            self.add(Line(d1.get_center(), d2.get_center(), color=GREY))
+        self.add(dots,  labels)
+        for coord, name in list(zip(coords, data['car name'])):
+            if name in ['honda accord cvcc', 'dodge aspen']:
+                d = Dot(color=RED).move_to(self.ax.c2p(coord[0], coord[1]))
+                label = Text('  '.join([n.capitalize() for n in name.split()[:2]]), color=RED, font_size=24).next_to(d, UR)
+                self.add(d, label)
+```
+
+In some cases this can be a reasonable approach! In fact it's how the `plt.plot` function works.
+
+## Linear interpolation
+
+Real data however is *messy*. Measurements in our dataset might not be 100% accurate or might even conflict!
+
+$$(\text{Weight: }3100, \text{MPG: } 34), \quad (\text{Weight: }3100, \text{MPG: } 23) \longrightarrow f(3100) = ?$$
+
+## Linear interpolation
+
+```{python}
+#| echo: false
+#| fig-align: center
+%%manim -sqh -v CRITICAL --progress_bar none HP_MPG
+import pandas as pd
+mpg_data = pd.read_csv('data/auto-mpg.csv')
+data = mpg_data.sort_values(by=['weight'])
+
+class HP_MPG(Scene):
+    def construct(self):
+        self.camera.background_color = "#ffffff"
+        self.ax = Axes(
+            x_range=[1000, 5500, 500],
+            y_range=[0, 50, 10],
+            x_length=12,
+            y_length=8,
+            axis_config={"color": GREY},
+        )
+        self.add(self.ax)
+        
+        
+        coords = [[c1, c2] for (c1, c2) in zip(data['weight'], data['mpg'])]
+        all_dots = [Dot(color=BLACK).move_to(self.ax.c2p(coord[0],coord[1])) for coord in coords]
+        dots = VGroup(*all_dots)
+        labels = self.ax.get_axis_labels(x_label="Weight\ (lbs)", y_label="MPG")
+        labels.set_color(GREY)
+        for d1, d2 in zip(all_dots[:-1], all_dots[1:]):
+            self.add(Line(d1.get_center(), d2.get_center(), color=GREY))
+        self.add(dots,  labels)
+        names = ['honda accord cvcc', 'dodge aspen']
+        for coord, name in list(zip(coords, data['car name'])):
+            
+            if name in names:
+                names.remove(name)
+                d = Dot(color=RED).move_to(self.ax.c2p(coord[0], coord[1]))
+                label = Text('  '.join([n.capitalize() for n in name.split()[:2]]), color=RED, font_size=24).next_to(d, UR)
+                self.add(d, label)
+```
+
+## Linear regression
+
+**Linear regression** *models* an unknown function with a linear function.
+
+$$
+f(\mathbf{x}) = \mathbf{x}^T\mathbf{w} = \sum_{i=1}^n x_i w_i
+$$
+
+Meaning that the output will be a weighted sum of the *features* of the input.
+
+$$
+\text{Predicted MPG} = f(\mathbf{x})= 
+$$
+
+$$
+(\text{weight})w_1 + (\text{horsepower})w_2 + (\text{displacement})w_3 + (\text{0-60mph})w_4 + b
+$$
+
+Or in matrix notation:
+
+$$
+f(\mathbf{x})= \begin{bmatrix} \text{Weight} \\ \text{Horsepower} \\ \text{Displacement} \\ \text{0-60mph} \\ 1 \end{bmatrix} \cdot \begin{bmatrix} w_1 \\ w_2\\ w_3 \\ w_4\\ b\end{bmatrix}
+$$
+
+## Linear regression
+
+```{python}
+class Regression:
+    def __init__(self, weights):
+        self.weights = weights
+    
+    def predict(self, x):
+        return np.dot(x, self.weights)
+
+model = Regression(np.array([1, 1, 1, 1, 1]))
+model.predict(np.array([5, 2, 3, 3, 1]))
+```
+
+## Linear regression
+
+We could chose many different linear functions to make predictions:
+
+```{python}
+#| echo: false
+#| fig-align: center
+%%manim -sqh -v CRITICAL --progress_bar none HP_MPG
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+mpg_data = pd.read_csv('data/auto-mpg.csv')
+data = mpg_data.sort_values(by=['weight'])[::50]
+
+x = np.array(data['weight'])[:, np.newaxis]
+y = np.array(data['mpg'])
+model = LinearRegression().fit(x, y)
+
+other_lines = [(model.coef_.item() * 1.2, model.intercept_.item() * 0.95), (model.coef_.item() * 0.7, model.intercept_.item() * 0.9), (model.coef_.item() * 1.8, model.intercept_.item() * 1.4)]
+
+class HP_MPG(Scene):
+    def construct(self):
+        self.camera.background_color = "#ffffff"
+        self.ax = Axes(
+            x_range=[1000, 5000, 500],
+            y_range=[10, 40, 10],
+            x_length=12,
+            y_length=8,
+            axis_config={"color": GREY},
+        )
+        self.add(self.ax)
+        
+        
+        coords = [[c1, c2] for (c1, c2) in zip(data['weight'], data['mpg'])]
+        dots = VGroup(*[Dot(color=BLACK).move_to(self.ax.c2p(coord[0],coord[1])) for coord in coords])
+        labels = self.ax.get_axis_labels(x_label="Weight\ (lbs)", y_label="MPG")
+        labels.set_color(GREY)
+        self.add(dots,  labels)
+        for coord, name in list(zip(coords, data['car name'])):
+            if name in ['honda accord cvcc', 'dodge aspen']:
+                d = Dot(color=RED).move_to(self.ax.c2p(coord[0], coord[1]))
+                label = Text('  '.join([n.capitalize() for n in name.split()[:2]]), color=RED, font_size=24).next_to(d, UR)
+                self.add(d, label)
+
+        # Add Regression line
+        plot = self.ax.plot(lambda x: model.predict(np.atleast_2d(x)).item(), x_range=[1300, 4300], color=BLACK)
+        self.add(plot)
+
+        # Add other candidate lines
+        for param, color in zip(other_lines, [BLUE, ORANGE, GREEN, PURPLE]):
+            w, b = param
+            plot = self.ax.plot(lambda x: x * w + b, x_range=[1300, 4300], color=color)
+            self.add(plot)
+        
+
+        eq = Tex(r'$f(x)=wx+b$', color=BLACK).to_corner(UR)
+        self.add(eq)
+```
+
+## Residuals and error
+
+The **residual** or **error** of a prediction is the difference between the prediction and the true output:
+
+$$
+e_i = y_i - f(\mathbf{x}_i)
+$$
+
+```{python}
+#| echo: false
+#| fig-align: center
+%%manim -sqh -v CRITICAL --progress_bar none HP_MPG_LR
+from sklearn.linear_model import LinearRegression
+x = np.array(mpg_data['weight'])[:, np.newaxis]
+y = np.array(mpg_data['mpg'])
+model = LinearRegression().fit(x, y)
+other_lines = [(model.coef_.item() * 1.2, model.intercept_.item() * 0.95), (model.coef_.item() * 0.7, model.intercept_.item() * 0.9), (model.coef_.item() * 1.8, model.intercept_.item() * 1.4)]
+
+class HP_MPG_LR(Scene):
+    def construct(self):
+        self.camera.background_color = "#ffffff"
+        self.ax = Axes(
+            x_range=[1000, 5000, 500],
+            y_range=[10, 40, 10],
+            x_length=12,
+            y_length=8,
+            axis_config={"color": GREY},
+        )
+        labels = self.ax.get_axis_labels(x_label="Weight\ (lbs)", y_label="MPG")
+        labels.set_color(GREY)
+        self.add(self.ax, labels)
+        
+
+        # Add data
+        coords = [[c1, c2] for (c1, c2) in zip(data['weight'], data['mpg'])]
+        all_dots = [Dot(color=BLACK).move_to(self.ax.c2p(coord[0],coord[1])) for coord in coords]
+        dots = VGroup(*all_dots)
+        self.add(dots)
+        
+        # Add highlighted points
+        for coord, name in list(zip(coords, data['car name'])):
+            if name in ['honda accord cvcc', 'dodge aspen']:
+                d = Dot(color=RED).move_to(self.ax.c2p(coord[0], coord[1]))
+                label = Text('  '.join([n.capitalize() for n in name.split()[:2]]), color=RED, font_size=24).next_to(d, UR)
+                self.add(d, label)
+
+        # Add Regression line
+        plot = self.ax.plot(lambda x: model.predict(np.atleast_2d(x)).item(), x_range=[1300, 4300], color=BLACK)
+        self.add(plot)
+
+        eq = Tex(r'$f(x)=wx+b$', color=BLACK).to_corner(UR)
+        self.add(eq)
+
+        # Add residuals
+        brace_num = 2
+        for i, coord in enumerate(coords):
+            x, y = coord
+            yline = model.predict(np.atleast_2d(x)).item()
+            line = Line(self.ax.c2p(x, y), self.ax.c2p(x, yline), color=GREY)
+            self.add(line)
+            if i == brace_num:
+                resid_brace = Brace(line, direction=LEFT, color=GREY)
+                resid_tex = resid_brace.get_tex(r"e_i=y_i-f(x_i)")
+                resid_tex.set_color(BLACK)
+                resid_tex.scale(0.8)
+                self.add(resid_brace, resid_tex)
+
+        model.predict(np.atleast_2d(x)).item()
+```
+
+## Mean squared error
+
+We need a measure of error for the *entire dataset*. The **mean squared error** is the average of the residual squared for each observation in our dataset:
+
+$$
+MSE = \frac{1}{N}\sum_{i=1}^N (f(\mathbf{x}_i) - y_i)^2 = \frac{1}{N}\sum_{i=1}^N (\mathbf{x}_i^T\mathbf{w} - y_i)^2
+$$It follows that the best choice of linear function $f^*$ is the one that *minimizes* the mean squared error for our dataset. $$\mathbf{w}^* = \underset{\mathbf{w}}{\text{argmin}} \frac{1}{N}\sum_{i=1}^N (\mathbf{x}_i^T\mathbf{w} - y_i)^2 $$
+
+## Loss functions
+
+Mean squared error depends on the data inputs $(\mathbf{x}_1,…,\mathbf{x}_N)$, the data targets $(y_1,…,y_N)$ *and* the parameters $(\mathbf{w})$. So we can express the MSE as a *function* of all three:
+
+$$
+MSE(\mathbf{w}, \mathbf{X}, \mathbf{y}) = \frac{1}{N}\sum_{i=1}^N (\mathbf{x}_i^T\mathbf{w} - y_i)^2 
+$$
+
+Here we have used $\mathbf{X}$ and $\mathbf{y}$ to refer to the entire collection of inputs and outputs from our dataset $( \mathbf{D})$ respectively, so:
+
+$$
+\mathbf{X} = \begin{bmatrix}\mathbf{x}_1 \\ \mathbf{x}_2 \\ \vdots \\ \mathbf{x}_N \end{bmatrix} = \begin{bmatrix}x_{11} & x_{12} & \dots & x_{1n} \\ x_{21} & x_{22} & \dots & x_{2n}\\ \vdots & \vdots  & \ddots & \vdots \\ x_{N1} & x_{N2} & \dots & x_{Nn} \end{bmatrix}, \quad \mathbf{y} = \begin{bmatrix}y_1 \\ y_2 \\ \vdots \\ y_N \end{bmatrix}
+$$
+
+## Loss functions
+
+This is an example of **loss function**. We can drop the explicit dependence on $\mathbf{X}$ and $\mathbf{y}$, looking at the loss as purely a function of our choice of parameters:
+
+$$
+\textbf{Loss}(\mathbf{w})= MSE(\mathbf{w}, \mathbf{X}, \mathbf{y}) = \frac{1}{N}\sum_{i=1}^N (\mathbf{x}_i^T\mathbf{w} - y_i)^2 
+$$
+
+Again, if our goal is to minimize error, we want to choose the parameters $\mathbf{w}^*$ that *minimize* this loss:
+
+$$
+\mathbf{w}^* = \underset{\mathbf{w}}{\text{argmin}}\ \textbf{Loss}(\mathbf{w})= \underset{\mathbf{w}}{\text{argmin}} \frac{1}{N}\sum_{i=1}^N (\mathbf{x}_i^T\mathbf{w} - y_i)^2
+$$
+
+## Visualizing loss
+
+If we consider the case where our inputs are 1-dimensional, as in the weight example above, then our parameter vector $\mathbf{w}$ only has 2 entries: $w_1$ and $b$.
+
+```{python}
+#| echo: false
+#| fig-align: center
+%%manim -sqh -v CRITICAL --progress_bar none HP_MPG
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+mpg_data = pd.read_csv('data/auto-mpg.csv')
+data = mpg_data.sort_values(by=['weight'])[::50]
+
+x = np.array(data['weight'])[:, np.newaxis]
+y = np.array(data['mpg'])
+model = LinearRegression().fit(x, y)
+
+other_lines = [(model.coef_.item() * 1.2, model.intercept_.item() * 0.95), (model.coef_.item() * 0.7, model.intercept_.item() * 0.9), (model.coef_.item() * 1.8, model.intercept_.item() * 1.4)]
+
+class HP_MPG(Scene):
+    def construct(self):
+        self.camera.background_color = "#ffffff"
+        self.ax = Axes(
+            x_range=[1000, 5000, 500],
+            y_range=[10, 40, 10],
+            x_length=12,
+            y_length=8,
+            axis_config={"color": GREY},
+        )
+        self.add(self.ax)
+        
+        
+        coords = [[c1, c2] for (c1, c2) in zip(data['weight'], data['mpg'])]
+        dots = VGroup(*[Dot(color=BLACK).move_to(self.ax.c2p(coord[0],coord[1])) for coord in coords])
+        labels = self.ax.get_axis_labels(x_label="Weight\ (lbs)", y_label="MPG")
+        labels.set_color(GREY)
+        self.add(dots,  labels)
+        for coord, name in list(zip(coords, data['car name'])):
+            if name in ['honda accord cvcc', 'dodge aspen']:
+                d = Dot(color=RED).move_to(self.ax.c2p(coord[0], coord[1]))
+                label = Text('  '.join([n.capitalize() for n in name.split()[:2]]), color=RED, font_size=24).next_to(d, UR)
+                self.add(d, label)
+
+        # Add Regression line
+        plot = self.ax.plot(lambda x: model.predict(np.atleast_2d(x)).item(), x_range=[1300, 4300], color=BLACK)
+        self.add(plot)
+
+        # Add other candidate lines
+        for param, color in zip(other_lines, [BLUE, ORANGE, GREEN, PURPLE]):
+            w, b = param
+            plot = self.ax.plot(lambda x: x * w + b, x_range=[1300, 4300], color=color)
+            self.add(plot)
+        
+
+        eq = Tex(r'$f(x)=wx+b$', color=BLACK).to_corner(UR)
+        self.add(eq)
+```
+
+```{python}
+#| echo: false
+#| fig-align: center
+import matplotlib.pyplot as plt
+x = (x - x.mean()) / x.std()
+y = (y - y.mean()) / y.std()
+
+model = LinearRegression().fit(x, y)
+
+other_lines = [(model.coef_.item(), model.intercept_.item()), (model.coef_.item() * 1.2, model.intercept_.item() - 0.95), (model.coef_.item() * 0.7, model.intercept_.item() + 0.9), (model.coef_.item() * 1.8, model.intercept_.item() + 1.4)]
+
+W = np.arange(-2, 2, 0.1)
+B = np.arange(-2, 2, 0.1)
+W, B = np.meshgrid(W, B)
+resid = np.expand_dims(W, 0) * x.reshape((-1, 1, 1)) + np.expand_dims(B, 0) - y.reshape((-1, 1, 1)) # N x W x B
+loss = np.mean(resid ** 2, axis=0)
+
+
+CS = plt.contour(W, B, loss, cmap='coolwarm', levels=0.5 * np.arange(25))
+ax = plt.gca()
+ax.set_xticks([])
+ax.set_yticks([])
+
+
+for param, color in zip(other_lines, [BLACK, BLUE, ORANGE, GREEN, PURPLE]):
+            w, b = param
+            ax.scatter(w, b, c=color, s=75)
+plt.xlabel('$w_1$')
+plt.ylabel('$b$')
+plt.title('$\mathbf{Loss}(\mathbf{w})$')
+ax.clabel(CS, inline=True, fontsize=10)
+pass
+```
+
+We see that point where the loss is lowest, corresponds to the line that best fits our data!
+
+## Gradient descent
+
+We have a function $f(\mathbf{\cdot})$ and we would like find the input $\mathbf{w}^*$ that minimizes the output of the function:
+
+$$
+\text{Find: } \mathbf{w}^* = \underset{\mathbf{w}}{\text{argmin}}\ f(\mathbf{w})
+$$
+
+We don't know how to find $\mathbf{w}^*$ directly, but if we have an initial guess $\mathbf{w}^{(0)}$, we can try to update our guess to improve it.
+
+$$
+\mathbf{w}^{(1)} \leftarrow \mathbf{w}^{(0)} + \mathbf{g}
+$$
+
+```{python}
+#| echo: false
+#| fig-align: center
+import matplotlib.pyplot as plt
+from autograd import grad
+x = (x - x.mean()) / x.std()
+y = (y - y.mean()) / y.std()
+
+model = LinearRegression().fit(x, y)
+
+W = np.arange(-2, 2, 0.1)
+B = np.arange(-2, 2, 0.1)
+W, B = np.meshgrid(W, B)
+
+
+resid = np.expand_dims(W, 0) * x.reshape((-1, 1, 1)) + np.expand_dims(B, 0) - y.reshape((-1, 1, 1)) # N x W x B
+loss = np.mean(resid ** 2, axis=0)
+
+def get_loss(w):
+    w, b = w[0], w[1]
+    resid = x * w + b - y
+    return 0.2 * np.mean(resid ** 2)
+
+gloss = grad(get_loss)
+
+ax = plt.gca()
+
+ax.set_xticks([])
+ax.set_yticks([])
+
+print(gloss(np.array([1.25, -1.5])))
+
+other_lines = [(1.25, -1.5)]
+
+for param, color in zip(other_lines, [BLACK, BLUE, ORANGE, GREEN, PURPLE]):
+            w, b = param
+            ax.scatter(w, b, c=color, s=75, zorder=4)
+            dw, db = -gloss(np.array([w, b]))
+            prop = dict(arrowstyle="-|>,head_width=0.4,head_length=0.8",
+            shrinkA=0,shrinkB=0)
+            ax.annotate("", xy=(dw + w,db + b), xytext=(w,b), arrowprops=prop)
+            #ax.arrow(w, b, dw, db, head_width=0.1, zorder=4)
+
+   
+plt.xlabel('$w_1$')
+plt.ylabel('$b$')
+plt.title('$\mathbf{Loss}(\mathbf{w})$')
+CS = ax.contour(W, B, loss, cmap='coolwarm', levels=0.5 * np.arange(25))
+ax.clabel(CS, inline=True, fontsize=10)
+pass
+```
+
+## Gradient descent
+
+The *gradient* of a function at point $\mathbf{x}$ corresponds to the *slope* of $f$ at $\mathbf{w}$, or equivalently the direction of maximum change. This gives us a natural choice for the update to our guess.
+
+$$
+\mathbf{w}^{(1)} \leftarrow \mathbf{w}^{(0)} - \nabla f(\mathbf{w}^{(0)})
+$$
+
+```{python}
+#| echo: false
+#| fig-align: center
+import matplotlib.pyplot as plt
+from autograd import grad
+x = (x - x.mean()) / x.std()
+y = (y - y.mean()) / y.std()
+
+model = LinearRegression().fit(x, y)
+
+W = np.arange(-2, 2, 0.1)
+B = np.arange(-2, 2, 0.1)
+W, B = np.meshgrid(W, B)
+
+
+resid = np.expand_dims(W, 0) * x.reshape((-1, 1, 1)) + np.expand_dims(B, 0) - y.reshape((-1, 1, 1)) # N x W x B
+loss = np.mean(resid ** 2, axis=0)
+
+def get_loss(w):
+    w, b = w[0], w[1]
+    resid = x * w + b - y
+    return 0.2 * np.mean(resid ** 2)
+
+gloss = grad(get_loss)
+
+ax = plt.gca()
+
+ax.set_xticks([])
+ax.set_yticks([])
+
+
+other_lines = [(1.25, -1.5)]
+
+for param, color in zip(other_lines, [BLACK, BLUE, ORANGE, GREEN, PURPLE]):
+            w, b = param
+            ax.scatter(w, b, c=color, s=75, zorder=4)
+            dw, db = -gloss(np.array([w, b]))
+            prop = dict(arrowstyle="-|>,head_width=0.4,head_length=0.8",
+            shrinkA=0,shrinkB=0)
+            ax.annotate("", xy=(dw + w,db + b), xytext=(w,b), arrowprops=prop)
+            #ax.arrow(w, b, dw, db, head_width=0.1, zorder=4)
+
+   
+plt.xlabel('$w_1$')
+plt.ylabel('$b$')
+plt.title('$\mathbf{Loss}(\mathbf{w})$')
+CS = ax.contour(W, B, loss, cmap='coolwarm', levels=0.5 * np.arange(25))
+ax.clabel(CS, inline=True, fontsize=10)
+pass
+```
+
+## Gradient descent
+
+We can repeat this process many times, continuously updating our estimate.
+
+$$
+\text{For }i \text{ in 1,...,T}\text{ :} 
+\quad \mathbf{w}^{(i+1)} \leftarrow \mathbf{w}^{(i)} - \nabla f(\mathbf{w}^{(i)})
+$$
+
+```{python}
+#| echo: false
+#| fig-align: center
+import matplotlib.pyplot as plt
+from autograd import grad
+x = (x - x.mean()) / x.std()
+y = (y - y.mean()) / y.std()
+
+model = LinearRegression().fit(x, y)
+
+W = np.arange(-2, 2, 0.1)
+B = np.arange(-2, 2, 0.1)
+W, B = np.meshgrid(W, B)
+
+
+resid = np.expand_dims(W, 0) * x.reshape((-1, 1, 1)) + np.expand_dims(B, 0) - y.reshape((-1, 1, 1)) # N x W x B
+loss = np.mean(resid ** 2, axis=0)
+
+def get_loss(w, x, y):
+    w, b = w[0], w[1]
+    resid = x.flatten() * w + b - y
+    return 0.15 * np.mean(resid ** 2)
+
+gloss = grad(get_loss)
+
+ax = plt.gca()
+
+ax.set_xticks([])
+ax.set_yticks([])
+
+
+w, b = (1.25, -1.5)
+
+for i in range(6):
+    ax.scatter(w, b, c=color, s=75, zorder=4)
+    dw, db = -gloss(np.array([w, b]), x, y)
+    db = db + max(0, 0.05 * (5- i))
+    prop = dict(arrowstyle="-|>,head_width=0.4,head_length=0.8",
+    shrinkA=0,shrinkB=0)
+    if i < 5:
+        ax.annotate("", xy=(dw + w,db + b), xytext=(w,b), arrowprops=prop)
+    w, b = w + dw, b + db
+    #ax.arrow(w, b, dw, db, head_width=0.1, zorder=4)
+
+   
+plt.xlabel('$w_1$')
+plt.ylabel('$b$')
+plt.title('$\mathbf{Loss}(\mathbf{w})$')
+CS = ax.contour(W, B, loss, cmap='coolwarm', levels=0.5 * np.arange(25))
+ax.clabel(CS, inline=True, fontsize=10)
+pass
+```
+
+## Gradient descent convergence
+
+At it's minimum value $\mathbf{w}^*$, a function $f$ *must* have a gradient of $\mathbf{0}$.
+
+$$
+\nabla f(\mathbf{w}^*) = \mathbf{0}
+$$
+
+It follows that:
+
+$$
+\mathbf{w}^{*} = \mathbf{w}^{*} - \nabla f(\mathbf{w}^{*})
+$$
+
+We could write our algorithm to account for this:
+
+$$
+\text{While } \nabla f(\mathbf{w}^{(i)}) \neq \mathbf{0} \text{ :}
+\quad \mathbf{w}^{(i+1)} \leftarrow \mathbf{w}^{(i)} - \nabla f(\mathbf{w}^{(i)})
+$$
+
+## Gradient descent convergence
+
+Stops the iteration when the gradient magnitude is sufficiently small:
+
+$$
+\text{While } ||\nabla f(\mathbf{w}^{(i)})||_2 > \epsilon \text{ :} 
+\quad \mathbf{w}^{(i+1)} \leftarrow \mathbf{w}^{(i)} - \nabla f(\mathbf{w}^{(i)})
+$$
+
+```{python}
+#| echo: false
+#| fig-align: center
+import matplotlib.pyplot as plt
+from autograd import grad
+x = (x - x.mean()) / x.std()
+y = (y - y.mean()) / y.std()
+
+model = LinearRegression().fit(x, y)
+
+W = np.arange(-2, 2, 0.1)
+B = np.arange(-2, 2, 0.1)
+W, B = np.meshgrid(W, B)
+
+
+resid = np.expand_dims(W, 0) * x.reshape((-1, 1, 1)) + np.expand_dims(B, 0) - y.reshape((-1, 1, 1)) # N x W x B
+loss = np.mean(resid ** 2, axis=0)
+
+def get_loss(w, x, y):
+    w, b = w[0], w[1]
+    resid = x.flatten() * w + b - y
+    return 0.15 * np.mean(resid ** 2)
+
+gloss = grad(get_loss)
+
+ax = plt.gca()
+
+ax.set_xticks([])
+ax.set_yticks([])
+
+
+w, b = (1.25, -1.5)
+
+for i in range(12):
+    ax.scatter(w, b, c=color, s=75, zorder=4)
+    dw, db = -gloss(np.array([w, b]), x, y)
+    db = db + max(0, 0.05 * (5- i))
+    prop = dict(arrowstyle="-|>,head_width=0.4,head_length=0.8",
+    shrinkA=0,shrinkB=0)
+    if i < 11:
+        ax.annotate("", xy=(dw + w,db + b), xytext=(w,b), arrowprops=prop)
+    w, b = w + dw, b + db
+    #ax.arrow(w, b, dw, db, head_width=0.1, zorder=4)
+
+   
+plt.xlabel('$w_1$')
+plt.ylabel('$b$')
+plt.title('$\mathbf{Loss}(\mathbf{w})$')
+CS = ax.contour(W, B, loss, cmap='coolwarm', levels=0.5 * np.arange(25))
+ax.clabel(CS, inline=True, fontsize=10)
+pass
+```
+
+## Step sizes
+
+This approach says that when the magnitude of the gradient is large, we should take a large step, and vice-versa.
+
+```{python}
+#| echo: false
+#| fig-align: center
+import matplotlib.pyplot as plt
+from autograd import grad
+x = (x - x.mean()) / x.std()
+y = (y - y.mean()) / y.std()
+
+model = LinearRegression().fit(x, y)
+
+W = np.arange(-2, 2, 0.1)
+B = np.arange(-2, 2, 0.1)
+W, B = np.meshgrid(W, B)
+
+
+resid = np.expand_dims(W, 0) * x.reshape((-1, 1, 1)) + np.expand_dims(B, 0) - y.reshape((-1, 1, 1)) # N x W x B
+loss = np.mean(resid ** 2, axis=0)
+
+def get_loss(w, x, y):
+    w, b = w[0], w[1]
+    resid = x.flatten() * w + b - y
+    return 0.15 * np.mean(resid ** 2)
+
+gloss = grad(get_loss)
+
+ax = plt.gca()
+
+ax.set_xticks([])
+ax.set_yticks([])
+
+
+w, b = (1.25, -1.5)
+
+for i in range(12):
+    ax.scatter(w, b, c=color, s=75, zorder=4)
+    dw, db = -gloss(np.array([w, b]), x, y)
+    db = db + max(0, 0.05 * (5- i))
+    prop = dict(arrowstyle="-|>,head_width=0.4,head_length=0.8",
+    shrinkA=0,shrinkB=0)
+    if i < 11:
+        ax.annotate("", xy=(dw + w,db + b), xytext=(w,b), arrowprops=prop)
+    w, b = w + dw, b + db
+    #ax.arrow(w, b, dw, db, head_width=0.1, zorder=4)
+
+   
+plt.xlabel('$w_1$')
+plt.ylabel('$b$')
+plt.title('$\mathbf{Loss}(\mathbf{w})$')
+CS = ax.contour(W, B, loss, cmap='coolwarm', levels=0.5 * np.arange(25))
+ax.clabel(CS, inline=True, fontsize=10)
+pass
+```
+
+## Step sizes
+
+However, if we take too large a step, we can overshoot the minimum entirely! In the worst case, this can lead to *divergence,* where gradient descent overshoots the minimum more and more at each step.
+
+```{python}
+#| echo: false
+#| fig-align: center
+import matplotlib.pyplot as plt
+from autograd import grad
+x = (x - x.mean()) / x.std()
+y = (y - y.mean()) / y.std()
+
+model = LinearRegression().fit(x, y)
+
+W = np.arange(-15, 15, 0.4)
+B = np.arange(-15, 15, 0.4)
+W, B = np.meshgrid(W, B)
+
+
+resid = np.expand_dims(W, 0) * x.reshape((-1, 1, 1)) + np.expand_dims(B, 0) - y.reshape((-1, 1, 1)) # N x W x B
+loss = np.mean(resid ** 2, axis=0)
+
+def get_loss(w, x, y):
+    w, b = w[0], w[1]
+    resid = x.flatten() * w + b - y
+    return 1.08 * np.mean(resid ** 2)
+
+gloss = grad(get_loss)
+
+ax = plt.gca()
+
+ax.set_xticks([])
+ax.set_yticks([])
+
+
+w, b = (1.25, -1.5)
+
+for i in range(12):
+    ax.scatter(w, b, c=color, s=75, zorder=4)
+    dw, db = -gloss(np.array([w, b]), x, y)
+    db = db + max(0, 0.05 * (5- i))
+    prop = dict(arrowstyle="-|>,head_width=0.4,head_length=0.8",
+    shrinkA=0,shrinkB=0)
+    if i < 11:
+        ax.annotate("", xy=(dw + w,db + b), xytext=(w,b), arrowprops=prop)
+    w, b = w + dw, b + db
+    #ax.arrow(w, b, dw, db, head_width=0.1, zorder=4)
+
+   
+plt.xlabel('$w_1$')
+plt.ylabel('$b$')
+plt.title('$\mathbf{Loss}(\mathbf{w})$')
+CS = ax.contour(W, B, loss, cmap='coolwarm', levels=15 * np.arange(25))
+ax.clabel(CS, inline=True, fontsize=10)
+pass
+```
+
+## Step sizes
+
+The gradient is making a *linear approximation* to the function. A strait line has no minimum, so the gradient has no information about where along the approximation the true minimum will be.
+
+```{python}
+#| echo: false
+#| fig-align: center
+%%manim -sqh -v CRITICAL --progress_bar none BasicFunction
+
+class BasicFunction(PositiveVectorScene):
+    def construct(self):
+        f = lambda x: (0.5 * x - 3) **  2
+        fx = self.ax.plot(f, color=RED)
+        df = lambda x: (0.5 * x - 3)
+        dfx = self.ax.plot(lambda x: df(11) * (x - 8.55) , color=BLACK)
+        eq = MathTex(r'f(\mathbf{x})=2(\frac{x_1}{5})^3 -5 (\frac{x_1}{6})^2 + 4', color=BLACK, tex_template=self.template).to_edge(UP + 2 * UP)
+        #eq.move_to(*self.ax.c2p([8, 7, 0]))
+        labels = self.ax.get_axis_labels(x_label="x_1", y_label="y = f(\mathbf{x})")
+        labels.set_color(GREY)
+        labels.set_tex_template(self.template)
+        p = Dot(color=BLACK).move_to(self.ax.c2p(11, f(11)))
+        self.add(dfx, fx,  p, labels)
+```
+
+## Step sizes
+
+The gradient gives us the direction of maximum change of the function, but this is only true in the *limit* of a very small step.
+
+$$
+\frac{df}{d\mathbf{w}}= \underset{\gamma \rightarrow 0}{\lim}\ \underset{\|\mathbf{\epsilon}\|_2 < \gamma}{\max} \frac{f(\mathbf{w} + \mathbf{\epsilon}) - f(\mathbf{w})}{\|\mathbf{\epsilon}\|_2}
+$$
+
+In higher dimensions, the gradient may not point directly to the minimum.
+
+```{python}
+#| echo: false
+#| fig-align: center
+import matplotlib.pyplot as plt
+from autograd import grad
+x = (x - x.mean()) / x.std()
+y = (y - y.mean()) / y.std()
+
+model = LinearRegression().fit(x, y)
+
+W = np.arange(-2, 2, 0.1)
+B = np.arange(-2, 2, 0.1)
+W, B = np.meshgrid(W, B)
+
+
+resid = np.expand_dims(W, 0) * x.reshape((-1, 1, 1)) + np.expand_dims(B, 0) - y.reshape((-1, 1, 1)) # N x W x B
+loss = np.mean(resid ** 2, axis=0)
+
+def get_loss(w):
+    w, b = w[0], w[1]
+    resid = x * w + b - y
+    return 0.2 * np.mean(resid ** 2)
+
+gloss = grad(get_loss)
+
+ax = plt.gca()
+
+ax.set_xticks([])
+ax.set_yticks([])
+
+other_lines = [(1.25, -1.5)]
+
+for param, color in zip(other_lines, [BLACK, BLUE, ORANGE, GREEN, PURPLE]):
+            w, b = param
+            ax.scatter(w, b, c=color, s=75, zorder=4)
+            dw, db = -gloss(np.array([w, b]))
+            prop = dict(arrowstyle="-|>,head_width=0.4,head_length=0.8", color='r',
+            shrinkA=0,shrinkB=0)
+            ax.annotate("", xy=(dw + w,db + b), xytext=(w,b), arrowprops=prop, c='g')
+            prop = dict(arrowstyle="-|>,head_width=0.4,head_length=0.8", color='b',
+            shrinkA=0,shrinkB=0)
+            ax.annotate("", xy=(dw * 1.5 + w,db * 0.8 + b), xytext=(w,b), arrowprops=prop, c='k')
+            #ax.arrow(w, b, dw, db, head_width=0.1, zorder=4)
+
+   
+plt.xlabel('$w_1$')
+plt.ylabel('$b$')
+plt.title('$\mathbf{Loss}(\mathbf{w})$')
+CS = ax.contour(W, B, loss, cmap='coolwarm', levels=0.5 * np.arange(25))
+ax.clabel(CS, inline=True, fontsize=10)
+pass
+```
+
+## Step sizes
+
+We can introduce an additional control to our algorithm: a **step size** or **learning rate**. This is a small constant $\alpha$, that we will multiply the gradient by in each of our updates.
+
+$$
+\mathbf{w}^{(i+1)} \leftarrow \mathbf{w}^{(i)} - \alpha \nabla f(\mathbf{w}^{(i)})
+$$
+
+Using a small learning rate $(\alpha << 1)$ will make gradient descent slower, but *much* more reliable.
+
+```{python}
+#| echo: false
+#| fig-align: center
+import matplotlib.pyplot as plt
+from autograd import grad
+x = (x - x.mean()) / x.std()
+y = (y - y.mean()) / y.std()
+
+model = LinearRegression().fit(x, y)
+
+W = np.arange(-2, 2, 0.1)
+B = np.arange(-2, 2, 0.1)
+W, B = np.meshgrid(W, B)
+
+
+resid = np.expand_dims(W, 0) * x.reshape((-1, 1, 1)) + np.expand_dims(B, 0) - y.reshape((-1, 1, 1)) # N x W x B
+loss = np.mean(resid ** 2, axis=0)
+
+def get_loss(w, x, y):
+    w, b = w[0], w[1]
+    resid = x.flatten() * w + b - y
+    return 0.05 * np.mean(resid ** 2)
+
+gloss = grad(get_loss)
+
+ax = plt.gca()
+
+ax.set_xticks([])
+ax.set_yticks([])
+
+
+w, b = (1.25, -1.5)
+
+for i in range(12):
+    ax.scatter(w, b, c=color, s=75, zorder=4)
+    dw, db = -gloss(np.array([w, b]), x, y)
+    db = db + max(0, 0.01 * (10 - i))
+    prop = dict(arrowstyle="-|>,head_width=0.4,head_length=0.8",
+    shrinkA=0,shrinkB=0)
+    if i < 11:
+        ax.annotate("", xy=(dw + w,db + b), xytext=(w,b), arrowprops=prop)
+    w, b = w + dw, b + db
+    #ax.arrow(w, b, dw, db, head_width=0.1, zorder=4)
+
+   
+plt.xlabel('$w_1$')
+plt.ylabel('$b$')
+plt.title('$\\mathbf{Small }\\ \\alpha$')
+CS = ax.contour(W, B, loss, cmap='coolwarm', levels=0.5 * np.arange(25))
+ax.clabel(CS, inline=True, fontsize=10)
+pass
+```
+
+```{python}
+#| echo: false
+#| fig-align: center
+import matplotlib.pyplot as plt
+from autograd import grad
+x = (x - x.mean()) / x.std()
+y = (y - y.mean()) / y.std()
+
+model = LinearRegression().fit(x, y)
+
+W = np.arange(-2, 2, 0.1)
+B = np.arange(-2, 2, 0.1)
+W, B = np.meshgrid(W, B)
+
+
+resid = np.expand_dims(W, 0) * x.reshape((-1, 1, 1)) + np.expand_dims(B, 0) - y.reshape((-1, 1, 1)) # N x W x B
+loss = np.mean(resid ** 2, axis=0)
+
+def get_loss(w, x, y):
+    w, b = w[0], w[1]
+    resid = x.flatten() * w + b - y
+    return 0.75 * np.mean(resid ** 2)
+
+gloss = grad(get_loss)
+
+ax = plt.gca()
+
+ax.set_xticks([])
+ax.set_yticks([])
+
+
+w, b = (1.25, -1.5)
+
+for i in range(12):
+    ax.scatter(w, b, c=color, s=75, zorder=4)
+    dw, db = -gloss(np.array([w, b]), x, y)
+    db = db + max(0, 0.01 * (10 - i))
+    prop = dict(arrowstyle="-|>,head_width=0.4,head_length=0.8",
+    shrinkA=0,shrinkB=0)
+    if i < 11:
+        ax.annotate("", xy=(dw + w,db + b), xytext=(w,b), arrowprops=prop)
+    w, b = w + dw, b + db
+    #ax.arrow(w, b, dw, db, head_width=0.1, zorder=4)
+
+   
+plt.xlabel('$w_1$')
+plt.ylabel('$b$')
+plt.title('$\\mathbf{Large }\\ \\alpha$')
+CS = ax.contour(W, B, loss, cmap='coolwarm', levels=0.5 * np.arange(25))
+ax.clabel(CS, inline=True, fontsize=10)
+pass
+```
+
+## Optimizing linear regression
+
+We can apply gradient descent to linear regression in order to find the parameters that minimize the mean squared error loss.
+
+$$
+\nabla_{\mathbf{w}} \textbf{MSE}(\mathbf{w}, \mathbf{X}, \mathbf{y}) = 
+\frac{d}{d\mathbf{w}}\bigg( \frac{1}{N}\sum_{i=1}^N (\mathbf{x}_i^T\mathbf{w} - y_i)^2 \bigg)
+$$
+
+$$
+= \frac{2}{N}\sum_{i=1}^N (\mathbf{x}_i^T\mathbf{w} - y_i)\mathbf{x}_i
+$$
+
+With this gradient our gradient descent update becomes:
+
+$$
+\mathbf{w}^{(i+1)} \longleftarrow \mathbf{w}^{(i)} - \alpha\bigg(\frac{2 }{N}\bigg)\sum_{i=1}^N  (\mathbf{x}_i^T\mathbf{w}^{(i)} - y_i)\mathbf{x}_i
+$$
+
+## Optimizing linear regression directly
+
+We know that at the minimum, the gradient must be $\mathbf{0}$, so the following condition must hold:
+
+$$
+\mathbf{0} = \bigg( \frac{2}{N}\bigg)\sum_{i=1}^N  (\mathbf{x}_i^T\mathbf{w} - y_i)\mathbf{x}_i
+$$
+
+We can solve for a $\mathbf{w}$ that satisfied this condition by first dropping the constant $\frac{2}{N}$.
+
+$$
+\mathbf{0} = \sum_{i=1}^N  (\mathbf{x}_i^T\mathbf{w} - y_i)\mathbf{x}_i
+$$
+
+$$
+\mathbf{0} = \sum_{i=1}^N \big( \mathbf{x}_i\mathbf{x}_i^T\mathbf{w} - y_i \mathbf{x}_i \big)
+$$
+
+$$
+\sum_{i=1}^N  y_i \mathbf{x}_i  =\bigg(\sum_{i=1}^N  \mathbf{x}_i\mathbf{x}_i^T \bigg)  \mathbf{w} 
+$$
+
+## Optimizing linear regression directly
+
+Note that $\mathbf{x}_i \mathbf{x}_i^T$ is a vector *outer product*:
+
+$$
+\mathbf{x}_i \mathbf{x}_i^T = \begin{bmatrix} x_{i1} \\ x_{i2} \\ \vdots \\  x_{in}\end{bmatrix} \begin{bmatrix} x_{i1} & x_{i2} & \dots &  x_{in}\end{bmatrix} = 
+\begin{bmatrix} x_{i1} x_{i1} & x_{i1} x_{i2} & \dots & x_{i1} x_{in} \\
+x_{i2} x_{i1} & x_{i2} x_{i2} & \dots & x_{i2} x_{in} \\
+\vdots & \vdots & \ddots & \vdots \\
+x_{in} x_{i1} & x_{in} x_{i2} & \dots & x_{in} x_{in} \\
+\end{bmatrix} 
+$$
+
+Thus $\bigg(\sum_{i=1}^N \mathbf{x}_i\mathbf{x}_i^T \bigg)$ is a matrix.
+
+## Optimizing linear regression directly
+
+$$
+\sum_{i=1}^N  y_i \mathbf{x}_i  =\bigg(\sum_{i=1}^N  \mathbf{x}_i\mathbf{x}_i^T \bigg)  \mathbf{w} 
+$$
+
+Multiplying both sides by the inverse $\bigg(\sum_{i=1}^N \mathbf{x}_i\mathbf{x}_i^T \bigg)^{-1}$ we get:
+
+$$
+\bigg(\sum_{i=1}^N  \mathbf{x}_i\mathbf{x}_i^T \bigg)^{-1} \bigg(\sum_{i=1}^N  y_i \mathbf{x}_i\bigg)  =  \mathbf{w}^* 
+$$
+
+## Optimizing linear regression directly
+
+$$
+\bigg(\sum_{i=1}^N  \mathbf{x}_i\mathbf{x}_i^T \bigg)^{-1} \bigg(\sum_{i=1}^N  y_i \mathbf{x}_i\bigg)  =  \mathbf{w}^* 
+$$
+
+We can write this more compactly using the stacked input matrix and label vector notation we saw in homework 1.
+
+$$
+\mathbf{X} = \begin{bmatrix} \mathbf{x}_{1} \\ \mathbf{x}_{2} \\ \vdots \\  \mathbf{x}_{N} \end{bmatrix},\quad \mathbf{y} = \begin{bmatrix} y_{1} \\ y_{2} \\ \vdots \\  y_{N} \end{bmatrix}
+$$
+
+In this case, the expression becomes:
+
+$$\mathbf{w}^* = \big( \mathbf{X}^T \mathbf{X} \big)^{-1} \big(\mathbf{y}\mathbf{X}\big)$$
+
+# Maximum likelihood estimation
+
+## Normal distributions
+
+The **Normal** distribution (also known as the **Gaussian** distribution) is a continuous probability distribution with the following probability density function:
+
+$$
+p(y) = \frac{1}{\sigma \sqrt{2 \pi}} \mathbf{exp}\bigg(-\frac{1}{2\sigma^2} (y -\mu)^2\bigg)
+$$
+
+![](pictures/Normal_Distribution_PDF.svg){fig-align="center"}
+
+## Linear regression as a probabilistic model
+
+The probabilistic model for linear regression will make the assumption that the output is *normally distributed* conditioned on the input:
+
+$$
+y_i \sim N\big(\mathbf{x}_i^T \mathbf{w},\ \sigma^2\big)
+$$
+
+We can write the conditional probability or **likelihood** of an output as:
+
+$$
+p(y_i\mid\mathbf{x}_i, \mathbf{w}) =  \frac{1}{\sigma \sqrt{2 \pi}} \mathbf{exp}\bigg(-\frac{1}{2\sigma^2} (y_i - \mathbf{x}_i^T\mathbf{w})^2\bigg)
+$$
+
+![Image credit: Lily Chen *Towards Data Science*](pictures/prob_lr.webp){fig-align="center"}
+
+## Maximum likelihood estimation
+
+How do we find the optimal value for $\mathbf{w}$? Choose the $\mathbf{w}$ that **maximizes the likelihood** (conditional probability) of all of the outputs in our dataset:
+
+$$
+\mathbf{w}^* = \underset{\mathbf{w}}{\text{argmax}} \ p(\mathbf{y} \mid \mathbf{X}, \mathbf{w}) =\underset{\mathbf{w}}{\text{argmax}} \ p(y_1,...,y_N \mid \mathbf{x}_1, ...,\mathbf{x}_N, \mathbf{w}) $$
+
+Generally our model also assumes *conditional independence* across observations so:
+
+$$
+p(y_1,...,y_N \mid \mathbf{x}_1, ...,\mathbf{x}_N, \mathbf{w}) = \prod_{i=1}^N p(y_i\mid \mathbf{x}_i, \mathbf{w})
+$$
+
+## Maximum likelihood estimation
+
+Equivalently frame the optimal value in terms of the *negative log-likelihood* rather than the likelihood.
+
+$$
+\underset{\mathbf{w}}{\text{argmax}} \prod_{i=1}^N p(y_i\mid \mathbf{x}_i, \mathbf{w}) = \underset{\mathbf{w}}{\text{argmin}} - \sum_{i=1}^N \log p(y_i \mid \mathbf{x}_i, \mathbf{w}) = \textbf{NLL}(\mathbf{w}, \mathbf{X}, \mathbf{y})
+$$
+
+We see that the negative log-likelihood is a natural *loss function* to optimize to find $\mathbf{w}^*$.
+
+$$
+\textbf{Loss}(\mathbf{w}) =\textbf{NLL}(\mathbf{w}, \mathbf{X}, \mathbf{y})=- \sum_{i=1}^N \log p(y_i \mid \mathbf{x}_i, \mathbf{w}) 
+$$
+
+## Maximum likelihood estimation
+
+We can write out the negative log-likelihood explicitly using the normal PDF:
+
+$$
+\textbf{NLL}(\mathbf{w}, \mathbf{X}, \mathbf{y}) = -\sum_{i=1}^N\log\bigg[\frac{1}{\sigma \sqrt{2 \pi}} \text{exp}\bigg(-\frac{1}{2\sigma^2} (y_i - \mathbf{x}_i^T\mathbf{w})^2\bigg)\bigg]
+$$
+
+$$
+ = \frac{1}{2\sigma^2} \sum_{i=1}^N(y_i - \mathbf{x}_i^T\mathbf{w})^2 - \frac{N}{\sigma \sqrt{2 \pi}}
+$$
+
+## Maximum likelihood estimation
+
+$$
+\textbf{NLL}(\mathbf{w}, \mathbf{X}, \mathbf{y}) = \frac{1}{2\sigma^2} \sum_{i=1}^N(y_i - \mathbf{x}_i^T\mathbf{w})^2 - \frac{N}{\sigma \sqrt{2 \pi}}
+$$
+
+We see that this loss is very similar to the MSE loss. Taking the gradient this becomes even more clear.
+
+$$
+\nabla_{\mathbf{w}}\textbf{NLL}(\mathbf{w}, \mathbf{X}, \mathbf{y}) = 
+\frac{d}{d\mathbf{w}}\bigg( \frac{1}{2\sigma^2} \sum_{i=1}^N(y_i - \mathbf{x}_i^T\mathbf{w})^2 - \frac{N}{\sigma \sqrt{2 \pi}} \bigg)
+$$
+
+$$
+= \frac{1}{2\sigma^2}\sum_{i=1}^N (\mathbf{x}_i^T\mathbf{w} - y_i)\mathbf{x}_i
+$$
+
+The optimal value for $\mathbf{w}$ is the same for both MSE and negative log-likelihood and the optimal value does not depend on $\sigma^2$!
+
+$$
+\underset{\mathbf{w}}{\text{argmin}}\  MSE(\mathbf{w}, \mathbf{X}, \mathbf{y}) = \underset{\mathbf{w}}{\text{argmin}}\ \textbf{NLL}(\mathbf{w}, \mathbf{X}, \mathbf{y})
+$$

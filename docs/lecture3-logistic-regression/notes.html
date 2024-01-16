@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.319">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>CS 152: Neural Networks - Lecture 3: Logistic regression</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">CS 152: Neural Networks</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../calendar/calendar.html" rel="" target="">
+ <span class="menu-text">Calendar</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/orgs/CS152-Neural-Networks-Fall-2023/repositories" rel="" target="">
+ <span class="menu-text">Homeworks</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://harveymuddcollege.instructure.com/courses/615/" rel="" target="">
+ <span class="menu-text">Canvas</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/orgs/CS152-Neural-Networks-Fall-2023/" rel="" target="">
+ <span class="menu-text">Github</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools ms-auto">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#classification" id="toc-classification" class="nav-link active" data-scroll-target="#classification">Classification</a>
+  <ul class="collapse">
+  <li><a href="#functions-with-categorical-outputs" id="toc-functions-with-categorical-outputs" class="nav-link" data-scroll-target="#functions-with-categorical-outputs">Functions with categorical outputs</a></li>
+  <li><a href="#binary-outputs" id="toc-binary-outputs" class="nav-link" data-scroll-target="#binary-outputs">Binary outputs</a></li>
+  <li><a href="#visualizing-categorical-outputs" id="toc-visualizing-categorical-outputs" class="nav-link" data-scroll-target="#visualizing-categorical-outputs">Visualizing categorical outputs</a></li>
+  <li><a href="#making-binary-predictions" id="toc-making-binary-predictions" class="nav-link" data-scroll-target="#making-binary-predictions">Making binary predictions</a></li>
+  <li><a href="#interpreting-parameters" id="toc-interpreting-parameters" class="nav-link" data-scroll-target="#interpreting-parameters">Interpreting parameters</a></li>
+  <li><a href="#geometric-interpretation-of-predictions" id="toc-geometric-interpretation-of-predictions" class="nav-link" data-scroll-target="#geometric-interpretation-of-predictions">Geometric interpretation of predictions</a></li>
+  <li><a href="#decision-boundaries" id="toc-decision-boundaries" class="nav-link" data-scroll-target="#decision-boundaries">Decision boundaries</a></li>
+  <li><a href="#measuring-error" id="toc-measuring-error" class="nav-link" data-scroll-target="#measuring-error">Measuring error</a></li>
+  <li><a href="#defining-a-loss-function" id="toc-defining-a-loss-function" class="nav-link" data-scroll-target="#defining-a-loss-function">Defining a loss function</a></li>
+  </ul></li>
+  <li><a href="#logistic-regression" id="toc-logistic-regression" class="nav-link" data-scroll-target="#logistic-regression">Logistic Regression</a>
+  <ul class="collapse">
+  <li><a href="#the-bernoulli-distribution" id="toc-the-bernoulli-distribution" class="nav-link" data-scroll-target="#the-bernoulli-distribution">The Bernoulli distribution</a></li>
+  <li><a href="#a-probabilistic-model-for-binary-classification" id="toc-a-probabilistic-model-for-binary-classification" class="nav-link" data-scroll-target="#a-probabilistic-model-for-binary-classification">A probabilistic model for binary classification</a></li>
+  <li><a href="#sigmoid-function" id="toc-sigmoid-function" class="nav-link" data-scroll-target="#sigmoid-function">Sigmoid function</a></li>
+  <li><a href="#a-probabilistic-model-for-binary-classification-1" id="toc-a-probabilistic-model-for-binary-classification-1" class="nav-link" data-scroll-target="#a-probabilistic-model-for-binary-classification-1">A probabilistic model for binary classification</a></li>
+  <li><a href="#logistic-regression-decision-boundary" id="toc-logistic-regression-decision-boundary" class="nav-link" data-scroll-target="#logistic-regression-decision-boundary">Logistic regression decision boundary</a></li>
+  <li><a href="#maximum-likelihood-estimation-review" id="toc-maximum-likelihood-estimation-review" class="nav-link" data-scroll-target="#maximum-likelihood-estimation-review">Maximum likelihood estimation review</a></li>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
+  <li><a href="#maximum-likelihood-for-logistic-regression" id="toc-maximum-likelihood-for-logistic-regression" class="nav-link" data-scroll-target="#maximum-likelihood-for-logistic-regression">Maximum likelihood for logistic regression</a></li>
+  <li><a href="#optimizing-logistic-regression" id="toc-optimizing-logistic-regression" class="nav-link" data-scroll-target="#optimizing-logistic-regression">Optimizing logistic regression</a></li>
+  <li><a href="#comparing-loss-functions" id="toc-comparing-loss-functions" class="nav-link" data-scroll-target="#comparing-loss-functions">Comparing loss functions</a></li>
+  </ul></li>
+  <li><a href="#multinomial-logistic-regression" id="toc-multinomial-logistic-regression" class="nav-link" data-scroll-target="#multinomial-logistic-regression">Multinomial logistic regression</a>
+  <ul class="collapse">
+  <li><a href="#multi-class-classification" id="toc-multi-class-classification" class="nav-link" data-scroll-target="#multi-class-classification">Multi-class classification</a></li>
+  <li><a href="#multi-class-prediction-functions" id="toc-multi-class-prediction-functions" class="nav-link" data-scroll-target="#multi-class-prediction-functions">Multi-class prediction functions</a></li>
+  <li><a href="#multi-class-decision-boundaries" id="toc-multi-class-decision-boundaries" class="nav-link" data-scroll-target="#multi-class-decision-boundaries">Multi-class decision boundaries</a></li>
+  <li><a href="#categorical-distribution" id="toc-categorical-distribution" class="nav-link" data-scroll-target="#categorical-distribution">Categorical distribution</a></li>
+  <li><a href="#a-probabilistic-model-for-multi-class-classification" id="toc-a-probabilistic-model-for-multi-class-classification" class="nav-link" data-scroll-target="#a-probabilistic-model-for-multi-class-classification">A probabilistic model for multi-class classification</a></li>
+  <li><a href="#softmax-function" id="toc-softmax-function" class="nav-link" data-scroll-target="#softmax-function">Softmax function</a></li>
+  <li><a href="#multonomial-logistic-regression" id="toc-multonomial-logistic-regression" class="nav-link" data-scroll-target="#multonomial-logistic-regression">Multonomial logistic regression</a></li>
+  <li><a href="#maximum-likelihood-estimation-for-multinomial-logistic-regression" id="toc-maximum-likelihood-estimation-for-multinomial-logistic-regression" class="nav-link" data-scroll-target="#maximum-likelihood-estimation-for-multinomial-logistic-regression">Maximum likelihood estimation for multinomial logistic regression</a></li>
+  <li><a href="#gradient-descent" id="toc-gradient-descent" class="nav-link" data-scroll-target="#gradient-descent">Gradient descent</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Lecture 3: Logistic regression</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell" data-execution_count="1">
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.17.3</span>
+
+</pre>
+</div>
+</div>
+<section id="classification" class="level1">
+<h1>Classification</h1>
+<section id="functions-with-categorical-outputs" class="level2">
+<h2 class="anchored" data-anchor-id="functions-with-categorical-outputs">Functions with categorical outputs</h2>
+<p>In the last lecture we considered approximating functions of the form:</p>
+<p><span class="math display">\[
+y=f(\mathbf{x}), \quad \text{Input: } \mathbf{x} \in\mathbb{R}^n \longrightarrow \text{ Output: }y \in\mathbb{R}
+\]</span></p>
+<p>In that setup our function takes in a vector and produces a real number as an output (for example a miles per gallon rating).</p>
+<p>In many real-world problems, the output we want to model is not a continuous value, but a <em>categorical</em> value, meaning the function produces one choice from an unordered of possible outputs. A well-studied example of this kind of prediction is labeling; we might want to assign a label to an image based on the image’s content.</p>
+<p><img src="pictures/catdogmouse.png" class="img-fluid"></p>
+<p>We call the prediction of categorical outputs <strong>classification</strong>. The output is often also called the <em>class</em> of the obserc</p>
+</section>
+<section id="binary-outputs" class="level2">
+<h2 class="anchored" data-anchor-id="binary-outputs">Binary outputs</h2>
+<p>In the simplest <em>binary</em> case our function produces one of two possible outputs.</p>
+<p>For example: consider the problem of labeling images as containing either cats or dogs. Conceptually we would like a function that maps images to either a cat label or a dog label:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="pictures/catdog.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+<p>For convenience and generality, we will typically use the set <span class="math inline">\(\{0, 1\}\)</span> to denote the possible outputs for a binary classification function. Therefore in general we are considering functions of the form:</p>
+<p><span class="math display">\[
+y=f(\mathbf{x}), \quad \text{Input: } \mathbf{x} \in\mathbb{R}^n \longrightarrow \text{ Output: }y \in \{0, 1\}
+\]</span></p>
+<p>We can assign these outputs to correspond to our actual target labels. For instance we might say that <span class="math inline">\(0 = \textbf{"cat"}\)</span> and <span class="math inline">\(1=\textbf{"dog"}\)</span>.</p>
+</section>
+<section id="visualizing-categorical-outputs" class="level2">
+<h2 class="anchored" data-anchor-id="visualizing-categorical-outputs">Visualizing categorical outputs</h2>
+<p>As a simpler example, let’s again consider the fuel efficiency example from the previous lecture. Perhaps our company has set a target fuel efficiency of 30 miles per gallon for our new model and we want to predict whether our design will meet that target. In this case our inputs will be the same as before, but our output will become a binary label:</p>
+<p><span class="math display">\[
+\text{Input: } \mathbf{x}_i= \begin{bmatrix} \text{Weight} \\ \text{Horsepower} \\ \text{Displacement} \\ \text{0-60mph}  \end{bmatrix}, \quad \text{Output: } y_i = \begin{cases} 1: \text{Meets target } (MPG \geq 30) \\ 0:
+\text{Fails to meet target } (MPG &lt; 30) \\  \end{cases}
+\]</span></p>
+<p>We can visualize which observations meet our target efficiency by again plotting weight against MPG and using colors to distinguish observations would have label <span class="math inline">\(1\)</span> vs.&nbsp;label <span class="math inline">\(0\)</span>.</p>
+<div class="cell" data-execution_count="2">
+<div class="cell-output cell-output-display">
+<p><img src="notes_files/figure-html/cell-3-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>With this new output definition our dataset will look like:</p>
+<p><span class="math display">\[
+\text{Honda Accord: } \begin{bmatrix} \text{Weight:} &amp; \text{2500 lbs} \\ \text{Horsepower:} &amp; \text{ 123 HP} \\ \text{Displacement:} &amp; \text{ 2.4 L} \\ \text{0-60mph:} &amp; \text{ 7.8 Sec} \end{bmatrix} \longrightarrow \text{1   (Meets target)}
+\]</span></p>
+<p><span class="math display">\[
+\text{Dodge Aspen: } \begin{bmatrix} \text{Weight:} &amp; \text{3800 lbs} \\ \text{Horsepower:} &amp; \text{ 155 HP} \\ \text{Displacement:} &amp; \text{ 3.2 L} \\ \text{0-60mph:} &amp; \text{ 6.8 Sec} \end{bmatrix} \longrightarrow  \text{0   (Does not meet target)}
+\]</span></p>
+<p><span class="math display">\[
+\vdots \quad \vdots
+\]</span></p>
+<p>In this case, we’ve gotten rid of the <span class="math inline">\(MPG\)</span> output variable and replaced it with a binary output <span class="math inline">\(y_i \in \{0, 1\}\)</span>. If we plot this version of the data, we can see more directly how this <em>classification</em> task differs from the <em>regression</em> task we saw in the last lecture.</p>
+<div class="cell" data-execution_count="3">
+<div class="cell-output cell-output-display">
+<p><img src="notes_files/figure-html/cell-4-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="making-binary-predictions" class="level2">
+<h2 class="anchored" data-anchor-id="making-binary-predictions">Making binary predictions</h2>
+<p>We could fit a linear regression model to our binary data, by simply treating the labels <span class="math inline">\(0\)</span> and <span class="math inline">\(1\)</span> as real-valued outputs. For our fuel economy example, such a model would look like this:</p>
+<div class="cell" data-execution_count="4">
+<div class="cell-output cell-output-display">
+<p><img src="notes_files/figure-html/cell-5-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>However, this doesn’t really address our problem. How do we interpret a prediction of <span class="math inline">\(-1\)</span> or <span class="math inline">\(10\)</span> or <span class="math inline">\(0.5\)</span>?</p>
+<p>A more suitable prediction function would <em>only</em> output one of our two possible labels <span class="math inline">\(\{0, 1\}\)</span>. Fortunately, we can adapt our linear regression function in this way by defining a <em>cutoff</em> (typically 0), as follows:</p>
+<p><span class="math display">\[
+f(\mathbf{x})=\mathbf{x}^T\mathbf{w} \quad \longrightarrow \quad f(\mathbf{x})=\begin{cases} 1\ \text{   if   }\ \mathbf{x}^T\mathbf{w} \geq 0 \\
+0\ \text{   if   }\ \mathbf{x}^T\mathbf{w} &lt; 0\end{cases}
+\]</span></p>
+<p>We might also write this as:</p>
+<p><span class="math display">\[
+f(\mathbf{x}) = \mathbb{I}(\mathbf{x}^T\mathbf{w} \geq 0)
+\]</span></p>
+<p>Where <span class="math inline">\(\mathbb{I}\)</span> is an <em>indicator function</em> that is <span class="math inline">\(1\)</span> if the boolean expression is true and <span class="math inline">\(0\)</span> otherwise.</p>
+<p>This gives us a prediction function that looks like step function in 1 dimension:</p>
+<div class="cell" data-execution_count="5">
+<div class="cell-output cell-output-display">
+<p><img src="notes_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="interpreting-parameters" class="level2">
+<h2 class="anchored" data-anchor-id="interpreting-parameters">Interpreting parameters</h2>
+<p>For our efficiency example, the binary prediction function can be written as:</p>
+<p><span class="math display">\[
+\text{Meets target} = f(\mathbf{x})=
+\]</span></p>
+<p><span class="math display">\[
+\big((\text{weight})w_1 + (\text{horsepower})w_2 + (\text{displacement})w_3 + (\text{0-60mph})w_4 + b\big) \geq 0
+\]</span></p>
+<p>Or in matrix notation:</p>
+<p><span class="math display">\[
+f(\mathbf{x})= \left( \begin{bmatrix} \text{Weight} \\ \text{Horsepower} \\ \text{Displacement} \\ \text{0-60mph} \\ 1 \end{bmatrix} \cdot \begin{bmatrix} w_1 \\ w_2\\ w_3 \\ w_4\\ b\end{bmatrix} \geq  0\right)
+\]</span></p>
+<p>In this form we can see that the <em>sign</em> of each weight parameter determines whether the corresponding feature is more predictive of label <span class="math inline">\(1\)</span> or <span class="math inline">\(0\)</span> and to what extent. For instance, large positive weights indicate features that are very predictive of <span class="math inline">\(1\)</span>.</p>
+</section>
+<section id="geometric-interpretation-of-predictions" class="level2">
+<h2 class="anchored" data-anchor-id="geometric-interpretation-of-predictions">Geometric interpretation of predictions</h2>
+<p>Our binary prediction function also has a geometric interpretation if we think of <span class="math inline">\(\mathbf{w}\)</span> and <span class="math inline">\(\mathbf{x}\)</span> as vectors. Reall that the dot product between the vectors <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\mathbf{w}\)</span> can be written as:</p>
+<p><span class="math display">\[
+\mathbf{x}^T\mathbf{w} = ||\mathbf{x}||_2 ||\mathbf{w}||_2 \cos \theta
+\]</span></p>
+<p>Where <span class="math inline">\(\theta\)</span> is the angle between the two vectors. If the angle between <span class="math inline">\(\mathbf{w}\)</span> and <span class="math inline">\(\mathbf{x}\)</span> is in the range <span class="math inline">\([-\frac{\pi}{2}, \frac{\pi}{2}]\)</span> (or <span class="math inline">\([-90^o, 90^o]\)</span> in degrees), then the prediction will be <span class="math inline">\(1\)</span>, otherwise it will be 0.</p>
+<div class="cell" data-execution_count="6">
+<div class="cell-output cell-output-display">
+<p><img src="notes_files/figure-html/cell-7-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>The blue line in the figure above is the set of points such that:</p>
+<p><span class="math display">\[
+\mathbf{x}^T \mathbf{w} = 0
+\]</span></p>
+<p>thus it represents the boundary between the regions where <span class="math inline">\(1\)</span> and <span class="math inline">\(0\)</span> predictions are made. By definition, it is <em>perpendicular</em> to the direction of <span class="math inline">\(\mathbf{w}\)</span>.</p>
+</section>
+<section id="decision-boundaries" class="level2">
+<h2 class="anchored" data-anchor-id="decision-boundaries">Decision boundaries</h2>
+<p>We can visualize a classification dataset as a function of two variables using color to distinguish between observations with each label. In this example we’ll look at weight and engine displacement.</p>
+<div class="cell" data-execution_count="7">
+<div class="cell-output cell-output-display">
+<p><img src="notes_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>For a binary classification model the <strong>decision boundary</strong> is the border between regions of the input space corresponding to each prediction that we saw in the previous section. For a linear classification model the decision boundary is line or plane:</p>
+<p><span class="math display">\[\mathbf{x}^T\mathbf{w}=0\]</span></p>
+<p>Here we’ll plot the decision boundary in the input space and color code observations by the <em>predicted</em> label.</p>
+<div class="cell" data-execution_count="8">
+<div class="cell-output cell-output-display">
+<p><img src="notes_files/figure-html/cell-9-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="measuring-error" class="level2">
+<h2 class="anchored" data-anchor-id="measuring-error">Measuring error</h2>
+<p>A natural measure for error for binary classifiers is <strong>accuracy</strong>. The <em>accuracy</em> of a prediction function is the fraction of observations where the prediction matches the true output:</p>
+<p><span class="math display">\[
+\textbf{Accuracy: }\quad \frac{\text{\# of correct predictions}}{\text{Total predictions}}
+\]</span></p>
+<p>We can write this in terms of our prediction function as:</p>
+<p><span class="math display">\[
+\textbf{Accuracy} = \frac{1}{N} \sum_{i=1}^N \mathbb{I}\big(f(\mathbf{x}_i) = y_i\big)
+\]</span></p>
+<p>Below we can plot the decision boundary compared to the <em>true</em> outputs and calculate the accuracy of our predictions.</p>
+<div class="cell" data-execution_count="9">
+<div class="cell-output cell-output-stdout">
+<pre><code>Accuracy: 0.8291</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="notes_files/figure-html/cell-10-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="defining-a-loss-function" class="level2">
+<h2 class="anchored" data-anchor-id="defining-a-loss-function">Defining a loss function</h2>
+<p>In the last lecture we saw that we can find an optimal choice of parameters <span class="math inline">\(\mathbf{w}\)</span> for a linear regression model by defining a measure of <em>error</em> or <em>loss</em> for our approximation on our dataset and minimizing that error as a function of <span class="math inline">\(\mathbf{w}\)</span>, either directly or with gradient descent.</p>
+<p><span class="math display">\[
+\mathbf{w}^* = \underset{\mathbf{w}}{\text{argmin}} \ \mathbf{Loss}(\mathbf{w})
+\]</span></p>
+<p>Gradient descent update:</p>
+<p><span class="math display">\[
+\mathbf{w}^{(k+1)} \quad \longleftarrow \quad \mathbf{w}^{(k)} - \alpha \nabla_{\mathbf{w}} \mathbf{Loss}(\mathbf{w})
+\]</span></p>
+<p>We might consider using (negative) accuracy as a loss function or the same mean squared error that we used for linear regression. However, if we tried to minimize one of these losses with gradient descent, we would run into a fundamental problem: the derivative of the indicator function is always <span class="math inline">\(0\)</span>, meaning gradient descent will never update our model.</p>
+<p>To get around this problem, we need to turn back to our <em>maximum likelihood estimation</em> approach.</p>
+</section>
+</section>
+<section id="logistic-regression" class="level1">
+<h1>Logistic Regression</h1>
+<section id="the-bernoulli-distribution" class="level2">
+<h2 class="anchored" data-anchor-id="the-bernoulli-distribution">The Bernoulli distribution</h2>
+<p>The <strong>Bernoulli</strong> distribution is a probability distribution over two possible outcomes. It is often thought of as the distribution of a coin flip, where the probability of heads is defined by a <em>parameter</em> <span class="math inline">\(q\)</span> in the range <span class="math inline">\([0,1]\)</span>.</p>
+<p><span class="math display">\[
+\text{Probability of }\textbf{heads: } \ \ q, \quad \text{Probability of }\textbf{tails: } 1-q
+\]</span></p>
+<p>Again we typically use <span class="math inline">\(0\)</span> and <span class="math inline">\(1\)</span> to denote the two possible outcomes, so we can write the <em>probability mass function</em> (or <em>likelihood</em>) of the Bernoulli distribution as:</p>
+<p><span class="math display">\[
+p(y)=\begin{cases} q\quad\ \ \ \ \ \ \  \text{if }\ y=1\\
+1-q\quad \text{if }\ y=0\\
+\end{cases}\quad q\in[0,1],\ y\in\{0, 1\}
+\]</span></p>
+<p>Using the fact that <span class="math inline">\(y\)</span> can only be <span class="math inline">\(0\)</span> or <span class="math inline">\(1\)</span>, we can write this more compactly as:</p>
+<p><span class="math display">\[
+p(y) = q^y(1-q)^{1-y}
+\]</span></p>
+<p>Recall that the probability mass function tells us the probability of any outcome under our distribution. We can write the log probability mass function as:</p>
+<p><span class="math display">\[
+\log p(y) = y\log q + (1-y)\log(1-q)
+\]</span></p>
+</section>
+<section id="a-probabilistic-model-for-binary-classification" class="level2">
+<h2 class="anchored" data-anchor-id="a-probabilistic-model-for-binary-classification">A probabilistic model for binary classification</h2>
+<p>In the previous lecture we saw that we could define a <em>probabilistic model</em> for outcomes given inputs by making an strong assumption about how the observed outputs were generated. In particular, we assumed that each <span class="math inline">\(y_i\)</span> was sampled from a Normal distribution where the mean was a linear function of the input <span class="math inline">\(\mathbf{x}_i\)</span>.</p>
+<p><span class="math display">\[
+y_i \sim \mathcal{N}(\mathbf{x}_i^T\mathbf{w},\ \sigma^2)
+\]</span></p>
+<p>Given everything we’ve seen, we might want to do the same for binary outputs by defining a probabilistic model where each binary label $y$_i$ is drawn from a Bernoulli where <span class="math inline">\(q\)</span> is a linear function of <span class="math inline">\(\mathbf{x}_i\)</span>. Unfortunately <span class="math inline">\(q\)</span> needs to be restricted to the interval <span class="math inline">\([0,1]\)</span> and a linear function can make no such guarantee about its output.</p>
+<p><span class="math display">\[
+\mathbf{x}^T\mathbf{w}\notin [0, 1] \quad \longrightarrow \quad y_i \sim \mathbf{Bernoulli}(\mathbf{ q=? })\quad
+\]</span></p>
+<p>However, if we had a way to map the outputs of our linear function into the range <span class="math inline">\([0,1]\)</span>, we could define such a model. This means we need a <em>function</em> of the form:</p>
+<p><span class="math display">\[
+\textbf{Need }\ g(x):\ \mathbb{R} \longrightarrow [0,1]
+\]</span></p>
+<p><span class="math display">\[
+\textbf{Input: } x \in \mathbb{R} \longrightarrow \textbf{Output: } y \in [0,1]
+\]</span></p>
+</section>
+<section id="sigmoid-function" class="level2">
+<h2 class="anchored" data-anchor-id="sigmoid-function">Sigmoid function</h2>
+<p>The <strong>sigmoid</strong> (or <strong>logistic</strong>) function is exactly such a function.</p>
+<p><span class="math display">\[
+\sigma(x) = \frac{1}{1+e^{-x}}
+\]</span></p>
+<div class="cell" data-execution_count="10">
+<div class="cell-output cell-output-display">
+<p><img src="notes_files/figure-html/cell-11-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>This “S”-shaped function <em>squashes</em> any real number into the range <span class="math inline">\([0,1]\)</span>. The sigmoid function has a number of other nice properties. It is <em>smooth</em>, <em>monotonic</em> and <em>differentiable</em>. It’s derivative has a convenient form that can be written in terms of the sigmoid function itself.</p>
+<p><span class="math display">\[
+\frac{d}{dx}\sigma(x) = \sigma(x)\big(1-\sigma(x)\big)
+\]</span></p>
+<div class="cell" data-execution_count="11">
+<div class="cell-output cell-output-display">
+<p><img src="notes_files/figure-html/cell-12-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>It’s particularly useful for modeling probabilities because:</p>
+<p><span class="math display">\[
+\sigma(0) = 0.5
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+1-\sigma(x) = \sigma(-x)
+\]</span></p>
+</section>
+<section id="a-probabilistic-model-for-binary-classification-1" class="level2">
+<h2 class="anchored" data-anchor-id="a-probabilistic-model-for-binary-classification-1">A probabilistic model for binary classification</h2>
+<p>With the sigmoid as our mapping function, we can now define our linear probabilistic model for binary classification as:</p>
+<p><span class="math display">\[
+y_i \sim \mathbf{Bernoulli}\big(\mathbf{ \sigma(\mathbf{x}_i^T\mathbf{w} })\big)
+\]</span></p>
+<p>Using this definition, we can easily write out the probability of each output given the input <span class="math inline">\((\mathbf{x}_i)\)</span> and model parameters <span class="math inline">\((\mathbf{w})\)</span>.</p>
+<p><span class="math display">\[
+p(y_i = 1\mid \mathbf{x}_i, \mathbf{w}) = \sigma(\mathbf{x}_i^T\mathbf{w}), \quad p(y_i=0\mid \mathbf{x}_i, \mathbf{w})=1-\sigma(\mathbf{x}_i^T\mathbf{w})=\sigma(-\mathbf{x}_i^T\mathbf{w})
+\]</span></p>
+<p>For our fuel efficiency example, we can plot the predicted probability that our target is met, <span class="math inline">\(p(y=1\mid \mathbf{x}, \mathbf{w})\)</span> under our model as a function of the input (in this case <code>weight</code>). We see that the result is again an s-curve.</p>
+<div class="cell" data-execution_count="12">
+<div class="cell-output cell-output-display">
+<p><img src="notes_files/figure-html/cell-13-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>We call this probabilistic model for binary outputs: <strong>logistic regression</strong>.</p>
+</section>
+<section id="logistic-regression-decision-boundary" class="level2">
+<h2 class="anchored" data-anchor-id="logistic-regression-decision-boundary">Logistic regression decision boundary</h2>
+<p>When we’re making predictions we typically don’t want to sample an output, we want to make a definite prediction. In this case either <span class="math inline">\(0\)</span> or <span class="math inline">\(1\)</span>. A reasonable way to do this is to simply predict the output that is most likely under our model:</p>
+<p><span class="math display">\[
+\textbf{Prediction function: } f(\mathbf{x}) = \begin{cases}1 \ \text{if } p(y=1\mid\mathbf{x}, \mathbf{w}) \geq p(y=0\mid\mathbf{x}, \mathbf{w}) \\
+0 \text{ otherwise} \end{cases}
+\]</span></p>
+<p>Since there’s only two possible outcomes, this is equivalent to checking if the probability of class <span class="math inline">\(1\)</span> is greater than 50%. <span class="math display">\[p(y=1\mid \mathbf{x}, \mathbf{w}) =\sigma(\mathbf{x}^T\mathbf{w})\geq 0.5\]</span></p>
+<p>Since <span class="math inline">\(\sigma(0) =0.5\)</span>, we see that this is equivalent to the decision rule for classification we defined earlier!</p>
+<p><span class="math display">\[
+p(y_i=1)\geq 0.5 \quad \longrightarrow \quad \mathbf{x}^T\mathbf{w}\geq 0
+\]</span></p>
+</section>
+<section id="maximum-likelihood-estimation-review" class="level2">
+<h2 class="anchored" data-anchor-id="maximum-likelihood-estimation-review">Maximum likelihood estimation review</h2>
+<p>Now that we’ve setup our model, we can look at how to find the optimal <span class="math inline">\(\mathbf{w}\)</span> using the principle of <em>maximum likelihood estimation</em>.</p>
+<div class="cell" data-execution_count="13">
+<div class="cell-output cell-output-display">
+<p><img src="notes_files/figure-html/cell-14-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="section" class="level2">
+<h2 class="anchored" data-anchor-id="section"></h2>
+<p>Recall that the <em>maximum likelihood estimate</em> of our parameter <span class="math inline">\(\mathbf{w}\)</span> is the choice of <span class="math inline">\(\mathbf{w}\)</span> that maximizes the (conditional) probability of the data we observed under our model</p>
+<p><span class="math display">\[
+\mathbf{w}^* = \underset{\mathbf{w}}{\text{argmax}} \ p(\mathbf{y} \mid \mathbf{X}, \mathbf{w}) =\underset{\mathbf{w}}{\text{argmax}} \ p(y_1,...,y_N \mid \mathbf{x}_1, ...,\mathbf{x}_N, \mathbf{w}) \]</span></p>
+<p>Again, our model also assumes <em>conditional independence</em> across observations so:</p>
+<p><span class="math display">\[
+p(y_1,...,y_N \mid \mathbf{x}_1, ...,\mathbf{x}_N, \mathbf{w}) = \prod_{i=1}^N p(y_i\mid \mathbf{x}_i, \mathbf{w})
+\]</span></p>
+<p>For convenience, it is typical to frame the optimal value in terms of the <em>negative log-likelihood</em> rather than the likelihood, but the two are equivalent.</p>
+<p><span class="math display">\[
+\underset{\mathbf{w}}{\text{argmax}} \prod_{i=1}^N p(y_i\mid \mathbf{x}_i, \mathbf{w}) = \underset{\mathbf{w}}{\text{argmin}} - \sum_{i=1}^N \log p(y_i \mid \mathbf{x}_i, \mathbf{w}) = \textbf{NLL}(\mathbf{w}, \mathbf{X}, \mathbf{y})
+\]</span></p>
+<p>Thus, the negative log-likelihood is a natural <em>loss function</em> to optimize to find <span class="math inline">\(\mathbf{w}^*\)</span>.</p>
+<p><span class="math display">\[
+\textbf{Loss}(\mathbf{w}) =\textbf{NLL}(\mathbf{w}, \mathbf{X}, \mathbf{y})=- \sum_{i=1}^N \log p(y_i \mid \mathbf{x}_i, \mathbf{w})
+\]</span></p>
+</section>
+<section id="maximum-likelihood-for-logistic-regression" class="level2">
+<h2 class="anchored" data-anchor-id="maximum-likelihood-for-logistic-regression">Maximum likelihood for logistic regression</h2>
+<p>We can now write out the negative log-likelihood for our logistic regression model using the Bernoulli PMF we defined above</p>
+<p><span class="math display">\[
+\mathbf{NLL}(\mathbf{w}, \mathbf{X}, \mathbf{y}) = -\sum_{i=1}^N \bigg[ y_i\log \sigma(\mathbf{x}_i^T\mathbf{w}) + (1-y_i)\log(1-\sigma(\mathbf{x}_i^T\mathbf{w})) \bigg]
+\]</span></p>
+<p>Using our knowledge of the sigmoid function, we can write this even more compactly:</p>
+<p><span class="math display">\[
+\mathbf{NLL}(\mathbf{w}, \mathbf{X}, \mathbf{y}) =-\sum_{i=1}^N \bigg[ y_i\log \sigma(\mathbf{x}_i^T\mathbf{w}) + (1-y_i)\log \sigma(-\mathbf{x}_i^T\mathbf{w}) \bigg]
+\]</span></p>
+<p><span class="math display">\[
+= -\sum_{i=1}^N \log\sigma\big((2y_i-1)\mathbf{x}_i^T\mathbf{w}\big)
+\]</span></p>
+<p>Note that <span class="math inline">\(2y_i-1\)</span> is <span class="math inline">\(1\)</span> if <span class="math inline">\(y_i=1\)</span> and is <span class="math inline">\(-1\)</span> if <span class="math inline">\(y_i=0\)</span>.</p>
+<p>For our logistic regression model, maximum likelihood is intuitive. In the ideal case our model would always predict the correct class with probability 1.</p>
+<p><span class="math display">\[
+\textbf{Best case scenerio: } p(y_i\mid \mathbf{x}_i, \mathbf{w})=1, \quad \forall i \in \{1,...,N\}
+\]</span></p>
+<p>This is generally not possible though due to the constraints of our linear function.</p>
+<p>We can also write the negative log-likelihood compactly using matrix-vector notation.</p>
+<p><span class="math display">\[
+\mathbf{NLL}(\mathbf{w}, \mathbf{X}, \mathbf{y}) = -\mathbf{y}^T\log \sigma(\mathbf{X}\mathbf{w}) - (1-\mathbf{y})^T\log \sigma(-\mathbf{X}\mathbf{w})
+\]</span></p>
+<p>It’s worth noting that in neural network literature, this loss is often called the <strong>binary cross-entropy loss</strong>.</p>
+</section>
+<section id="optimizing-logistic-regression" class="level2">
+<h2 class="anchored" data-anchor-id="optimizing-logistic-regression">Optimizing logistic regression</h2>
+<p>As we saw with linear regression, we can find the optimal paramters <span class="math inline">\(\mathbf{w}^*\)</span> under this loss function using gradient descent:<br>
+<span class="math display">\[
+\mathbf{w}^{(i+1)} \leftarrow \mathbf{w}^{(i)} - \alpha \nabla_{\mathbf{w}} \mathbf{NLL}(\mathbf{w}^{(i)}, \mathbf{X}, \mathbf{y})
+\]</span></p>
+<p>To use this, we first need to derive the gradient of the negative log-likelihood with respect to <span class="math inline">\(\mathbf{w}\)</span>. We’ll start by writing out the simplest version of the NLL that we saw above:</p>
+<p><span class="math display">\[
+\mathbf{NLL}(\mathbf{w}, \mathbf{X}, \mathbf{y}) = -\sum_{i=1}^N \log\sigma\big((2y_i-1)\mathbf{x}_i^T\mathbf{w}\big)
+\]</span></p>
+<p><span class="math display">\[
+\nabla_{\mathbf{w}}\mathbf{NLL}(\mathbf{w}, \mathbf{X}, \mathbf{y}) = \frac{d}{d\mathbf{w}}-\sum_{i=1}^N \log\sigma\big((2y_i-1)\mathbf{x}_i^T\mathbf{w}\big)
+\]</span></p>
+<p>As a first step, recall that the addition rule tells us that the derivative of a sum is a sum of derivatives:</p>
+<p><span class="math display">\[
+= -\sum_{i=1}^N \frac{d}{d\mathbf{w}} \log\sigma\big((2y_i-1)\mathbf{x}_i^T\mathbf{w}\big)
+\]</span></p>
+<p>Next we’ll apply the chain rule to the <span class="math inline">\(\log\)</span> function, remembering that <span class="math inline">\(\frac{d}{dx} \log x = \frac{1}{x}\)</span>:</p>
+<p><span class="math display">\[
+= -\sum_{i=1}^N \bigg(\frac{1}{ \sigma\big((2y_i-1)\mathbf{x}_i^T\mathbf{w}\big) }\bigg)\frac{d}{d\mathbf{w}} \sigma\big((2y_i-1)\mathbf{x}_i^T\mathbf{w}\big)
+\]</span></p>
+<p>Then we can apply the chain rule to the sigmoid function, using the fact that <span class="math inline">\(\frac{d}{dx} \sigma(x)=\sigma(x)(1-\sigma(x))\)</span>:</p>
+<p><span class="math display">\[
+= -\sum_{i=1}^N \bigg(\frac{1}{ \sigma\big((2y_i-1)\mathbf{x}_i^T\mathbf{w}\big) } \bigg)
+\bigg(\sigma\big((2y_i-1)\mathbf{x}_i^T\mathbf{w}\big)\bigg) \bigg(1-\sigma\big((2y_i-1)\mathbf{x}_i^T\mathbf{w}\big)  \bigg)
+\frac{d}{d\mathbf{w}}\big((2y_i-1)\mathbf{x}_i^T\mathbf{w}\big)
+\]</span></p>
+<p>We now see that the first 2 terms cancel!</p>
+<p><span class="math display">\[
+= -\sum_{i=1}^N  \bigg(1-\sigma\big((2y_i-1)\mathbf{x}_i^T\mathbf{w}\big)  \bigg)
+\frac{d}{d\mathbf{w}}\big((2y_i-1)\mathbf{x}_i^T\mathbf{w}\big)
+\]</span></p>
+<p>Finally we’re left with the gradient of a linear function, which is just:</p>
+<p><span class="math display">\[\frac{d}{d\mathbf{w}}\big((2y_i-1)\mathbf{x}_i^T\mathbf{w}\big)=(2y_i-1)\mathbf{x}_i\]</span></p>
+<p>Note that the transpose is irrelevant as we’re no longer signifying a dot-product and <span class="math inline">\(\mathbf{x}_i\)</span> is just a vector. So finally we’re left with</p>
+<p><span class="math display">\[
+\nabla_{\mathbf{w}}\mathbf{NLL}(\mathbf{w}, \mathbf{X}, \mathbf{y}) = -\sum_{i=1}^N  \bigg(1-\sigma\big((2y_i-1)\mathbf{x}_i^T\mathbf{w}\big)  \bigg)
+\bigg((2y_i-1)\mathbf{x}_i \bigg)
+\]</span></p>
+</section>
+<section id="comparing-loss-functions" class="level2">
+<h2 class="anchored" data-anchor-id="comparing-loss-functions">Comparing loss functions</h2>
+<p>Let’s look at how this loss function compares to the mean squared error loss we derived for logistic regression. One way to do this is to visualize the loss for a single observation as a function of the output of <span class="math inline">\(\mathbf{x}^T\mathbf{w}\)</span>. Here we’ll look at the loss for different models trying to predict an output of <span class="math inline">\(y=0\)</span>:</p>
+<p><span class="math display">\[
+\textbf{Let: }\ y=0, \quad z=\mathbf{x}^T\mathbf{w}
+\]</span></p>
+<div class="cell" data-execution_count="14">
+<div class="cell-output cell-output-display">
+<p><img src="notes_files/figure-html/cell-15-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>We see that the squared error loss is best when the output is exactly 0, while the logistic regression NLL wants the output of <span class="math inline">\(\mathbf{x}^T\mathbf{w}\)</span> to be a negative as possible so that <span class="math inline">\(p(y=0\mid \mathbf{x}, \mathbf{w}) \longrightarrow 1\)</span>. Meanwhile the “accuracy” loss has no slope, making it impossible to optimize with gradient descent.</p>
+</section>
+</section>
+<section id="multinomial-logistic-regression" class="level1">
+<h1>Multinomial logistic regression</h1>
+<section id="multi-class-classification" class="level2">
+<h2 class="anchored" data-anchor-id="multi-class-classification">Multi-class classification</h2>
+<p>We’ve now seen a useful model for binary classification, but in many cases we want to predict between many different classes.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="pictures/catdogmouse.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+<p>We will typically use a set of integers <span class="math inline">\(\{1, 2,...,C\}\)</span> to denote the possible outputs for a general categorical function. Therefore we are considering functions of the form:</p>
+<p><span class="math display">\[
+y=f(\mathbf{x}), \quad \text{Input: } \mathbf{x} \in\mathbb{R}^n \longrightarrow \text{ Output: }y \in \{1, 2, ...,C\}
+\]</span></p>
+<p>It’s important to note that we do <em>not</em> want to assume that the <em>ordering</em> of labels is meaningful. For instance if we’re classifying images of animals we might set the labels such that:</p>
+<p><span class="math display">\[
+\textbf{1:  Cat},\quad
+\textbf{2:  Dog},\quad
+\textbf{3:  Mouse}
+\]</span></p>
+<p>But this shouldn’t lead to different results to the case where we assign the labels as:</p>
+<p><span class="math display">\[
+\textbf{1:  Dog},\quad
+\textbf{2:  Mouse},\quad
+\textbf{3:  Cat}
+\]</span></p>
+<p>We call prediction of a categorical output with more than two possibilities <strong>multi-class</strong> <strong>classification</strong>.</p>
+</section>
+<section id="multi-class-prediction-functions" class="level2">
+<h2 class="anchored" data-anchor-id="multi-class-prediction-functions">Multi-class prediction functions</h2>
+<p>A symmetric approach to defining a prediction function for multi-class classification is to define a <em>separate</em> linear function for each class and choose the class whose function gives the largest output.</p>
+<p>If <span class="math inline">\(C\)</span> is the number of possible classes, we will therefore have <span class="math inline">\(C\)</span> different parameter vectors <span class="math inline">\(\mathbf{w}_1,…,\mathbf{w}_C\)</span> and our prediction function will be defined as:</p>
+<p><span class="math display">\[
+f(\mathbf{x}) = \underset{c\in\{1...C\}}{\text{argmax}}\ \mathbf{x}^T\mathbf{w}_c
+\]</span></p>
+<p>For convenience, we can also define a matrix that contains all <span class="math inline">\(C\)</span> parameter vectors:</p>
+<p><span class="math display">\[
+\mathbf{W} = \begin{bmatrix} \mathbf{w}_1^T \\ \mathbf{w}_2^T \\ \vdots \\ \mathbf{w}_C^T\end{bmatrix} = \begin{bmatrix} W_{11} &amp; W_{12} &amp; \dots &amp; W_{1d} \\
+W_{21} &amp; W_{22} &amp; \dots &amp; W_{2d} \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots\\
+W_{C1} &amp; W_{C2} &amp; \dots &amp; W_{Cd}
+\end{bmatrix}
+\]</span></p>
+<p>With this notation, our prediction function becomes:</p>
+<p><span class="math display">\[
+f(\mathbf{x}) = \underset{c\in\{1...C\}}{\text{argmax}}\ (\mathbf{x}^T\mathbf{W}^T)_c, \quad \mathbf{W} \in \mathbb{R}^{C\times d}
+\]</span></p>
+</section>
+<section id="multi-class-decision-boundaries" class="level2">
+<h2 class="anchored" data-anchor-id="multi-class-decision-boundaries">Multi-class decision boundaries</h2>
+<p>If we only have two classes <span class="math inline">\(0\)</span> and <span class="math inline">\(1\)</span>, so <span class="math inline">\(C=2\)</span>, then this multi-class prediction function reduces to the same as our binary prediction function. We can see this by noting that <span class="math inline">\(x &gt; y \equiv x-y&gt;0\)</span>:</p>
+<p><span class="math display">\[
+f(\mathbf{x}) = \underset{c\in\{0,1\}}{\text{argmax}}\ (\mathbf{x}^T\mathbf{W}^T)_c = \mathbb{I}(\mathbf{x}^T\mathbf{w}_1 - \mathbf{x}^T\mathbf{w}_0 \geq 0)
+\]</span></p>
+<p>If we factor out <span class="math inline">\(\mathbf{x}\)</span> we see that we can simply define a new parameter vector in order to get the same decision rule.</p>
+<p><span class="math display">\[
+=\mathbb{I}(\mathbf{x}^T(\mathbf{w}_1 - \mathbf{w}_0) \geq 0) \quad \longrightarrow \quad \mathbb{I}(\mathbf{x}^T\mathbf{w} \geq 0), \quad \mathbf{w}=\mathbf{w}_1-\mathbf{w}_0
+\]</span></p>
+<p>It follows that the decision boundary between any two classes is also linear! We can see this by plotting a prediction function. In this case for the <em>Iris</em> dataset we saw in the homework.</p>
+</section>
+<section id="categorical-distribution" class="level2">
+<h2 class="anchored" data-anchor-id="categorical-distribution">Categorical distribution</h2>
+<p>As a first step towards finding the optimal <span class="math inline">\(\mathbf{W}\)</span> for a multi-class model, let’s look at a distribution over multiple discrete outcomes: the <strong>Categorical</strong> distribution.</p>
+<p>A categorical distribution needs to define a probability for each possible output. We’ll use <span class="math inline">\(q_c\)</span> to denote the probability of output <span class="math inline">\(c\)</span>.</p>
+<p><span class="math display">\[
+p(y=c) = q_c, \quad y\in \{1...C\}
+\]</span></p>
+<p>We can then denote the vector of all <span class="math inline">\(C\)</span> probabilities as <span class="math inline">\(\mathbf{q}\)</span>. Note that in order for this to be valid, every probability needs to be in the range <span class="math inline">\([0,1]\)</span> and the total probability of all outcomes needs to be <span class="math inline">\(1\)</span>, so:</p>
+<p><span class="math display">\[
+\mathbf{q} \in \mathbb{R}^C\quad q_c \geq 0\ \forall c\in \{1...C\}\quad \sum_{c=1}^C q_c=1
+\]</span></p>
+<p>As with the Bernoulli distribution, we can write this in a more compact form. Here we see that the probability of a given outcome is simply the corresponding entry in <span class="math inline">\(\mathbf{q}\)</span></p>
+<p><span class="math display">\[
+p(y)=\prod q_c^{\mathbb{I}(y=c)} = q_y
+\]</span></p>
+<p>Thus the log-probability is simply:</p>
+<p><span class="math display">\[
+\log p(y) = \sum_{c=1}^C \mathbb{I}(y=c)\log q_c = \log q_y
+\]</span></p>
+</section>
+<section id="a-probabilistic-model-for-multi-class-classification" class="level2">
+<h2 class="anchored" data-anchor-id="a-probabilistic-model-for-multi-class-classification">A probabilistic model for multi-class classification</h2>
+<p>With the Categorical distribution defined, we can now ask if we can use it to define a linear probabilistic model for multi-class categorical outputs. As with our other models we’ll consider making the distribution parameter a linear function of our input.</p>
+<p><span class="math display">\[
+y_i\sim \mathbf{Categorical}(\mathbf{q}=?), \quad \mathbf{q}=\mathbf{x}_i^T\mathbf{W}^T?
+\]</span></p>
+<p>However, we once again run into the issue that the output of our linear function likely won’t satisfy the conditions we need for the parameter of a categorical distribution. In particular, the output is not guaranteed to be positive or to sum to <span class="math inline">\(1\)</span>.</p>
+<p><span class="math display">\[
+\mathbf{x}^T\mathbf{W}^T\in \mathbb{R}^C,\quad  q_c \ngeq 0\ \forall c\in \{1...C\}, \quad \sum_{c=1}^C q_c\neq1
+\]</span></p>
+<p>In this case we need a way to map arbitrary vectors to vectors that satisfy these conditions:</p>
+<p><span class="math display">\[
+\textbf{Need }\ f(\mathbf{x}):\ \mathbb{R}^C \longrightarrow [0,\infty)^C,\ \sum_{i=1}^Cf(\mathbf{x})_c = 1
+\]</span></p>
+</section>
+<section id="softmax-function" class="level2">
+<h2 class="anchored" data-anchor-id="softmax-function">Softmax function</h2>
+<p>Such a mapping exists in the <strong>softmax</strong> function. This function maps vectors to positive vectors such that the entries sum to <span class="math inline">\(1\)</span>. Entry <span class="math inline">\(c\)</span> of <span class="math inline">\(\text{softmax}(\mathbf{x})\)</span> can be written as:</p>
+<p><span class="math display">\[
+\text{softmax}(\mathbf{x})_c = \frac{e^{x_c}}{\sum_{j=1}^Ce^{x_j}}
+\]</span></p>
+<p>We can also define the softmax function using vector notation as:</p>
+<p><span class="math display">\[
+\text{softmax}(\mathbf{x}) = \begin{bmatrix}\frac{e^{x_1}}{\sum_{j=1}^Ce^{x_j}} \\ \frac{e^{x_2}}{\sum_{j=1}^Ce^{x_j}} \\ \vdots \\ \frac{e^{x_C}}{\sum_{j=1}^Ce^{x_j}} \end{bmatrix}
+\]</span></p>
+<p>Intuitively, <span class="math inline">\(e^x\)</span> is positive for any <span class="math inline">\(x\)</span>, while dividing by the sum ensure the entries sum to 1 as:</p>
+<p><span class="math display">\[
+\sum_{i=1}^C \frac{e^{x_i}}{\sum_{j=1}^Ce^{x_j}} = \frac{\sum_{i=1}^C e^{x_i}}{\sum_{j=1}^Ce^{x_j}} = 1
+\]</span></p>
+<p>The softmax function also has the nice property that</p>
+<p><span class="math display">\[
+\underset{c\in\{1,...,C\}}{\text{argmax}}\ \mathbf{x}_c = \underset{c\in\{1,...,C\}}{\text{argmax}}\ \text{softmax}(\mathbf{x})_c
+\]</span></p>
+</section>
+<section id="multonomial-logistic-regression" class="level2">
+<h2 class="anchored" data-anchor-id="multonomial-logistic-regression">Multonomial logistic regression</h2>
+<p>With the softmax function we can now define our probabilistic model for categorical labels as:</p>
+<p><span class="math display">\[
+y_i\sim \mathbf{Categorical}\big(\text{softmax}(\mathbf{x}^T\mathbf{W})\big)
+\]</span></p>
+<p>We see that under this assumption, the probability of a particular output <span class="math inline">\((c)\)</span> is:</p>
+<p><span class="math display">\[
+p(y_i=c \mid \mathbf{x}, \mathbf{W}) = \text{softmax}(\mathbf{x}^T\mathbf{W})_c=\frac{e^{\mathbf{x}^T\mathbf{w}_c}}{\sum_{j=1}^Ce^{\mathbf{x}^T\mathbf{w}_j}}
+\]</span></p>
+<p>We call this particular probabilistic model: <strong>multinomial logistic regression</strong></p>
+</section>
+<section id="maximum-likelihood-estimation-for-multinomial-logistic-regression" class="level2">
+<h2 class="anchored" data-anchor-id="maximum-likelihood-estimation-for-multinomial-logistic-regression">Maximum likelihood estimation for multinomial logistic regression</h2>
+<p>We now have everything we need to define our negative log-likelihood loss for the multi-class classification model. Once again our loss is the negative sum of the log-probability of each observed output:</p>
+<p><span class="math display">\[
+\textbf{Loss}(\mathbf{W}) =\textbf{NLL}(\mathbf{W}, \mathbf{X}, \mathbf{y})=- \sum_{i=1}^N \log p(y_i \mid \mathbf{x}_i, \mathbf{W})
+\]</span></p>
+<p>Using the log-probability of the multinomial logistic regression model we get:</p>
+<p><span class="math display">\[
+\textbf{NLL}(\mathbf{W}, \mathbf{X}, \mathbf{y})= -\sum_{i=1}^N \log\ \text{softmax}(\mathbf{x}_i^T\mathbf{W}^T)_{y_i} = -\sum_{i=1}^N  \log \frac{e^{\mathbf{x}_i^T\mathbf{w}_{y_i}}}{\sum_{j=1}^Ce^{\mathbf{x}_i^T\mathbf{w}_{j}}}
+\]</span></p>
+<p>We can simplify this further to:</p>
+<p><span class="math display">\[
+\textbf{NLL}(\mathbf{W}, \mathbf{X}, \mathbf{y})=-\sum_{i=1}^N \bigg(\mathbf{x}_i^T\mathbf{w}_{y_i}- \log\sum_{j=1}^Ce^{\mathbf{x}_i^T\mathbf{w}_{j}}\bigg)
+\]</span></p>
+</section>
+<section id="gradient-descent" class="level2">
+<h2 class="anchored" data-anchor-id="gradient-descent">Gradient descent</h2>
+<p>In this case our parameters are a matrix <span class="math inline">\(\mathbf{W}\)</span>. The concept of a gradient, extends naturally to a matrix; we simply define the gradient matrix such that each element is the partial derivative with respect to the corresponding element of the input. For the multinomial logistic regression loss, the gradient this looks like:</p>
+<p><span class="math display">\[
+\nabla_{\mathbf{W}} \mathbf{NLL}(\mathbf{W}, \mathbf{X}, \mathbf{y})= \begin{bmatrix} \frac{\partial \mathbf{NLL}}{\partial W_{11}} &amp; \frac{\partial \mathbf{NLL}}{\partial W_{12}} &amp; \dots &amp; \frac{\partial \mathbf{NLL}}{\partial W_{1C}} \\
+\frac{\partial \mathbf{NLL}}{\partial W_{21}} &amp; \frac{\partial \mathbf{NLL}}{\partial W_{22}} &amp; \dots &amp; \frac{\partial \mathbf{NLL}}{\partial W_{2C}} \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots\\
+\frac{\partial \mathbf{NLL}}{\partial W_{d1}} &amp; \frac{\partial \mathbf{NLL}}{\partial W_{d2}} &amp; \dots &amp; \frac{\partial \mathbf{NLL}}{\partial W_{dC}}
+\end{bmatrix}
+\]</span></p>
+<p>We can still apply the same gradient descent updates in this case!</p>
+<p><span class="math display">\[
+\mathbf{W}^{(i+1)} \leftarrow \mathbf{W}^{(i)} - \alpha \nabla_{\mathbf{W}} \mathbf{NLL}(\mathbf{W}^{(i)}, \mathbf{X}, \mathbf{y})
+\]</span></p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,0 +1,25 @@
+---
+title: "Hint for homework 1: Q7"
+---
+
+For this question we are interested in simplifying an expression into matrix/vector notation. In order to do this it may be first helpful to think about how we went the other direction: matrix/vector notation to expanded notation.
+
+Recall that a *dot product* between two vectors $\mathbf{x}$ and $\mathbf{y}$, can be written explicitly from its definition as:
+
+$$
+\mathbf{x}^T\mathbf{y} = \sum_{i=1}^n x_iy_i
+$$
+
+Therefore if we see something like the summation on the right in an expression, we can replace it with the more compact dot product notation.
+
+If we have the expression $\mathbf{A} \mathbf{x}$, where $\mathbf{A}$ is a matrix and $\mathbf{x}$ is a vector, we know that the result of this multiplication will be a vector. Let's call this vector $\mathbf{c}$, so that $\mathbf{A}\mathbf{x}=\mathbf{c}$.
+
+We know from the definition of matrix-multiplication that each element of $\mathbf{c}$ can be written as the following summation:
+
+$$
+c_i = \sum_{j=1}^n A_{ij}x_j
+$$
+
+Therefore, if we saw such a summation in an expression, we could temporarily replace it with $c_i$, knowing that we defined $\mathbf{c}$ as $\mathbf{c}=\mathbf{A}\mathbf{x}$. Try doing this as the first step in the homework, then try repeating this idea until you have something that you can write compactly in matrix/vector notation.
+
+When writing you final answer make sure to write the final expression in terms of the original variables $(\mathbf{A}, \mathbf{x}, \mathbf{b})$. E.g. if you substituted $\mathbf{c}$ for $\mathbf{A}\mathbf{x}$, make sure to substitute it back in the answer.

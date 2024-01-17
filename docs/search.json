@@ -963,7 +963,7 @@
     "href": "lecture1-background/notes.html#histograms",
     "title": "Lecture 1: Introduction to Neural Networks",
     "section": "Histograms",
-    "text": "Histograms\nHistograms are also useful visualizations:\n\nplt.hist(y2, bins=20)\n\n(array([27., 12.,  9.,  7.,  7.,  6.,  5.,  4.,  2.,  2.,  3.,  2.,  2.,\n         1.,  2.,  2.,  2.,  1.,  2.,  2.]),\n array([8.50253376e-06, 1.04174744e-01, 2.08340986e-01, 3.12507227e-01,\n        4.16673469e-01, 5.20839710e-01, 6.25005952e-01, 7.29172193e-01,\n        8.33338435e-01, 9.37504676e-01, 1.04167092e+00, 1.14583716e+00,\n        1.25000340e+00, 1.35416964e+00, 1.45833588e+00, 1.56250213e+00,\n        1.66666837e+00, 1.77083461e+00, 1.87500085e+00, 1.97916709e+00,\n        2.08333333e+00]),\n &lt;BarContainer object of 20 artists&gt;)\n\n\n\n\n\nThe outputs of hist include the bin locations, the number of data in each bin, and the “handles” to the plot elements to manipulate their appearance, if desired."
+    "text": "Histograms\nHistograms are also useful visualizations:\n\nplt.hist(y2, bins=20);\n\n\n\n\nThe outputs of hist include the bin locations, the number of data in each bin, and the “handles” to the plot elements to manipulate their appearance, if desired."
   },
   {
     "objectID": "lecture1-background/notes.html#subplots-and-plot-sizes",
@@ -1418,7 +1418,7 @@
     "href": "lecture3-logistic-regression/notes.html",
     "title": "Lecture 3: Logistic regression",
     "section": "",
-    "text": "Manim Community v0.17.3"
+    "text": "Manim Community v0.18.0"
   },
   {
     "objectID": "lecture3-logistic-regression/notes.html#partial-derivatives",
@@ -3728,7 +3728,7 @@
     "href": "lecture1-background/notes.html#legends",
     "title": "Lecture 1: Introduction to Neural Networks",
     "section": "Legends",
-    "text": "Legends\nWhen plotting multiple point sets or curves we’ll likely want to be able to distinguish what each plot represents. We can do this by specifying a label for each plot, then adding a legend that tells us what each represents.\n\nx_values = np.linspace(0,8,100)\ny1 = np.sin(x_values)         # sinusoidal function\ny2 = (x_values - 3)**2 / 12   # a simple quadratic curve\ny3 = 0.5*x_values - 1.0       # a simple linear function\n\nplt.plot(x_values, y1, 'b-', label='sin(x)');  # plot two curves\nplt.plot(x_values, y2, 'g--', label='$(x-3)^2 / 12$')\nplt.plot(x_values, y3, 'r:', label='$.5x-1$'); # add a curve to the plot\nplt.legend()\n\n&lt;matplotlib.legend.Legend at 0x17e859850&gt;\n\n\n\n\n\nHere surrounding text in a label with $ $ allows us to write mathamatical equations as in LaTex!"
+    "text": "Legends\nWhen plotting multiple point sets or curves we’ll likely want to be able to distinguish what each plot represents. We can do this by specifying a label for each plot, then adding a legend that tells us what each represents.\n\nx_values = np.linspace(0,8,100)\ny1 = np.sin(x_values)         # sinusoidal function\ny2 = (x_values - 3)**2 / 12   # a simple quadratic curve\ny3 = 0.5*x_values - 1.0       # a simple linear function\n\nplt.plot(x_values, y1, 'b-', label='sin(x)');  # plot two curves\nplt.plot(x_values, y2, 'g--', label='$(x-3)^2 / 12$')\nplt.plot(x_values, y3, 'r:', label='$.5x-1$'); # add a curve to the plot\nplt.legend();\n\n\n\n\nHere surrounding text in a label with $ $ allows us to write mathamatical equations as in LaTex!"
   },
   {
     "objectID": "index.html#homework-assignments-60-of-course-grade",
@@ -3799,5 +3799,19 @@
     "title": "Course Syllabus",
     "section": "Submitting PDFs to Gradescope",
     "text": "Submitting PDFs to Gradescope\nEach complete homework notebook should be submitted as a PDF file to Gradescope. This primarily where homeworks will be graded and where grades and regrade requests will be handeled. Jupyter notebooks can be converted to PDFs either through VSCode (instructions here), or via online tools such as this one."
+  },
+  {
+    "objectID": "lecture1-background/notes.html#titles-and-labels",
+    "href": "lecture1-background/notes.html#titles-and-labels",
+    "title": "Lecture 1: Introduction to Neural Networks",
+    "section": "Titles and labels",
+    "text": "Titles and labels\nTypically we would like those viewing our plot to understand what the axes mean! We can label the x and y axes using plt.xlabel() and plt.ylabel() respectively. We can also set a title for our plot using plt.title()\n\nx_values = np.linspace(0,8,100)\ny = np.sin(x_values)          # sinusoidal function\n\nplt.plot(x_values, y, 'b-');  # plot two curves\nplt.xlabel('x')               # set the label for the x-axis\nplt.ylabel('$sin(x)$')        # set the label for the y-axis\nplt.title('x vs. $sin(x)$');  # set the title for the plot"
+  },
+  {
+    "objectID": "lecture1-background/notes.html#subplot-options",
+    "href": "lecture1-background/notes.html#subplot-options",
+    "title": "Lecture 1: Introduction to Neural Networks",
+    "section": "Subplot options",
+    "text": "Subplot options\nIf we want to add legends or labeling to individual subplots we need to call methods of the individual subplot objects. In this case, the methods we need change a bit! Rather than using plt.title(), plt.xlabel() and plt.ylabel(), we need to use the methods ax.set_title(), ax.set_xlabel() and ax.set_ylabel()\n\nfig,ax = plt.subplots(1,2, figsize=(8.0, 2.0))      # make a 1 x 3 grid of plots:\nax[0].plot(x_values, y1, 'b-', label='sin(x)');   # plot y1 in the first subplot\nax[1].plot(x_values, y2, 'g--', label='$(x-3)^2 / 12$');  #   y2 in the 2nd\n\n# Add titles to both subplots\nax[0].set_title('x vs. sin(x)')\nax[1].set_title('x vs. $(x-3)^2 / 12$')\n\n# Add axis labels\nax[0].set_xlabel('x')\nax[0].set_ylabel('sin(x)')\n\nax[1].set_xlabel('x')\nax[1].set_ylabel('$(x-3)^2 / 12$')\n\n# Create legends for both subplots\nax[0].legend()\nax[1].legend();"
   }
 ]

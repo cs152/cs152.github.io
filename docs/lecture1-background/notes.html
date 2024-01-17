@@ -127,16 +127,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Calendar</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://github.com/orgs/CS152-Neural-Networks-Fall-2023/repositories" rel="" target="">
+    <a class="nav-link" href="https://drive.google.com/drive/folders/1JFhwmcFBTHiRbfhQ0VRDj9xIPxFpHuWj?usp=drive_link" rel="" target="">
  <span class="menu-text">Homeworks</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://harveymuddcollege.instructure.com/courses/615/" rel="" target="">
- <span class="menu-text">Canvas</span></a>
+    <a class="nav-link" href="../assignments/final-project/outline.html" rel="" target="">
+ <span class="menu-text">Project</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://github.com/orgs/CS152-Neural-Networks-Fall-2023/" rel="" target="">
+    <a class="nav-link" href="https://github.com/orgs/CS152/" rel="" target="">
  <span class="menu-text">Github</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://www.gradescope.com/courses/710173" rel="" target="">
+ <span class="menu-text">Gradescope</span></a>
   </li>  
 </ul>
             <div class="quarto-navbar-tools ms-auto">
@@ -198,9 +202,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started">Getting started</a></li>
   <li><a href="#scatterplots-and-line-plots" id="toc-scatterplots-and-line-plots" class="nav-link" data-scroll-target="#scatterplots-and-line-plots">Scatterplots and line plots</a></li>
   <li><a href="#legends" id="toc-legends" class="nav-link" data-scroll-target="#legends">Legends</a></li>
-  <li><a href="#titles" id="toc-titles" class="nav-link" data-scroll-target="#titles">Titles</a></li>
+  <li><a href="#titles-and-labels" id="toc-titles-and-labels" class="nav-link" data-scroll-target="#titles-and-labels">Titles and labels</a></li>
   <li><a href="#histograms" id="toc-histograms" class="nav-link" data-scroll-target="#histograms">Histograms</a></li>
   <li><a href="#subplots-and-plot-sizes" id="toc-subplots-and-plot-sizes" class="nav-link" data-scroll-target="#subplots-and-plot-sizes">Subplots and plot sizes</a></li>
+  <li><a href="#subplot-options" id="toc-subplot-options" class="nav-link" data-scroll-target="#subplot-options">Subplot options</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -1303,7 +1308,7 @@ f(\mathbf{x}+\mathbf{\epsilon}) \approx f(\mathbf{x}) + \frac{df}{d\mathbf{x}} \
 <span id="cb100-2"><a href="#cb100-2" aria-hidden="true" tabindex="-1"></a>y_values <span class="op">=</span> np.random.randn(<span class="dv">1</span>,<span class="dv">10</span>)  <span class="co"># Gaussian distribution</span></span>
 <span id="cb100-3"><a href="#cb100-3" aria-hidden="true" tabindex="-1"></a>plt.plot(x_values, y_values, <span class="st">'ko'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="notes_files/figure-html/cell-62-output-1.png" width="590" height="414"></p>
+<p><img src="notes_files/figure-html/cell-62-output-1.png" width="582" height="411"></p>
 </div>
 </div>
 <p>The string determines the plot appearance -- in this case, black circles. You can use color strings (‘r’, ‘g’, ‘b’, ‘m’, ‘c’, ‘y’, ...) or use the “Color” keyword to specify an RGB color. Marker appearance (‘o’,‘s’,‘v’,‘.’, ...) controls how the points look.</p>
@@ -1362,38 +1367,36 @@ f(\mathbf{x}+\mathbf{\epsilon}) \approx f(\mathbf{x}) + \frac{df}{d\mathbf{x}} \
 <span id="cb105-6"><a href="#cb105-6" aria-hidden="true" tabindex="-1"></a>plt.plot(x_values, y1, <span class="st">'b-'</span>, label<span class="op">=</span><span class="st">'sin(x)'</span>)<span class="op">;</span>  <span class="co"># plot two curves</span></span>
 <span id="cb105-7"><a href="#cb105-7" aria-hidden="true" tabindex="-1"></a>plt.plot(x_values, y2, <span class="st">'g--'</span>, label<span class="op">=</span><span class="st">'$(x-3)^2 / 12$'</span>)</span>
 <span id="cb105-8"><a href="#cb105-8" aria-hidden="true" tabindex="-1"></a>plt.plot(x_values, y3, <span class="st">'r:'</span>, label<span class="op">=</span><span class="st">'$.5x-1$'</span>)<span class="op">;</span> <span class="co"># add a curve to the plot</span></span>
-<span id="cb105-9"><a href="#cb105-9" aria-hidden="true" tabindex="-1"></a>plt.legend()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="64">
-<pre><code>&lt;matplotlib.legend.Legend at 0x17e859850&gt;</code></pre>
-</div>
+<span id="cb105-9"><a href="#cb105-9" aria-hidden="true" tabindex="-1"></a>plt.legend()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="notes_files/figure-html/cell-66-output-2.png" width="582" height="411"></p>
+<p><img src="notes_files/figure-html/cell-66-output-1.png" width="582" height="411"></p>
 </div>
 </div>
 <p>Here surrounding text in a label with <code>$ $</code> allows us to write mathamatical equations as in LaTex!</p>
 </section>
-<section id="titles" class="level2">
-<h2 class="anchored" data-anchor-id="titles">Titles</h2>
-<p>we</p>
+<section id="titles-and-labels" class="level2">
+<h2 class="anchored" data-anchor-id="titles-and-labels">Titles and labels</h2>
+<p>Typically we would like those viewing our plot to understand what the axes mean! We can label the x and y axes using <code>plt.xlabel()</code> and <code>plt.ylabel()</code> respectively. We can also set a title for our plot using <code>plt.title()</code></p>
+<div class="cell" data-execution_count="66">
+<div class="sourceCode cell-code" id="cb106"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a>x_values <span class="op">=</span> np.linspace(<span class="dv">0</span>,<span class="dv">8</span>,<span class="dv">100</span>)</span>
+<span id="cb106-2"><a href="#cb106-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.sin(x_values)          <span class="co"># sinusoidal function</span></span>
+<span id="cb106-3"><a href="#cb106-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb106-4"><a href="#cb106-4" aria-hidden="true" tabindex="-1"></a>plt.plot(x_values, y, <span class="st">'b-'</span>)<span class="op">;</span>  <span class="co"># plot two curves</span></span>
+<span id="cb106-5"><a href="#cb106-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'x'</span>)               <span class="co"># set the label for the x-axis</span></span>
+<span id="cb106-6"><a href="#cb106-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'$sin(x)$'</span>)        <span class="co"># set the label for the y-axis</span></span>
+<span id="cb106-7"><a href="#cb106-7" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'x vs. $sin(x)$'</span>)<span class="op">;</span>  <span class="co"># set the title for the plot</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="notes_files/figure-html/cell-67-output-1.png" width="609" height="450"></p>
+</div>
+</div>
 </section>
 <section id="histograms" class="level2">
 <h2 class="anchored" data-anchor-id="histograms">Histograms</h2>
 <p>Histograms are also useful visualizations:</p>
-<div class="cell" data-execution_count="66">
-<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a>plt.hist(y2, bins<span class="op">=</span><span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="65">
-<pre><code>(array([27., 12.,  9.,  7.,  7.,  6.,  5.,  4.,  2.,  2.,  3.,  2.,  2.,
-         1.,  2.,  2.,  2.,  1.,  2.,  2.]),
- array([8.50253376e-06, 1.04174744e-01, 2.08340986e-01, 3.12507227e-01,
-        4.16673469e-01, 5.20839710e-01, 6.25005952e-01, 7.29172193e-01,
-        8.33338435e-01, 9.37504676e-01, 1.04167092e+00, 1.14583716e+00,
-        1.25000340e+00, 1.35416964e+00, 1.45833588e+00, 1.56250213e+00,
-        1.66666837e+00, 1.77083461e+00, 1.87500085e+00, 1.97916709e+00,
-        2.08333333e+00]),
- &lt;BarContainer object of 20 artists&gt;)</code></pre>
-</div>
+<div class="cell" data-execution_count="67">
+<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a>plt.hist(y2, bins<span class="op">=</span><span class="dv">20</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="notes_files/figure-html/cell-67-output-2.png" width="566" height="411"></p>
+<p><img src="notes_files/figure-html/cell-68-output-1.png" width="566" height="411"></p>
 </div>
 </div>
 <p>The outputs of hist include the bin locations, the number of data in each bin, and the “handles” to the plot elements to manipulate their appearance, if desired.</p>
@@ -1402,13 +1405,40 @@ f(\mathbf{x}+\mathbf{\epsilon}) \approx f(\mathbf{x}) + \frac{df}{d\mathbf{x}} \
 <h2 class="anchored" data-anchor-id="subplots-and-plot-sizes">Subplots and plot sizes</h2>
 <p>It is often useful to put more than one plot together in a group; you can do this using the subplot function. There are various options; for example, “sharex” and “sharey” allow multiple plots to share a single axis range (or, you can set it manually, of course).</p>
 <p>I often find it necessary to also change the geometry of the figure for multiple subplots -- although this is more generally useful as well, if you have a plot that looks better wider and shorter, for example.</p>
-<div class="cell" data-execution_count="67">
-<div class="sourceCode cell-code" id="cb109"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a>fig,ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">3</span>, figsize<span class="op">=</span>(<span class="fl">8.0</span>, <span class="fl">2.0</span>))      <span class="co"># make a 1 x 3 grid of plots:</span></span>
-<span id="cb109-2"><a href="#cb109-2" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].plot(x_values, y1, <span class="st">'b-'</span>)<span class="op">;</span>   <span class="co"># plot y1 in the first subplot</span></span>
-<span id="cb109-3"><a href="#cb109-3" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].plot(x_values, y2, <span class="st">'g--'</span>)<span class="op">;</span>  <span class="co">#   y2 in the 2nd</span></span>
-<span id="cb109-4"><a href="#cb109-4" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">2</span>].plot(x_values, y3, <span class="st">'r:'</span>)<span class="op">;</span>   <span class="co">#   and y3 in the last</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="68">
+<div class="sourceCode cell-code" id="cb108"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a>fig,ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">3</span>, figsize<span class="op">=</span>(<span class="fl">8.0</span>, <span class="fl">2.0</span>))      <span class="co"># make a 1 x 3 grid of plots:</span></span>
+<span id="cb108-2"><a href="#cb108-2" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].plot(x_values, y1, <span class="st">'b-'</span>)<span class="op">;</span>   <span class="co"># plot y1 in the first subplot</span></span>
+<span id="cb108-3"><a href="#cb108-3" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].plot(x_values, y2, <span class="st">'g--'</span>)<span class="op">;</span>  <span class="co">#   y2 in the 2nd</span></span>
+<span id="cb108-4"><a href="#cb108-4" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">2</span>].plot(x_values, y3, <span class="st">'r:'</span>)<span class="op">;</span>   <span class="co">#   and y3 in the last</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="notes_files/figure-html/cell-68-output-1.png" width="656" height="189"></p>
+<p><img src="notes_files/figure-html/cell-69-output-1.png" width="656" height="189"></p>
+</div>
+</div>
+</section>
+<section id="subplot-options" class="level2">
+<h2 class="anchored" data-anchor-id="subplot-options">Subplot options</h2>
+<p>If we want to add legends or labeling to individual subplots we need to call methods of the individual subplot objects. In this case, the methods we need change a bit! Rather than using <code>plt.title()</code>, <code>plt.xlabel()</code> and <code>plt.ylabel()</code>, we need to use the methods <code>ax.set_title()</code>, <code>ax.set_xlabel()</code> and <code>ax.set_ylabel()</code></p>
+<div class="cell" data-execution_count="69">
+<div class="sourceCode cell-code" id="cb109"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a>fig,ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">2</span>, figsize<span class="op">=</span>(<span class="fl">8.0</span>, <span class="fl">2.0</span>))      <span class="co"># make a 1 x 3 grid of plots:</span></span>
+<span id="cb109-2"><a href="#cb109-2" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].plot(x_values, y1, <span class="st">'b-'</span>, label<span class="op">=</span><span class="st">'sin(x)'</span>)<span class="op">;</span>   <span class="co"># plot y1 in the first subplot</span></span>
+<span id="cb109-3"><a href="#cb109-3" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].plot(x_values, y2, <span class="st">'g--'</span>, label<span class="op">=</span><span class="st">'$(x-3)^2 / 12$'</span>)<span class="op">;</span>  <span class="co">#   y2 in the 2nd</span></span>
+<span id="cb109-4"><a href="#cb109-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb109-5"><a href="#cb109-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Add titles to both subplots</span></span>
+<span id="cb109-6"><a href="#cb109-6" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_title(<span class="st">'x vs. sin(x)'</span>)</span>
+<span id="cb109-7"><a href="#cb109-7" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_title(<span class="st">'x vs. $(x-3)^2 / 12$'</span>)</span>
+<span id="cb109-8"><a href="#cb109-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb109-9"><a href="#cb109-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Add axis labels</span></span>
+<span id="cb109-10"><a href="#cb109-10" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_xlabel(<span class="st">'x'</span>)</span>
+<span id="cb109-11"><a href="#cb109-11" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_ylabel(<span class="st">'sin(x)'</span>)</span>
+<span id="cb109-12"><a href="#cb109-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb109-13"><a href="#cb109-13" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_xlabel(<span class="st">'x'</span>)</span>
+<span id="cb109-14"><a href="#cb109-14" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_ylabel(<span class="st">'$(x-3)^2 / 12$'</span>)</span>
+<span id="cb109-15"><a href="#cb109-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb109-16"><a href="#cb109-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Create legends for both subplots</span></span>
+<span id="cb109-17"><a href="#cb109-17" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].legend()</span>
+<span id="cb109-18"><a href="#cb109-18" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].legend()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="notes_files/figure-html/cell-70-output-1.png" width="674" height="231"></p>
 </div>
 </div>
 

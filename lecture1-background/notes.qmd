@@ -1215,19 +1215,29 @@ y3 = 0.5*x_values - 1.0       # a simple linear function
 plt.plot(x_values, y1, 'b-', label='sin(x)');  # plot two curves
 plt.plot(x_values, y2, 'g--', label='$(x-3)^2 / 12$')
 plt.plot(x_values, y3, 'r:', label='$.5x-1$'); # add a curve to the plot
-plt.legend()
+plt.legend();
 ```
 Here surrounding text in a label with `$ $` allows us to write mathamatical equations as in LaTex!
 
-## Titles
-we
+## Titles and labels
+Typically we would like those viewing our plot to understand what the axes mean! We can label the x and y axes using `plt.xlabel()` and `plt.ylabel()` respectively. We can also set a title for our plot using `plt.title()`
+
+```{python}
+x_values = np.linspace(0,8,100)
+y = np.sin(x_values)          # sinusoidal function
+
+plt.plot(x_values, y, 'b-');  # plot two curves
+plt.xlabel('x')               # set the label for the x-axis
+plt.ylabel('$sin(x)$')        # set the label for the y-axis
+plt.title('x vs. $sin(x)$');  # set the title for the plot
+```
 
 ## Histograms
 
 Histograms are also useful visualizations:
 
 ```{python}
-plt.hist(y2, bins=20)
+plt.hist(y2, bins=20);
 ```
 
 The outputs of hist include the bin locations, the number of data in each bin, and the "handles" to the plot elements to manipulate their appearance, if desired.
@@ -1243,5 +1253,30 @@ fig,ax = plt.subplots(1,3, figsize=(8.0, 2.0))      # make a 1 x 3 grid of plots
 ax[0].plot(x_values, y1, 'b-');   # plot y1 in the first subplot
 ax[1].plot(x_values, y2, 'g--');  #   y2 in the 2nd
 ax[2].plot(x_values, y3, 'r:');   #   and y3 in the last
+
+```
+
+## Subplot options
+If we want to add legends or labeling to individual subplots we need to call methods of the individual subplot objects. In this case, the methods we need change a bit! Rather than using `plt.title()`, `plt.xlabel()` and `plt.ylabel()`, we need to use the methods `ax.set_title()`, `ax.set_xlabel()` and `ax.set_ylabel()`
+
+```{python}
+fig,ax = plt.subplots(1,2, figsize=(8.0, 2.0))      # make a 1 x 3 grid of plots:
+ax[0].plot(x_values, y1, 'b-', label='sin(x)');   # plot y1 in the first subplot
+ax[1].plot(x_values, y2, 'g--', label='$(x-3)^2 / 12$');  #   y2 in the 2nd
+
+# Add titles to both subplots
+ax[0].set_title('x vs. sin(x)')
+ax[1].set_title('x vs. $(x-3)^2 / 12$')
+
+# Add axis labels
+ax[0].set_xlabel('x')
+ax[0].set_ylabel('sin(x)')
+
+ax[1].set_xlabel('x')
+ax[1].set_ylabel('$(x-3)^2 / 12$')
+
+# Create legends for both subplots
+ax[0].legend()
+ax[1].legend();
 
 ```

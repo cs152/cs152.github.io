@@ -1,16 +1,22 @@
 ---
-title: "Final project outline"
+title: "Final project"
 format:
     html:
         toc: true
         toc-depth: 3
 ---
 
-## Proposal (**Due Wednesday 11/8 before class**)
+## Form groups (**Due Wednesday 2/8 11:59pm**)
+The first step for the project will be to form a group and think about possible project topics. For this stage you should:
 
-The first step for the project will be to form a group and choose a project topic. For your proposal you should:
+-   Form a group of 2-4 students (ideally 3) and choose a cool team name. If you would like help finding a group, please email me! If you would like to individually, you must get prior approval from the professor.
 
--   Form a group of 2-4 students (ideally 3) and choose a cool team name. If you would like help finding a group, please email me!
+-   Submit a topic exploration discussion. *Details forthcoming!*
+
+## Proposal (**Due Wednesday 3/21 11:59pm**)
+
+The next step for the project will be to formally propose a project topic, for this milestone you should:
+
 -   Choose a project topic. You may choose a topic from the list below or you may propose your own topic.
 -   With your team, write a short (up to 1 page) proposal for your project and submit it on gradescope. Your proposal should include:
     -   The names of the team members
@@ -18,11 +24,11 @@ The first step for the project will be to form a group and choose a project topi
     -   A one paragraph description of how you intend to approach this problem and any challenges you forsee. This should include identifying datasets that you might use, identifying at least one referance (academic paper or website) for a technique you intend to try.
     -   A one paragraph description of how you will evaluate success for your application.
 
-## Check-in (**Due Monday 11/20 before class**)
+## Check-in (**Due Monday 4/22 11:59pm**)
 
 As a progress report you and your team will submit a short (1 page) summery of progress on Gradescope. This summary will include: - A high-level description of any updates you have made to the goals of your project. - A description of what methods you have tried and any preliminary results. - A timeline for finishing the remaining goals of your project. - A brief description of the contributions made by each team member.
 
-## Final deliverables (**Due 12/12, 11:59pm**)
+## Final deliverables (**Due 5/3, 11:59pm**)
 
 Please see the final project template [here](./CS152_Project_Template.pdf), which includes instructions and guidelines for what to submit. Submissions will be through gradescope.
 

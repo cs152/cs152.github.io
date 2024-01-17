@@ -749,7 +749,7 @@ ax.set_yticks([])
 
 for param, color in zip(other_lines, [BLACK, BLUE, ORANGE, GREEN, PURPLE]):
             w, b = param
-            ax.scatter(w, b, c=color, s=75)
+            ax.scatter(w, b, c=color.to_rgb(), s=75)
 plt.xlabel('$w_1$')
 plt.ylabel('$b$')
 plt.title('$\mathbf{Loss}(\mathbf{w})$')
@@ -809,7 +809,7 @@ other_lines = [(1.25, -1.5)]
 
 for param, color in zip(other_lines, [BLACK, BLUE, ORANGE, GREEN, PURPLE]):
             w, b = param
-            ax.scatter(w, b, c=color, s=75, zorder=4)
+            ax.scatter(w, b, c=color.to_rgb(), s=75, zorder=4)
             dw, db = -gloss(np.array([w, b]))
             prop = dict(arrowstyle="-|>,head_width=0.4,head_length=0.8",
             shrinkA=0,shrinkB=0)
@@ -871,7 +871,7 @@ ax.set_yticks([])
 w, b = (1.25, -1.5)
 
 for i in range(6):
-    ax.scatter(w, b, c=color, s=75, zorder=4)
+    ax.scatter(w, b, c=color.to_rgb(), s=75, zorder=4)
     dw, db = -gloss(np.array([w, b]), x, y)
     db = db + max(0, 0.05 * (5- i))
     prop = dict(arrowstyle="-|>,head_width=0.4,head_length=0.8",
@@ -957,7 +957,7 @@ ax.set_yticks([])
 w, b = (1.25, -1.5)
 
 for i in range(12):
-    ax.scatter(w, b, c=color, s=75, zorder=4)
+    ax.scatter(w, b, c=color.to_rgb(), s=75, zorder=4)
     dw, db = -gloss(np.array([w, b]), x, y)
     db = db + max(0, 0.05 * (5- i))
     prop = dict(arrowstyle="-|>,head_width=0.4,head_length=0.8",
@@ -1011,7 +1011,7 @@ ax.set_yticks([])
 w, b = (1.25, -1.5)
 
 for i in range(12):
-    ax.scatter(w, b, c=color, s=75, zorder=4)
+    ax.scatter(w, b, c=color.to_rgb(), s=75, zorder=4)
     dw, db = -gloss(np.array([w, b]), x, y)
     db = db + max(0, 0.05 * (5- i))
     prop = dict(arrowstyle="-|>,head_width=0.4,head_length=0.8",
@@ -1100,7 +1100,7 @@ ax.set_yticks([])
 w, b = (1.25, -1.5)
 
 for i in range(12):
-    ax.scatter(w, b, c=color, s=75, zorder=4)
+    ax.scatter(w, b, c=color.to_rgb(), s=75, zorder=4)
     dw, db = -gloss(np.array([w, b]), x, y)
     db = db + max(0, 0.01 * (10 - i))
     prop = dict(arrowstyle="-|>,head_width=0.4,head_length=0.8",
@@ -1152,7 +1152,7 @@ ax.set_yticks([])
 w, b = (1.25, -1.5)
 
 for i in range(12):
-    ax.scatter(w, b, c=color, s=75, zorder=4)
+    ax.scatter(w, b, c=color.to_rgb(), s=75, zorder=4)
     dw, db = -gloss(np.array([w, b]), x, y)
     db = db + max(0, 0.01 * (10 - i))
     prop = dict(arrowstyle="-|>,head_width=0.4,head_length=0.8",

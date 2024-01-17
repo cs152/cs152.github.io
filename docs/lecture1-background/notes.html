@@ -92,6 +92,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-submit-button-title": "Submit"
   }
 }</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -195,6 +198,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started">Getting started</a></li>
   <li><a href="#scatterplots-and-line-plots" id="toc-scatterplots-and-line-plots" class="nav-link" data-scroll-target="#scatterplots-and-line-plots">Scatterplots and line plots</a></li>
   <li><a href="#legends" id="toc-legends" class="nav-link" data-scroll-target="#legends">Legends</a></li>
+  <li><a href="#titles" id="toc-titles" class="nav-link" data-scroll-target="#titles">Titles</a></li>
   <li><a href="#histograms" id="toc-histograms" class="nav-link" data-scroll-target="#histograms">Histograms</a></li>
   <li><a href="#subplots-and-plot-sizes" id="toc-subplots-and-plot-sizes" class="nav-link" data-scroll-target="#subplots-and-plot-sizes">Subplots and plot sizes</a></li>
   </ul></li>
@@ -318,11 +322,18 @@ Other useful vector creation functions
 <p>We may say that <span class="math inline">\(\mathbf{x} \in \mathbb{R}^n\)</span> to mean that <span class="math inline">\(\mathbf{x}\)</span> is in the set of vectors with <span class="math inline">\(n\)</span> real-valued entries. In numpy we can access individual elements of a vector using <code>[]</code> operators (note that numpy is 0-indexed!).</p>
 <div class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>x[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="272">
+<div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>2</code></pre>
 </div>
 </div>
 <p>A vector represents either a <em>location</em> or a <em>change in location</em> in <span class="math inline">\(n\)</span> -dimensional space. For instance, the <span class="math inline">\(\mathbf{x}\)</span> vector we defined could represent the point with coordinates <span class="math inline">\((2, 5, 1)\)</span> in 3-D space or a movement of 2 along the first axis, 5 along the second axis and 1 along the third axis.</p>
+<div class="cell" data-execution_count="9">
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.0</span>
+
+</pre>
+</div>
+</div>
 <div class="cell" data-execution_count="10">
 <div class="cell-output cell-output-display">
 <p><img src="notes_files/figure-html/cell-11-output-1.png" class="img-fluid"></p>
@@ -348,14 +359,14 @@ Other useful vector creation functions
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.array([<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">1</span>])</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.array([<span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">2</span>])</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">==</span> y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="275">
+<div class="cell-output cell-output-display" data-execution_count="11">
 <pre><code>array([False,  True, False])</code></pre>
 </div>
 </div>
 <p>We can check if all entries are equal (and therefore the vectors are equal) using the <code>np.all</code> function.</p>
 <div class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>np.<span class="bu">all</span>(x <span class="op">==</span> y), np.<span class="bu">all</span>(x <span class="op">==</span> x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="276">
+<div class="cell-output cell-output-display" data-execution_count="12">
 <pre><code>(False, True)</code></pre>
 </div>
 </div>
@@ -367,7 +378,7 @@ Other useful vector creation functions
 <p><span class="math display">\[\mathbf{x} + \mathbf{y} = \begin{bmatrix} x_1\\ x_2\\ x_3\end{bmatrix} + \begin{bmatrix} y_1\\ y_2\\ y_3\end{bmatrix} = \begin{bmatrix} x_1 + y_1\\ x_2 + y_2\\ x_3 + y_3\end{bmatrix}\]</span> This works the same in numpy</p>
 <div class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">+</span> y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="277">
+<div class="cell-output cell-output-display" data-execution_count="13">
 <pre><code>array([ 5, 10,  3])</code></pre>
 </div>
 </div>
@@ -387,7 +398,7 @@ Other useful vector creation functions
 <p>In numpy:</p>
 <div class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">**</span> <span class="dv">2</span>, np.log(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="279">
+<div class="cell-output cell-output-display" data-execution_count="15">
 <pre><code>(array([ 4, 25,  1]), array([0.69314718, 1.60943791, 0.        ]))</code></pre>
 </div>
 </div>
@@ -412,7 +423,7 @@ a\mathbf{x} = \begin{bmatrix} a x_1 \\ a x_2 \\ a x_3 \end{bmatrix}, \quad a + \
 <div class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>xnorm_explicit <span class="op">=</span> np.sqrt(np.<span class="bu">sum</span>(x <span class="op">**</span> <span class="dv">2</span>))</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>xnorm, xnorm_explicit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="281">
+<div class="cell-output cell-output-display" data-execution_count="17">
 <pre><code>(5.477225575051661, 5.477225575051661)</code></pre>
 </div>
 </div>
@@ -449,7 +460,7 @@ Other useful aggregation functions
 \]</span></p>
 <div class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">/</span> np.linalg.norm(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="283">
+<div class="cell-output cell-output-display" data-execution_count="19">
 <pre><code>array([0.36514837, 0.91287093, 0.18257419])</code></pre>
 </div>
 </div>
@@ -466,7 +477,7 @@ Other useful aggregation functions
 <p>We can compute dot products in numpy using the <code>np.dot</code> function</p>
 <div class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>np.dot(x, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="284">
+<div class="cell-output cell-output-display" data-execution_count="20">
 <pre><code>33</code></pre>
 </div>
 </div>
@@ -482,7 +493,7 @@ Other useful aggregation functions
 <div class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> np.array([[<span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">4</span>], [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>]])</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>A</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="285">
+<div class="cell-output cell-output-display" data-execution_count="21">
 <pre><code>array([[3, 5, 4],
        [1, 1, 2]])</code></pre>
 </div>
@@ -494,7 +505,7 @@ Other useful aggregation functions
 <p>In numpy we can access elements in a matrix similarly.</p>
 <div class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>A[<span class="dv">1</span>, <span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="286">
+<div class="cell-output cell-output-display" data-execution_count="22">
 <pre><code>2</code></pre>
 </div>
 </div>
@@ -541,7 +552,7 @@ Other matrix creation routines
 <p>In numpy we can access a single row similarly.</p>
 <div class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>A[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="290">
+<div class="cell-output cell-output-display" data-execution_count="26">
 <pre><code>array([1, 1, 2])</code></pre>
 </div>
 </div>
@@ -552,14 +563,14 @@ Other matrix creation routines
 <p>In numpy we can access an entire column (or row) using the <em>slice</em> operator <code>:</code>, which takes all elements along an axis.</p>
 <div class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>A[:, <span class="dv">1</span>] <span class="co"># Take all elements in column 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="291">
+<div class="cell-output cell-output-display" data-execution_count="27">
 <pre><code>array([5, 1])</code></pre>
 </div>
 </div>
 <p>We can also use the slice operator to take a subset of elements along an axis.</p>
 <div class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>A[:, <span class="dv">1</span>:<span class="dv">3</span>] <span class="co">#Take the second and third columns of A</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="292">
+<div class="cell-output cell-output-display" data-execution_count="28">
 <pre><code>array([[5, 4],
        [1, 2]])</code></pre>
 </div>
@@ -669,7 +680,7 @@ A[:,0:4:2]=
 <div class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> np.array([[<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>], [<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>]])</span>
 <span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>A.T</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="300">
+<div class="cell-output cell-output-display" data-execution_count="36">
 <pre><code>array([[1, 2],
        [1, 2],
        [1, 2]])</code></pre>
@@ -690,7 +701,7 @@ c\mathbf{A} = \begin{bmatrix} cA_{11}  &amp; cA_{12} &amp; cA_{13} \\ cA_{21} &a
 <div class="cell" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>B <span class="op">=</span> <span class="dv">5</span> <span class="op">*</span> A </span>
 <span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>A <span class="op">+</span> B</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="301">
+<div class="cell-output cell-output-display" data-execution_count="37">
 <pre><code>array([[ 6,  6,  6],
        [12, 12, 12]])</code></pre>
 </div>
@@ -714,7 +725,7 @@ Other element-wise operations
 <span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>np.exp(A)      <span class="co"># Take e^x for every element x in A</span></span>
 <span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>np.sin(A)      <span class="co"># Take sin(x) for every element x in A</span></span>
 <span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a>np.cos(A)      <span class="co"># Take cos(x) for every element x in A</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="302">
+<div class="cell-output cell-output-display" data-execution_count="38">
 <pre><code>array([[ 0.54030231,  0.54030231,  0.54030231],
        [-0.41614684, -0.41614684, -0.41614684]])</code></pre>
 </div>
@@ -726,7 +737,7 @@ Other element-wise operations
 <span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>A <span class="op">*</span> <span class="dv">4</span>          <span class="co"># Multiply a scalar with every element of A</span></span>
 <span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a>A <span class="op">/</span> <span class="dv">6</span>          <span class="co"># Divide every element by a scalar</span></span>
 <span id="cb63-5"><a href="#cb63-5" aria-hidden="true" tabindex="-1"></a>A <span class="op">**</span> <span class="dv">3</span>         <span class="co"># Take every element to a power</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="303">
+<div class="cell-output cell-output-display" data-execution_count="39">
 <pre><code>array([[1, 1, 1],
        [8, 8, 8]])</code></pre>
 </div>
@@ -747,7 +758,7 @@ Other element-wise operations
 <span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.array([<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">1</span>])</span>
 <span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>np.dot(A, x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="304">
+<div class="cell-output cell-output-display" data-execution_count="40">
 <pre><code>array([35,  9, 16])</code></pre>
 </div>
 </div>
@@ -756,7 +767,7 @@ Other element-wise operations
 <p>The number of columns of <span class="math inline">\(A\)</span> must match the size of the vector <span class="math inline">\(\mathbf{x}\)</span>, but if <span class="math inline">\(A\)</span> has a different number of rows, the output will simply have a different size.</p>
 <div class="cell" data-execution_count="41">
 <div class="sourceCode cell-code" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>np.dot(A[:<span class="dv">2</span>], x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="305">
+<div class="cell-output cell-output-display" data-execution_count="41">
 <pre><code>array([35,  9])</code></pre>
 </div>
 </div>
@@ -790,7 +801,7 @@ Other element-wise operations
 <div class="cell" data-execution_count="43">
 <div class="sourceCode cell-code" id="cb70"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">3</span>])</span>
 <span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>np.dot(np.dot(A, B), x), np.dot(A, np.dot(B, x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="307">
+<div class="cell-output cell-output-display" data-execution_count="43">
 <pre><code>(array([79, 31, 41]), array([79, 31, 41]))</code></pre>
 </div>
 </div>
@@ -843,7 +854,7 @@ x_1 &amp; x_2 &amp; x_3
 <div class="cell" data-execution_count="45">
 <div class="sourceCode cell-code" id="cb74"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>row_x <span class="op">=</span> np.expand_dims(x, axis<span class="op">=</span><span class="dv">0</span>) <span class="co"># Add a new leading dimension to x</span></span>
 <span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>row_x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="309">
+<div class="cell-output cell-output-display" data-execution_count="45">
 <pre><code>array([[ 1, -2,  1]])</code></pre>
 </div>
 </div>
@@ -851,7 +862,7 @@ x_1 &amp; x_2 &amp; x_3
 <div class="sourceCode cell-code" id="cb76"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>column_x <span class="op">=</span> np.expand_dims(x, axis<span class="op">=</span><span class="dv">1</span>) <span class="co"># Add a new second dimension to x</span></span>
 <span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> np.<span class="bu">all</span>(column_x.T <span class="op">==</span> row_x)</span>
 <span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a>column_x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="310">
+<div class="cell-output cell-output-display" data-execution_count="46">
 <pre><code>array([[ 1],
        [-2],
        [ 1]])</code></pre>
@@ -870,7 +881,7 @@ x_1 &amp; x_2 &amp; x_3
 <div class="sourceCode cell-code" id="cb79"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> np.array([[<span class="dv">1</span>, <span class="dv">1</span>], [<span class="dv">2</span>, <span class="dv">2</span>], [<span class="dv">3</span>, <span class="dv">3</span>]])</span>
 <span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a>B <span class="op">=</span> np.array([[<span class="dv">1</span>, <span class="dv">2</span>], [<span class="dv">1</span>, <span class="dv">2</span>], [<span class="dv">1</span>, <span class="dv">2</span>]])</span>
 <span id="cb79-3"><a href="#cb79-3" aria-hidden="true" tabindex="-1"></a>A <span class="op">*</span> B</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="312">
+<div class="cell-output cell-output-display" data-execution_count="48">
 <pre><code>array([[1, 2],
        [2, 4],
        [3, 6]])</code></pre>
@@ -886,7 +897,7 @@ x_1 &amp; x_2 &amp; x_3
 <p>As we saw with vectors, we can take the <strong>sum</strong> of the elements of a matrix using the <code>np.sum</code> function:</p>
 <div class="cell" data-execution_count="49">
 <div class="sourceCode cell-code" id="cb81"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>np.<span class="bu">sum</span>(A)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="313">
+<div class="cell-output cell-output-display" data-execution_count="49">
 <pre><code>12</code></pre>
 </div>
 </div>
@@ -908,7 +919,7 @@ x_1 &amp; x_2 &amp; x_3
  [2 2]
  [3 3]]</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="314">
+<div class="cell-output cell-output-display" data-execution_count="50">
 <pre><code>(array([6, 6]), array([2, 4, 6]))</code></pre>
 </div>
 </div>
@@ -1016,7 +1027,7 @@ f(x) = x^2 + 3x + 1
 <span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> <span class="dv">3</span> <span class="op">*</span> x <span class="op">+</span> <span class="dv">1</span></span>
 <span id="cb91-3"><a href="#cb91-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb91-4"><a href="#cb91-4" aria-hidden="true" tabindex="-1"></a>f(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="319">
+<div class="cell-output cell-output-display" data-execution_count="55">
 <pre><code>41</code></pre>
 </div>
 </div>
@@ -1139,7 +1150,7 @@ y = f\big(g\left(x\right)\big)
 <span id="cb93-5"><a href="#cb93-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">5</span> <span class="op">*</span> x <span class="op">-</span> <span class="dv">2</span></span>
 <span id="cb93-6"><a href="#cb93-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb93-7"><a href="#cb93-7" aria-hidden="true" tabindex="-1"></a>f(g(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="320">
+<div class="cell-output cell-output-display" data-execution_count="56">
 <pre><code>209</code></pre>
 </div>
 </div>
@@ -1226,7 +1237,7 @@ f(\mathbf{x}) = \sum_{i=1}^n x_i^3 + 1
 <span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.<span class="bu">sum</span>(x <span class="op">**</span> <span class="dv">3</span>) <span class="op">+</span> <span class="dv">1</span></span>
 <span id="cb97-3"><a href="#cb97-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb97-4"><a href="#cb97-4" aria-hidden="true" tabindex="-1"></a>f(np.array([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="322">
+<div class="cell-output cell-output-display" data-execution_count="58">
 <pre><code>37</code></pre>
 </div>
 </div>
@@ -1292,7 +1303,7 @@ f(\mathbf{x}+\mathbf{\epsilon}) \approx f(\mathbf{x}) + \frac{df}{d\mathbf{x}} \
 <span id="cb100-2"><a href="#cb100-2" aria-hidden="true" tabindex="-1"></a>y_values <span class="op">=</span> np.random.randn(<span class="dv">1</span>,<span class="dv">10</span>)  <span class="co"># Gaussian distribution</span></span>
 <span id="cb100-3"><a href="#cb100-3" aria-hidden="true" tabindex="-1"></a>plt.plot(x_values, y_values, <span class="st">'ko'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="notes_files/figure-html/cell-62-output-1.png" width="582" height="411"></p>
+<p><img src="notes_files/figure-html/cell-62-output-1.png" width="590" height="414"></p>
 </div>
 </div>
 <p>The string determines the plot appearance -- in this case, black circles. You can use color strings (‘r’, ‘g’, ‘b’, ‘m’, ‘c’, ‘y’, ...) or use the “Color” keyword to specify an RGB color. Marker appearance (‘o’,‘s’,‘v’,‘.’, ...) controls how the points look.</p>
@@ -1352,8 +1363,8 @@ f(\mathbf{x}+\mathbf{\epsilon}) \approx f(\mathbf{x}) + \frac{df}{d\mathbf{x}} \
 <span id="cb105-7"><a href="#cb105-7" aria-hidden="true" tabindex="-1"></a>plt.plot(x_values, y2, <span class="st">'g--'</span>, label<span class="op">=</span><span class="st">'$(x-3)^2 / 12$'</span>)</span>
 <span id="cb105-8"><a href="#cb105-8" aria-hidden="true" tabindex="-1"></a>plt.plot(x_values, y3, <span class="st">'r:'</span>, label<span class="op">=</span><span class="st">'$.5x-1$'</span>)<span class="op">;</span> <span class="co"># add a curve to the plot</span></span>
 <span id="cb105-9"><a href="#cb105-9" aria-hidden="true" tabindex="-1"></a>plt.legend()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="328">
-<pre><code>&lt;matplotlib.legend.Legend at 0x177762520&gt;</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="64">
+<pre><code>&lt;matplotlib.legend.Legend at 0x17e859850&gt;</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <p><img src="notes_files/figure-html/cell-66-output-2.png" width="582" height="411"></p>
@@ -1361,13 +1372,28 @@ f(\mathbf{x}+\mathbf{\epsilon}) \approx f(\mathbf{x}) + \frac{df}{d\mathbf{x}} \
 </div>
 <p>Here surrounding text in a label with <code>$ $</code> allows us to write mathamatical equations as in LaTex!</p>
 </section>
+<section id="titles" class="level2">
+<h2 class="anchored" data-anchor-id="titles">Titles</h2>
+<p>we</p>
+</section>
 <section id="histograms" class="level2">
 <h2 class="anchored" data-anchor-id="histograms">Histograms</h2>
 <p>Histograms are also useful visualizations:</p>
 <div class="cell" data-execution_count="66">
-<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a>plt.hist(y2, bins<span class="op">=</span><span class="dv">20</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a>plt.hist(y2, bins<span class="op">=</span><span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="65">
+<pre><code>(array([27., 12.,  9.,  7.,  7.,  6.,  5.,  4.,  2.,  2.,  3.,  2.,  2.,
+         1.,  2.,  2.,  2.,  1.,  2.,  2.]),
+ array([8.50253376e-06, 1.04174744e-01, 2.08340986e-01, 3.12507227e-01,
+        4.16673469e-01, 5.20839710e-01, 6.25005952e-01, 7.29172193e-01,
+        8.33338435e-01, 9.37504676e-01, 1.04167092e+00, 1.14583716e+00,
+        1.25000340e+00, 1.35416964e+00, 1.45833588e+00, 1.56250213e+00,
+        1.66666837e+00, 1.77083461e+00, 1.87500085e+00, 1.97916709e+00,
+        2.08333333e+00]),
+ &lt;BarContainer object of 20 artists&gt;)</code></pre>
+</div>
 <div class="cell-output cell-output-display">
-<p><img src="notes_files/figure-html/cell-67-output-1.png" width="566" height="411"></p>
+<p><img src="notes_files/figure-html/cell-67-output-2.png" width="566" height="411"></p>
 </div>
 </div>
 <p>The outputs of hist include the bin locations, the number of data in each bin, and the “handles” to the plot elements to manipulate their appearance, if desired.</p>
@@ -1377,10 +1403,10 @@ f(\mathbf{x}+\mathbf{\epsilon}) \approx f(\mathbf{x}) + \frac{df}{d\mathbf{x}} \
 <p>It is often useful to put more than one plot together in a group; you can do this using the subplot function. There are various options; for example, “sharex” and “sharey” allow multiple plots to share a single axis range (or, you can set it manually, of course).</p>
 <p>I often find it necessary to also change the geometry of the figure for multiple subplots -- although this is more generally useful as well, if you have a plot that looks better wider and shorter, for example.</p>
 <div class="cell" data-execution_count="67">
-<div class="sourceCode cell-code" id="cb108"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a>fig,ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">3</span>, figsize<span class="op">=</span>(<span class="fl">8.0</span>, <span class="fl">2.0</span>))      <span class="co"># make a 1 x 3 grid of plots:</span></span>
-<span id="cb108-2"><a href="#cb108-2" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].plot(x_values, y1, <span class="st">'b-'</span>)<span class="op">;</span>   <span class="co"># plot y1 in the first subplot</span></span>
-<span id="cb108-3"><a href="#cb108-3" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].plot(x_values, y2, <span class="st">'g--'</span>)<span class="op">;</span>  <span class="co">#   y2 in the 2nd</span></span>
-<span id="cb108-4"><a href="#cb108-4" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">2</span>].plot(x_values, y3, <span class="st">'r:'</span>)<span class="op">;</span>   <span class="co">#   and y3 in the last</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb109"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a>fig,ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">3</span>, figsize<span class="op">=</span>(<span class="fl">8.0</span>, <span class="fl">2.0</span>))      <span class="co"># make a 1 x 3 grid of plots:</span></span>
+<span id="cb109-2"><a href="#cb109-2" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].plot(x_values, y1, <span class="st">'b-'</span>)<span class="op">;</span>   <span class="co"># plot y1 in the first subplot</span></span>
+<span id="cb109-3"><a href="#cb109-3" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].plot(x_values, y2, <span class="st">'g--'</span>)<span class="op">;</span>  <span class="co">#   y2 in the 2nd</span></span>
+<span id="cb109-4"><a href="#cb109-4" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">2</span>].plot(x_values, y3, <span class="st">'r:'</span>)<span class="op">;</span>   <span class="co">#   and y3 in the last</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="notes_files/figure-html/cell-68-output-1.png" width="656" height="189"></p>
 </div>

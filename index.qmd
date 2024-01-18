@@ -8,6 +8,8 @@ In this course, we will introduce neural networks as a tool for machine learning
 
 **Course Slack:** <https://join.slack.com/t/cs152neuralne-fop9003/shared_invite/zt-2ax94g9q8-Av_OBLyv2Lh63Om2WGWYRw>
 
+**Course Survey:** <https://forms.gle/QaaKDcqpZL8ZvTAB7>
+
 ## Instructor
 
 ![](pictures/gabe.png){fig-align="left" width="300"}

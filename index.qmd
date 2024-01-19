@@ -17,7 +17,7 @@ In this course, we will introduce neural networks as a tool for machine learning
 Prof. Gabe Hope (he/him)
 
 **Email:** ghope\@g.hmc.edu
-
+ 
 **Office:** MacGregor 322
 
 ### About me

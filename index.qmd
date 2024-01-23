@@ -34,14 +34,16 @@ Prof. Gabe Hope (he/him)
 
 -   My research focuses on using neural networks to find interpretable structures in data. I mainly focus on image data, though I have also worked on analyzing motion-capture, audio and climate data among other things!
 
-## Grutors
+## Grutors (and hours)
 
--   Ian Li
--   Isaac Chung
--   Hoang Chu
--   Sophie Bekerman
--   Isaac Hershenon
--   Hayley Walters
+-   Hoang Chu: **Wednesday 4-5pm  - McGregor 339**
+-   Sophie Bekerman: **Wednesday 5-6pm  - McGregor 339**
+-   Isaac Hershenon: **Thursday 7-8  - McGregor 339pm**
+-   Hayley Walters: **Friday 2-3pm - McGregor 331**
+-   Isaac Chung: **Friday 3-4pm - McGregor 331**
+-   Ian Li:  **Friday 4-5pm - McGregor 331**
+
+**Locations TBA!**
 
 ## Topics covered
 

@@ -20,6 +20,8 @@ Prof. Gabe Hope (he/him)
  
 **Office:** MacGregor 322
 
+**Office hours: Thursdays 3:30-5pm MacGregor 322**
+
 ### About me
 
 -   You can call me any combination of Prof./Professor/Dr. and Hope/Gabe. My full name is actually John Gabriel Hope.
@@ -43,7 +45,6 @@ Prof. Gabe Hope (he/him)
 -   Isaac Chung: **Friday 3-4pm - McGregor 331**
 -   Ian Li:  **Friday 4-5pm - McGregor 331**
 
-**Locations TBA!**
 
 ## Topics covered
 
@@ -69,15 +70,9 @@ Prof. Gabe Hope (he/him)
 
 [Probabilistic Machine Learning](https://probml.github.io/pml-book/) by Kevin Murphy. Full text for [book 1](https://probml.github.io/pml-book/book1.html) and [book 2](https://probml.github.io/pml-book/book2.html) are available for free online.
 
-## Office hours
 
-#### Prof. Gabe Hope
 
-**Thursdays 3:30-5pm MacGregor 322**
 
-#### Grutors
-
-**TBD!**
 
 **Open door policy:** If my door is open, feel free to stop in, say hi and ask questions about the course, research or any other academic issues. If the door is closed, feel free to knock. I often like to close my door to focus, but it does not always mean I am unable to talk. If I don't answer promptly I am either out of office or in a meeting and am unable to talk. If in doubt, feel free contact me on slack. Note that I generally prefer to keep longer discussion of course materials to designated office hours.
 

@@ -6,12 +6,12 @@ format:
         toc-depth: 3
 ---
 
-## Form groups (**Due Wednesday 2/8 11:59pm**)
-The first step for the project will be to form a group and think about possible project topics. For this stage you should:
+## Ethics Discussion (**Due Wednesday 2/8 11:59pm**)
+The first step for the project will be to form a group and participate in a discussion about the potential ethical issues that arise when applying machine learning models in the real world. For this stage you should:
 
--   Form a group of 2-4 students (ideally 3) and choose a cool team name. If you would like help finding a group, please email me! If you would like to individually, you must get prior approval from the professor.
+-   Form a group of 2-4 students and choose a cool team name. If you would like help finding a group, please email me! If you would like to work individually, you must get prior approval from the professor.
 
--   Submit a topic exploration discussion. *Details forthcoming!*
+-   Complete the [ethics and AI assignment](./ethics.qmd) as a group.
 
 ## Proposal (**Due Wednesday 3/21 11:59pm**)
 
@@ -19,14 +19,26 @@ The next step for the project will be to formally propose a project topic, for t
 
 -   Choose a project topic. You may choose a topic from the list below or you may propose your own topic.
 -   With your team, write a short (up to 1 page) proposal for your project and submit it on gradescope. Your proposal should include:
-    -   The names of the team members
-    -   A one paragraph high-level description of the goal(s) of the project (e.g. object detection in images, classifying text data, etc.), how this goal could be useful in real-world applications and why this topic interests you.
-    -   A one paragraph description of how you intend to approach this problem and any challenges you forsee. This should include identifying datasets that you might use, identifying at least one referance (academic paper or website) for a technique you intend to try.
-    -   A one paragraph description of how you will evaluate success for your application.
+
+-   The names of the team members
+
+-   A one paragraph high-level description of the goal(s) of the project (e.g. object detection in images, classifying text data, etc.), how this goal could be useful in real-world applications and why this topic interests you.
+
+-   A one paragraph description of how you intend to approach this problem and any challenges you forsee. This should include identifying datasets that you might use, identifying at least one referance (academic paper or website) for a technique you intend to try.
+
+-   A one paragraph description of how you will evaluate success for your application.
 
 ## Check-in (**Due Monday 4/22 11:59pm**)
 
-As a progress report you and your team will submit a short (1 page) summery of progress on Gradescope. This summary will include: - A high-level description of any updates you have made to the goals of your project. - A description of what methods you have tried and any preliminary results. - A timeline for finishing the remaining goals of your project. - A brief description of the contributions made by each team member.
+As a progress report you and your team will submit a short (1 page) summery of progress on Gradescope. This summary will include: 
+
+- A high-level description of any updates you have made to the goals of your project. 
+
+- A description of what methods you have tried and any preliminary results. 
+
+- A timeline for finishing the remaining goals of your project. 
+
+- A brief description of the contributions made by each team member.
 
 ## Final deliverables (**Due 5/3, 11:59pm**)
 
@@ -68,7 +80,9 @@ Please see the final project template [here](./CS152_Project_Template.pdf), whic
 
 ### Object detection with YOLO
 
-**Link:** <https://arxiv.org/pdf/1506.02640v5.pdf>
+**Introduction:** <https://pyimagesearch.com/2022/04/11/understanding-a-real-time-object-detection-network-you-only-look-once-yolov1/>
+
+**Original paper:** <https://arxiv.org/pdf/1506.02640v5.pdf>
 
 **Summary:** Object detection is the task of locating objects within an image. This is a step more difficult than just classifying images, but is very useful in practice. For this project you could: implement the YOLO object detection model, test different variations of the model and evaluate it on new data.
 
@@ -76,7 +90,9 @@ Please see the final project template [here](./CS152_Project_Template.pdf), whic
 
 ### Image generation with Generative Adversarial Networks
 
-**Link:** <https://arxiv.org/pdf/1406.2661.pdf>
+**Introduction:** <https://developers.google.com/machine-learning/gan>
+
+**Original paper:** <https://arxiv.org/pdf/1406.2661.pdf>
 
 **Summary:** Generative adversarial networks (GANs for short) are an effective way to generate realistic looking images using neural networks. They have caused a considerable amount of excitement and concern for their performance in generating realistic images of humans. For this project you could: implement a generative adversarial network, explore reasonable ways to evaluate the performance of GANs and dive into the ethical implications.
 

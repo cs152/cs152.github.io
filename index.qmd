@@ -134,25 +134,6 @@ In general, only the final answer to such problems will be required to be submit
 
 Each complete homework notebook should be submitted as a PDF file to Gradescope. This primarily where homeworks will be graded and where grades and regrade requests will be handeled. Jupyter notebooks can be converted to PDFs either through VSCode (instructions [here](https://code.visualstudio.com/docs/datascience/jupyter-notebooks#_export-your-jupyter-notebook)), or via online tools such as [this one](https://www.convert.ploomber.io/).
 
-
-## Git and GitHub
-
-Assignments for this course will be distributed and collected via [GitHub](https://github.com/). You can sign up for a GitHub account at the link. If you have an existing GitHub account you may use it; you are not required to use an account associated with your Harvey Mudd (or 5Cs) email. As soon as possible please provide me with your Github username using [this form](https://forms.gle/aReVB1nbdxFcQG2NA).
-
-After the first class you will receive an email inviting you to a GitHub organization for this course. Please accept the invite as soon as possible. Once you have joined the organization, personal repositories for each homework will appear in your GitHub account under the organization ([this link](https://github.com/orgs/CS152-Neural-Networks-Fall-2023/repositories) should take you to a list of your repositories for each homework, provided you are logged into GitHub).
-
-The workflow for each homework should be as follows:
-
--   **Clone the repository:** You can find your repository for each homework using the link above. Running `git clone REPOSITORY_URL` will copy the repository to your computer. In VSCode, you can simply select `Clone Git Repository...`under the start menu.
-
--   **Complete the assignment:** Typically the only file you will need to edit will be `main.ipynb` in each homework's repository. This is a Jupyter notebook which will contain instructions for where to answer each question. Other supporting files may be distributed in the repository as well.
-
--   **Commit your changes:** From the command line in the repository directory run the command: `git add main.ipynb`to stage the changes to made to the assignment with your answers. Then run the command `git commit -m "COMMIT_MESSAGE"` to save a checkpoint of your changes with the provided message. You can make as many commits as you want. In VSCode you can commit by navigating to the "source control" menu in the toolbar (typically on the left side of the window) and clicking the `commit` or check mark button.
-
--   **Push your changes:** Before the deadline, submit your assignment by running `git push origin main` in the assignment directory. You may push updated solutions multiple times, but please do not push after the deadline. Your last push before the deadline will be considered your submission. Submitting after the deadline will cause issues for me and the gruders. In VSCode you can similarly push your assignment from the source control panel and selecting "push".
-
--   **Convert to PDF and submit to Gradescope:** See the instructions above!
-
 ## Course GPU Server
 
 We have a GPU server for this course that will be available to you for your final projects. (Thank you to our system administrator Tim Buchheim for setting this up!). The server is located at teapot.cs.hmc.edu (named for the [Utah teapot](https://en.wikipedia.org/wiki/Utah_teapot)). We will discuss how to allocate resources on this machine at the start of the course project. You will not need GPU access for most homework assignments.
@@ -296,7 +277,7 @@ College policy states that masks are no longer required indoors for the upcoming
 
 # Final Project
 
-As stated in the course grades section, this course will culminate in a final group project. More information about this project will be distributed prior to the official assignment of the project.
+As stated in the course grades section, this course will culminate in a final group project. More information about this project can be found on the [project page](./assignments/final-project/outline.qmd).
 
 # External Resources
 

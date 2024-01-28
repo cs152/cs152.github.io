@@ -124,16 +124,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Calendar</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://github.com/orgs/CS152-Neural-Networks-Fall-2023/repositories" rel="" target="">
+    <a class="nav-link" href="https://drive.google.com/drive/folders/1JFhwmcFBTHiRbfhQ0VRDj9xIPxFpHuWj?usp=drive_link" rel="" target="">
  <span class="menu-text">Homeworks</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://harveymuddcollege.instructure.com/courses/615/" rel="" target="">
- <span class="menu-text">Canvas</span></a>
+    <a class="nav-link" href="../assignments/final-project/outline.html" rel="" target="">
+ <span class="menu-text">Project</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://github.com/orgs/CS152-Neural-Networks-Fall-2023/" rel="" target="">
+    <a class="nav-link" href="https://github.com/orgs/CS152/" rel="" target="">
  <span class="menu-text">Github</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://www.gradescope.com/courses/710173" rel="" target="">
+ <span class="menu-text">Gradescope</span></a>
   </li>  
 </ul>
             <div class="quarto-navbar-tools ms-auto">
@@ -322,25 +326,25 @@ X_{51} &amp; X_{52} \\
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.random.randint(<span class="dv">10</span>, size<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">2</span>))</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[[5 2]
- [7 7]
- [8 5]
- [6 0]
+<pre><code>[[2 3]
+ [7 2]
+ [1 0]
+ [1 9]
  [2 7]]</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X[:<span class="dv">3</span>]) <span class="co"># Get first 3 rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[[5 2]
- [7 7]
- [8 5]]</code></pre>
+<pre><code>[[2 3]
+ [7 2]
+ [1 0]]</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X[<span class="dv">3</span>:]) <span class="co"># Get the rest of the rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[[6 0]
+<pre><code>[[1 9]
  [2 7]]</code></pre>
 </div>
 </div>

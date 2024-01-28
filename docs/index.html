@@ -172,7 +172,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#jupyter" id="toc-jupyter" class="nav-link" data-scroll-target="#jupyter">Jupyter</a></li>
   <li><a href="#latex-style-equations" id="toc-latex-style-equations" class="nav-link" data-scroll-target="#latex-style-equations">Latex (style) equations</a></li>
   <li><a href="#submitting-pdfs-to-gradescope" id="toc-submitting-pdfs-to-gradescope" class="nav-link" data-scroll-target="#submitting-pdfs-to-gradescope">Submitting PDFs to Gradescope</a></li>
-  <li><a href="#git-and-github" id="toc-git-and-github" class="nav-link" data-scroll-target="#git-and-github">Git and GitHub</a></li>
   <li><a href="#course-gpu-server" id="toc-course-gpu-server" class="nav-link" data-scroll-target="#course-gpu-server">Course GPU Server</a></li>
   </ul></li>
   <li><a href="#course-grades" id="toc-course-grades" class="nav-link" data-scroll-target="#course-grades">Course grades</a>
@@ -328,19 +327,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="submitting-pdfs-to-gradescope">Submitting PDFs to Gradescope</h2>
 <p>Each complete homework notebook should be submitted as a PDF file to Gradescope. This primarily where homeworks will be graded and where grades and regrade requests will be handeled. Jupyter notebooks can be converted to PDFs either through VSCode (instructions <a href="https://code.visualstudio.com/docs/datascience/jupyter-notebooks#_export-your-jupyter-notebook">here</a>), or via online tools such as <a href="https://www.convert.ploomber.io/">this one</a>.</p>
 </section>
-<section id="git-and-github" class="level2">
-<h2 class="anchored" data-anchor-id="git-and-github">Git and GitHub</h2>
-<p>Assignments for this course will be distributed and collected via <a href="https://github.com/">GitHub</a>. You can sign up for a GitHub account at the link. If you have an existing GitHub account you may use it; you are not required to use an account associated with your Harvey Mudd (or 5Cs) email. As soon as possible please provide me with your Github username using <a href="https://forms.gle/aReVB1nbdxFcQG2NA">this form</a>.</p>
-<p>After the first class you will receive an email inviting you to a GitHub organization for this course. Please accept the invite as soon as possible. Once you have joined the organization, personal repositories for each homework will appear in your GitHub account under the organization (<a href="https://github.com/orgs/CS152-Neural-Networks-Fall-2023/repositories">this link</a> should take you to a list of your repositories for each homework, provided you are logged into GitHub).</p>
-<p>The workflow for each homework should be as follows:</p>
-<ul>
-<li><p><strong>Clone the repository:</strong> You can find your repository for each homework using the link above. Running <code>git clone REPOSITORY_URL</code> will copy the repository to your computer. In VSCode, you can simply select <code>Clone Git Repository...</code>under the start menu.</p></li>
-<li><p><strong>Complete the assignment:</strong> Typically the only file you will need to edit will be <code>main.ipynb</code> in each homework’s repository. This is a Jupyter notebook which will contain instructions for where to answer each question. Other supporting files may be distributed in the repository as well.</p></li>
-<li><p><strong>Commit your changes:</strong> From the command line in the repository directory run the command: <code>git add main.ipynb</code>to stage the changes to made to the assignment with your answers. Then run the command <code>git commit -m "COMMIT_MESSAGE"</code> to save a checkpoint of your changes with the provided message. You can make as many commits as you want. In VSCode you can commit by navigating to the “source control” menu in the toolbar (typically on the left side of the window) and clicking the <code>commit</code> or check mark button.</p></li>
-<li><p><strong>Push your changes:</strong> Before the deadline, submit your assignment by running <code>git push origin main</code> in the assignment directory. You may push updated solutions multiple times, but please do not push after the deadline. Your last push before the deadline will be considered your submission. Submitting after the deadline will cause issues for me and the gruders. In VSCode you can similarly push your assignment from the source control panel and selecting “push”.</p></li>
-<li><p><strong>Convert to PDF and submit to Gradescope:</strong> See the instructions above!</p></li>
-</ul>
-</section>
 <section id="course-gpu-server" class="level2">
 <h2 class="anchored" data-anchor-id="course-gpu-server">Course GPU Server</h2>
 <p>We have a GPU server for this course that will be available to you for your final projects. (Thank you to our system administrator Tim Buchheim for setting this up!). The server is located at teapot.cs.hmc.edu (named for the <a href="https://en.wikipedia.org/wiki/Utah_teapot">Utah teapot</a>). We will discuss how to allocate resources on this machine at the start of the course project. You will not need GPU access for most homework assignments.</p>
@@ -456,7 +442,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="final-project" class="level1">
 <h1>Final Project</h1>
-<p>As stated in the course grades section, this course will culminate in a final group project. More information about this project will be distributed prior to the official assignment of the project.</p>
+<p>As stated in the course grades section, this course will culminate in a final group project. More information about this project can be found on the <a href="./assignments/final-project/outline.html">project page</a>.</p>
 </section>
 <section id="external-resources" class="level1">
 <h1>External Resources</h1>

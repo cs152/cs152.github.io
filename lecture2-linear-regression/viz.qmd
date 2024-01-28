@@ -1,10 +1,3 @@
----
-title: "Stochastic Gradient descent visualization"
-format:
-    html:
-        toc: true
-        toc-depth: 3
----
 
 ```{ojs}
 //| echo: false
@@ -627,61 +620,6 @@ mpg = FileAttachment("auto-mpg.csv").csv()
 ```
 
 
-::: {.column-screen .columns}
-::: {.column width="50%"}
-```{ojs}
-//| echo : false
-scatter = py`
-# Scatterplot figure
-scatterfig = PlotlyFigure()
-scatterfig
-`
-```
-
-```{ojs}
-//| echo : false
-viewof learningrate = Inputs.range([0, 3], {value: 1, step: 0.01, label: " Learning rate"})
-```
-
-```{ojs}
-//| echo : false
-hist = py`
-# Scatterplot figure
-histfig = PlotlyFigure()
-histfig
-`
-```
-
-:::
-
-::: {.column width="50%"}
-```{ojs}
-//| echo : false
-
-plots = py`
-lossplot = PlotlyInput()
-`
-
-viewof weights = py`
-# ${plots}
-lossplot
-`
-```
-```{ojs}
-//| echo : false
-viewof steps = Inputs.range([1, 10], {value: 1, step: 1, label: "  Steps"})
-```
-:::
-
-:::
-
-
-
-
-
-
-
-
 
 
 
@@ -740,12 +678,8 @@ def loss(w, x, y):
   return (tf.mean((predict(w, x) - y) ** 2, 0)) + l1weight * tf.abs(w).sum(1) + l2weight * (w ** 2).sum(1) 
 
 lossgrid = loss(paramgrid, x, y).reshape(ww.shape)
-losscontour = plotconvert(dict(x=wrange, y=brange, z=lossgrid, type='contour', ncontours=25, ))
-losssurface = plotconvert(dict(x=wrange, y=brange, z=lossgrid, type='surface', showlegend=False, showscale=False, opacity=0.8, contours=dict(x=dict(show=True), y=dict(show=True))))
-
-batchlossgrid = loss(paramgrid, xbatch, ybatch).reshape(ww.shape)
-batchlosscontour = plotconvert(dict(x=wrange, y=brange, z=batchlossgrid, type='contour', ncontours=25,))
-batchlosssurface = plotconvert(dict(x=wrange, y=brange, z=batchlossgrid, showlegend=False, showscale=False, type='surface', opacity=0.8, contours=dict(x=dict(show=True), y=dict(show=True))))
+losscontour = plotconvert(dict(x=wrange, y=brange, z=lossgrid, type='contour', ncontours=25, showscale=False, ))
+losssurface = plotconvert(dict(x=wrange, y=brange, z=lossgrid, type='surface', showlegend=False, showscale=False, opacity=0.8,  contours=dict(x=dict(show=True), y=dict(show=True))))
 `
 
 py`
@@ -754,10 +688,11 @@ py`
 cweights = ${weights}
 startpoint = dict(x=[cweights[0]], y=[cweights[1]], mode='markers', showlegend=False, marker=dict(color='firebrick', size=10, line= {'color': 'black', 'width': 3}))
 
-lr = float(${learningrate})
+
 fullweightlist = [Tensor(cweights)]
 batchweightlist = [Tensor(cweights)]
 steps = int(${steps})
+lr = float(${learningrate}) if steps > 0 else 0.
 
 momentum = 0.
 nxbatch, nybatch = batches[0]
@@ -794,31 +729,99 @@ batchzloss = loss(batchweights, x, y)
 threedgradplot = dict(x=fullweights[:, 0], y=fullweights[:, 1], z=zloss, showlegend=False, marker=dict(size=4), line=dict(color='black', width=4), type='scatter3d')
 threedbatchgradplot = dict(x=batchweights[:, 0], y=batchweights[:, 1], z=batchzloss, showlegend=False, marker=dict(size=4), line=dict(color='orange', width=4), type='scatter3d')
 
-PlotlyReactive(lossplot, [losscontour, startpoint, gradplot, batchgradplot], {'xaxis': {'range': [-3, 3]}, 'yaxis': {'range': [-3, 3]}})
-PlotlyReactive(batchlossplot, [batchlosscontour, startpoint, gradplot, batchgradplot], {'xaxis': {'range': [-3, 3]}, 'yaxis': {'range': [-3, 3]}})
+finalloss = zloss[0].t2Js()
+
+PlotlyReactive(lossplot, [losscontour, startpoint, gradplot, batchgradplot], {'title': 'Loss = %.3f' % finalloss, 'showlegend': False, 'xaxis': {'range': [-3, 3], 'title': 'Slope (w)'}, 'yaxis': {'range': [-3, 3], 'title': {
+      'text': 'Bias (b)'
+    }}})
 `
 
-py`
+loss = py`
 # ${batch}
 # Plot the data scatterplot and prediction function
 
-cweights = Tensor(${weights})
+inweights = ${weights}
+cweights = Tensor(inweights)
 errors = ybatch.reshape((-1,)) - predict(cweights, xbatch.reshape((-1,)),).flatten()
 losses = (errors) ** 2
 batchdata = dict(x=xbatch.reshape((-1,)), y=ybatch.reshape((-1,)), mode='markers', marker=dict(color=tf.sqrt(losses), colorscale='RdBu', cmin=0, cmax=2))
 
 xrange = tf.linspace(-2, 3, 50)
 pfunction = dict(x=xrange.flatten(), y=predict(cweights, xrange).flatten(), line=dict(color='black'))
-PlotlyReactive(scatterfig, [ batchdata, pfunction], {'xaxis': {'range': [-2, 3]}, 'yaxis': {'range': [-2, 3]}})
+
+
+PlotlyReactive(scatterfig, [ batchdata, pfunction], {'title': 'Prediction function: y = %.2f x + %.2f' % (inweights[0], inweights[1]), 'showlegend': False, 'xaxis': {'range': [-2, 3], 'title': {'text': 'x (weight)'}}, 'yaxis': {'range': [-2, 3], 'title': {'text': 'y (MPG)'} }})
 
 histdata = dict(x=errors, type='histogram', xbins= dict(start=-3, end=3, size=0.15))
-PlotlyReactive(histfig, [ histdata, ], {'xaxis': {'range': [-3, 3]}})
+
+nx = tf.linspace(-3, 3, 100)
+ny = tf.exp(-nx ** 2)
+normdata = dict(x=nx, y=ny, line=dict(color='red'), yaxis='y2',)
+
+PlotlyReactive(histfig, [ histdata, normdata], {'showlegend': False, 'title': 'Distribution of residuals', 'yaxis': {'title': {'text': 'Frequency'}},  'yaxis2': {'overlaying': 'y', 'range': [0, 1], 'visible': False}, 'xaxis': {'range': [-3, 3], 'title': {'text': 'Error (residual)'} }})
+losses.mean()
 `
 
 batch = py`
 # ${data}
 batchsize = 0
-batches = [get_batch(batchsize, x, y) for i in range(int(${steps}))]
+batches = [get_batch(batchsize, x, y) for i in range(max(1, int(${steps})))]
 xbatch, ybatch = batches[0]
 `
 ```
+
+::: {.column-screen .columns}
+::: {.column width="33%"}
+```{ojs}
+//| echo : false
+scatter = py`
+# Scatterplot figure
+scatterfig = PlotlyFigure(width=500, height=500)
+scatterfig
+`
+```
+
+```{ojs}
+//| echo : false
+//viewof learningrate = Inputs.range([0, 3], {value: 1, step: 0.01, label: " Learning rate"})
+learningrate = 0
+```
+:::
+::: {.column width="33%"}
+```{ojs}
+//| echo : false
+
+plots = py`
+lossplot = PlotlyInput(width=500, height=500)
+`
+
+viewof weights = py`
+# ${plots}
+lossplot
+`
+```
+```{ojs}
+//| echo : false
+//viewof steps = Inputs.range([0, 10], {value: 0, step: 1, label: "  Steps"})
+steps = 0
+```
+:::
+::: {.column width="33%"}
+```{ojs}
+//| echo : false
+hist = py`
+# Scatterplot figure
+histfig = PlotlyFigure(width=500, height=500)
+histfig
+`
+```
+
+:::
+:::
+
+
+
+
+
+
+

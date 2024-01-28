@@ -795,7 +795,6 @@ loss = np.mean(resid ** 2, axis=0)
 def get_loss(w):
     w, b = w[0], w[1]
     resid = x * w + b - y
-    print(resid)
     return 0.2 * np.mean(resid ** 2)
 
 gloss = grad(get_loss)
@@ -806,6 +805,7 @@ ax.set_xticks([])
 ax.set_yticks([])
 
 other_lines = [(1.25, -1.5)]
+
 
 for param, color in zip(other_lines, [BLACK, BLUE, ORANGE, GREEN, PURPLE]):
             w, b = param
@@ -822,6 +822,7 @@ plt.ylabel('$b$')
 plt.title('$\mathbf{Loss}(\mathbf{w})$')
 CS = ax.contour(W, B, loss, cmap='coolwarm', levels=0.5 * np.arange(25))
 ax.clabel(CS, inline=True, fontsize=10)
+
 pass
 ```
 
@@ -1274,6 +1275,8 @@ p(y_i\mid\mathbf{x}_i, \mathbf{w}) =  \frac{1}{\sigma \sqrt{2 \pi}} \text{exp}\b
 $$
 
 Why view linear regression as a probabilistic model? Well, generally for real data we can't know if there actually *is* a function that perfectly maps inputs to outputs. It could be that there are variables we're not accounting for, that there errors in our measurements for the data we collected or simply that there is some inherent randomness in the outputs. This view of linear regression makes the uncertainty in our predictions explicit.
+
+{{< include ./viz.qmd >}}
 
 ## Maximum likelihood estimation
 

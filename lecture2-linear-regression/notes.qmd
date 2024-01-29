@@ -220,14 +220,11 @@ $$
 
 We will refer to the values that define a function within our class (e.g. $w_i$ and $b$) as the **parameters** of the function, by changing these values, we can change the function.
 
-
-
 We typically refer to $\mathbf{w}$ specifically as the **weight vector** (or weights) and $b$ as the **bias**. To summarize:
 
 $$
 \textbf{Affine function:  }f(\mathbf{x}) = \mathbf{x}^T\mathbf{w}+b,\quad \textbf{Parameters:}\quad \big(\text{Weights:  } \mathbf{w},\ \text{Bias:  } b \big)
 $$
-
 
 ## Handling bias compactly
 
@@ -652,7 +649,7 @@ $$
 Here we have used $\mathbf{X}$ and $\mathbf{y}$ to refer to the entire collection of inputs and outputs from our dataset $(\mathcal{D})$ respectively, so:
 
 $$
-\mathbf{X} = \begin{bmatrix}\mathbf{x}_1 \\ \mathbf{x}_2 \\ \vdots \\ \mathbf{x}_N \end{bmatrix} = \begin{bmatrix}x_{11} & x_{12} & \dots & x_{1n} \\ x_{21} & x_{22} & \dots & x_{2n}\\ \vdots & \vdots  & \ddots & \vdots \\ x_{N1} & x_{N2} & \dots & x_{Nn} \end{bmatrix}, \quad \mathbf{y} = \begin{bmatrix}y_1 \\ y_2 \\ \vdots \\ y_N \end{bmatrix}
+\mathbf{X} = \begin{bmatrix}\mathbf{x}_1^T \\ \mathbf{x}_2^T \\ \vdots \\ \mathbf{x}_N^T \end{bmatrix} = \begin{bmatrix}x_{11} & x_{12} & \dots & x_{1n} \\ x_{21} & x_{22} & \dots & x_{2n}\\ \vdots & \vdots  & \ddots & \vdots \\ x_{N1} & x_{N2} & \dots & x_{Nn} \end{bmatrix}, \quad \mathbf{y} = \begin{bmatrix}y_1 \\ y_2 \\ \vdots \\ y_N \end{bmatrix}
 $$
 
 This is an example of **loss function**, for our given dataset this function tells us how much error (loss) we are incurring for a given choice of $\mathbf{w}$. If we assume our dataset is fixed we can drop the explicit dependence on $\mathbf{X}$ and $\mathbf{y}$, looking at the loss as purely a function of our choice of parameters:

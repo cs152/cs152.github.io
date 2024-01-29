@@ -940,6 +940,8 @@ $$
 \bigg((2y_i-1)\mathbf{x}_i \bigg)
 $$
 
+{{< include ./viz.qmd >}}
+
 ## Comparing loss functions
 
 Let's look at how this loss function compares to the mean squared error loss we derived for logistic regression. One way to do this is to visualize the loss for a single observation as a function of the output of $\mathbf{x}^T\mathbf{w}$. Here we'll look at the loss for different models trying to predict an output of $y=0$:

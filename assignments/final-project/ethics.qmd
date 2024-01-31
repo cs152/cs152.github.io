@@ -8,7 +8,7 @@ format:
 
 ## **Due Wednesday 2/8 11:59pm**
 
-In this assignment you will read and reflect on a fictional case study regarding the ethical implications AI tools. While these cases are fictional, they are inspired by real issues. You may find yourself confronting similar scenerios in your future career, so it's worth thinking about how to address ethical concerns now! 
+In this assignment you will read and reflect on a fictional case study regarding the ethical implications of AI tools. While these cases are fictional, they are inspired by real issues. You may find yourself confronting similar scenerios in your future career, so it's worth thinking about how to address ethical concerns now! 
 
 For your final project report, you will also be asked to discuss what real-world ethical concerns could arise from the types of tools you develop.
 
@@ -16,11 +16,12 @@ For your final project report, you will also be asked to discuss what real-world
 
 Form a group of 2-4 students (ideally 3). This will also be your group for the final project. Create your group on Gradescope for the [Ethics and AI assignment](https://www.gradescope.com/courses/710173/assignments/4013515). 
 
-*The writeups for this assignment should be done by the group members, however you are welcome (and encouraged) to involve other interested students in the discussions!*
+*The writeups for this assignment should be done by the group members, however you are welcome (and encouraged) to involve anyone in the discussions!*
 
 ## Part 2: Choose a case study
 
-Here is a quick summary of the six available case studies provided by the Princeton Dialogues on AI and Ethics. You should choose one prior to reading the PDF; your group is welcome to start over and choose a new one if you decide you don't like the one you've chosen after you've started reading it.
+Here is a quick summary of the six available case studies provided by the Princeton Dialogues on AI and Ethics. 
+Your group should choose one of them, based on the following descriptions.
 
 ### Case Study 1: Automated Healthcare App
 
@@ -28,11 +29,11 @@ A team of medical researchers and computer scientists develop an app that utiliz
 
 ### Case Study 2: Dynamic Sound Identification
 
-An R&D company develop an app that can identify—among other things—personal information about those speaking, links to websites selling a product being advertised on television, encyclopedic entries about bird calls in the wild and other relevant resources.
+An R&D company develops an app that can identify information from sound. For example, personal information about those speaking, links to websites selling a product being advertised on television, encyclopedic entries about bird calls in the wild and other relevant resources.
 
 ### Case Study 3: Optimizing Schools
 
-A public high school contracts a data science company and gives them access to student behavioral data (attendance, purchases, library usage, movement on campus, etc.) so that they can predict students at-risk of dropping out.
+A public high school contracts a data science company and gives them access to student behavioral data (attendance, purchases, library usage, movement on campus, etc.) so that they can predict which students are at-risk of dropping out.
 
 ### Case Study 4: Law Enforcement Chatbots
 
@@ -40,7 +41,7 @@ A country's federal law enforcement agency teams up with University researchers 
 
 ### Case Study 5: Hiring By Machine
 
-A group of military veterans create a non-profit company that creates products for veterans transitioning back to civilian life. The company strongly believes in open-source and hiring veterans.
+A group of military veterans create a non-profit company that makes software for veterans transitioning back to civilian life. The company strongly believes in open-source and hiring veterans.
 
 ### Case Study 6: Public Sector Data Analytics
 
@@ -49,41 +50,43 @@ A once-prosperous city contracts with a consulting group to use an algorithmic, 
 
 ## Part 3: Consider possible issues
 
-**Prior to** reading the case study in full, your group should choose at least three of the questions below to discuss (you may also come up with your own questions relating to any of the topics below). You do not need to have a complete understanding of the case study or the questions prior to thinking these through. Try to put yourselves in the developers' shoes and guess at any issues that might arise or any background learning that your team might need to conduct.
+Before getting into reading the case study you chose, pause and think about what ethical issues might arise.
+Below are some common categories of ethical issues, several of which may apply to your chosen case.
+Choose 3 of these categories and, in the Gradscope assignment, list the categories you chose and explain (in 2-3 sentences) why, based on the case study description, your group felt these issues might be important for the case.
+(Note that there is not a wrong or right answer to this, just explain your reasoning)
 
-In the Gradscope assignment, list each of the 3 questions you chose. For each question explain why your group felt this question might be important for the chosen case in 2-3 sentences.
-
-#### Questions on oversight and accountability
+#### Issues with oversight and accountability
 - Which laws and regulations might be applicable to this project?
 - How is ethical accountability being achieved?
 
-#### Questions on data privacy and anonymity
+#### Issues with data privacy and anonymity
 - How might the legal rights of organizations and individuals be impinged by our use of the data?
 - How might individuals’ privacy and anonymity be impinged via aggregation and linking of the data?
 
-#### Questions on data availability and validity
+#### Issues with data availability and validity
 - How do you know that the data is ethically available for its intended use?
 - How do you know that the data is valid for its intended use?
 
-#### Questions on model bias
+#### Issues with model bias
 - How have we identified and minimized any bias in the data or in the model?
 - How was any potential modeler bias identified and then, if appropriate, mitigated?
 
-#### Questions on model transparency and interpretation
+#### Issues with model transparency and interpretation
 - How transparent does the model need to be and how is that transparency achieved?
 - What are likely misinterpretations of the results and what can be done to prevent those misinterpretations?
 
-These questions are from [Integrating Ethics within Machine Learning Courses | ACM Transactions on Computing Education by J. Saltz et al. ](https://dl.acm.org/doi/10.1145/3341164)
+These issue categories are from [Integrating Ethics within Machine Learning Courses | ACM Transactions on Computing Education by J. Saltz et al. ](https://dl.acm.org/doi/10.1145/3341164)
 
 ## Part 4: Read and discuss your case study
 
-Case studies include anywhere from three to seven discussion questions. Please read the case study individually, but pause at each discussion question and discuss them as a group. On Gradescope, summarize your group's discussion for each question in 1-2 paragraphs.
+In the case study you chose, you will find anywhere from three to seven discussion questions. Please read the case study individually, but pause at each discussion question and discuss them as a group. On Gradescope, summarize your group's discussion for each question in 1-2 paragraphs.
 
 Now read through your chosen [case study PDF](https://aiethics.princeton.edu/case-studies/case-study-pdfs/).
+(It is okay to choose a new one if you decide you don't like the one you've chosen after you've started reading it.)
 
-Each case study PDF includes a “Reflections & Discussion Questions” section near the end. You should read through these individually, and you can optionally choose to discuss them as a group. However, you did not need to report on your discussions for this part of the case study PDFs.
+Each case study PDF includes a “Reflections & Discussion Questions” section near the end. You should read through these individually, and you can optionally choose to discuss them as a group. Note that you do not need to report on your discussions for this part of the case study PDFs.
 
-Once you've completed this section you are finished with the Gradescope assignment!
+Once you've completed this part you are finished with the Gradescope assignment!
 
 ## Part 5: In-class discussion
 

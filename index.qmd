@@ -8,7 +8,7 @@ In this course, we will introduce neural networks as a tool for machine learning
 
 **Course Slack:** <https://join.slack.com/t/cs152neuralne-fop9003/shared_invite/zt-2ax94g9q8-Av_OBLyv2Lh63Om2WGWYRw>
 
-**Course Survey:** <https://forms.gle/QaaKDcqpZL8ZvTAB7> 
+**Course Survey:** <https://forms.gle/QaaKDcqpZL8ZvTAB7>
 
 ## Instructor
 
@@ -17,7 +17,7 @@ In this course, we will introduce neural networks as a tool for machine learning
 Prof. Gabe Hope (he/him)
 
 **Email:** ghope\@g.hmc.edu
- 
+
 **Office:** MacGregor 322
 
 **Office hours: Thursdays 3:30-5pm MacGregor 322**
@@ -38,13 +38,12 @@ Prof. Gabe Hope (he/him)
 
 ## Grutors (and hours)
 
--   Hoang Chu: **Wednesday 4-5pm  - McGregor 339**
--   Sophie Bekerman: **Wednesday 5-6pm  - McGregor 339**
--   Isaac Hershenon: **Thursday 7-8  - McGregor 339pm**
+-   Hoang Chu: **Wednesday 4-5pm - McGregor 339**
+-   Sophie Bekerman: **Wednesday 5-6pm - McGregor 339**
+-   Isaac Hershenon: **Thursday 7-8 - McGregor 339pm**
 -   Hayley Walters: **Friday 2-3pm - McGregor 331**
 -   Isaac Chung: **Friday 3-4pm - McGregor 331**
--   Ian Li:  **Friday 4-5pm - McGregor 331**
-
+-   Ian Li: **Friday 4-5pm - McGregor 331**
 
 ## Topics covered
 
@@ -70,13 +69,9 @@ Prof. Gabe Hope (he/him)
 
 [Probabilistic Machine Learning](https://probml.github.io/pml-book/) by Kevin Murphy. Full text for [book 1](https://probml.github.io/pml-book/book1.html) and [book 2](https://probml.github.io/pml-book/book2.html) are available for free online.
 
-
-
-
-
 **Open door policy:** If my door is open, feel free to stop in, say hi and ask questions about the course, research or any other academic issues. If the door is closed, feel free to knock. I often like to close my door to focus, but it does not always mean I am unable to talk. If I don't answer promptly I am either out of office or in a meeting and am unable to talk. If in doubt, feel free contact me on slack. Note that I generally prefer to keep longer discussion of course materials to designated office hours.
 
-**Scheduling meetings:** You may also schedule a 1-on-1 meeting with me if needed through this link: [https://calendly.com/prof-gabe/one-on-one-with-prof-gabe](https://calendly.com/prof-gabe/one-on-one-with-prof-gabe).
+**Scheduling meetings:** You may also schedule a 1-on-1 meeting with me if needed through this link: <https://calendly.com/prof-gabe/one-on-one-with-prof-gabe>.
 
 # Software and tools
 
@@ -144,14 +139,15 @@ I will be assigning course grades based on three categories: homework assignment
 
 ## Homework assignments (60% of course grade)
 
-**Frequency and deadlines:** Homeworks will be assigned on a weekly basis throughout the semester, with the exception of weeks where final project checkpoints are due. Homeworks are assigned on Wednesdays and must be submitted on gradescope and Github by the end of the following Thursday (11:59pm Thursday). 
+**Frequency and deadlines:** Homeworks will be assigned on a weekly basis throughout the semester, with the exception of weeks where final project checkpoints are due. Homeworks are assigned on Wednesdays and must be submitted on gradescope and Github by the end of the following Thursday (11:59pm Thursday).
 
 **Submission** Homework assignments are submitted by uploading a solution PDF to Gradescope and pushing to the corresponding Github repository. See the instructions under software and tools!
 
 **Late policy:** A student will be automatically granted a 1-day extension on any homework assignment (to Friday 11:59pm) by simply messaging or emailing me to ask for one **before the due date**. These should be used to handle cases such as travel, interviews, short-term illness, stressful weeks, etc. There is no limit on the number of homework assignments on which you may use a one-day extension so long as you notify me.
 
-**Extension policy:** For situations such as extended illnesses, family emergencies, or other significant and unforeseen circumstances preventing you from working, I’m happy to work with you to try to find a way to give you the space you need while being able to come back to the course when you’re able. The best way to start this conversation is by directly emailing me (ghope@g.hmc.edu). To protect your privacy about the reasons for these circumstances and to ensure you get the support you need, I may ask you to reach out about this to your campus’ Division of Student Affairs, Dean of Students office, or your Student Disability Services coordinator to verify what kind of accommodation makes sense and to ensure you're being supported across your other courses. If it's more comfortable, you may also choose to reach out to any of these groups to reach out to me before contacting me yourself.
+**Drops:** The lowest **2** homework scores will be dropped unconditionally. Your homework score will be computed as the average of the remaining scores.
 
+**Extension policy:** For situations such as extended illnesses, family emergencies, or other significant and unforeseen circumstances preventing you from working, I’m happy to work with you to try to find a way to give you the space you need while being able to come back to the course when you’re able. The best way to start this conversation is by directly emailing me (ghope\@g.hmc.edu). To protect your privacy about the reasons for these circumstances and to ensure you get the support you need, I may ask you to reach out about this to your campus’ Division of Student Affairs, Dean of Students office, or your Student Disability Services coordinator to verify what kind of accommodation makes sense and to ensure you're being supported across your other courses. If it's more comfortable, you may also choose to reach out to any of these groups to reach out to me before contacting me yourself.
 
 ## Participation (10% of course grade)
 

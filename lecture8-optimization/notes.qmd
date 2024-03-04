@@ -6,7 +6,6 @@ format:
         toc-depth: 3
 ---
 
-
 # Playground
 
 Try out the concepts from this lecture in the [Neural Network Playground!](https://cs152-neural-networks-fall-2023.github.io/playground)

@@ -225,6 +225,79 @@ We can compare initializations from a standard normal with initializations from 
 
 [Visualizer](./viz.qmd)
 
+## Computational complexity
+
+An important consideration for any algorithm is the computational complexity. So far we've ignored the computational cost of training a neural network, but in practice it can be quite significant! It's worthwhile to think about what this complexity is and if there's any way to improve it.
+
+Let's start by reviewing the factors that will determine the cost of running gradient descent to train a network and define some notation for each:
+
+-   **Dataset size (** $N$ **):** As we have previously, we'll use $N$ to denote the number of observations in the dataset that we'll use to train our model (the *training set*).
+
+-   **Dimensionality (** $d$ **):** We'll use the notation $d$ to refer to *both* the **number of input features** *and* the **number of neurons per layer**. In general this will let us conveniently refer to the number of inputs and outputs for any given layer with a single number. In practice the number of input dimensions may not match the number of neurons per layer (and the number of neurons per layer may not actually be constant!), but since we're mostly concerned with an asymptotic upper bound on complexity, we'll just assume $d$ is the size of the largest layer.
+
+-   **Number of layers (** $L$ **):** The other factor of our network architecture is of course the number of layers, which we'll call $L$.
+
+-   **Number of steps (** $S$ **):** Finally how steps of gradient descent we take will of course also have an input on the running time. We'll use $S$ to denote this number.
+
+We can consider one of the networks shown above as a specific example:
+
+![](images/paste-24.png)
+
+Here we see that this network has $8$ neurons per layer, so $d=8$, a total of $6$ hidden layers, so $L=6$ and the training set shown has roughly $100$ observations, so $N=100$. We won't worry about the number of steps ( $S$ ) for now.
+
+In this example our neural network is being used on a regression task, so at each step of gradient descent we'll to compute the mean squared error loss:
+
+$$\underset{\text{MSE}}{\textbf{Loss}} (\mathbf{w}, \mathbf{X}, \mathbf{y}) = \frac{1}{N}\sum_{i=1}^N (f(\mathbf{x}_i, \mathbf{w}) - y_i)^2$$And then it's gradient with respect to the parameters, $\mathbf{w}$.
+
+$$\nabla_{\mathbf{w}}\underset{\text{MSE}}{\textbf{Loss}} (\mathbf{w}, \mathbf{X}, \mathbf{y}) = \nabla_{\mathbf{w}}\frac{1}{N}\sum_{i=1}^N (f(\mathbf{x}_i, \mathbf{w}) - y_i)^2$$
+
+Our analysis would be equivalent for classification problems.
+
+## Computing a single neuron
+
+Let's start simple, what is the cost computing a *single* neuron in our network? We know that the calculation that a single neuron performs is (we'll ignore a bias term because it could be analyzed as a single extra term of the summation) :
+
+$$\phi(\mathbf{x})=\sigma\big(\mathbf{x}^T\mathbf{w} \big) = \sigma\bigg(\sum_{i=1}^d x_i w_i \bigg)$$
+
+We see that computing activation function $\sigma(\cdot)$ is constant time, but the cost of the summation: $\sum_{i=1}^d x_i w_i$ will scale linearly with the dimension $d$, so we can write the running time generally as $\mathcal{O}(d)$.
+
+That was straightforward, but we're not quite done with a single neuron yet! Remember that we're also going to be computing gradients, so we'll need to make sure that the cost of our backward pass update for this neuron won't increase our asymptotic running time.
+
+Recall that in our backward pass update we're provided $\frac{dLoss}{d\phi}$ and we need to compute$\frac{dLoss}{dx_i}$ $\frac{dLoss}{dw_i}$. Once again we see that the activation $\sigma$ only acts on a single value, so the update will simply be: $$\frac{dLoss}{d(\mathbf{x}^T\mathbf{w})}=\frac{dLoss}{d\phi}\frac{d\phi}{d(\mathbf{x}^T\mathbf{w})}$$ As all of these terms are scalars, the cost is once again constant.
+
+Now given the scalar $\frac{dLoss}{d(\mathbf{x}^T\mathbf{w})}$, we compute the derivative with respect to $x_i$ or $w_i$ as:
+
+$$
+\frac{dLoss}{dx_i}=\frac{dLoss}{d(\mathbf{x}^T\mathbf{w})}\frac{d(\mathbf{x}^T\mathbf{w})}{dx_i}= \frac{dLoss}{d(\mathbf{x}^T\mathbf{w})} w_i$$ $$
+\frac{dLoss}{dw_i}=\frac{dLoss}{d(\mathbf{x}^T\mathbf{w})}\frac{d(\mathbf{x}^T\mathbf{w})}{dw_i}= \frac{dLoss}{d(\mathbf{x}^T\mathbf{w})} x_i
+$$
+
+A constant ( $\mathcal{O}(1)$ ) operation per entry. Since $\mathbf{x}$ and $\mathbf{w}$ both have $d$ entries, the cost of the backward pass update will still be $\mathcal{O}(d)$.
+
+## Computing the full loss
+
+Things get a little easier from here. We know that each layer of our network has $d$ neurons, each of which takes $\mathcal{O}(d)$ time to compute. Therefore the total cost for a layer will be $\mathcal{O}(d^2)$.
+
+Our full network has $L$ layers, therefore the full network will take $\mathcal{O}(Ld^2)$ time to compute.
+
+Looking back at our loss:
+
+$$\underset{\text{MSE}}{\textbf{Loss}} (\mathbf{w}, \mathbf{X}, \mathbf{y}) = \frac{1}{N}\sum_{i=1}^N (f(\mathbf{x}_i, \mathbf{w}) - y_i)^2$$
+
+We see that so far we've bounded the time it takes to compute *one* of our predictions: $f(\mathbf{x}_i, \mathbf{w})$. In order to compute the full loss (and therefore gradient), we need to do this for every term in our summation, a total of $N$ times. This give us a total cost to compute the loss of $\mathcal{O}(NLd^2)$. We already saw that our backward pass updates don't increase our asymptotic cost, so in total the cost of a single gradient descent update:
+
+$$ \mathbf{w}^{(k+1)} \longleftarrow \mathbf{w}^{(k)} - \alpha \nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})$$
+
+Is $\mathcal{O}(NLd^2)$.
+
+Accounting for the number of update steps ( $S$ ) we perform we see that the **total cost of gradient descent is:** $\mathcal{O}(SNLd^2)$.
+
+## Real world costs
+
+Let's asses how bad this running time actually is. To do so we'll need to consider how large each of these factors actually is in practice. We'll start by looking at a state-of-the-art (for 2012) neural network for classifying images: AlexNet.
+
+![](images/paste-29.png){width="960"}
+
 ## Estimating loss
 
 Neural network MSE loss:

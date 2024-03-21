@@ -1,0 +1,790 @@
+---
+title: "Initialization"
+author: "Gabriel Hope"
+format: 
+    revealjs:
+        html-math-method: mathjax
+        width: 1920
+        height: 1080
+---
+
+# Review of expectation and variance
+
+## Expectation
+
+$$\mathbb{E}\big[X \big] = \int_{x} x p(x) dx\quad \text{(Continuous random variables)}$$
+
+![](images/paste-41.png)
+
+## Expectation
+
+$$\mathbb{E}\big[X \big] = \sum_{x} x p(x) \quad \text{(Discrete random variables)}$$
+
+![](images/paste-40.png)
+
+## Linearity of expectation
+
+$$\mathbb{E}\big[ aX \big] =  a\mathbb{E}\big[ X \big] $$
+
+$$\mathbb{E}\bigg[ \sum_{i=1}^n X_i \bigg] =  \sum_{i=1}^n \mathbb{E}\bigg[ X_i \bigg]$$
+
+## Variance
+
+$$
+Var\big[X\big] = \mathbb{E}\big[(X - \mathbb{E}[X])^2\big]
+$$
+
+![](images/paste-42.png)
+
+## Properties of variance
+
+$$
+Var[X] = \mathbb{E}[X^2] - \mathbb{E}[X]^2
+$$
+
+$$
+Var[aX] = a^2 Var[X]
+$$
+
+If $X$ and $Y$ are independent: $$
+Var[X + Y] = Var[X] + Var[Y]
+$$
+
+## Dropout
+
+![](images/paste-15.png){width="993"}
+
+## Dropout
+
+**Dropout rate:** $r$
+
+$$\text{DO}(\mathbf{X}, r) = \mathbf{D} \odot \mathbf{X}, \quad \mathbf{D} =
+\begin{bmatrix}
+d_{11} & d_{12} & \dots & d_{1n} \\ 
+d_{21} & d_{22} & \dots & d_{2n} \\
+\vdots & \vdots & \ddots & \vdots \\
+d_{m1} & d_{m2} & \dots &  d_{mn}
+\end{bmatrix} $$ $$d_{ij} \sim \text{Bernoulli}(1-r)$$
+
+## Dropout
+
+Within a NN layer:
+
+$$
+\phi(\mathbf{x}) = \sigma(\text{DO}_r(\mathbf{x})^T\mathbf{W} + \mathbf{b})
+$$
+
+## Dropout
+
+A network with several dropout layers:
+
+$$f(\mathbf{x}, \mathbf{w}_0,...) = \text{DO}_r(\sigma( \text{DO}_r(\sigma( \text{DO}_r(\sigma(\text{DO}_r( \mathbf{x})^T  \mathbf{W}_2 + \mathbf{b}_2))^T \mathbf{W}_1 + \mathbf{b}_1))^T \mathbf{w}_0 + \mathbf{b}_0$$
+
+## Dropout
+
+A network with several dropout layers:
+
+$$
+\mathbf{a} = \sigma(\text{DO}_r(\mathbf{x})^T\mathbf{W}_2 + \mathbf{b}_2)
+$$
+
+$$
+\mathbf{b} = \sigma(\text{DO}_r(\mathbf{a})^T\mathbf{W}_1 + \mathbf{b}_1)
+$$\
+$$
+\mathbf{f} = \text{DO}_r(\mathbf{b})^T\mathbf{w}_0 + b_0
+$$
+
+## Dropout
+
+::: columns
+::: {.column width="33%"}
+![](images/paste-19.png)
+:::
+
+::: {.column width="33%"}
+![](images/paste-20.png)
+:::
+
+::: {.column width="33%"}
+![](images/paste-21.png)
+:::
+:::
+
+## Dropout
+
+![](images/paste-22.png)
+
+## Dropout at evaluation time
+
+$$
+\phi(\mathbf{x})_{train} = \sigma(\text{DO}_r(\mathbf{x})^T\mathbf{W} + \mathbf{b})$$ $$ \rightarrow \quad \phi(\mathbf{x})_{eval} = \sigma(\mathbf{x}^T\mathbf{W} + \mathbf{b})
+$$
+
+This has a problem!
+
+## Dropout at evaluation time
+
+Consider the **expected value** of a linear function with dropout:
+
+$$
+\mathbb{E}[ \text{DO}_r(\mathbf{x})^T\mathbf{w}] = \sum_i d_i x_i w_i, \quad d_i \sim \text{Bernoulli}(1-r)
+$$
+
+## Dropout at evaluation time
+
+Consider the **expected value** of a linear function with dropout:
+
+$$
+\mathbb{E}[ \text{DO}_r(\mathbf{x})^T\mathbf{w}] = \sum_i d_i x_i w_i, \quad d_i \sim \text{Bernoulli}(1-r)
+$$
+
+$$
+= \sum_i p(d_i=1) x_i w_i = (1-r)\sum_i  x_i w_i <  \sum_i  x_i w_i
+$$
+
+If $r=0.5$ then on average the output of our function with dropout will only be half as large as the function without dropout!
+
+## Dropout at evaluation time
+
+Correct solution
+
+## Dropout at evaluation time
+
+Simple (but not quite correct) solution
+
+$$
+\text{Dropout}_{eval}(\mathbf{X}, r) = (1-r) \mathbf{X}
+$$
+
+This gives use the smooth prediction function we're looking for:
+
+![](images/paste-22.png)
+
+## Dropout in PyTorch
+
+```{python}
+#| eval: false
+#| echo: true
+# 2 Hidden-layer network with dropout
+model = nn.Sequential(nn.Dropout(0.5), nn.Linear(2, 10), nn.ReLU(), 
+                      nn.Dropout(0.5), nn.Linear(10, 10), nn.ReLU(), 
+                      nn.Dropout(0.5), nn.Linear(10, 1)
+                     )
+```
+
+# Optimization
+
+## Initialization
+
+Gradient descent: $$ \mathbf{w}^{(k+1)} \longleftarrow \mathbf{w}^{(k)} - \alpha \nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})$$
+
+What do we choose for $\mathbf{w}^{(0)}$?
+
+## Convexity
+
+Convex function $f$
+
+$$
+f(t x_1 + (1-t)x_2) \leq tf(x_1) + (1-t)f(x_2)
+$$
+
+![](images/paste-43.png)
+
+## Convexity
+
+*Strictly* convex function $f$
+
+$$
+f(t x_1 + (1-t)x_2)\ {\color{red}{<}}\ tf(x_1) + (1-t)f(x_2)
+$$
+
+![Single optimum, gradient is non-zero away from the optimum.](images/paste-43.png){width="1920"}
+
+## Convexity
+
+Linear and logistic regression losses are convex (usually strictly)
+
+![](images/paste-44.png)
+
+## Convexity
+
+Linear and logistic regression losses are convex (usually strictly)
+
+![](images/paste-45.png)
+
+Gradient descent will always\* get us to the right answer.
+
+## Convexity
+
+Neural network losses are (usually) not convex!
+
+![](images/paste-46.png)
+
+Why?
+
+## Convexity
+
+Two equivalent solutions
+
+![](images/paste-58.png){width="775"}
+
+![](images/paste-57.png){width="771"}
+
+## Symmetry-breaking
+
+A simple network
+
+$$
+f(\mathbf{x}) = \sigma(\mathbf{x}^T\mathbf{W}_1)^T\mathbf{w}_0=\sigma(x_1 w_{11}) w_{01} +\sigma (x_1 w_{12})w_{02}
+$$
+
+$$
+\frac{d}{dw_{01}} f(\mathbf{x}) = 
+$$
+
+$$
+\frac{d}{dw_{02}} f(\mathbf{x}) =
+$$
+
+## Symmetry-breaking
+
+A simple network
+
+$$
+f(\mathbf{x}) = \sigma(\mathbf{x}^T\mathbf{W}_1)^T\mathbf{w}_0=\sigma(x_1 w_{11}) w_{01} +\sigma (x_1 w_{12})w_{02}
+$$
+
+$$
+\frac{d}{dw_{01}} f(\mathbf{x}) = \sigma(x_1 w_{11}) = \sigma(x_1 a)
+$$
+
+$$
+\frac{d}{dw_{02}} f(\mathbf{x}) = \sigma(x_1 w_{12}) = \sigma(x_1 a)
+$$
+
+## Symmetry-breaking
+
+::: columns
+::: {.column width="45%"}
+![](images/paste-47.png)\
+When the network is initialized with symmetry, the two neurons will always have the same output and our solution is poor.
+:::
+
+::: {.column width="10%"}
+:::
+
+::: {.column width="45%"}
+![](images/paste-48.png)
+
+When initialized randomly, the two neurons can create different transforms and a much better solution is found.
+:::
+:::
+
+## Symmetry-breaking
+
+::: columns
+::: {.column width="45%"}
+![](images/paste-49.png)
+:::
+
+::: {.column width="45%"}
+![](images/paste-50.png)
+:::
+:::
+
+## Visualizing learning rates
+
+::: columns
+::: {.column width="30%"}
+![](images/paste-51.png)
+
+A small learning rate means we will move slowly, so It may take a long time to find the minimum.
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="30%"}
+![](images/paste-54.png)
+
+A well-chosen learning rate lets us find a minimum quickly.
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="30%"}
+![](images/paste-53.png)
+
+A too-large learning rate means that steps may take us flying past the minimum!
+:::
+:::
+
+## Scaled initialization
+
+Initializing randomly:
+
+$$w_{i} \sim \mathcal{N}(0, 1) \quad \forall\ w_{i} \in \mathbf{w}$$This has a subtle issue though. Why?
+
+## Scaled initialization
+
+To see why let's consider a linear function defined by randomly initialized weights:
+
+$$
+f(\mathbf{x}) = \sum_{i=1}^d x_i w_i
+$$
+
+Let's consider the mean and variance of this output with respect to $\mathbf{w}$:
+
+$$
+\mathbb{E} \big[f(\mathbf{x})\big] =
+$$
+
+$$
+\text{Var} \big[f(\mathbf{x})\big] =
+$$
+
+## Scaled initialization
+
+To see why let's consider a linear function defined by randomly initialized weights:
+
+$$
+f(\mathbf{x}) = \sum_{i=1}^d x_i w_i
+$$
+
+Let's consider the mean and variance of this output with respect to $\mathbf{w}$:
+
+$$
+\mathbb{E} \big[f(\mathbf{x})\big] = \mathbb{E} \bigg[  \sum_{i=1}^d x_i w_i \bigg] 
+$$
+
+$$
+=   \sum_{i=1}^d x_i \mathbb{E} \big[w_i \big] = 0, \quad w_i \sim \mathcal{N}(0, 1)
+$$
+
+## Scaled initialization
+
+To see why let's consider a linear function defined by randomly initialized weights:
+
+$$
+f(\mathbf{x}) = \sum_{i=1}^d x_i w_i
+$$
+
+Let's consider the mean and variance of this output with respect to $\mathbf{w}$:
+
+$$
+\text{Var} \big[f(\mathbf{x})\big] = \text{Var}  \bigg[  \sum_{i=1}^d x_i w_i \bigg] 
+$$
+
+$$
+ =\sum_{i=1}^d \text{Var} \big[ x_i w_i \big] = \sum_{i=1}^d x_i^2 \text{Var} [w_i] = \sum_{i=1}^d x_i^2 
+$$
+
+## Scaled initialization
+
+![](images/paste-55.png){width="666"}
+
+## Scaled initialization
+
+Scaling
+
+$$
+f(\mathbf{x}) = \sum_{i=1}^d x_i w_i\bigg(\frac{1}{s}\bigg)
+$$
+
+If we want the variance to be independent of $d$, then we want:
+
+$$
+s = 
+$$
+
+## Scaled initialization
+
+Scaling
+
+$$
+f(\mathbf{x}) = \sum_{i=1}^d x_i w_i\bigg(\frac{1}{s}\bigg)
+$$
+
+If we want the variance to be independent of $d$, then we want:
+
+$$
+s = \sqrt{d}
+$$
+
+## Scaled initialization
+
+Computing the variance
+
+$$
+\text{Var}  \bigg[  \sum_{i=1}^d x_i w_i \bigg(\frac{1}{\sqrt{d}}\bigg) \bigg] =   
+$$
+
+## Scaled initialization
+
+Computing the variance
+
+$$
+\text{Var}  \bigg[  \sum_{i=1}^d x_i w_i \bigg(\frac{1}{\sqrt{d}}\bigg) \bigg] =   
+$$
+
+$$
+\sum_{i=1}^d \text{Var} \bigg[ x_i w_i \bigg(\frac{1}{\sqrt{d}}\bigg) \bigg] 
+$$
+
+$$
+= \sum_{i=1}^d x_i^2 \bigg(\frac{1}{\sqrt{d}}\bigg)^2 \text{Var} [w_i] = \frac{1}{d}\sum_{i=1}^d x_i^2 
+$$
+
+## Scaled initialization
+
+For neural network layers where the weights are a matrix $\mathbf{W} \in \mathbb{R}^{d \times e}$, this works the same way:
+
+$$w_{ij} \sim \mathcal{N}\bigg(0, \frac{1}{\sqrt{d}}\bigg) \quad \forall\ w_{ij} \in \mathbf{W},\ \mathbf{w}\in \mathbb{R}^{d \times e}$$
+
+A popular alternative scales the distribution according to both the number of inputs and outputs of the layer:
+
+$$w_{ij} \sim \mathcal{N}\bigg(0, \sqrt{\frac{2}{d + e}}\bigg) \quad \forall\ w_{ij} \in \mathbf{W},\ \mathbf{w}\in \mathbb{R}^{d \times e}$$
+
+This is known as **Xavier initialization** (or **Glorot initialization** after the inventor Xavier Glorot).
+
+## Scaled initialization
+
+::: columns
+::: {.column width="100%"}
+![](images/paste-56.png){width="926"}
+:::
+:::
+
+# Stochastic Gradient Descent
+
+## Computational complexity
+
+::: columns
+::: {.column width="40%"}
+-   **Dataset size:** $N$
+
+-   **Dimensionality :** $d$
+
+-   **Number of layers:** $L$
+
+-   **Number of steps:** $S$
+:::
+
+::: {.column width="60%"}
+We can consider one of the networks shown above as a specific example:
+
+![](images/paste-63.png){width="749"}
+:::
+:::
+
+## Computational complexity
+
+Loss function
+
+$$\underset{\text{MSE}}{\textbf{Loss}} (\mathbf{w}, \mathbf{X}, \mathbf{y}) = \frac{1}{N}\sum_{i=1}^N (f(\mathbf{x}_i, \mathbf{w}) - y_i)^2$$
+
+Gradient with respect to the parameters, $\mathbf{w}$.
+
+$$\nabla_{\mathbf{w}}\underset{\text{MSE}}{\textbf{Loss}} (\mathbf{w}, \mathbf{X}, \mathbf{y}) = \nabla_{\mathbf{w}}\frac{1}{N}\sum_{i=1}^N (f(\mathbf{x}_i, \mathbf{w}) - y_i)^2$$
+
+Our analysis would be equivalent for classification problems.
+
+## Computing a single neuron
+
+::: columns
+::: {.column width="60%"}
+$$\phi(\mathbf{x})=\sigma\big(\mathbf{x}^T\mathbf{w} \big) = \sigma\bigg(\sum_{i=1}^d x_i w_i \bigg)$$
+
+Activation function $\sigma(\cdot)$: Constant, $\mathcal{O}(1)$
+
+Summation: $\sum_{i=1}^d x_i w_i$ : Linear, $\mathcal{O}(d)$.
+:::
+
+::: {.column width="40%"}
+![](images/paste-60.png){width="758"}
+:::
+:::
+
+## Computing a single neuron
+
+::: columns
+::: {.column width="60%"}
+$\phi(\mathbf{x})=\sigma\big(\mathbf{x}^T\mathbf{w} \big) = \sigma\bigg(\sum_{i=1}^d x_i w_i \bigg)$
+
+Backward pass?
+
+-   Given: $\frac{dLoss}{d\phi}$
+
+-   Update: $\frac{dLoss}{dx_i}$ $\frac{dLoss}{dw_i}$
+:::
+
+::: {.column width="40%"}
+![](images/paste-60.png){width="758"}
+:::
+:::
+
+## Computing a single neuron
+
+::: columns
+::: {.column width="60%"}
+Backward pass?
+
+-   Given: $\frac{dLoss}{d\phi}$
+
+-   Update: $\frac{dLoss}{dx_i}$ $\frac{dLoss}{dw_i}$
+:::
+
+::: {.column width="40%"}
+![](images/paste-60.png){width="758"}
+:::
+:::
+
+Activation function: $$\frac{dLoss}{d(\mathbf{x}^T\mathbf{w})}=\frac{dLoss}{d\phi}\frac{d\phi}{d(\mathbf{x}^T\mathbf{w})}$$ All scalars! $\mathcal{O}(1)$
+
+## Computing a single neuron
+
+::: columns
+::: {.column width="60%"}
+Backward pass?
+
+-   Given: $\frac{dLoss}{d(\mathbf{x}^T\mathbf{w})}$
+
+-   Update: $\frac{dLoss}{dx_i}$ $\frac{dLoss}{dw_i}$
+:::
+
+::: {.column width="40%"}
+![](images/paste-60.png){width="758"}
+:::
+:::
+
+$$
+\mathbf{x}^T\mathbf{w}=\sum_{i=1}^d x_i w_i$$
+
+$\frac{dLoss}{dw_i}=$
+
+## Computing a single neuron
+
+::: columns
+::: {.column width="60%"}
+Backward pass?
+
+-   Given: $\frac{dLoss}{d(\mathbf{x}^T\mathbf{w})}$
+
+-   Update: $\frac{dLoss}{dx_i}$ $\frac{dLoss}{dw_i}$
+:::
+
+::: {.column width="40%"}
+![](images/paste-60.png){width="758"}
+:::
+:::
+
+$$
+\frac{dLoss}{dx_i}=\frac{dLoss}{d(\mathbf{x}^T\mathbf{w})}\frac{d(\mathbf{x}^T\mathbf{w})}{dx_i}= \frac{dLoss}{d(\mathbf{x}^T\mathbf{w})} w_i$$ $$
+\frac{dLoss}{dw_i}=\frac{dLoss}{d(\mathbf{x}^T\mathbf{w})}\frac{d(\mathbf{x}^T\mathbf{w})}{dw_i}= \frac{dLoss}{d(\mathbf{x}^T\mathbf{w})} x_i
+$$
+
+$\mathcal{O}(1)$ per entry. Total: [$\mathcal{O}(d)$]{style="color: red;"}.
+
+## Cost per layer
+
+::: columns
+::: {.column width="60%"}
+$\mathcal{O}(d)$ Neurons per layer
+
+Total cost: $\mathcal{O}(d^2)$
+:::
+
+::: {.column width="40%"}
+![](images/paste-61.png){width="737"}
+:::
+:::
+
+Full network: $\mathcal{O}(Ld^2)$
+
+## Computational complexity
+
+We've bounded the time it takes to compute *one* of our predictions: $f(\mathbf{x}_i, \mathbf{w})$.
+
+$$\underset{\text{MSE}}{\textbf{Loss}} (\mathbf{w}, \mathbf{X}, \mathbf{y}) = \frac{1}{N}\sum_{i=1}^N (f(\mathbf{x}_i, \mathbf{w}) - y_i)^2$$
+
+$N$ terms in summation, total cost of $\mathcal{O}(NLd^2)$ for a single gradient descent update:
+
+$$ \mathbf{w}^{(k+1)} \longleftarrow \mathbf{w}^{(k)} - \alpha \nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})$$
+
+**Total cost of gradient descent:** $\mathcal{O}(SNLd^2)$.
+
+## AlexNet (2012)
+
+::: columns
+::: {.column width="50%"}
+-   **Dataset size:** $N=$
+
+-   **Dimensionality :** $d=$
+
+-   **Number of layers:** $L=$
+
+-   **Number of steps:** $S=$
+:::
+
+::: {.column width="50%"}
+Network:
+
+![](images/paste-64.png){width="570"}
+:::
+:::
+
+## AlexNet (2012)
+
+::: columns
+::: {.column width="50%"}
+-   **Dataset size:** $N=$
+
+-   **Dimensionality :** $d=4000$
+
+-   **Number of layers:** $L=10$
+
+-   **Number of steps:** $S=$
+:::
+
+::: {.column width="50%"}
+![](images/paste-65.png){width="506"}
+:::
+:::
+
+## Estimating loss
+
+Neural network MSE loss:
+
+$$\underset{\text{MSE}}{\textbf{Loss}} (\mathbf{w}, \mathbf{X}, \mathbf{y}) = \frac{1}{N}\sum_{i=1}^N (f(\mathbf{x}_i, \mathbf{w}) - y_i)^2$$
+
+## Estimating loss
+
+Neural network MSE loss:
+
+$$\underset{\text{MSE}}{\textbf{Loss}} (\mathbf{w}, \mathbf{X}, \mathbf{y}) = \frac{1}{N}\sum_{i=1}^N (f(\mathbf{x}_i, \mathbf{w}) - y_i)^2$$
+
+Estimate by sampling:
+
+$$\underset{\text{MSE}}{\textbf{Loss}} (\mathbf{w}, \mathbf{X}, \mathbf{y}) \approx (f(\mathbf{x}_i, \mathbf{w}) - y_i)^2, \quad i \sim \text{Uniform}(1, N)$$
+
+## Estimating loss
+
+$$\underset{\text{MSE}}{\textbf{Loss}} (\mathbf{w}, \mathbf{X}, \mathbf{y}) \approx (f(\mathbf{x}_i, \mathbf{w}) - y_i)^2, \quad i \sim \text{Uniform}(1, N)$$
+
+Expectation of sampled loss
+
+$$\mathbb{E}_i[(f(\mathbf{x}_i, \mathbf{w}) - y_i)^2] = ?$$
+
+## Estimating loss
+
+$$\underset{\text{MSE}}{\textbf{Loss}} (\mathbf{w}, \mathbf{X}, \mathbf{y}) \approx (f(\mathbf{x}_i, \mathbf{w}) - y_i)^2, \quad i \sim \text{Uniform}(1, N)$$
+
+Expectation of sampled loss [is the true loss!]{style="color: red;"}
+
+$$\mathbb{E}_i[(f(\mathbf{x}_i, \mathbf{w}) - y_i)^2] = \sum_{i=1}^N p(i)(f(\mathbf{x}_i, \mathbf{w}) - y_i)^2$$
+
+$$
+ =\frac{1}{N} \sum_{i=1}^N (f(\mathbf{x}_i, \mathbf{w}) - y_i)^2
+$$
+
+## Estimating loss
+
+In general any loss that can be written as a mean of individual losses can be estimated in this way:
+
+$$\textbf{Loss} (\mathbf{w}, \mathbf{X}, \mathbf{y}) = \frac{1}{N} \sum_{i=1}^N \textbf{Loss} (\mathbf{w}, \mathbf{x}_i, y_i)$$
+
+$$\textbf{Loss} (\mathbf{w}, \mathbf{X}, \mathbf{y}) = \mathbb{E}[\textbf{Loss} (\mathbf{w}, \mathbf{x}_i, y_i)], \  i\sim \text{Uniform}(1,N)$$
+
+Cost for full loss: $\mathcal{O}(N)$
+
+Cost of *estimated* loss: [$\mathcal{O}(1)$]{style="color: red;"}
+
+## Estimating gradients
+
+Gradient descent update:
+
+$$ \mathbf{w}^{(k+1)} \longleftarrow \mathbf{w}^{(k)} - \alpha \nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})$$
+
+Gradient can be composed into a sum of gradients and estimated the same way!
+
+$$\nabla_{\mathbf{w}} \textbf{Loss} (\mathbf{w}, \mathbf{X}, \mathbf{y}) = \nabla_{\mathbf{w}} \bigg( \frac{1}{N} \sum_{i=1}^N \textbf{Loss} (\mathbf{w}, \mathbf{x}_i, y_i)\bigg)$$
+
+## Estimating gradients
+
+$$\nabla_{\mathbf{w}} \textbf{Loss} (\mathbf{w}, \mathbf{X}, \mathbf{y}) = \nabla_{\mathbf{w}} \bigg( \frac{1}{N} \sum_{i=1}^N \textbf{Loss} (\mathbf{w}, \mathbf{x}_i, y_i)\bigg)$$
+
+$$=\frac{1}{N} \sum_{i=1}^N  \nabla_{\mathbf{w}} \textbf{Loss} (\mathbf{w}, \mathbf{x}_i, y_i) = \mathbb{E}[\nabla_{\mathbf{w}} \textbf{Loss} (\mathbf{w}, \mathbf{x}_i, y_i)])$$
+
+*Stochastic gradient descent update:*
+
+$$ \mathbf{w}^{(k+1)} \longleftarrow \mathbf{w}^{(k)} - \alpha \nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{x}_i, y_i)$$
+
+$$
+i\sim \text{Uniform}(1, N)
+$$
+
+## Estimating gradients
+
+![](images/paste-66.png){width="667"}
+
+![](images/paste-67.png){width="683"}
+
+## Minibatch SGD
+
+Can estimate gradients with a *minibatch* of $B$ observations:
+
+$$\text{Batch:}\ \{(\mathbf{x}_{b_1}, y_{b_1}), (\mathbf{x}_{b_2}, y_{b_2}), ...,  (\mathbf{x}_{b_B}, y_{b_B})\}$$
+
+$$
+\{b_1, b_2, ...,b_B\} \sim \text{Uniform}(1, N)
+$$
+
+New estimate:
+
+$$\nabla_{\mathbf{w}} \textbf{Loss} (\mathbf{w}, \mathbf{X}, \mathbf{y}) \approx \frac{1}{B} \sum_{i=1}^B \nabla_{\mathbf{w}} \textbf{Loss} (\mathbf{w}, \mathbf{x}_{b_i}, y_{b_i})$$
+
+$$
+\{b_1, b_2, ...,b_B\} \sim \text{Uniform}(1, N)
+$$
+
+## Minibatch SGD
+
+Does this still give the correct expectation?
+
+$$\mathbb{E}\bigg[\frac{1}{B} \sum_{i=1}^B \nabla_{\mathbf{w}} \textbf{Loss} (\mathbf{w}, \mathbf{x}_{b_i}, y_{b_i})\bigg] = ?$$
+
+## Minibatch SGD
+
+Does this still give the correct expectation?
+
+$$\mathbb{E}\bigg[\frac{1}{B} \sum_{i=1}^B \nabla_{\mathbf{w}} \textbf{Loss} (\mathbf{w}, \mathbf{x}_{b_i}, y_{b_i})\bigg] $$
+
+$$= \bigg(\frac{1}{B}\bigg) \sum_{i=1}^B\mathbb{E}\bigg[ \nabla_{\mathbf{w}} \textbf{Loss} (\mathbf{w}, \mathbf{x}_{b_i}, y_{b_i})\bigg]$$ $$ = \nabla_{\mathbf{w}} \textbf{Loss} (\mathbf{w}, \mathbf{X}, \mathbf{y})$$
+
+## Minibatch SGD
+
+What about variance?
+
+$$
+\text{Var}\bigg[\frac{1}{B} \sum_{i=1}^B \nabla_{\mathbf{w}} \textbf{Loss} (\mathbf{w}, \mathbf{x}_{b_i}, y_{b_i})\bigg] = ?
+$$
+
+## Minibatch SGD
+
+The variance decreases with the size of the batch!
+
+$$\text{Var}\bigg[\frac{1}{B} \sum_{i=1}^B \nabla_{\mathbf{w}} \textbf{Loss} (\mathbf{w}, \mathbf{x}_{b_i}, y_{b_i})\bigg] $$
+
+$$
+=  \bigg(\frac{1}{B^2}\bigg) \sum_{i=1}^B\text{Var}\bigg[ \nabla_{\mathbf{w}} \textbf{Loss} (\mathbf{w}, \mathbf{x}_{b_i}, y_{b_i})\bigg]
+$$
+
+$$= \bigg(\frac{1}{B}\bigg)\text{Var}\bigg[ \nabla_{\mathbf{w}} \textbf{Loss} (\mathbf{w}, \mathbf{x}_{b_i}, y_{b_i})\bigg]$$
+
+## Minibatch SGD
+
+![](images/paste-66.png){width="667"}
+
+![](images/paste-69.png){width="652"}

@@ -527,3 +527,4 @@ def test_vjp(op, name='', binary=False, true_func=None, issum=False):
         assert np.allclose(impl[1], truth), 'dL_db has an incorrect value (See printout above)!'
     print('Passed ' + name +'!')
         
+import numpy as np

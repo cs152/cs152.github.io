@@ -204,11 +204,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#import urllib.request</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#remote_url = 'https://gist.githubusercontent.com/gabehope/d3e6b10338a1ba78f53204fc7502eda5/raw/52631870b1475b5ef8d9701f1c676fa97bf7b300/hw5_support.py'</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#with urllib.request.urlopen(remote_url) as remote, open('hw4_support.py', 'w') as local:</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#with urllib.request.urlopen(remote_url) as remote, open('hw5_support.py', 'w') as local:</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  [local.write(str(line, encoding='utf-8')) for line in remote]</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Run me first!</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hw5_support <span class="im">import</span> <span class="op">*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hw5_support <span class="im">import</span> <span class="op">*</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="python-features" class="level4">
 <h4 class="anchored" data-anchor-id="python-features">Python features</h4>
@@ -515,7 +516,7 @@ c.backward_pass() # Updates dL/da and dL/db</code></pre>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> matmul(a, b):</span>
 <span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Multiplys two matrices</span></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> _matmul(a, b) <span class="cf">if</span> <span class="bu">isinstance</span>(a, AutogradValue) <span class="cf">else</span> np.matmul(a, b)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> _matmul(a, b) <span class="cf">if</span> (<span class="bu">isinstance</span>(a, AutogradValue) <span class="kw">or</span> <span class="bu">isinstance</span>(b, AutogradValue)) <span class="cf">else</span> np.matmul(a, b)</span>
 <span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sigmoid(x):</span>
 <span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Computes the sigmoid function</span></span>
@@ -605,6 +606,7 @@ c.backward_pass() # Updates dL/da and dL/db</code></pre>
 <section id="q5" class="level4">
 <h4 class="anchored" data-anchor-id="q5">Q5</h4>
 <p>Implement an <code>nll_and_grad</code> method for the <code>NeuralNetwork</code> class using your reverse-mode automatic differentiation implmentation to compute the gradient with respect to each weight matrix.</p>
+<p><em><strong>Hint:</strong> You’ll need to use the <code>wrap_array</code> and <code>unwrap_gradients</code> functions you wrote above. You should use the built-in <code>nll</code> method to compute the loss.</em></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> nll_and_grad(<span class="va">self</span>, X, y):</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
@@ -824,22 +826,24 @@ c.backward_pass() # Updates dL/da and dL/db</code></pre>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: Remember that above we defined a class for each type of operation</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="co"># so in this code we are overriding the basic operators for AutogradValue</span></span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co"># such that they construct a new object of the class corresponding to the</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co"># given operation and return it.</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co"># given operation and return it. </span></span>
 <span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co"># (You don't need to everything that's happening here to do the HW)</span></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>AutogradValue.vjp <span class="op">=</span> <span class="kw">lambda</span> <span class="va">self</span>, a: (<span class="fl">1.</span>,)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>AutogradValue.vjp <span class="op">=</span> <span class="kw">lambda</span> <span class="va">self</span>, grad, a: (<span class="fl">1.</span>,)</span>
 <span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>AutogradValue.exp <span class="op">=</span> <span class="kw">lambda</span> a: _exp(a)</span>
 <span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>AutogradValue.log <span class="op">=</span> <span class="kw">lambda</span> a: _log(a)</span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>AutogradValue.pad <span class="op">=</span> <span class="kw">lambda</span> a: _log(a)</span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>AutogradValue.matmul <span class="op">=</span> <span class="kw">lambda</span> a, b: _matmul(a, b)</span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>AutogradValue.<span class="fu">__add__</span> <span class="op">=</span> <span class="kw">lambda</span> a, b: _add(a, b)</span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>AutogradValue.<span class="fu">__radd__</span> <span class="op">=</span> <span class="kw">lambda</span> a, b: _add(b, a)</span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>AutogradValue.<span class="fu">__sub__</span> <span class="op">=</span> <span class="kw">lambda</span> a, b: _sub(a, b)</span>
-<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>AutogradValue.<span class="fu">__rsub__</span> <span class="op">=</span> <span class="kw">lambda</span> a, b: _sub(b, a)</span>
-<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>AutogradValue.<span class="fu">__neg__</span> <span class="op">=</span> <span class="kw">lambda</span> a: _neg(a)</span>
-<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>AutogradValue.<span class="fu">__mul__</span> <span class="op">=</span> <span class="kw">lambda</span> a, b: _mul(a, b)</span>
-<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>AutogradValue.<span class="fu">__rmul__</span> <span class="op">=</span> <span class="kw">lambda</span> a, b: _mul(b, a)</span>
-<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>AutogradValue.<span class="fu">__truediv__</span> <span class="op">=</span> <span class="kw">lambda</span> a, b: _div(a, b)</span>
-<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>AutogradValue.<span class="fu">__rtruediv__</span> <span class="op">=</span> <span class="kw">lambda</span> a, b: _div(b, a)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>AutogradValue.pad <span class="op">=</span> <span class="kw">lambda</span> a: _pad(a)</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>AutogradValue.<span class="bu">sum</span> <span class="op">=</span> <span class="kw">lambda</span> a: _sum(a)</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>AutogradValue.matmul <span class="op">=</span> <span class="kw">lambda</span> a, b: _matmul(a, b)</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>AutogradValue.rmatmul <span class="op">=</span> <span class="kw">lambda</span> a, b: _matmul(b, a)</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>AutogradValue.<span class="fu">__add__</span> <span class="op">=</span> <span class="kw">lambda</span> a, b: _add(a, b)</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>AutogradValue.<span class="fu">__radd__</span> <span class="op">=</span> <span class="kw">lambda</span> a, b: _add(b, a)</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>AutogradValue.<span class="fu">__sub__</span> <span class="op">=</span> <span class="kw">lambda</span> a, b: _sub(a, b)</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>AutogradValue.<span class="fu">__rsub__</span> <span class="op">=</span> <span class="kw">lambda</span> a, b: _sub(b, a)</span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>AutogradValue.<span class="fu">__neg__</span> <span class="op">=</span> <span class="kw">lambda</span> a: _neg(a)</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>AutogradValue.<span class="fu">__mul__</span> <span class="op">=</span> <span class="kw">lambda</span> a, b: _mul(a, b)</span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>AutogradValue.<span class="fu">__rmul__</span> <span class="op">=</span> <span class="kw">lambda</span> a, b: _mul(b, a)</span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>AutogradValue.<span class="fu">__truediv__</span> <span class="op">=</span> <span class="kw">lambda</span> a, b: _div(a, b)</span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>AutogradValue.<span class="fu">__rtruediv__</span> <span class="op">=</span> <span class="kw">lambda</span> a, b: _div(b, a)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>As a final step, we need to update our <code>backward_pass</code> method to use our new <code>vjp</code> method instead of relying on <code>grads</code>.</p>
 </section>

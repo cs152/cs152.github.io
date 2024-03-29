@@ -35,7 +35,7 @@ PyScope = function() {
   let scope = pyodide.toPy({});
   
   let py = async (strings, ...expressions) => {
-    let globals = {};
+    let globals = {stop: 'STOP'};
     const code = strings.reduce((result, string, index) => {
       if (expressions[index]) {
         const name = `x${index}`;
@@ -52,6 +52,12 @@ PyScope = function() {
         globals: scope
       }
     );
+
+    console.log(result === 'STOP');
+    if (result === 'STOP') {
+      console.log('wtf');
+      return new Promise(() => {}); 
+    }
     if (result?.t2Js) return result.t2Js();
     if (result?.toJs) return result.toJs();
     return result;
@@ -63,7 +69,7 @@ PyScope = function() {
 py = {
   let testscope = PyScope();
   let py = async (strings, ...expressions) => {
-    let globals = {};
+    let globals = {stop: 'STOP'};
     const code = strings.reduce((result, string, index) => {
       if (expressions[index]) {
         const name = `x${index}`;
@@ -78,6 +84,11 @@ py = {
       code,
       {globals: pyodide.globals}
     );
+
+    console.log(result === 'STOP');
+    if (result === 'STOP') {
+      return new Promise(() => {}); 
+    }
     if (result?.t2Js) return result.t2Js();
     if (result?.toJs) return result.toJs();
     return result;
@@ -396,7 +407,7 @@ def PlotlyFigure(width=800, height=None, hide_toolbar=True, overlay=True):
     overlay.style.position = 'absolute'
   return container
   
-def PlotlyInput(width=800, height=None, hide_toolbar=True, sync=None):
+def PlotlyInput(width=800, height=None, hide_toolbar=True, sync=None, events=['mousedown', 'mousemove']):
   container = PlotlyFigure(width, height, hide_toolbar)
   lineplot, overlay = container.childNodes[0], container.childNodes[1]
   if sync is None:
@@ -414,7 +425,7 @@ def PlotlyInput(width=800, height=None, hide_toolbar=True, sync=None):
       if event.type == 'mouseup':
         self.mousedown = False
   
-      if self.mousedown:
+      if self.mousedown and event.type in events:
         x = float(lineplot._fullLayout.xaxis.p2c(event.layerX - lineplot._fullLayout.margin.l))
         y = float(lineplot._fullLayout.yaxis.p2c(event.layerY - lineplot._fullLayout.margin.t))
         sync.value = to_js([x, y])
@@ -628,7 +639,7 @@ mpg = FileAttachment("auto-mpg.csv").csv()
 
 
 ::: {.column-screen .columns}
-::: {.column width="33%"}
+::: {.column width="50%"}
 ```{ojs}
 //| echo : false
 scatter = py`
@@ -652,20 +663,16 @@ viewof steps = Inputs.range([1, 100], {value: 1, step: 1, label: "  Steps"})
 ```{ojs}
 //| echo : false
 viewof threed = Inputs.toggle({value: false, label: "Show 3D"})
-viewof distribution = Inputs.toggle({value: false, label: "Show Dist."})
 ```
 :::
 
-::: {.column width="33%"}
+::: {.column width="50%"}
 ```{ojs}
 //| echo : false
 
 plots = py`
-lossplot = PlotlyInput()
-batchlossplot = PlotlyInput(sync=lossplot)
-
+lossplot = PlotlyInput(events=['mousedown'])
 threedlossplot = PlotlyFigure(hide_toolbar=False, overlay=False)
-threedbatchlossplot = PlotlyFigure(hide_toolbar=False, overlay=False)
 `
 
 viewof weights = py`
@@ -704,14 +711,6 @@ threedlossplot  if bool(${threed}) else ''
 ```
 :::
 
-::: {.column width="33%"}
-```{ojs}
-//| echo : false
-batchloss = py`
-# ${plots}
-batchlossplot
-`
-```
 ```{ojs}
 //| echo : false
 viewof newbatch = Inputs.button('New Batch')
@@ -724,13 +723,6 @@ viewof transform = Inputs.select(['none', 'sin', 'cos', 'square'], {label: 'Weig
 ```{ojs}
 //| echo : false
 viewof bscale = Inputs.range([0, 10], {value: 1, step: 0.01, label: " Bias scale"})
-```
-```{ojs}
-//| echo : false
-py`
-# ${plots}
-threedbatchlossplot if bool(${threed}) else ''
-`
 ```
 :::
 :::
@@ -761,8 +753,6 @@ data = py`
 import pandas as pd
 df = pd.DataFrame(${mpg})[['weight', 'mpg']]
 df = df.astype(float).dropna().values
-
-
 
 x, y = df[:, :1], df[:, 1:]
 x = Tensor((x - x.mean()) / x.std())
@@ -809,16 +799,11 @@ def loss(w, x, y):
 lossgrid = loss(paramgrid, x, y).reshape(ww.shape)
 losscontour = plotconvert(dict(x=wrange, y=brange, z=lossgrid, type='contour', ncontours=25, ))
 losssurface = plotconvert(dict(x=wrange, y=brange, z=lossgrid, type='surface', showlegend=False, showscale=False, opacity=0.8, contours=dict(x=dict(show=True), y=dict(show=True))))
-
-batchlossgrid = loss(paramgrid, xbatch, ybatch).reshape(ww.shape)
-batchlosscontour = plotconvert(dict(x=wrange, y=brange, z=batchlossgrid, type='contour', ncontours=25,))
-batchlosssurface = plotconvert(dict(x=wrange, y=brange, z=batchlossgrid, showlegend=False, showscale=False, type='surface', opacity=0.8, contours=dict(x=dict(show=True), y=dict(show=True))))
 `
 
-py`
+start = py`
 # ${surfaces}
 
-dist = bool(${distribution})
 cweights = ${weights}
 startpoint = dict(x=[cweights[0]], y=[cweights[1]], mode='markers', showlegend=False, marker=dict(color='firebrick', size=10, line= {'color': 'black', 'width': 3}))
 
@@ -836,52 +821,60 @@ magnitude = batchgrad ** 2
 if beta > 0:
   batchgrad = batchgrad / tf.sqrt(magnitude + 1e-8)
 
-for i, (nxbatch, nybatch) in zip(range(max(1, steps)), batches):
-  batchweights = batchweightlist[0] if dist else batchweightlist[-1]
-  fullweights = fullweightlist[0] if dist else fullweightlist[-1]
+batchi = 1
+fullweights = tf.stack(fullweightlist)
+batchweights = tf.stack(batchweightlist)
+`
 
-  fullgrad = lr * grad(lambda t: loss(t, x, y))(fullweights)
+step = py`
+# ${start} ${now}
 
-  bgrad = grad(lambda t: loss(t, nxbatch, nybatch))(batchweights)
+going = batchi < steps
+if going:
+  (nxbatch, nybatch) = batches[batchi]
+  batchi += 1
+
+  fullgrad = lr * grad(lambda t: loss(t, x, y))(fullweightlist[-1])
+
+  bgrad = grad(lambda t: loss(t, nxbatch, nybatch))(batchweightlist[-1])
   velocity = momentum * velocity + (1 - momentum) * bgrad
   magnitude = beta * magnitude + (1. - beta) * (bgrad ** 2)
   batchgrad = velocity
   if beta > 0:
     batchgrad = velocity / tf.sqrt(magnitude + 1e-8)
-  
-  fullweightlist.append((fullweights - fullgrad).flatten())
-  batchweightlist.append((batchweights - lr * batchgrad).flatten())
-  
 
-fullweights = tf.stack(fullweightlist)
-batchweights = tf.stack(batchweightlist)
+  fullweightlist.append((fullweightlist[-1] - fullgrad).flatten())
+  batchweightlist.append((batchweightlist[-1] - lr * batchgrad).flatten())
+  
+  fullweights = tf.stack(fullweightlist)
+  batchweights = tf.stack(batchweightlist)
 
+True if going else 'STOP'
+`
+
+update = py`
+# ${step}
+print('Updating')
 gradplot = dict(x=fullweights[:, 0], y=fullweights[:, 1], showlegend=False, line=dict(color='black'))
-if dist:
-  batchgradplot = dict(x=batchweights[:, 0], y=batchweights[:, 1], showlegend=False, line=dict(width=0))
-else:
-  batchgradplot = dict(x=batchweights[:, 0], y=batchweights[:, 1], showlegend=False, line=dict(color='orange'))
+batchgradplot = dict(x=batchweights[:, 0], y=batchweights[:, 1], showlegend=False, line=dict(color='orange'))
 
 
 zloss = loss(fullweights, x, y)
 batchzloss = loss(batchweights, x, y)
 threedgradplot = dict(x=fullweights[:, 0], y=fullweights[:, 1], z=zloss, showlegend=False, marker=dict(size=4), line=dict(color='black', width=4), type='scatter3d')
-threedbatchgradplot = dict(x=batchweights[:, 0], y=batchweights[:, 1], z=batchzloss, showlegend=False, marker=dict(size=4), line=dict(color='orange', width=4), type='scatter3d')
 
 PlotlyReactive(lossplot, [losscontour, startpoint, gradplot, batchgradplot], {'xaxis': {'range': [-3, 3]}, 'yaxis': {'range': [-3, 3]}})
-PlotlyReactive(batchlossplot, [batchlosscontour, startpoint, gradplot, batchgradplot], {'xaxis': {'range': [-3, 3]}, 'yaxis': {'range': [-3, 3]}})
 
 threed = bool(${threed})
 if threed:
+  print('Threedeee')
   PlotlyReactive(threedlossplot, [losssurface, threedgradplot, threedbatchgradplot], {'scene': {'hovermode' : False, 'xaxis': {'range': [-3, 3], 'visible': False}, 'yaxis': {'range': [-3, 3], 'visible': False}, 'zaxis': {'visible': False}}})
-  PlotlyReactive(threedbatchlossplot, [batchlosssurface], {'scene': {'hovermode' : False, 'xaxis': {'range': [-3, 3], 'visible': False}, 'yaxis': {'range': [-3, 3], 'visible': False}, 'zaxis': {'visible': False}}})
 else:
   PlotlyReactive(threedlossplot, [])
-  PlotlyReactive(threedbatchlossplot, [])
 `
 
 py`
-# ${batch}
+# ${batch} ${update}
 # Plot the data scatterplot and prediction function
 scatterdata = dict(x=x.reshape((-1,)), y=y.reshape((-1,)), mode='markers', label='All data', marker=dict(color='rgba(17, 157, 255,0.5)'))
 batchdata = dict(x=xbatch.reshape((-1,)), y=ybatch.reshape((-1,)), mode='markers', marker=dict(color='firebrick'))

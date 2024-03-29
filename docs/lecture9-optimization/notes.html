@@ -133,6 +133,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#computational-complexity" id="toc-computational-complexity" class="nav-link" data-scroll-target="#computational-complexity">Computational complexity</a></li>
   <li><a href="#computing-a-single-neuron" id="toc-computing-a-single-neuron" class="nav-link" data-scroll-target="#computing-a-single-neuron">Computing a single neuron</a></li>
   <li><a href="#computing-the-full-loss" id="toc-computing-the-full-loss" class="nav-link" data-scroll-target="#computing-the-full-loss">Computing the full loss</a></li>
+  <li><a href="#real-world-costs" id="toc-real-world-costs" class="nav-link" data-scroll-target="#real-world-costs">Real world costs</a></li>
   <li><a href="#estimating-loss" id="toc-estimating-loss" class="nav-link" data-scroll-target="#estimating-loss">Estimating loss</a></li>
   <li><a href="#estimating-gradients" id="toc-estimating-gradients" class="nav-link" data-scroll-target="#estimating-gradients">Estimating gradients</a></li>
   <li><a href="#minibatch-sgd" id="toc-minibatch-sgd" class="nav-link" data-scroll-target="#minibatch-sgd">Minibatch SGD</a></li>
@@ -346,7 +347,7 @@ s = \sqrt{d}
 </section>
 <section id="computing-the-full-loss" class="level2">
 <h2 class="anchored" data-anchor-id="computing-the-full-loss">Computing the full loss</h2>
-<p>Things get a little easier from here. We know that each layer of our network has <span class="math inline">\(d\)</span> neurons, each of which takes <span class="math inline">\(\mathcal{O}(d)\)</span> time to compute. Therefore the total cost for a layer will be <span class="math inline">\(\mathbf{O}(d^2)\)</span>.</p>
+<p>Things get a little easier from here. We know that each layer of our network has <span class="math inline">\(d\)</span> neurons, each of which takes <span class="math inline">\(\mathcal{O}(d)\)</span> time to compute. Therefore the total cost for a layer will be <span class="math inline">\(\mathcal{O}(d^2)\)</span>.</p>
 <p>Our full network has <span class="math inline">\(L\)</span> layers, therefore the full network will take <span class="math inline">\(\mathcal{O}(Ld^2)\)</span> time to compute.</p>
 <p>Looking back at our loss:</p>
 <p><span class="math display">\[\underset{\text{MSE}}{\textbf{Loss}} (\mathbf{w}, \mathbf{X}, \mathbf{y}) = \frac{1}{N}\sum_{i=1}^N (f(\mathbf{x}_i, \mathbf{w}) - y_i)^2\]</span></p>
@@ -354,6 +355,11 @@ s = \sqrt{d}
 <p><span class="math display">\[ \mathbf{w}^{(k+1)} \longleftarrow \mathbf{w}^{(k)} - \alpha \nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})\]</span></p>
 <p>Is <span class="math inline">\(\mathcal{O}(NLd^2)\)</span>.</p>
 <p>Accounting for the number of update steps ( <span class="math inline">\(S\)</span> ) we perform we see that the <strong>total cost of gradient descent is:</strong> <span class="math inline">\(\mathcal{O}(SNLd^2)\)</span>.</p>
+</section>
+<section id="real-world-costs" class="level2">
+<h2 class="anchored" data-anchor-id="real-world-costs">Real world costs</h2>
+<p>Let’s asses how bad this running time actually is. To do so we’ll need to consider how large each of these factors actually is in practice. We’ll start by looking at a state-of-the-art (for 2012) neural network for classifying images: AlexNet.</p>
+<p><img src="images/paste-29.png" class="img-fluid" width="960"></p>
 </section>
 <section id="estimating-loss" class="level2">
 <h2 class="anchored" data-anchor-id="estimating-loss">Estimating loss</h2>

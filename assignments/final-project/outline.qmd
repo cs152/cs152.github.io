@@ -13,7 +13,7 @@ The first step for the project will be to form a group and participate in a disc
 
 -   Complete the [ethics and AI assignment](./ethics.qmd) as a group.
 
-## Proposal (**Due Wednesday 3/21 11:59pm**)
+## Proposal (**Due Thursday 4/4 11:59pm**)
 
 The next step for the project will be to formally propose a project topic, for this milestone you should:
 

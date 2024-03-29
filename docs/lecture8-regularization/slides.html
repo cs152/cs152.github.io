@@ -1030,6 +1030,213 @@ i\sim \text{Uniform}(1, N)
 <h2>Minibatch SGD</h2>
 <p><img data-src="images/paste-66.png" width="667"></p>
 <p><img data-src="images/paste-69.png" width="652"></p>
+</section>
+<section id="local-optima" class="slide level2">
+<h2>Local optima</h2>
+<p>Can we escape local optima?</p>
+
+<img data-src="images/paste-70.png" width="1003" class="r-stretch"></section>
+<section id="saddle-points" class="slide level2">
+<h2>Saddle points</h2>
+<p>What about saddle points?</p>
+
+<img data-src="images/paste-71.png" class="r-stretch"></section>
+<section id="momentum" class="slide level2">
+<h2>Momentum</h2>
+<p>Gradient descent with momentum updates the <em>average gradient</em> then uses the running average to take descent steps.</p>
+<p>Update <em>velocity</em></p>
+<p><span class="math display">\[ \mathbf{v}^{(k+1)} \longleftarrow \beta \mathbf{v}^{(k)} + (1-\beta) \nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})\]</span></p>
+<p>Update weights using velocity</p>
+<p><span class="math display">\[ \mathbf{w}^{(k+1)} \longleftarrow \mathbf{w}^{(k)} - \alpha v^{(k+1)}\]</span></p>
+</section>
+<section id="sgd-momentum" class="slide level2">
+<h2>SGD + Momentum</h2>
+<p>We can apply momentum for stochastic gradient descent as well</p>
+<p>Update <em>velocity</em></p>
+<p><span class="math display">\[ \mathbf{v}^{(k+1)} \longleftarrow \beta \mathbf{v}^{(k)} + (1-\beta) \nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{x}_i, y_i), \quad i\sim \text{Uniform}(1,N)\]</span></p>
+<p>Update weights using velocity</p>
+<p><span class="math display">\[ \mathbf{w}^{(k+1)} \longleftarrow \mathbf{w}^{(k)} - \alpha v^{(k+1)}\]</span></p>
+<p><span class="math display">\[\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y}) \approx \sum_{j=1}^k \beta^{k-j}(1-\beta) \nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(j)}, \mathbf{x}_{i^{(j)}}, y_{i^{(j)}})\]</span></p>
+</section>
+<section id="sgd-momentum-1" class="slide level2">
+<h2>SGD + Momentum</h2>
+<p>Momentum also smooths our SGD path!</p>
+</section>
+<section id="sgd-momentum-2" class="slide level2">
+<h2>SGD + Momentum</h2>
+</section>
+<section id="adaptive-gradients-rmsprop" class="slide level2">
+<h2>Adaptive gradients (RMSProp)</h2>
+<p><span class="math display">\[\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y}) = \begin{bmatrix} \frac{dL}{dw^{(k)}_1} \\ \frac{dL}{dw^{(k)}_2} \\ \vdots \end{bmatrix}\]</span></p>
+<p><span class="math display">\[\begin{bmatrix} 3.1\\ 2.2 \\ \vdots \end{bmatrix} \leftarrow
+\begin{bmatrix} 5.0 \\ 1.8 \\ \vdots \end{bmatrix}\leftarrow
+\begin{bmatrix} 1.5 \\ 4.4 \\ \vdots \end{bmatrix}...\]</span></p>
+</section>
+<section id="adaptive-gradients-rmsprop-1" class="slide level2">
+<h2>Adaptive gradients (RMSProp)</h2>
+
+<img data-src="images/paste-73.png" width="987" class="r-stretch"></section>
+<section id="adaptive-gradients-rmsprop-2" class="slide level2">
+<h2>Adaptive gradients (RMSProp)</h2>
+</section>
+<section id="section" class="slide level2">
+<h2><img data-src="images/paste-74.png" width="886"></h2>
+</section>
+<section id="adaptive-gradients-rmsprop-3" class="slide level2">
+<h2>Adaptive gradients (RMSProp)</h2>
+<p><span class="math display">\[\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y}) = \begin{bmatrix} \frac{dL}{dw^{(k)}_1} \\ \frac{dL}{dw^{(k)}_2} \\ \vdots \end{bmatrix}\]</span></p>
+<p><span class="math display">\[\begin{bmatrix} 10.1\\ 0.04 \\ \vdots \end{bmatrix} \leftarrow
+\begin{bmatrix} 8.6 \\ 0.02 \\ \vdots \end{bmatrix}\leftarrow
+\begin{bmatrix} 9.4 \\ 0.009 \\ \vdots \end{bmatrix}...\]</span></p>
+</section>
+<section id="adaptive-gradients-rmsprop-4" class="slide level2">
+<h2>Adaptive gradients (RMSProp)</h2>
+
+<img data-src="images/paste-75.png" width="799" class="r-stretch"></section>
+<section id="adaptive-gradients-rmsprop-5" class="slide level2">
+<h2>Adaptive gradients (RMSProp)</h2>
+
+<img data-src="images/paste-76.png" width="805" class="r-stretch"></section>
+<section id="adaptive-gradients-rmsprop-6" class="slide level2">
+<h2>Adaptive gradients (RMSProp)</h2>
+
+<img data-src="images/paste-77.png" width="1010" class="r-stretch"></section>
+<section id="adaptive-gradients-rmsprop-7" class="slide level2">
+<h2>Adaptive gradients (RMSProp)</h2>
+
+<img data-src="images/paste-78.png" width="1014" class="r-stretch"></section>
+<section id="second-order-optimization" class="slide level2">
+<h2>Second-order optimization</h2>
+<p>Second derivative tells us how quickly the derivative changes (curvature)</p>
+<p><strong>Idea (Newton’s method):</strong> Divide our step by the second derivative</p>
+<p><span class="math display">\[ \mathbf{w}^{(k+1)} \longleftarrow \mathbf{w}^{(k)} - \alpha \frac{\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})}{\nabla^2_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})}\]</span></p>
+</section>
+<section id="second-order-optimization-1" class="slide level2">
+<h2>Second-order optimization</h2>
+<p>Take a big step when the gradient changes slowly and a small step when it changes quickly</p>
+
+<img data-src="images/paste-79.png" width="1051" class="r-stretch"></section>
+<section id="second-order-optimization-2" class="slide level2">
+<h2>Second-order optimization</h2>
+<p>Take a big step when the gradient changes slowly and a small step when it changes quickly</p>
+
+<img data-src="images/paste-80.png" width="1072" class="r-stretch"></section>
+<section id="adaptive-gradients-rmsprop-8" class="slide level2">
+<h2>Adaptive gradients (RMSProp)</h2>
+<p>Update scales</p>
+<p><span class="math display">\[ \mathbf{s}^{(k+1)} \longleftarrow \beta \mathbf{s}^{(k)} + (1-\beta) (\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y}))^2\]</span></p>
+<p>Update weights</p>
+<p><span class="math display">\[ \mathbf{w}^{(k+1)} \longleftarrow \mathbf{w}^{(k)} - \alpha \frac{\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})}{\sqrt{\mathbf{s}^{(k+1)} + \epsilon}}\]</span></p>
+</section>
+<section id="adaptive-gradients-rmsprop-9" class="slide level2">
+<h2>Adaptive gradients (RMSProp)</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>Second derivative tells us how quickly the derivative changes (curvature)</p>
+<p><strong>Idea (Newton’s method):</strong> Divide our step by the second derivative</p>
+<p><span class="math display">\[ \mathbf{w}^{(k+1)} \longleftarrow \mathbf{w}^{(k)} - \alpha \frac{\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})}{\nabla^2_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})}\]</span></p>
+<section id="section-1" class="slide level2">
+<h2></h2>
+</section>
+</div><div class="column" style="width:50%;">
+<p>Update scales</p>
+<p><span class="math display">\[ \mathbf{s}^{(k+1)} \longleftarrow \beta \mathbf{s}^{(k)} + (1-\beta) (\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y}))^2\]</span></p>
+<p>Running average magnitude tells us how steep the function has been recently</p>
+<p><strong>Idea (RMSProp):</strong> Divide our step by average <em>magnitude</em> of the gradient</p>
+<p><span class="math display">\[ \mathbf{w}^{(k+1)} \longleftarrow \mathbf{w}^{(k)} - \alpha \frac{\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})}{\sqrt{\mathbf{s}^{(k+1)} + \epsilon}}\]</span></p>
+<section id="section-2" class="slide level2">
+<h2></h2>
+</section>
+</div>
+</div>
+</section>
+<section id="adaptive-gradients-rmsprop-10" class="slide level2">
+<h2>Adaptive gradients (RMSProp)</h2>
+
+<img data-src="images/paste-81.png" width="1078" class="r-stretch"></section>
+<section id="adaptive-gradients-rmsprop-11" class="slide level2">
+<h2>Adaptive gradients (RMSProp)</h2>
+
+<img data-src="images/paste-82.png" width="1072" class="r-stretch"></section>
+<section id="adaptive-gradients-rmsprop-12" class="slide level2">
+<h2>Adaptive gradients (RMSProp)</h2>
+<p>Update scales</p>
+<p><span class="math display">\[ \mathbf{s}^{(k+1)} \longleftarrow \beta \mathbf{s}^{(k)} + (1-\beta) (\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y}))^2\]</span></p>
+<p>Update weights</p>
+<p><span class="math display">\[ \mathbf{w}^{(k+1)} \longleftarrow \mathbf{w}^{(k)} - \alpha \frac{\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})}{\sqrt{\mathbf{s}^{(k+1)} + \epsilon}}\]</span> What is epsilon for?</p>
+<p><span class="math display">\[\epsilon &lt;&lt; 1, \quad \text{e.g. } \epsilon = 1e^{-7}\]</span></p>
+</section>
+<section id="adaptive-gradients-rmsprop-13" class="slide level2">
+<h2>Adaptive gradients (RMSProp)</h2>
+<p>What if we just scaled the gradient directly (not using the history?)</p>
+<p><span class="math display">\[\frac{\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})}{\sqrt{\mathbf{s}^{(k+1)}}} =
+\begin{bmatrix} \frac{\frac{dL}{dw_1}}{\sqrt{\big(\frac{dL}{dw_1}}\big)^2} \\ \frac{\frac{dL}{dw_2}}{\sqrt{\big(\frac{dL}{dw_2}}\big)^2} \\ \vdots \end{bmatrix}  =\]</span></p>
+</section>
+<section id="adaptive-gradients-rmsprop-14" class="slide level2">
+<h2>Adaptive gradients (RMSProp)</h2>
+<p>What if we just scaled the gradient directly (not using the history?)</p>
+<p><span class="math display">\[\frac{\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})}{\sqrt{\mathbf{s}^{(k+1)}}} =
+\begin{bmatrix} \frac{\frac{dL}{dw_1}}{\sqrt{\big(\frac{dL}{dw_1}}\big)^2} \\ \frac{\frac{dL}{dw_2}}{\sqrt{\big(\frac{dL}{dw_2}}\big)^2} \\ \vdots \end{bmatrix}  =
+\begin{bmatrix} \text{sign}\big(\frac{dL}{dw_1} \big) \\ \text{sign}\big(\frac{dL}{dw_2} \big) \\ \vdots \end{bmatrix} = \begin{bmatrix} +1 \\ -1 \\ \vdots \end{bmatrix} \]</span></p>
+</section>
+<section id="section-3" class="slide level2">
+<h2></h2>
+</section>
+<section id="adam" class="slide level2">
+<h2>Adam</h2>
+<p>Can we combine adaptive scaling and momentum?</p>
+</section>
+<section id="adam-1" class="slide level2">
+<h2>Adam</h2>
+<p>Update <em>velocity</em></p>
+<p><span class="math display">\[ \mathbf{v}^{(k+1)} \longleftarrow \beta_1 \mathbf{v}^{(k)} + (1-\beta_1) \nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})\]</span> Update <em>scaling</em><span class="math display">\[ \mathbf{s}^{(k+1)} \longleftarrow \beta_2 \mathbf{s}^{(k)} + (1-\beta_2) (\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y}))^2\]</span> Update weights</p>
+<p><span class="math display">\[ \mathbf{w}^{(k+1)} \longleftarrow \mathbf{w}^{(k)} - \alpha \frac{\mathbf{v}^{(k+1)}
+}{\sqrt{\mathbf{s}^{(k+1)} + \epsilon}}\]</span></p>
+</section>
+<section id="adam-2" class="slide level2">
+<h2>Adam</h2>
+<p>Update <em>velocity</em></p>
+<p><span class="math display">\[ \mathbf{v}^{(k+1)} \longleftarrow \beta_1 \mathbf{v}^{(k)} + (1-\beta_1) \nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})\]</span> Update <em>scaling</em><span class="math display">\[ \mathbf{s}^{(k+1)} \longleftarrow \beta_2 \mathbf{s}^{(k)} + (1-\beta_2) (\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y}))^2\]</span></p>
+<p>Modified weight update:</p>
+<p><span class="math display">\[ \mathbf{w}^{(k+1)} \longleftarrow \mathbf{w}^{(k)} - \alpha \frac{\frac{\mathbf{v}^{(k+1)}}{(1-\beta_1^k)}
+}{\sqrt{\frac{\mathbf{s}^{(k+1)}}{(1-\beta_2^k)} + \epsilon}}\]</span><br>
+</p>
+</section>
+<section id="adam-3" class="slide level2">
+<h2>Adam</h2>
+<p>At step 0:</p>
+<p><span class="math display">\[\mathbf{v}^{(0)} = \mathbf{0}, \quad \mathbf{s}^{(0)} = \mathbf{0}\]</span> <span class="math display">\[\frac{\mathbf{v}^{(k+1)}}{(1-\beta_1^k)} = \frac{\beta_1 \mathbf{0} + (1-\beta_1)\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})}{(1-\beta_1^1)} = \nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})\]</span></p>
+</section>
+<section id="choosing-learning-rates" class="slide level2">
+<h2>Choosing learning rates</h2>
+
+<img data-src="images/paste-83.png" width="826" class="r-stretch"></section>
+<section id="learning-rate-schedules" class="slide level2">
+<h2>Learning rate schedules</h2>
+
+<img data-src="images/paste-84.png" class="r-stretch"></section>
+<section id="summary-of-gradient-descent-issues" class="slide level2">
+<h2>Summary of gradient descent issues</h2>
+<p><strong>Updates are too slow</strong></p>
+<ul>
+<li>Stochastic/minibatch gradient descent</li>
+</ul>
+<p><strong>SGD gradients are very noisy (high variance)</strong></p>
+<ul>
+<li>Increase batch size, use momentum</li>
+</ul>
+<p><strong>Stuck at saddle points or shallow optima</strong></p>
+<ul>
+<li>Use momentum</li>
+</ul>
+<p><strong>Inconsistant scaling of the gradient</strong></p>
+<ul>
+<li>Use RMSProp scaling</li>
+</ul>
+<p><strong>Validation loss plateaus</strong></p>
+<ul>
+<li>Use a learning rate schedule</li>
+</ul>
 
 <div class="footer footer-default">
 

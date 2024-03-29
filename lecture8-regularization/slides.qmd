@@ -788,3 +788,242 @@ $$= \bigg(\frac{1}{B}\bigg)\text{Var}\bigg[ \nabla_{\mathbf{w}} \textbf{Loss} (\
 ![](images/paste-66.png){width="667"}
 
 ![](images/paste-69.png){width="652"}
+
+## Local optima
+
+Can we escape local optima?
+
+![](images/paste-70.png){width="1003"}
+
+## Saddle points
+
+What about saddle points?
+
+![](images/paste-71.png)
+
+## Momentum
+
+Gradient descent with momentum updates the *average gradient* then uses the running average to take descent steps.
+
+Update *velocity*
+
+$$ \mathbf{v}^{(k+1)} \longleftarrow \beta \mathbf{v}^{(k)} + (1-\beta) \nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})$$
+
+Update weights using velocity
+
+$$ \mathbf{w}^{(k+1)} \longleftarrow \mathbf{w}^{(k)} - \alpha v^{(k+1)}$$
+
+## SGD + Momentum
+
+We can apply momentum for stochastic gradient descent as well
+
+Update *velocity*
+
+$$ \mathbf{v}^{(k+1)} \longleftarrow \beta \mathbf{v}^{(k)} + (1-\beta) \nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{x}_i, y_i), \quad i\sim \text{Uniform}(1,N)$$
+
+Update weights using velocity
+
+$$ \mathbf{w}^{(k+1)} \longleftarrow \mathbf{w}^{(k)} - \alpha v^{(k+1)}$$
+
+$$\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y}) \approx \sum_{j=1}^k \beta^{k-j}(1-\beta) \nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(j)}, \mathbf{x}_{i^{(j)}}, y_{i^{(j)}})$$
+
+## SGD + Momentum
+
+Momentum also smooths our SGD path!
+
+## SGD + Momentum
+
+## Adaptive gradients (RMSProp)
+
+$$\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y}) = \begin{bmatrix} \frac{dL}{dw^{(k)}_1} \\ \frac{dL}{dw^{(k)}_2} \\ \vdots \end{bmatrix}$$
+
+$$\begin{bmatrix} 3.1\\ 2.2 \\ \vdots \end{bmatrix} \leftarrow 
+\begin{bmatrix} 5.0 \\ 1.8 \\ \vdots \end{bmatrix}\leftarrow 
+\begin{bmatrix} 1.5 \\ 4.4 \\ \vdots \end{bmatrix}...$$
+
+## Adaptive gradients (RMSProp)
+
+![](images/paste-73.png){width="987"}
+
+## Adaptive gradients (RMSProp)
+
+## ![](images/paste-74.png){width="886"}
+
+## Adaptive gradients (RMSProp)
+
+$$\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y}) = \begin{bmatrix} \frac{dL}{dw^{(k)}_1} \\ \frac{dL}{dw^{(k)}_2} \\ \vdots \end{bmatrix}$$
+
+$$\begin{bmatrix} 10.1\\ 0.04 \\ \vdots \end{bmatrix} \leftarrow 
+\begin{bmatrix} 8.6 \\ 0.02 \\ \vdots \end{bmatrix}\leftarrow 
+\begin{bmatrix} 9.4 \\ 0.009 \\ \vdots \end{bmatrix}...$$
+
+## Adaptive gradients (RMSProp)
+
+![](images/paste-75.png){width="799"}
+
+## Adaptive gradients (RMSProp)
+
+![](images/paste-76.png){width="805"}
+
+## Adaptive gradients (RMSProp)
+
+![](images/paste-77.png){width="1010"}
+
+## Adaptive gradients (RMSProp)
+
+![](images/paste-78.png){width="1014"}
+
+## Second-order optimization
+
+Second derivative tells us how quickly the derivative changes (curvature)
+
+**Idea (Newton's method):** Divide our step by the second derivative
+
+$$ \mathbf{w}^{(k+1)} \longleftarrow \mathbf{w}^{(k)} - \alpha \frac{\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})}{\nabla^2_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})}$$
+
+## Second-order optimization
+
+Take a big step when the gradient changes slowly and a small step when it changes quickly
+
+![](images/paste-79.png){width="1051"}
+
+## Second-order optimization
+
+Take a big step when the gradient changes slowly and a small step when it changes quickly
+
+![](images/paste-80.png){width="1072"}
+
+## Adaptive gradients (RMSProp)
+
+Update scales
+
+$$ \mathbf{s}^{(k+1)} \longleftarrow \beta \mathbf{s}^{(k)} + (1-\beta) (\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y}))^2$$
+
+Update weights
+
+$$ \mathbf{w}^{(k+1)} \longleftarrow \mathbf{w}^{(k)} - \alpha \frac{\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})}{\sqrt{\mathbf{s}^{(k+1)} + \epsilon}}$$
+
+## Adaptive gradients (RMSProp)
+
+::: columns
+::: {.column width="50%"}
+Second derivative tells us how quickly the derivative changes (curvature)
+
+**Idea (Newton's method):** Divide our step by the second derivative
+
+$$ \mathbf{w}^{(k+1)} \longleftarrow \mathbf{w}^{(k)} - \alpha \frac{\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})}{\nabla^2_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})}$$
+
+## 
+:::
+
+::: {.column width="50%"}
+Update scales
+
+$$ \mathbf{s}^{(k+1)} \longleftarrow \beta \mathbf{s}^{(k)} + (1-\beta) (\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y}))^2$$
+
+Running average magnitude tells us how steep the function has been recently
+
+**Idea (RMSProp):** Divide our step by average *magnitude* of the gradient
+
+$$ \mathbf{w}^{(k+1)} \longleftarrow \mathbf{w}^{(k)} - \alpha \frac{\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})}{\sqrt{\mathbf{s}^{(k+1)} + \epsilon}}$$
+
+## 
+:::
+:::
+
+## Adaptive gradients (RMSProp)
+
+![](images/paste-81.png){width="1078"}
+
+## Adaptive gradients (RMSProp)
+
+![](images/paste-82.png){width="1072"}
+
+## Adaptive gradients (RMSProp)
+
+Update scales
+
+$$ \mathbf{s}^{(k+1)} \longleftarrow \beta \mathbf{s}^{(k)} + (1-\beta) (\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y}))^2$$
+
+Update weights
+
+$$ \mathbf{w}^{(k+1)} \longleftarrow \mathbf{w}^{(k)} - \alpha \frac{\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})}{\sqrt{\mathbf{s}^{(k+1)} + \epsilon}}$$ What is epsilon for?
+
+$$\epsilon << 1, \quad \text{e.g. } \epsilon = 1e^{-7}$$
+
+## Adaptive gradients (RMSProp)
+
+What if we just scaled the gradient directly (not using the history?)
+
+$$\frac{\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})}{\sqrt{\mathbf{s}^{(k+1)}}} = 
+\begin{bmatrix} \frac{\frac{dL}{dw_1}}{\sqrt{\big(\frac{dL}{dw_1}}\big)^2} \\ \frac{\frac{dL}{dw_2}}{\sqrt{\big(\frac{dL}{dw_2}}\big)^2} \\ \vdots \end{bmatrix}  =$$
+
+## Adaptive gradients (RMSProp)
+
+What if we just scaled the gradient directly (not using the history?)
+
+$$\frac{\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})}{\sqrt{\mathbf{s}^{(k+1)}}} = 
+\begin{bmatrix} \frac{\frac{dL}{dw_1}}{\sqrt{\big(\frac{dL}{dw_1}}\big)^2} \\ \frac{\frac{dL}{dw_2}}{\sqrt{\big(\frac{dL}{dw_2}}\big)^2} \\ \vdots \end{bmatrix}  =
+\begin{bmatrix} \text{sign}\big(\frac{dL}{dw_1} \big) \\ \text{sign}\big(\frac{dL}{dw_2} \big) \\ \vdots \end{bmatrix} = \begin{bmatrix} +1 \\ -1 \\ \vdots \end{bmatrix} $$
+
+## 
+
+## Adam
+
+Can we combine adaptive scaling and momentum?
+
+## Adam
+
+Update *velocity*
+
+$$ \mathbf{v}^{(k+1)} \longleftarrow \beta_1 \mathbf{v}^{(k)} + (1-\beta_1) \nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})$$ Update *scaling*$$ \mathbf{s}^{(k+1)} \longleftarrow \beta_2 \mathbf{s}^{(k)} + (1-\beta_2) (\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y}))^2$$ Update weights
+
+$$ \mathbf{w}^{(k+1)} \longleftarrow \mathbf{w}^{(k)} - \alpha \frac{\mathbf{v}^{(k+1)}
+}{\sqrt{\mathbf{s}^{(k+1)} + \epsilon}}$$
+
+## Adam
+
+Update *velocity*
+
+$$ \mathbf{v}^{(k+1)} \longleftarrow \beta_1 \mathbf{v}^{(k)} + (1-\beta_1) \nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})$$ Update *scaling*$$ \mathbf{s}^{(k+1)} \longleftarrow \beta_2 \mathbf{s}^{(k)} + (1-\beta_2) (\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y}))^2$$
+
+Modified weight update:
+
+$$ \mathbf{w}^{(k+1)} \longleftarrow \mathbf{w}^{(k)} - \alpha \frac{\frac{\mathbf{v}^{(k+1)}}{(1-\beta_1^k)}
+}{\sqrt{\frac{\mathbf{s}^{(k+1)}}{(1-\beta_2^k)} + \epsilon}}$$\
+
+## Adam
+
+At step 0:
+
+$$\mathbf{v}^{(0)} = \mathbf{0}, \quad \mathbf{s}^{(0)} = \mathbf{0}$$ $$\frac{\mathbf{v}^{(k+1)}}{(1-\beta_1^k)} = \frac{\beta_1 \mathbf{0} + (1-\beta_1)\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})}{(1-\beta_1^1)} = \nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})$$
+
+## Choosing learning rates
+
+![](images/paste-83.png){width="826"}
+
+## Learning rate schedules
+
+![](images/paste-84.png)
+
+## Summary of gradient descent issues
+
+**Updates are too slow**
+
+-   Stochastic/minibatch gradient descent
+
+**SGD gradients are very noisy (high variance)**
+
+-   Increase batch size, use momentum
+
+**Stuck at saddle points or shallow optima**
+
+-   Use momentum
+
+**Inconsistant scaling of the gradient**
+
+-   Use RMSProp scaling
+
+**Validation loss plateaus**
+
+-   Use a learning rate schedule

@@ -4954,5 +4954,229 @@
     "title": "Final project",
     "section": "Proposal (Due Thursday 4/4 11:59pm)",
     "text": "Proposal (Due Thursday 4/4 11:59pm)\nThe next step for the project will be to formally propose a project topic, for this milestone you should:\n\nChoose a project topic. You may choose a topic from the list below or you may propose your own topic.\nWith your team, write a short (up to 1 page) proposal for your project and submit it on gradescope. Your proposal should include:\nThe names of the team members\nA one paragraph high-level description of the goal(s) of the project (e.g. object detection in images, classifying text data, etc.), how this goal could be useful in real-world applications and why this topic interests you.\nA one paragraph description of how you intend to approach this problem and any challenges you forsee. This should include identifying datasets that you might use, identifying at least one referance (academic paper or website) for a technique you intend to try.\nA one paragraph description of how you will evaluate success for your application."
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#adam",
+    "href": "lecture10-normalization/slides.html#adam",
+    "title": "Initialization",
+    "section": "Adam",
+    "text": "Adam\nCan we combine adaptive scaling and momentum?"
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#adam-1",
+    "href": "lecture10-normalization/slides.html#adam-1",
+    "title": "Initialization",
+    "section": "Adam",
+    "text": "Adam\nUpdate velocity\n\\[ \\mathbf{v}^{(k+1)} \\longleftarrow \\beta_1 \\mathbf{v}^{(k)} + (1-\\beta_1) \\nabla_{\\mathbf{w}} \\textbf{Loss}(\\mathbf{w}^{(k)}, \\mathbf{X}, \\mathbf{y})\\] Update scaling\\[ \\mathbf{s}^{(k+1)} \\longleftarrow \\beta_2 \\mathbf{s}^{(k)} + (1-\\beta_2) (\\nabla_{\\mathbf{w}} \\textbf{Loss}(\\mathbf{w}^{(k)}, \\mathbf{X}, \\mathbf{y}))^2\\] Update weights\n\\[ \\mathbf{w}^{(k+1)} \\longleftarrow \\mathbf{w}^{(k)} - \\alpha \\frac{\\mathbf{v}^{(k+1)}\n}{\\sqrt{\\mathbf{s}^{(k+1)} + \\epsilon}}\\]"
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#adam-2",
+    "href": "lecture10-normalization/slides.html#adam-2",
+    "title": "Initialization",
+    "section": "Adam",
+    "text": "Adam\nUpdate velocity\n\\[ \\mathbf{v}^{(k+1)} \\longleftarrow \\beta_1 \\mathbf{v}^{(k)} + (1-\\beta_1) \\nabla_{\\mathbf{w}} \\textbf{Loss}(\\mathbf{w}^{(k)}, \\mathbf{X}, \\mathbf{y})\\] Update scaling\\[ \\mathbf{s}^{(k+1)} \\longleftarrow \\beta_2 \\mathbf{s}^{(k)} + (1-\\beta_2) (\\nabla_{\\mathbf{w}} \\textbf{Loss}(\\mathbf{w}^{(k)}, \\mathbf{X}, \\mathbf{y}))^2\\]\nModified weight update:\n\\[ \\mathbf{w}^{(k+1)} \\longleftarrow \\mathbf{w}^{(k)} - \\alpha \\frac{\\frac{\\mathbf{v}^{(k+1)}}{(1-\\beta_1^k)}\n}{\\sqrt{\\frac{\\mathbf{s}^{(k+1)}}{(1-\\beta_2^k)} + \\epsilon}}\\]"
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#adam-3",
+    "href": "lecture10-normalization/slides.html#adam-3",
+    "title": "Initialization",
+    "section": "Adam",
+    "text": "Adam\nAt step 0:\n\\[\\mathbf{v}^{(0)} = \\mathbf{0}, \\quad \\mathbf{s}^{(0)} = \\mathbf{0}\\] \\[\\frac{\\mathbf{v}^{(k+1)}}{(1-\\beta_1^k)} = \\frac{\\beta_1 \\mathbf{0} + (1-\\beta_1)\\nabla_{\\mathbf{w}} \\textbf{Loss}(\\mathbf{w}^{(k)}, \\mathbf{X}, \\mathbf{y})}{(1-\\beta_1^1)} = \\nabla_{\\mathbf{w}} \\textbf{Loss}(\\mathbf{w}^{(k)}, \\mathbf{X}, \\mathbf{y})\\]"
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#choosing-learning-rates",
+    "href": "lecture10-normalization/slides.html#choosing-learning-rates",
+    "title": "Initialization",
+    "section": "Choosing learning rates",
+    "text": "Choosing learning rates"
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#learning-rate-schedules",
+    "href": "lecture10-normalization/slides.html#learning-rate-schedules",
+    "title": "Initialization",
+    "section": "Learning rate schedules",
+    "text": "Learning rate schedules"
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#summary-of-gradient-descent-issues",
+    "href": "lecture10-normalization/slides.html#summary-of-gradient-descent-issues",
+    "title": "Initialization",
+    "section": "Summary of gradient descent issues",
+    "text": "Summary of gradient descent issues\nUpdates are too slow\n\nStochastic/minibatch gradient descent\n\nSGD gradients are very noisy (high variance)\n\nIncrease batch size, use momentum\n\nStuck at saddle points or shallow optima\n\nUse momentum\n\nInconsistant scaling of the gradient\n\nUse RMSProp scaling"
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#exponential-moving-average-ema",
+    "href": "lecture10-normalization/slides.html#exponential-moving-average-ema",
+    "title": "Initialization",
+    "section": "Exponential moving average (EMA)",
+    "text": "Exponential moving average (EMA)"
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#exponential-moving-average-ema-1",
+    "href": "lecture10-normalization/slides.html#exponential-moving-average-ema-1",
+    "title": "Initialization",
+    "section": "Exponential moving average (EMA)",
+    "text": "Exponential moving average (EMA)"
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#exponential-moving-average-ema-2",
+    "href": "lecture10-normalization/slides.html#exponential-moving-average-ema-2",
+    "title": "Initialization",
+    "section": "Exponential moving average (EMA)",
+    "text": "Exponential moving average (EMA)"
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#exponential-moving-average-ema-3",
+    "href": "lecture10-normalization/slides.html#exponential-moving-average-ema-3",
+    "title": "Initialization",
+    "section": "Exponential moving average (EMA)",
+    "text": "Exponential moving average (EMA)"
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#exponential-moving-average-ema-4",
+    "href": "lecture10-normalization/slides.html#exponential-moving-average-ema-4",
+    "title": "Initialization",
+    "section": "Exponential moving average (EMA)",
+    "text": "Exponential moving average (EMA)"
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#exponential-moving-average-ema-5",
+    "href": "lecture10-normalization/slides.html#exponential-moving-average-ema-5",
+    "title": "Initialization",
+    "section": "Exponential moving average (EMA)",
+    "text": "Exponential moving average (EMA)"
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#data-normalization",
+    "href": "lecture10-normalization/slides.html#data-normalization",
+    "title": "Initialization",
+    "section": "Data normalization",
+    "text": "Data normalization"
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#data-normalization-1",
+    "href": "lecture10-normalization/slides.html#data-normalization-1",
+    "title": "Initialization",
+    "section": "Data normalization",
+    "text": "Data normalization"
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#data-normalization-2",
+    "href": "lecture10-normalization/slides.html#data-normalization-2",
+    "title": "Initialization",
+    "section": "Data normalization",
+    "text": "Data normalization"
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#data-normalization-3",
+    "href": "lecture10-normalization/slides.html#data-normalization-3",
+    "title": "Initialization",
+    "section": "Data normalization",
+    "text": "Data normalization"
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#data-normalization-4",
+    "href": "lecture10-normalization/slides.html#data-normalization-4",
+    "title": "Initialization",
+    "section": "Data normalization",
+    "text": "Data normalization"
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#vanishing-and-exploding-gradients",
+    "href": "lecture10-normalization/slides.html#vanishing-and-exploding-gradients",
+    "title": "Initialization",
+    "section": "Vanishing and exploding gradients",
+    "text": "Vanishing and exploding gradients"
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#vanishing-and-exploding-gradients-1",
+    "href": "lecture10-normalization/slides.html#vanishing-and-exploding-gradients-1",
+    "title": "Initialization",
+    "section": "Vanishing and exploding gradients",
+    "text": "Vanishing and exploding gradients"
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#vanishing-and-exploding-gradients-2",
+    "href": "lecture10-normalization/slides.html#vanishing-and-exploding-gradients-2",
+    "title": "Initialization",
+    "section": "Vanishing and exploding gradients",
+    "text": "Vanishing and exploding gradients"
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#gradient-clipping",
+    "href": "lecture10-normalization/slides.html#gradient-clipping",
+    "title": "Initialization",
+    "section": "Gradient clipping",
+    "text": "Gradient clipping"
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#gradient-clipping-1",
+    "href": "lecture10-normalization/slides.html#gradient-clipping-1",
+    "title": "Initialization",
+    "section": "Gradient clipping",
+    "text": "Gradient clipping\nExplicitly clip the gradient to prevent it form becoming too large.\n\\[\\textbf{clip}_{\\text{value}}\\big(\\mathbf{x}, \\epsilon\\big) = \\begin{bmatrix} \\min(\\max(x_1, -\\epsilon), \\epsilon) \\\\ \\min(\\max(x_2, - \\epsilon), \\epsilon) \\\\ \\vdots \\end{bmatrix}\\]\n\\[\\textbf{clip}_{\\text{norm}}\\big(\\mathbf{x}, \\epsilon\\big) = \\begin{cases}\n\\frac{\\epsilon\\mathbf{x} }{\\| \\mathbf{x} \\|_2} \\quad & \\textbf{if: } \\|\\mathbf{x}\\|_2 &gt; \\epsilon \\\\\n\\mathbf{x} \\  \\quad\\quad & \\textbf{if: } \\|\\mathbf{x}\\|_2 \\leq \\epsilon\n\\end{cases}\\]\n\\[ \\mathbf{w}^{(k+1)} \\longleftarrow \\mathbf{w}^{(k)} - \\alpha\\ \\textbf{clip}\\big(\\nabla_{\\mathbf{w}} \\textbf{Loss}(\\mathbf{w}^{(k)}, \\mathbf{X}, \\mathbf{y})\\big)\\]"
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#gradient-clipping-2",
+    "href": "lecture10-normalization/slides.html#gradient-clipping-2",
+    "title": "Initialization",
+    "section": "Gradient clipping",
+    "text": "Gradient clipping"
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#batch-normalization",
+    "href": "lecture10-normalization/slides.html#batch-normalization",
+    "title": "Initialization",
+    "section": "Batch normalization",
+    "text": "Batch normalization\nNormalize over the batch:\n\\[\\text{BatchNorm}(x) = \\frac{ x - \\mathbb{E}[x]}{\\sqrt{\\text{Var}[x] + \\epsilon}}\\]\nTraining time: \\[\\text{Batch: } \\{x_1, x_2,...,x_B\\}\\] \\[\\mathbb{E}[x] \\approx \\bar{x} = \\frac{1}{B}\\sum_{i=1}^{B} x_i\\quad \\text{(sample mean)}\\]"
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#batch-normalization-1",
+    "href": "lecture10-normalization/slides.html#batch-normalization-1",
+    "title": "Initialization",
+    "section": "Batch normalization",
+    "text": "Batch normalization"
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#batch-normalization-2",
+    "href": "lecture10-normalization/slides.html#batch-normalization-2",
+    "title": "Initialization",
+    "section": "Batch normalization",
+    "text": "Batch normalization"
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#batch-normalization-3",
+    "href": "lecture10-normalization/slides.html#batch-normalization-3",
+    "title": "Initialization",
+    "section": "Batch normalization",
+    "text": "Batch normalization\nBiased estimator: \\[\\text{Var}[x] \\approx s^2 = \\frac{1}{B}\\sum_{i=1}^{B} \\bigg(x_i - \\bigg(\\frac{1}{B}\\sum_{i=1}^{B} x_i\\bigg)\\bigg)^2\\quad \\text{(sample var.)}\\] Unbiased estimator: \\[\\text{Var}[x] \\approx  s^2 = \\frac{1}{B-1}\\sum_{i=1}^{B} \\bigg(x_i - \\bigg(\\frac{1}{B}\\sum_{i=1}^{B} x_i\\bigg)\\bigg)^2\\quad \\text{(sample var.)}\\]\n\\[\\underset{\\text{train}}{\\text{BatchNorm}}(x) = \\frac{ x - \\bar{x}}{\\sqrt{s^2 + \\epsilon}}\\]"
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#batch-normalization-4",
+    "href": "lecture10-normalization/slides.html#batch-normalization-4",
+    "title": "Initialization",
+    "section": "Batch normalization",
+    "text": "Batch normalization\nRunning estimate: \\[\\bar{\\mu}^{(k+1)} \\longleftarrow \\beta \\bar{\\mu}^{(k)} + (1-\\beta) \\bar{x}^{(k)}\\] \\[\\bar{\\sigma}^{2(k+1)} \\longleftarrow \\beta \\bar{\\sigma}^{2(k)} + (1-\\beta) s^{2(k)}\\]\n\\[\\underset{\\text{test}}{\\text{BatchNorm}}(x) = \\frac{ x - \\bar{\\mu}}{\\sqrt{\\bar{\\sigma}^2 + \\epsilon}}\\]"
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#layer-normalization",
+    "href": "lecture10-normalization/slides.html#layer-normalization",
+    "title": "Initialization",
+    "section": "Layer normalization",
+    "text": "Layer normalization\nNormalize over the layer:\n\\[\\text{LayerNorm}(\\mathbf{x}) = \\frac{\\mathbf{x} - \\bar{x}}{\\sqrt{s^2 + \\epsilon}}, \\quad \\mathbf{x} = \\begin{bmatrix} x_1 \\\\ \\vdots \\\\ x_d\\end{bmatrix}\\]\nTraining & test time: \\[\\bar{x} = \\frac{1}{d}\\sum_{i=1}^{d} x_i\\quad \\text{(output mean)}\\]"
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#layer-normalization-1",
+    "href": "lecture10-normalization/slides.html#layer-normalization-1",
+    "title": "Initialization",
+    "section": "Layer normalization",
+    "text": "Layer normalization\nBiased estimator: \\[s^2 = \\frac{1}{d}\\sum_{i=1}^{d} \\bigg(x_i - \\bigg(\\frac{1}{d}\\sum_{i=1}^{d} x_i\\bigg)\\bigg)^2\\quad \\text{(output var.)}\\] Unbiased estimator: \\[s^2 = \\frac{1}{d-1}\\sum_{i=1}^{d} \\bigg(x_i - \\bigg(\\frac{1}{d}\\sum_{i=1}^{d} x_i\\bigg)\\bigg)^2\\quad \\text{(output var.)}\\]"
+  },
+  {
+    "objectID": "lecture10-normalization/slides.html#scaled-normalization",
+    "href": "lecture10-normalization/slides.html#scaled-normalization",
+    "title": "Initialization",
+    "section": "Scaled normalization",
+    "text": "Scaled normalization\n\\[\\text{BatchNorm}(x) = \\frac{ x - \\mathbb{E}[x]}{\\sqrt{\\text{Var}[x] + \\epsilon}} \\gamma + \\kappa\\] \\[\\text{LayerNorm}(\\mathbf{x}) = \\frac{\\mathbf{x} - \\bar{x}}{\\sqrt{s^2 + \\epsilon}} \\gamma + \\kappa\\]"
   }
 ]

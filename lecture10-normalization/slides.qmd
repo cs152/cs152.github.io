@@ -1,0 +1,176 @@
+---
+title: "Initialization"
+author: "Gabriel Hope"
+format: 
+    revealjs:
+        html-math-method: mathjax
+        width: 1920
+        height: 1080
+---
+
+## Adam
+
+Can we combine adaptive scaling and momentum?
+
+## Adam
+
+Update *velocity*
+
+$$ \mathbf{v}^{(k+1)} \longleftarrow \beta_1 \mathbf{v}^{(k)} + (1-\beta_1) \nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})$$ Update *scaling*$$ \mathbf{s}^{(k+1)} \longleftarrow \beta_2 \mathbf{s}^{(k)} + (1-\beta_2) (\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y}))^2$$ Update weights
+
+$$ \mathbf{w}^{(k+1)} \longleftarrow \mathbf{w}^{(k)} - \alpha \frac{\mathbf{v}^{(k+1)}
+}{\sqrt{\mathbf{s}^{(k+1)} + \epsilon}}$$
+
+## Adam
+
+Update *velocity*
+
+$$ \mathbf{v}^{(k+1)} \longleftarrow \beta_1 \mathbf{v}^{(k)} + (1-\beta_1) \nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})$$ Update *scaling*$$ \mathbf{s}^{(k+1)} \longleftarrow \beta_2 \mathbf{s}^{(k)} + (1-\beta_2) (\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y}))^2$$
+
+Modified weight update:
+
+$$ \mathbf{w}^{(k+1)} \longleftarrow \mathbf{w}^{(k)} - \alpha \frac{\frac{\mathbf{v}^{(k+1)}}{(1-\beta_1^k)}
+}{\sqrt{\frac{\mathbf{s}^{(k+1)}}{(1-\beta_2^k)} + \epsilon}}$$\
+
+## Adam
+
+At step 0:
+
+$$\mathbf{v}^{(0)} = \mathbf{0}, \quad \mathbf{s}^{(0)} = \mathbf{0}$$ $$\frac{\mathbf{v}^{(k+1)}}{(1-\beta_1^k)} = \frac{\beta_1 \mathbf{0} + (1-\beta_1)\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})}{(1-\beta_1^1)} = \nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})$$
+
+## Summary of gradient descent issues
+
+**Updates are too slow**
+
+-   Stochastic/minibatch gradient descent
+
+**SGD gradients are very noisy (high variance)**
+
+-   Increase batch size, use momentum
+
+**Stuck at saddle points or shallow optima**
+
+-   Use momentum
+
+**Inconsistant scaling of the gradient**
+
+-   Use RMSProp scaling
+
+## Exponential moving average (EMA)
+
+![](images/paste-1.png){width="888"}
+
+## Exponential moving average (EMA)
+
+![](images/paste-2.png){width="714"}
+
+## Exponential moving average (EMA)
+
+![](images/paste-3.png){width="721"}
+
+## Exponential moving average (EMA)
+
+![](images/paste-4.png){width="703"}
+
+## Exponential moving average (EMA)
+
+![](images/paste-5.png){width="906"}
+
+## Data normalization
+
+![](images/paste-6.png){width="737"}
+
+## Data normalization
+
+![](images/paste-7.png){width="921"}
+
+## Data normalization
+
+![](images/paste-8.png){width="708"}
+
+## Data normalization
+
+![](images/paste-9.png){width="1071"}
+
+## Data normalization
+
+![](images/paste-10.png){width="706"}
+
+## Vanishing and exploding gradients
+
+![](images/paste-12.png){width="795"}
+
+## Vanishing and exploding gradients
+
+![](images/paste-14.png){width="847"}
+
+## Vanishing and exploding gradients
+
+![](images/paste-15.png){width="735"}
+
+## Gradient clipping
+
+![](images/paste-16.png){width="1055"}
+
+## Gradient clipping
+
+Explicitly clip the gradient to prevent it form becoming too large.
+
+$$\textbf{clip}_{\text{value}}\big(\mathbf{x}, \epsilon\big) = \begin{bmatrix} \min(\max(x_1, -\epsilon), \epsilon) \\ \min(\max(x_2, - \epsilon), \epsilon) \\ \vdots \end{bmatrix}$$
+
+$$\textbf{clip}_{\text{norm}}\big(\mathbf{x}, \epsilon\big) = \begin{cases} 
+\frac{\epsilon\mathbf{x} }{\| \mathbf{x} \|_2} \quad & \textbf{if: } \|\mathbf{x}\|_2 > \epsilon \\
+\mathbf{x} \  \quad\quad & \textbf{if: } \|\mathbf{x}\|_2 \leq \epsilon
+\end{cases}$$
+
+$$ \mathbf{w}^{(k+1)} \longleftarrow \mathbf{w}^{(k)} - \alpha\ \textbf{clip}\big(\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})\big)$$
+
+## Gradient clipping
+
+![](images/paste-17.png){width="965"}
+
+# Normalization
+
+## Batch normalization
+
+Normalize over the batch:
+
+$$\text{BatchNorm}(x) = \frac{ x - \mathbb{E}[x]}{\sqrt{\text{Var}[x] + \epsilon}}$$
+
+Training time: $$\text{Batch: } \{x_1, x_2,...,x_B\}$$ $$\mathbb{E}[x] \approx \bar{x} = \frac{1}{B}\sum_{i=1}^{B} x_i\quad \text{(sample mean)}$$
+
+## Batch normalization
+
+![](images/paste-18.png){width="852"}
+
+## Batch normalization
+
+![](images/paste-19.png){width="972"}
+
+## Batch normalization
+
+Biased estimator: $$\text{Var}[x] \approx s^2 = \frac{1}{B}\sum_{i=1}^{B} \bigg(x_i - \bigg(\frac{1}{B}\sum_{i=1}^{B} x_i\bigg)\bigg)^2\quad \text{(sample var.)}$$ Unbiased estimator: $$\text{Var}[x] \approx  s^2 = \frac{1}{B-1}\sum_{i=1}^{B} \bigg(x_i - \bigg(\frac{1}{B}\sum_{i=1}^{B} x_i\bigg)\bigg)^2\quad \text{(sample var.)}$$
+
+$$\underset{\text{train}}{\text{BatchNorm}}(x) = \frac{ x - \bar{x}}{\sqrt{s^2 + \epsilon}}$$
+
+## Batch normalization
+
+Running estimate: $$\bar{\mu}^{(k+1)} \longleftarrow \beta \bar{\mu}^{(k)} + (1-\beta) \bar{x}^{(k)}$$ $$\bar{\sigma}^{2(k+1)} \longleftarrow \beta \bar{\sigma}^{2(k)} + (1-\beta) s^{2(k)}$$
+
+$$\underset{\text{test}}{\text{BatchNorm}}(x) = \frac{ x - \bar{\mu}}{\sqrt{\bar{\sigma}^2 + \epsilon}}$$
+
+## Layer normalization
+
+Normalize over the layer:
+
+$$\text{LayerNorm}(\mathbf{x}) = \frac{\mathbf{x} - \bar{x}}{\sqrt{s^2 + \epsilon}}, \quad \mathbf{x} = \begin{bmatrix} x_1 \\ \vdots \\ x_d\end{bmatrix}$$
+
+Training & test time: $$\bar{x} = \frac{1}{d}\sum_{i=1}^{d} x_i\quad \text{(output mean)}$$
+
+## Layer normalization
+
+Biased estimator: $$s^2 = \frac{1}{d}\sum_{i=1}^{d} \bigg(x_i - \bigg(\frac{1}{d}\sum_{i=1}^{d} x_i\bigg)\bigg)^2\quad \text{(output var.)}$$ Unbiased estimator: $$s^2 = \frac{1}{d-1}\sum_{i=1}^{d} \bigg(x_i - \bigg(\frac{1}{d}\sum_{i=1}^{d} x_i\bigg)\bigg)^2\quad \text{(output var.)}$$
+
+## Scaled normalization
+
+$$\text{BatchNorm}(x) = \frac{ x - \mathbb{E}[x]}{\sqrt{\text{Var}[x] + \epsilon}} \gamma + \kappa$$ $$\text{LayerNorm}(\mathbf{x}) = \frac{\mathbf{x} - \bar{x}}{\sqrt{s^2 + \epsilon}} \gamma + \kappa$$

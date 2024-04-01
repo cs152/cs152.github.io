@@ -211,7 +211,7 @@ export function classifySpiralData(numSamples: number, noise: number):
   return points;
 }
 
-export function classifyCircleData(numSamples: number, noise: number):
+export function classifyCircleDataOld(numSamples: number, noise: number):
     Example2D[] {
   let points: Example2D[] = [];
   let radius = 5;
@@ -244,6 +244,30 @@ export function classifyCircleData(numSamples: number, noise: number):
   }
   return points;
 }
+
+export function classifyCircleData(numSamples: number, noise: number):
+    Example2D[] {
+      function getXORLabel(p: Point) { return p.x * p.y >= 0 ? 1 : -1; }
+
+      let points: Example2D[] = [];
+      for (let i = 0; i < numSamples; i++) {
+        let x = randUniform(-5, 5);
+        let padding = 0.3;
+        x += x > 0 ? padding : -padding;  // Padding.
+        let y = randUniform(-5, 5);
+        y += y > 0 ? padding : -padding;
+        let noiseX = randUniform(-5, 5) * noise;
+        let noiseY = randUniform(-5, 5) * noise;
+        let label = getXORLabel({x: x + noiseX, y: y + noiseY});
+
+        x = x / 5. + 5.;
+        y = x / 5. + 5.;
+        points.push({x, y, label});
+      }
+      return points;
+}
+
+
 
 export function classifyXORData(numSamples: number, noise: number):
     Example2D[] {

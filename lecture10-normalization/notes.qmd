@@ -10,46 +10,281 @@ format:
 
 ## Vanishing and exploding gradients
 
-![](images/paste-27.png)
+In previous lectures we discussed what can happen if we make a neural network too *wide*, meaning that there are many neurons a each layer. We saw that as long as we are careful in how we initialize the parameters, we can prevent any issues that might arrive. Now we'll consider what happens if we make our network too *deep*, that is we'll increase the number of layers. Modern neural networks can have up to 100's of layers, so it's important to make sure that gradient descent will work well even in this extreme case.
 
-![](images/paste-28.png)
+Just like before we'll analyze the *scale* of the gradient to make sure that we're not going to take any extreme steps as we go that might cause our learning to stall or even diverge. This time we'll be a little less formal and only take a look at a high level view of what happens to the gradient as the number of layers increases, as the specifics can vary quite a bit from network to network.
 
-Neural networks are a composition of functions:
+Recall that our neural network feature transform can be written as a composition of feature transform functions, one for each of the $\ell$ layers.
 
-$$f(\mathbf{x}) = f_0(f_1(f_2(...f_L(\mathbf{x})...)))$$
+$$\phi(\mathbf{x}) = \phi_\ell(\phi_{\ell-1}(\phi_{\ell-2}(...\phi_1(\mathbf{x})...)))$$
 
-$$f(\mathbf{x}) = \text{relu}(\text{relu}(\text{relu}(...\mathbf{x}^T\mathbf{W}_L...)^T\mathbf{W}_2)^T\mathbf{W}_1)^T\mathbf{w}_0$$ $$\text{relu}(x) = \max(x, 0)$$
+In practice each layer will be a linear transformation followed by an activation function like the $\text{relu}(\cdot)$ or $\sigma (\cdot)$ function.
 
-$$\nabla_{\mathbf{W}_L}f(\mathbf{x})  = \frac{d\mathbf{f}_0}{d\mathbf{f}_1}\frac{d\mathbf{f}_1}{d\mathbf{f}_2}...\frac{d\mathbf{f}_{L-1}}{d\mathbf{f}_L}\frac{d\mathbf{f}_L}{d\mathbf{W}_L}  = \mathbf{x}^T\prod_{l=1}^{L-1}\frac{d\mathbf{f}_{l}}{d\mathbf{f}_{l-1}} $$
+$$\phi(\mathbf{x}) = \text{relu}(\text{relu}(\text{relu}(...\mathbf{x}^T\mathbf{W}_1 + \mathbf{b}_1...)^T\mathbf{W}_{\ell-1} + \mathbf{b}_{\ell-1})^T\mathbf{W}_\ell + \mathbf{b}_\ell)$$
 
-Simplified case: $$\frac{df}{dx}  = \frac{d{f}_0}{d{f}_1}\frac{d{f}_1}{d{f}_2}...\frac{d{f}_{L-1}}{d{f}_L}\frac{d{f}_L}{d{w}_L}  = {x}^T\prod_{l=1}^{L-1}\frac{d{f}_{l}}{d{f}_{l-1}} $$
+We'll then generally make a prediction using a linear function this output and compute a loss by comparing this prediction to a true label using a metric like mean squared error:
 
-$$w_L, x, \frac{df_0}{df_1},... \in \mathbb{R}, \quad \bigg|\frac{df_{l-1}}{df_l}\bigg| \approx M$$
+$$f(\mathbf{x}) = \phi(\mathbf{x})^T\mathbf{w}_0 + b_0$$
 
-$$\bigg|\frac{df}{dw_L}\bigg| = |x| \prod_{l=1}^{L-1}\bigg| \frac{df_{l}}{df_{l-1}}\bigg| \approx |x|\big(\textcolor{red}{M^L}\big)$$ Exploding gradients: $$\textbf{If: } M > 1 \longrightarrow \frac{df}{dw_L} >> 1$$ Vanishing gradients: $$\textbf{If: } M < 1 \longrightarrow \frac{df}{dw_L} \approx 0$$
+$$
+\text{Loss}(\mathbf{x}, y) = (f(\mathbf{x}) - y)^2
+$$
+
+We can write our neural network loss as a series of operations:
+
+$$
+\Phi_1 = \sigma(\mathbf{x}^T\mathbf{W}_1 + \mathbf{b}_1)
+$$
+
+$$
+\Phi_2 = \sigma(\Phi_1^T\mathbf{W}_2 + \mathbf{b}_2)
+$$
+
+$$
+\vdots
+$$
+
+$$
+\Phi_\ell = \sigma(\Phi_{\ell-1}^T\mathbf{W}_\ell + \mathbf{b}_\ell)
+$$
+
+$$
+\mathbf{f} = \Phi_{\ell-1}^T\mathbf{W}_0 + \mathbf{b}_0
+$$
+
+$$
+\mathbf{L} = \text{Loss}(\mathbf{f}, y)
+$$
+Now let's consider the gradient of the loss with respect to $\mathbf{W}_1$ , the first set of weights used in the network. We can write this gradient using the chain rule as:
+
+$$\frac{d\mathbf{L}}{d\mathbf{W}_1}=\frac{d\mathbf{L}}{d\Phi_\ell}\frac{d\Phi_{\ell}}{d\Phi_{\ell-1}}...\frac{d\Phi_2}{d\Phi_1}\frac{d\Phi_1}{d\mathbf{W}_1}$$
+
+For the sake of simplicity, we'll consider the 1-dimensional case, so all our variables are scalars rather than vectors/matrices ($\mathbf{W}_1$ *becomes* $w_1$, $\mathbf{x}$ becomes $x$). In this case we can rewrite this using a product and expanding $\frac{d\Phi_1}{dw_1}$.
+
+$$\frac{d\Phi_1}{dw_1}=x\sigma'(xw_1 + b_1)$$ $$\frac{d\mathbf{L}}{dw_1}=x\sigma'(xw_1 + b_1)\frac{d\mathbf{L}}{d\Phi_\ell}\prod_{i=2}^{\ell}\frac{d\Phi_{i}}{d\Phi_{i-1}}$$
+
+$$
+w_1, x, \frac{d\Phi_0}{d\Phi_1},... \in \mathbb{R}
+$$
+
+Finally we can consider how this gradient grows/shrinks as we increase the number of layers. We don't know exactly what the gradient of each layer will be, but given our initialization it's reasonable to assume that they're all relatively consistent. For example if we use a linear (no) activation the gradient we simply get:$$
+\frac{d\Phi_{i}}{d\Phi_{i-1}}= \frac{d}{d\Phi_{i-1}}(\Phi_{i-1}w_i + b_i)=  w_i, \quad 
+$$We'll use $M$ to denote the approximate magnitude of each term in the product:
+
+$$\bigg|\frac{d\Phi_{i}}{d\Phi_{i-1}}\bigg| \approx M, \forall i$$
+
+Now it becomes clear that the scale of the gradient grows/shrinks exponentially with the number of layers $(\ell)$!
+
+$$\bigg|\frac{dL}{dw_1}\bigg| = |x| \prod_{i=2}^{\ell}\bigg| \frac{d\Phi_{i}}{d\Phi_{i-1}}\bigg|... \approx |x|\big(\textcolor{red}{M^L}\big)...$$
+
+Therefore we have two concerning possibilities: if $M$ is larger than $1$, our gradient could become extremely large. We call this an **exploding gradient:**
+
+$$\textbf{If: } M > 1 \longrightarrow \frac{dL}{dw_1} >> 1$$
+
+If $M$ is smaller than 1, our gradient could be very small. We call this a **vanishing gradient:**
+
+$$\textbf{If: } M < 1 \longrightarrow \frac{df}{dw_L} \approx 0$$
+
+Concretely if we have a 100 layer network and $M=1.5$ then $\frac{d\mathbf{L}}{dw_1}\approx 4\times10^{17}$. If $M=0.75$, then $\frac{d\mathbf{L}}{dw_1}\approx 3\times10^{-13}$. Only in the case where $M\approx 1$ do we have a stable gradient scale.
+
+It's tempting to think we could just initialize our weights carefully such that $M\approx 1$ or change our learning rate to counteract this scale. Unfortunately, once we start updating our network weights with gradient descent, $M$ could change and we could easily move from one regime to another. Geometrically, this problem corresponds to a loss function that has *both* very steep slopes and very flat plateaus.
 
 ## Gradient clipping
 
-Explicitly clip the gradient to prevent it form becoming too large.
+Let's start by looking at a very simple method to address the exploding gradient problem. Instead of scaling the gradient by a fixed amount, we'll set a cap $(\epsilon)$ on the size of step that we can take. If gradient exceeds that maximum step, we'll simply try to re-scale it to the desired length. We call this approach **gradient clipping.** We'll define two slightly different operations to *clip* a vector to a given length. If our gradient is actually a matrix or a collection of vectors/matrices, we could always *flatten* all the individual partial derivatives into one big, long vector to apply the clipping operation.
+
+We'll call our first approach **clip-by-value**. In this case, we will simply limit the value of any individual entry in our vector to be no more than $\epsilon$ and no less than $-\epsilon$. We can write this mathematically as:
 
 $$\textbf{clip}_{\text{value}}\big(\mathbf{x}, \epsilon\big) = \begin{bmatrix} \min(\max(x_1, -\epsilon), \epsilon) \\ \min(\max(x_2, - \epsilon), \epsilon) \\ \vdots \end{bmatrix}$$
+
+Geometrically, this corresponds to restricting $\mathbf{x}$ to a box centered at the origin.
+
+For our second approach, rather than considering each dimension individually, we'll restrict the overall *length* (magnitude) of the vector, while maintaining the direction. Remember that we define the length of a vector by its 2-norm: $||\mathbf{x}||_2 = \sqrt{\sum_{i=1}^d x_i^2}$, therefore we call this approach **clip-by-norm.** If we want to re-scale our vector to have length $\epsilon$ we simply need to divide each entry by $||\mathbf{x}||_2$ and multiply by $\epsilon$, therefore our clipping operation will look like:
 
 $$\textbf{clip}_{\text{norm}}\big(\mathbf{x}, \epsilon\big) = \begin{cases} 
 \frac{\epsilon\mathbf{x} }{\| \mathbf{x} \|_2} \quad & \textbf{if: } \|\mathbf{x}\|_2 > \epsilon \\
 \mathbf{x} \  \quad\quad & \textbf{if: } \|\mathbf{x}\|_2 \leq \epsilon
 \end{cases}$$
 
+Applying either of these clipping operations within gradient descent would look like this:
+
 $$ \mathbf{w}^{(k+1)} \longleftarrow \mathbf{w}^{(k)} - \alpha\ \textbf{clip}\big(\nabla_{\mathbf{w}} \textbf{Loss}(\mathbf{w}^{(k)}, \mathbf{X}, \mathbf{y})\big)$$
+
+As a final note, we don't want to re-scale gradients smaller than length $\epsilon$ to be larger, because ultimately our gradient *should* have length 0 at the optimum. This means we may need an alternative way to handle vanishing gradients. We'll come back to this!
 
 # Normalization
 
+## Input scaling
+
+Returning to our analysis of the gradient magnitude above we see that there's another term that affects the scale of our gradient, $|x|$, the scale of our input features!
+
+$$\bigg|\frac{dL}{dw_1}\bigg| = |x| \prod_{i=2}^{\ell}\bigg| \frac{d\Phi_{i}}{d\Phi_{i-1}}\bigg|... \approx |x|\big(\textcolor{red}{M^L}\big)...$$
+
+Unlike the initial values of our parameters, we don't choose our data, so there's nothing that prevents the scale of $x$ itself from being very large or very small. Ideally we'd like a predictable scale for our data so that we can set things our learning rate more easily.
+
+Moreover, as we saw in our discussion of RMSProp optimization *mismatch* in scale between dimensions can also cause optimization issues even if the difference is not exponentially large! This is quite common in practice; in our initial fuel economy example we saw that each car had weight measurements in the range of 1000-4000lbs and acceleration measurements in the range of 5-10sec. While RMSProp can help, it would be ideal if we could re-scale our data to eliminate these differences before we even start running gradient descent.
+
+## Input centering
+
+Before we get to how to re-scale our data, let's consider one other way that an unexpected data distribution could break the assumptions that we used when designing a neural network. When we first introduced a neural network feature transform, we showed that in order for it to give us an improvement over a linear model, we needed to introduce non-linear *activation* functions into the network.
+
+$$
+\phi(x) = {\color{red}\sigma}(\mathbf{x}^T\mathbf{W}_1 + \mathbf{b}_1)
+$$
+
+In order for these activation to be useful however, our inputs need to be centered around $0$. If we plot our common choices for activation functions we can see why.
+
+Starting with the $\text{relu}$ function, we see that if *all* observed inputs are positive, then the function *is linear* over the entire range of inputs. Conversely, if all observed inputs are negative, we're even worse off; we'll never get outputs other than $0$! It's only when our data spans both positive and negative values that our prediction function will look non-linear.
+
+For the sigmoid function, $\sigma(\cdot)$, we have a similar story. In this case, if all observations are much larger than $0$, the function will always output 1. That is: $\sigma(x)\approx 1 \text{ if }x >> 0\ \forall x$, while if all the observations are far below $0$, the function will output $0$; $\sigma(x)\approx 0 \text{ if }x << 0\ \forall x$. In this case we also see that the *variance* of the data matters; if all the data is *too* close to $0$, the function again looks linear; $\sigma(x)\approx x \text{ if }|x| << 1\ \forall x$.
+
+## Input normalization
+
+Ultimately we've seen that we'd like our data to be centered around $0$ and to have a predictable scale. One way to say this more formally is that we want the mean (expectation) of our data to be $0$ and the variance of our data to be a known constant, usually $1$. So we'd like:
+
+$$
+\mathbb{E}[x]=0, \quad \text{Var}[x]=1
+$$
+
+A simple way to achieve this is to **normalize** our data. That is, for every observation we'll apply a transformation that subtracts the mean and divides by the square root of the variance.
+
+$$
+\text{Norm}(x) = \frac{x-\mathbb{E}[x]}{\sqrt{\text{Var}[x]}}
+$$
+
+By definition the expectation of this transformed value is $0$ and the variance is $1$!
+
+$$
+\mathbb{E}[\text{Norm}(x)]= \mathbb{E}\bigg[ \frac{x-\mathbb{E}[x]}{\sqrt{\text{Var}[x]}} \bigg]=\frac{\mathbb{E}\big[ x-\mathbb{E}[x] \big]}{\sqrt{\text{Var}[x]}}=\frac{\mathbb{E}[x]-\mathbb{E}[x]}{\sqrt{\text{Var}[x]}}=0
+$$
+
+$$
+\text{Var}[\text{Norm}(x)]= \text{Var}\bigg[ \frac{x-\mathbb{E}[x]}{\sqrt{\text{Var}[x]}} \bigg]=\frac{\text{Var}\big[ x-\mathbb{E}[x] \big]}{(\sqrt{\text{Var}[x]})^2}=\frac{\text{Var}[x]-0}{\text{Var}[x]}=1
+$$
+
+Note that in this case, we've framed things in terms of scalar inputs $x$. If our inputs are vectors, $\mathbf{x}$, we'll just do the same thing for each dimension.
+
+$$
+\text{Norm}(\mathbf{x}) = \begin{bmatrix} \frac{x_1-\mathbb{E}[x_1]}{\sqrt{\text{Var}[x_1]}} \\ \frac{x_2-\mathbb{E}[x_2]}{\sqrt{\text{Var}[x_2]}} \\ \vdots \end{bmatrix} = \frac{\mathbf{x}-\mathbb{E}[\mathbf{x}]}{\sqrt{\text{Var}[\mathbf{x}]}} 
+$$
+
+In this case we'll train $\mathbb{E}[\mathbf{x}]$ and $\text{Var}[\mathbf{x}]$ as the element-wise mean and variance.
+
+## Estimating data statistics
+
+Unfortunately, we don't know the *true* mean and variance of the data, as our training data doesn't likely doesn't encompass all the data in the world. So we'll typically we'll *estimate* the mean and variance using what we have.
+
+Recall that **sample mean**, $\mathbf{\bar{x}}$, gives us the optimal estimate of the expectation for a given sample of values. In this case we can compute the sample mean over our dataset.
+
+$$\text{Dataset: } \{\mathbf{x}_1, \mathbf{x}_2,...,\mathbf{x}_N\}$$
+
+$$\mathbb{E}[\mathbf{x}] \approx \bar{\mathbf{x}} = \frac{1}{N}\sum_{i=1}^{N} \mathbf{x}_i\quad \text{(sample mean)}$$
+
+Similarly, the **sample variance**, $\mathbf{s}^2$ can be used as a good estimate of the true variance. There are actually two common ways to compute the sample variance. The **biased estimator**:
+
+$$\text{Var}[\mathbf{x}] \approx \mathbf{s}^2 = \frac{1}{N}\sum_{i=1}^{N} \bigg(\mathbf{x}_i - \bigg(\frac{1}{N}\sum_{i=1}^{N} \mathbf{x}_i\bigg)\bigg)^2\quad \text{(biased sample var.)}$$
+
+and the **unbiased estimator:**
+
+$$\text{Var}[\mathbf{x}] \approx \mathbf{s}^2 = \frac{1}{N-1}\sum_{i=1}^{N} \bigg(\mathbf{x}_i - \bigg(\frac{1}{N}\sum_{i=1}^{N} \mathbf{x}_i\bigg)\bigg)^2\quad \text{(sample var.)}$$
+
+The differences between these two versions aren't too important for our purposes, so we'll leave that discussion for a statistics course. Both are commonly used in neural network applications and usually perform basically identically in practice.
+
+Now we can re-define our normalization operation to use this sample mean and variance:
+
+$$\text{Norm}(x) = \frac{ x - \bar{x}}{\sqrt{s^2}}$$
+
 ## Batch normalization
 
-Normalize over the batch:
+In some cases, if may not be practical to compute the estimates of the mean and variance over the entire dataset ahead of time (e.g. if we're streaming date from an external source). In this case we can apply **batch normalization.** In this case the operation we perform will look almost exactly like our normalization operation, but we'll compute the statistics over the current *batch* that we're using for stochastic gradient descent.
 
-$$\text{BatchNorm}(x) = \frac{ x - \mathbb{E}[x]}{\sqrt{\text{Var}[x] + \epsilon}}$$
+$$
+\text{BatchNorm}(x) = \frac{ x - \bar{x}}{\sqrt{s^2 + \epsilon}}
+$$ $$\text{Batch: } \{\mathbf{x}_1, \mathbf{x}_2,...,\mathbf{x}_B\}$$ $$\mathbb{E}[\mathbf{x}] \approx \bar{\mathbf{x}} = \frac{1}{B}\sum_{i=1}^{B} \mathbf{x}_i\quad \text{(sample mean)}$$ $$\text{Var}[\mathbf{x}] \approx  \mathbf{s}^2 = \frac{1}{B-1}\sum_{i=1}^{B} \bigg(\mathbf{x}_i - \bigg(\frac{1}{B}\sum_{i=1}^{B} \mathbf{x}_i\bigg)\bigg)^2\quad \text{(sample var.)}$$
 
-Training time: $$\text{Batch: } \{x_1, x_2,...,x_B\}$$ $$\mathbb{E}[x] \approx \bar{x} = \frac{1}{B}\sum_{i=1}^{B} x_i\quad \text{(sample mean)}$$ Biased estimator: $$\text{Var}[x] \approx s^2 = \frac{1}{B}\sum_{i=1}^{B} \bigg(x_i - \bigg(\frac{1}{B}\sum_{i=1}^{B} x_i\bigg)\bigg)^2\quad \text{(sample var.)}$$ Unbiased estimator: $$\text{Var}[x] \approx  s^2 = \frac{1}{B-1}\sum_{i=1}^{B} \bigg(x_i - \bigg(\frac{1}{B}\sum_{i=1}^{B} x_i\bigg)\bigg)^2\quad \text{(sample var.)}$$
+In this case we'll also in include a small constant $\epsilon << 1$ in the denominator of the transform, just as we did in RMSProp to prevent division by $0$ if we happen to sample a batch with $0$ variance.
+
+## Distribution shift
+
+You might notice that even if we transform our data to have $\mathbb{E}[\mathbf{x}]=0$ and $\text{Var}[\mathbf{x}]=1$, once our data goes through several layers:
+
+$$
+\Phi_1 = \sigma(\mathbf{x}^T\mathbf{W}_1 + \mathbf{b}_1)
+$$
+
+$$
+\Phi_2 = \sigma(\Phi_1^T\mathbf{W}_2 + \mathbf{b}_2)
+$$
+
+$$
+\vdots
+$$
+
+$$
+\Phi_i = \sigma(\Phi_{i-1}^T\mathbf{W}_i + \mathbf{b}_i)
+$$
+
+this may no longer hold. That is, we may find that $\mathbb{E}[\Phi_{i}]\neq 0$, $\text{Var}[\Phi_{i}]\neq 1$. Again, we could carefully tune our initialization to avoid this at first, but once we start changing the weights in gradient descent, we could quickly drift away, particularly if the number of layers is large. This means that layer $i+1$ may run into exactly the same issues we identified above.
+
+$$
+\Phi_{i+1} = \sigma(\Phi_{i}^T\mathbf{W}_{i+1} + \mathbf{b}_{i+1})
+$$
+
+Even worse, we might find that not only does the distribution of $\Phi_i$ not have our desired mean and variance, its distribution could change dramatically every time we update the weights!
+
+Remember that at step $k$ we'll update the weights $\mathbf{W}_{i+1}$ according to the current input $\Phi_i^{(k)}$:
+
+$$
+\mathbf{W}_{i+1}^{(k+1)} \longleftarrow \mathbf{W}_{i+1}^{(k)} - \alpha \Phi_{i}^{(k)}\sigma'(\Phi_{i}^{(k)}\mathbf{W}_{i+1} + \mathbf{b}_{i+1})
+$$
+
+But since we're also updating $\{\mathbf{W}_{1},\mathbf{b}_1,...,\mathbf{W}_{i},\mathbf{b}_i \}$ at the same time, when we go to make a prediction, may find that the distribution of $\Phi_{i}$ has changed and our gradient step for $\mathbf{W}_{i+1}$ looks bad in hindsight. We call this problem **distribution shift.** Updating the weights sequentially might help avoid this issue, but would be very *very* slow. Instead we can use the normalization tool we just discussed to *force* the distribution of $\Phi_{i}$ to have the properties we want.
+
+In other words, we can apply normalization at every layer!
+
+## Batch normalization in multiple layers
+
+Since the distribution of $\Phi_{i}$ will change as we update the weights $\{\mathbf{W}_{1},\mathbf{b}_1,...,\mathbf{W}_{i},\mathbf{b}_i \}$, we'll need to continuously update our estimates of $\mathbb{E}[\Phi_i]$ and $\text{Var}[\Phi_i]$ as well. Meaning that if we're using mini-batch stochastic gradient descent, we'll also want to use batch-noramlization to avoid recomputing the mean and variance at each layer for the whole dataset at every step. With the addition of batch normalization operations ($BN(\cdot)$), our network will now be computed as:
+$$
+\Phi_1 = \sigma(BN(\mathbf{X})^T\mathbf{W}_1 + \mathbf{b}_1)
+$$
+
+$$
+\Phi_2 = \sigma(BN(\Phi_1)^T\mathbf{W}_2 + \mathbf{b}_2)
+$$
+
+$$
+\vdots
+$$
+
+$$
+\Phi_\ell = \sigma(BN(\Phi_{\ell-1})^T\mathbf{W}_\ell + \mathbf{b}_\ell)
+$$
+
+$$
+\mathbf{f} = BN(\Phi_{\ell-1})^T\mathbf{W}_0 + \mathbf{b}_0
+$$
+
+$$
+\mathbf{L} = \text{Loss}(\mathbf{f}, y)
+$$
+
+## Batch normalization at test time
+So far we've made an implicit assumption for batch normalization that the size of our batch is larger than one: $B>1$. If $B=1$, we run into some issues with out mean and variance estimates:
+$$\bar{\mathbf{x}}= \frac{1}{1}\sum_{i=1}^1 \mathbf{x}_1 = \mathbf{x}_1 \longrightarrow \mathbf{x}_1 - \mathbf{\bar{x}} = 0$$
+$$\mathbf{s}^2= \frac{1}{0}\sum_{i=1}^1 (\mathbf{x}_1 - \mathbf{x}_1)^2= \frac{0}{0}=\mathbf{?}$$
+$$\text{BatchNorm}(x) = \frac{0}{\sqrt{\mathbf{?} + \epsilon}}$$
+
+Even if we to use the biased variance estimator, we'd still get a divide by 0 error in out batch norm calculation! 
+
+This isn't too big a deal when we're training our network; we can just always make sure out batch size is $>1$ if we're using batch norm. The problem is that we want others to be able to use our network we can't enforce that they must use a batch size of more than one. After all, in practice if I want to use a neural network to, for example, identify a species of flower in a photo, I shouldn't need to give it 9 other photos of flowers just to make one prediction!
+
+Even if we could force users to give our network multiple examples, it could be difficult to enforce that the sample batch they chose was truely random. If the selection of the batch is biased, it could throw off the mean and variance estimates we need!
+
+The solution often used in practice is to define batch normalization differently depending on whether we're training the network or testing it on new data. At training time we can keep the same approarch from before.
+
+However, we'll also keep track of a running average of the sample mean and sample variance that we observe at each step. We'll use the same *exponential moving average* approach we
+
 
 $$\underset{\text{train}}{\text{BatchNorm}}(x) = \frac{ x - \bar{x}}{\sqrt{s^2 + \epsilon}}$$
 

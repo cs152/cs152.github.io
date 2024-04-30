@@ -44,6 +44,16 @@ As a progress report you and your team will submit a short (1 page) summery of p
 
 Please see the final project template [here](./CS152_Project_Template.pdf), which includes instructions and guidelines for what to submit. Submissions will be through gradescope.
 
+**Rubric:** [link](./rubric.qmd)
+
+**Overleaf template:** [link](https://www.overleaf.com/read/sgrzqjprrcqv#f41b88)
+
+## Course server
+
+There is a GPU server allocated to this class at `teapot.cs.hmc.edu`. Please follow the instructions in homework 6 or 7 to setup a Jupyter session for project work.
+
+**Data directory** If you are working with a large dataset on the server, please do not save it to your home directory as this may cause you to exceed your account's allocated limit. Instead, please create a sub-directory of `/cs/cs152/shared` for your project and save your data there.
+
 ## Possible projects
 
 ### Neural style transfer

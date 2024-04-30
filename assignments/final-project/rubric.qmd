@@ -1,0 +1,99 @@
+---
+title: "Final project rubric"
+format:
+    html:
+        toc: true
+        toc-depth: 3
+---
+
+# Report (100 points)
+
+## Abstract (5 points)
+
+**+1** Includes abstract
+
+**+2** Summarizes goal of the project and method
+
+**+1** Summarizes conclusions and results in 1-2 sentences
+
+**+1** Clear and concise writing
+
+## Introduction and Related Work (10 points)
+
+**+5** Introduction to the goal of the project, why you are trying to solve it and how it could be used in practice.
+
+**+5** Introduces at least 1-2 pieces of related work that form the basis for the project, including at least 1-2 sentences about what method/data each introduced and what they showed. Cites related work appropriately.
+
+## Datasets (10 points)
+
+**+4** Clearly describes each dataset used and why it was chosen.
+
+**+1** Provides citation and link to each dataset's source.
+
+**+4** Provides a summary of each dataset including the size, class distribution (if applicable), and format of each observation.
+
+**+1** Clearly describes the training/validation/test split for each dataset.
+
+## Methods (30 points)
+
+**+10** Includes precise and correct mathematical formulations for the loss functions used and/or formulations and pseudocode for new algorithms introduced. If the method is an architecture (e.g. U-Nets or Vision transformers) this should be a precise discussion of how it differs from the networks we've used so far and what the relevant (hyper) parameters are. 
+
+**+10** Includes a clear description of the goals and intuition for the formulated approach. A student in this class should understand *why* the given formulation makes sense and how to replicate it.
+
+**+5** Includes a clear description of the training procedure(s) you used. For example: how long did you train each model for, how did you choose the learning rate, batch size etc, how did you determine when to stop training? (It's ok if some choices were made based on intution/prior experiences).
+
+**+5** Includes a clear description of the network architectures used (e.g. how many layers, and additional layers such as normalization, dropout etc.) Explains why this architecture(s) were chosen.
+
+## Results (30 points)
+
+**+10** Includes a clear quantitative and qualitative evaluation of the proposed method on *test* data. This should include defining the quantitative metrics used, at least one table or figure summarizing the best results achieved. 
+
+**+10** Includes at least one comparison or ablation study. This could be a comparison between substantially different model architectures, different possible losses or a comparison between the proposed method and a baseline.
+
+**+5** Includes an insightful discussion of how to interpret the results and any recommendations. If the results did not live up to expectations, discuss what could have gone wrong and possible fixes.
+
+**+5** Shows progress on training and validation data for the main (best) results. This could be a loss plot and/or plots of qualitative/quantitative evaluation over training.
+
+## Conclusion (5 points)
+
+**+5** Includes a well-written and concise summary of the conclusions and takeaways from this work.
+
+## Impact statement (5 points)
+
+**+5** Includes an discussion determining any possible ethical or societal impacts of this work. Be sure to identify any possible ways this approach could be misused and any biases in the results or data. 
+
+**+5 bonus** Possible bonus points for a particularly in-depth discussion of impacts.
+
+## Code (5 points)
+
+**+5** Includes clear code showing what was implemented as well as citations to code used.
+
+**+5 bonus** Possible bonus points for clearly documented code for reproducing all experiments.
+
+# Presentation (50 points)
+
+## Introduction (10 points)
+
+**+5** Provides a clear outline of the problem to be solved
+
+**+5** Gives clear and compelling reasons why this is an interesting problem and any societal implications
+
+## Methods (20 points)
+
+**+5** Gives a clear overview of the datasets used.
+
+**+10** Explains the technique that was studied with explanations for the *most relevant* formulas and/or algorithms.
+
+**+5** Methods section is appropriately targeted towards the level of this class.
+
+## Results (10 points)
+
+**+5** Highlights the main experimental results from the report.
+
+**+5** Gives a clear summary of the takeaways from the experiments and recommendations for future users.
+
+## Presentation (10 points)
+
+**+5** All group members contributed roughly equal time.
+
+**+5** Visuals were clear, readable and reinforced the verbal discussion.

@@ -235,7 +235,7 @@
     "href": "calendar/calendar.html",
     "title": "Course Calendar",
     "section": "",
-    "text": "Lecture\nDate\nTopics\nTextbook\nMaterials\nHomework\n\n\n\n\n1\n1/17\nCourse introduction, prediction models\nBook 1: 1.2.1-1.2.2, 7.1.1-7.2.4, 7.8.1, 7.8.2\nNotes\nHomework 1 assigned (Drive) Due: 1/25 11:59pm\nSolutions\n\n\n2\n1/22\nLinear regression, Gradient descent\nBook 1: 4.2.1, 4.2.2, 11.1-11.2.4\nNotes\nSlides\n\n\n\n3\n1/24\nLinear regression, maximum likelihood\nBook 1: 4.2.1, 4.2.2, 11.1-11.2.4\nNotes\nSlides\nHomework 2 assigned (Drive, hints) Due: 2/1 11:59pm\nSolutions\n\n\n4\n1/29\nLogistic regression\nBook 1: 10.1, 10.2.1, 10.2.3, 10.3.1-10.3.3\nNotes\nSlides\n\n\n\n5\n1/31\nLogistic regression\nBook 1: 10.1, 10.2.1, 10.2.3, 10.3.1-10.3.3\nNotes\nSlides\nNotebook\nFinal project ethics warm-up assigned (Description) Due: 2/8 11:59pm\n\n\n6\n2/5\nMultinomial logistic regression\nBook 1: 10.2.2\nNotes\nSlides\n\n\n\n7\n2/7\nFeature transforms\nBook 1: 13.1, 13.2\nNotes\nSlides\nHomework 3 assigned (Drive) Due: 2/15 11:59pm\nSolutions\n\n\n8\n2/12\nNeural networks\nBook 1: 13.1, 13.2\nNotebook\nSlides\n\n\n\n9\n2/14\nNeural networks (cont.)\nBook 1: 13.1, 13.2\nNotes\nSlides\nHomework 4 assigned (Drive) Due: 2/23 11:59pm\nSolutions\n\n\n10\n2/19\nAutomatic Differentiation\nBook 1: 13.3\nNotes\nSlides\n\n\n\n11\n2/21\nReverse-mode Automatic Differentiation\nBook 1: 13.3\nNotes\nSlides\n\n\n\n12\n2/26\nReverse-mode Automatic Differentiation (cont.)\nBook 1: 13.4.5, 13.5\nNotes\nSlides\n\n\n\n13\n2/28\nPyTorch\nBook 1: 13.5\nNotebook\nHomework 5 assigned (Drive) (Due: 3/7 11:59pm\n\n\n14\n3/4\nL1 & L2 regularization\nBook 1: 8.4\nNotes\nSlides\n\n\n\n15\n3/6\nRegularization (Cont.), Dropout\nBook 1: 8.4\nNotes\nSlides\n\n\n\n\n3/11\nNo class (Spring break)\n\n\n\n\n\n\n3/13\nNo class (Spring break)\n\n\n\n\n\n16\n3/18\nDropout, Initialization\nBook 1: 13.4.1-13.4.2, 14.2.4\nNotes\nSlides\n\n\n\n17\n3/20\nStochastic gradient descent\nBook 1: 13.4.3-13.4.5\nNotes\nSlides\nHomework 6 assigned (Drive) Due: 3/29 11:59pm\n\n\n18\n3/25\nStochastic gradient descent\nBook 1: 14.1-14.3\nNotes\nSlides\nFinal project proposal assigned (Description) Due: 4/4 11:59pm\n\n\n19\n3/27\nStochastic gradient descent\nBook 1: 14.1-14.3\nNotes\nSlides\n\n\n\n20\n4/1\nResidual networks and Normalization\nBook 1: 14.1-14.3\nSlides\n\n\n\n21\n4/3\nResidual networks and Normalization\nBook 1: 15.1, 15.2.1-15.2.3\nSlides\nHomework 7 assigned (Drive) Due: 4/11 11:59pm\n\n\n22\n4/8\nConvolutional Networks\nBook 1: 15.2.5-15.2.7\nSlides\n\n\n\n23\n4/10\nConvolutional Networks\nBook 1: 15.2.1-15.2.6\nSlides\nHomework 8 assigned Due: 4/18 11:59pm\n\n\n24\n4/15\nLanguage models, LSTMs\nBook 1: 15.2.1-15.2.6, http://nlp.seas.harvard.edu/annotated-transformer/\nSlides\n\n\n\n25\n4/17\nAttention layers\nBook 1: 15.4.1, 15.4.2-15.4.6\n\nFinal project check-in assigned (Description) Due: 4/22 11:59pm\n\n\n26\n4/22\nTransformers\nBook 1: 15.4.1, 15.4.2-15.4.6\n\n\n\n\n27\n4/24\nTransformers (cont.), Large language models\n\n\n\n\n\n\n5/3\n\n\n\nFinal Project Due (11:59pm)\n(Description)"
+    "text": "Lecture\nDate\nTopics\nTextbook\nMaterials\nHomework\n\n\n\n\n1\n1/17\nCourse introduction, prediction models\nBook 1: 1.2.1-1.2.2, 7.1.1-7.2.4, 7.8.1, 7.8.2\nNotes\nHomework 1 assigned (Drive) Due: 1/25 11:59pm\nSolutions\n\n\n2\n1/22\nLinear regression, Gradient descent\nBook 1: 4.2.1, 4.2.2, 11.1-11.2.4\nNotes\nSlides\n\n\n\n3\n1/24\nLinear regression, maximum likelihood\nBook 1: 4.2.1, 4.2.2, 11.1-11.2.4\nNotes\nSlides\nHomework 2 assigned (Drive, hints) Due: 2/1 11:59pm\nSolutions\n\n\n4\n1/29\nLogistic regression\nBook 1: 10.1, 10.2.1, 10.2.3, 10.3.1-10.3.3\nNotes\nSlides\n\n\n\n5\n1/31\nLogistic regression\nBook 1: 10.1, 10.2.1, 10.2.3, 10.3.1-10.3.3\nNotes\nSlides\nNotebook\nFinal project ethics warm-up assigned (Description) Due: 2/8 11:59pm\n\n\n6\n2/5\nMultinomial logistic regression\nBook 1: 10.2.2\nNotes\nSlides\n\n\n\n7\n2/7\nFeature transforms\nBook 1: 13.1, 13.2\nNotes\nSlides\nHomework 3 assigned (Drive) Due: 2/15 11:59pm\nSolutions\n\n\n8\n2/12\nNeural networks\nBook 1: 13.1, 13.2\nNotebook\nSlides\n\n\n\n9\n2/14\nNeural networks (cont.)\nBook 1: 13.1, 13.2\nNotes\nSlides\nHomework 4 assigned (Drive) Due: 2/23 11:59pm\nSolutions\n\n\n10\n2/19\nAutomatic Differentiation\nBook 1: 13.3\nNotes\nSlides\n\n\n\n11\n2/21\nReverse-mode Automatic Differentiation\nBook 1: 13.3\nNotes\nSlides\n\n\n\n12\n2/26\nReverse-mode Automatic Differentiation (cont.)\nBook 1: 13.4.5, 13.5\nNotes\nSlides\n\n\n\n13\n2/28\nPyTorch\nBook 1: 13.5\nNotebook\nHomework 5 assigned (Drive) (Due: 3/7 11:59pm\n\n\n14\n3/4\nL1 & L2 regularization\nBook 1: 8.4\nNotes\nSlides\n\n\n\n15\n3/6\nRegularization (Cont.), Dropout\nBook 1: 8.4\nNotes\nSlides\n\n\n\n\n3/11\nNo class (Spring break)\n\n\n\n\n\n\n3/13\nNo class (Spring break)\n\n\n\n\n\n16\n3/18\nDropout, Initialization\nBook 1: 13.4.1-13.4.2, 14.2.4\nNotes\nSlides\n\n\n\n17\n3/20\nStochastic gradient descent\nBook 1: 13.4.3-13.4.5\nNotes\nSlides\nHomework 6 assigned (Drive) Due: 3/29 11:59pm\n\n\n18\n3/25\nStochastic gradient descent\nBook 1: 14.1-14.3\nNotes\nSlides\nFinal project proposal assigned (Description) Due: 4/4 11:59pm\n\n\n19\n3/27\nStochastic gradient descent\nBook 1: 14.1-14.3\nNotes\nSlides\n\n\n\n20\n4/1\nResidual networks and Normalization\nBook 1: 14.1-14.3\nSlides\n\n\n\n21\n4/3\nResidual networks and Normalization\nBook 1: 15.1, 15.2.1-15.2.3\nSlides\nHomework 7 assigned (Drive) Due: 4/11 11:59pm\n\n\n22\n4/8\nConvolutional Networks\nBook 1: 15.2.5-15.2.7\nSlides\n\n\n\n23\n4/10\nConvolutional Networks\nBook 1: 15.2.1-15.2.6\nSlides\nHomework 8 assigned (Drive) Due: 4/18 11:59pm\n\n\n24\n4/15\nLanguage models, LSTMs\nBook 1: 15.2.1-15.2.6, http://nlp.seas.harvard.edu/annotated-transformer/\nSlides\n\n\n\n25\n4/17\nAttention layers\nBook 1: 15.4.1, 15.4.2-15.4.6\n\nFinal project check-in assigned (Description) Due: 4/22 11:59pm\n\n\n26\n4/22\nTransformers\nBook 1: 15.4.1, 15.4.2-15.4.6\n\n\n\n\n27\n4/24\nTransformers (cont.), Large language models\n\n\nOptional extra credit homework assigned (Drive)\nDue:\n5/3 11:59pm (seniors)\n5/9 11:59pm (others)\n\n\n\n5/3\n\n\n\nFinal Project Due (11:59pm)\n(Description)"
   },
   {
     "objectID": "plugins/drawer/Readme.html",
@@ -3784,7 +3784,7 @@
     "href": "assignments/final-project/outline.html#final-deliverables-due-53-1159pm",
     "title": "Final project",
     "section": "Final deliverables (Due 5/3, 11:59pm)",
-    "text": "Final deliverables (Due 5/3, 11:59pm)\nPlease see the final project template here, which includes instructions and guidelines for what to submit. Submissions will be through gradescope."
+    "text": "Final deliverables (Due 5/3, 11:59pm)\nPlease see the final project template here, which includes instructions and guidelines for what to submit. Submissions will be through gradescope.\nRubric: link\nOverleaf template: link"
   },
   {
     "objectID": "index.html#textbook",
@@ -5227,5 +5227,103 @@
     "title": "Lecture 10: Normalization",
     "section": "Batch normalization at test time",
     "text": "Batch normalization at test time\nSo far we’ve made an implicit assumption for batch normalization that the size of our batch is larger than one: \\(B&gt;1\\). If \\(B=1\\), we run into some issues with out mean and variance estimates: \\[\\bar{\\mathbf{x}}= \\frac{1}{1}\\sum_{i=1}^1 \\mathbf{x}_1 = \\mathbf{x}_1 \\longrightarrow \\mathbf{x}_1 - \\mathbf{\\bar{x}} = 0\\] \\[\\mathbf{s}^2= \\frac{1}{0}\\sum_{i=1}^1 (\\mathbf{x}_1 - \\mathbf{x}_1)^2= \\frac{0}{0}=\\mathbf{?}\\] \\[\\text{BatchNorm}(x) = \\frac{0}{\\sqrt{\\mathbf{?} + \\epsilon}}\\]\nEven if we to use the biased variance estimator, we’d still get a divide by 0 error in out batch norm calculation!\nThis isn’t too big a deal when we’re training our network; we can just always make sure out batch size is \\(&gt;1\\) if we’re using batch norm. The problem is that we want others to be able to use our network we can’t enforce that they must use a batch size of more than one. After all, in practice if I want to use a neural network to, for example, identify a species of flower in a photo, I shouldn’t need to give it 9 other photos of flowers just to make one prediction!\nEven if we could force users to give our network multiple examples, it could be difficult to enforce that the sample batch they chose was truely random. If the selection of the batch is biased, it could throw off the mean and variance estimates we need!\nThe solution often used in practice is to define batch normalization differently depending on whether we’re training the network or testing it on new data. At training time we can keep the same approarch from before.\nHowever, we’ll also keep track of a running average of the sample mean and sample variance that we observe at each step. We’ll use the same exponential moving average approach we\n\\[\\underset{\\text{train}}{\\text{BatchNorm}}(x) = \\frac{ x - \\bar{x}}{\\sqrt{s^2 + \\epsilon}}\\]\nRunning estimate: \\[\\bar{\\mu}^{(k+1)} \\longleftarrow \\beta \\bar{\\mu}^{(k)} + (1-\\beta) \\bar{x}^{(k)}\\] \\[\\bar{\\sigma}^{2(k+1)} \\longleftarrow \\beta \\bar{\\sigma}^{2(k)} + (1-\\beta) s^{2(k)}\\]\n\\[\\underset{\\text{test}}{\\text{BatchNorm}}(x) = \\frac{ x - \\bar{\\mu}}{\\sqrt{\\bar{\\sigma}^2 + \\epsilon}}\\]"
+  },
+  {
+    "objectID": "assignments/final-project/rubric.html",
+    "href": "assignments/final-project/rubric.html",
+    "title": "Final project rubric",
+    "section": "",
+    "text": "+1 Includes abstract\n+2 Summarizes goal of the project and method\n+1 Summarizes conclusions and results in 1-2 sentences\n+1 Clear and concise writing\n\n\n\n+5 Introduction to the goal of the project, why you are trying to solve it and how it could be used in practice.\n+5 Introduces at least 1-2 pieces of related work that form the basis for the project, including at least 1-2 sentences about what method/data each introduced and what they showed. Cites related work appropriately.\n\n\n\n+4 Clearly describes each dataset used and why it was chosen.\n+1 Provides citation and link to each dataset’s source.\n+4 Provides a summary of each dataset including the size, class distribution (if applicable), and format of each observation.\n+1 Clearly describes the training/validation/test split for each dataset.\n\n\n\n+10 Includes precise and correct mathematical formulations for the loss functions used and/or formulations and pseudocode for new algorithms introduced. If the method is an architecture (e.g. U-Nets or Vision transformers) this should be a precise discussion of how it differs from the networks we’ve used so far and what the relevant (hyper) parameters are.\n+10 Includes a clear description of the goals and intuition for the formulated approach. A student in this class should understand why the given formulation makes sense and how to replicate it.\n+5 Includes a clear description of the training procedure(s) you used. For example: how long did you train each model for, how did you choose the learning rate, batch size etc, how did you determine when to stop training? (It’s ok if some choices were made based on intution/prior experiences).\n+5 Includes a clear description of the network architectures used (e.g. how many layers, and additional layers such as normalization, dropout etc.) Explains why this architecture(s) were chosen.\n\n\n\n+10 Includes a clear quantitative and qualitative evaluation of the proposed method on test data. This should include defining the quantitative metrics used, at least one table or figure summarizing the best results achieved.\n+10 Includes at least one comparison or ablation study. This could be a comparison between substantially different model architectures, different possible losses or a comparison between the proposed method and a baseline.\n+5 Includes an insightful discussion of how to interpret the results and any recommendations. If the results did not live up to expectations, discuss what could have gone wrong and possible fixes.\n+5 Shows progress on training and validation data for the main (best) results. This could be a loss plot and/or plots of qualitative/quantitative evaluation over training.\n\n\n\n+5 Includes a well-written and concise summary of the conclusions and takeaways from this work.\n\n\n\n+5 Includes an discussion determining any possible ethical or societal impacts of this work. Be sure to identify any possible ways this approach could be misused and any biases in the results or data.\n+5 bonus Possible bonus points for a particularly in-depth discussion of impacts.\n\n\n\n+5 Includes clear code showing what was implemented as well as citations to code used.\n+5 bonus Possible bonus points for clearly documented code for reproducing all experiments."
+  },
+  {
+    "objectID": "assignments/final-project/rubric.html#abstract-5-points",
+    "href": "assignments/final-project/rubric.html#abstract-5-points",
+    "title": "Final project rubric",
+    "section": "",
+    "text": "+1 Includes abstract\n+2 Summarizes goal of the project and method\n+1 Summarizes conclusions and results in 1-2 sentences\n+1 Clear and concise writing"
+  },
+  {
+    "objectID": "assignments/final-project/rubric.html#introduction-and-related-work-10-points",
+    "href": "assignments/final-project/rubric.html#introduction-and-related-work-10-points",
+    "title": "Final project rubric",
+    "section": "",
+    "text": "+5 Introduction to the goal of the project, why you are trying to solve it and how it could be used in practice.\n+5 Introduces at least 1-2 pieces of related work that form the basis for the project, including at least 1-2 sentences about what method/data each introduced and what they showed. Cites related work appropriately."
+  },
+  {
+    "objectID": "assignments/final-project/rubric.html#datasets-10-points",
+    "href": "assignments/final-project/rubric.html#datasets-10-points",
+    "title": "Final project rubric",
+    "section": "",
+    "text": "+4 Clearly describes each dataset used and why it was chosen.\n+1 Provides citation and link to each dataset’s source.\n+4 Provides a summary of each dataset including the size, class distribution (if applicable), and format of each observation.\n+1 Clearly describes the training/validation/test split for each dataset."
+  },
+  {
+    "objectID": "assignments/final-project/rubric.html#methods-30-points",
+    "href": "assignments/final-project/rubric.html#methods-30-points",
+    "title": "Final project rubric",
+    "section": "",
+    "text": "+10 Includes precise and correct mathematical formulations for the loss functions used and/or formulations and pseudocode for new algorithms introduced. If the method is an architecture (e.g. U-Nets or Vision transformers) this should be a precise discussion of how it differs from the networks we’ve used so far and what the relevant (hyper) parameters are.\n+10 Includes a clear description of the goals and intuition for the formulated approach. A student in this class should understand why the given formulation makes sense and how to replicate it.\n+5 Includes a clear description of the training procedure(s) you used. For example: how long did you train each model for, how did you choose the learning rate, batch size etc, how did you determine when to stop training? (It’s ok if some choices were made based on intution/prior experiences).\n+5 Includes a clear description of the network architectures used (e.g. how many layers, and additional layers such as normalization, dropout etc.) Explains why this architecture(s) were chosen."
+  },
+  {
+    "objectID": "assignments/final-project/rubric.html#results-30-points",
+    "href": "assignments/final-project/rubric.html#results-30-points",
+    "title": "Final project rubric",
+    "section": "",
+    "text": "+10 Includes a clear quantitative and qualitative evaluation of the proposed method on test data. This should include defining the quantitative metrics used, at least one table or figure summarizing the best results achieved.\n+10 Includes at least one comparison or ablation study. This could be a comparison between substantially different model architectures, different possible losses or a comparison between the proposed method and a baseline.\n+5 Includes an insightful discussion of how to interpret the results and any recommendations. If the results did not live up to expectations, discuss what could have gone wrong and possible fixes.\n+5 Shows progress on training and validation data for the main (best) results. This could be a loss plot and/or plots of qualitative/quantitative evaluation over training."
+  },
+  {
+    "objectID": "assignments/final-project/rubric.html#conclusion-5-points",
+    "href": "assignments/final-project/rubric.html#conclusion-5-points",
+    "title": "Final project rubric",
+    "section": "",
+    "text": "+5 Includes a well-written and concise summary of the conclusions and takeaways from this work."
+  },
+  {
+    "objectID": "assignments/final-project/rubric.html#impact-statement-5-points",
+    "href": "assignments/final-project/rubric.html#impact-statement-5-points",
+    "title": "Final project rubric",
+    "section": "",
+    "text": "+5 Includes an discussion determining any possible ethical or societal impacts of this work. Be sure to identify any possible ways this approach could be misused and any biases in the results or data.\n+5 bonus Possible bonus points for a particularly in-depth discussion of impacts."
+  },
+  {
+    "objectID": "assignments/final-project/rubric.html#code-5-points",
+    "href": "assignments/final-project/rubric.html#code-5-points",
+    "title": "Final project rubric",
+    "section": "",
+    "text": "+5 Includes clear code showing what was implemented as well as citations to code used.\n+5 bonus Possible bonus points for clearly documented code for reproducing all experiments."
+  },
+  {
+    "objectID": "assignments/final-project/rubric.html#introduction-10-points",
+    "href": "assignments/final-project/rubric.html#introduction-10-points",
+    "title": "Final project rubric",
+    "section": "Introduction (10 points)",
+    "text": "Introduction (10 points)\n+5 Provides a clear outline of the problem to be solved\n+5 Gives clear and compelling reasons why this is an interesting problem and any societal implications"
+  },
+  {
+    "objectID": "assignments/final-project/rubric.html#methods-20-points",
+    "href": "assignments/final-project/rubric.html#methods-20-points",
+    "title": "Final project rubric",
+    "section": "Methods (20 points)",
+    "text": "Methods (20 points)\n+5 Gives a clear overview of the datasets used.\n+10 Explains the technique that was studied with explanations for the most relevant formulas and/or algorithms.\n+5 Methods section is appropriately targeted towards the level of this class."
+  },
+  {
+    "objectID": "assignments/final-project/rubric.html#results-10-points",
+    "href": "assignments/final-project/rubric.html#results-10-points",
+    "title": "Final project rubric",
+    "section": "Results (10 points)",
+    "text": "Results (10 points)\n+5 Highlights the main experimental results from the report.\n+5 Gives a clear summary of the takeaways from the experiments and recommendations for future users."
+  },
+  {
+    "objectID": "assignments/final-project/rubric.html#presentation-10-points",
+    "href": "assignments/final-project/rubric.html#presentation-10-points",
+    "title": "Final project rubric",
+    "section": "Presentation (10 points)",
+    "text": "Presentation (10 points)\n+5 All group members contributed roughly equal time.\n+5 Visuals were clear, readable and reinforced the verbal discussion."
+  },
+  {
+    "objectID": "assignments/final-project/outline.html#course-server",
+    "href": "assignments/final-project/outline.html#course-server",
+    "title": "Final project",
+    "section": "Course server",
+    "text": "Course server\nThere is a GPU server allocated to this class at teapot.cs.hmc.edu. Please follow the instructions in homework 6 or 7 to setup a Jupyter session for project work.\nData directory If you are working with a large dataset on the server, please do not save it to your home directory as this may cause you to exceed your account’s allocated limit. Instead, please create a sub-directory of /cs/cs152/shared for your project and save your data there."
   }
 ]

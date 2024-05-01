@@ -54,6 +54,13 @@ There is a GPU server allocated to this class at `teapot.cs.hmc.edu`. Please fol
 
 **Data directory** If you are working with a large dataset on the server, please do not save it to your home directory as this may cause you to exceed your account's allocated limit. Instead, please create a sub-directory of `/cs/cs152/shared` for your project and save your data there.
 
+## Examples from previous semesters
+
+Here are examples of great projects kindly shared by students from previous semesters. Note that these may be longer than what is expected for a perfect grade. 4-6 pages should be sufficient.
+
+- [Explainable Transfer Learning for CNNs and Transformers](./Examples/CS152_Project_example_1.pdf)
+- [Recurrent Neural Network Variants for Generating Opinion Distributions](./Examples/CS152_Project_example_2.pdf)
+
 ## Possible projects
 
 ### Neural style transfer

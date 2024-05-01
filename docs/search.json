@@ -5325,5 +5325,12 @@
     "title": "Final project",
     "section": "Course server",
     "text": "Course server\nThere is a GPU server allocated to this class at teapot.cs.hmc.edu. Please follow the instructions in homework 6 or 7 to setup a Jupyter session for project work.\nData directory If you are working with a large dataset on the server, please do not save it to your home directory as this may cause you to exceed your account’s allocated limit. Instead, please create a sub-directory of /cs/cs152/shared for your project and save your data there."
+  },
+  {
+    "objectID": "assignments/final-project/outline.html#examples-from-previous-semesters",
+    "href": "assignments/final-project/outline.html#examples-from-previous-semesters",
+    "title": "Final project",
+    "section": "Examples from previous semesters",
+    "text": "Examples from previous semesters\nHere are examples of great projects kindly shared by students from previous semesters. Note that these may be longer than what is expected for a perfect grade. 4-6 pages should be sufficient.\n\nExplainable Transfer Learning for CNNs and Transformers\nRecurrent Neural Network Variants for Generating Opinion Distributions"
   }
 ]

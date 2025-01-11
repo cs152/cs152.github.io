@@ -14,8 +14,6 @@ website:
         text: Homeworks
       - href: assignments/final-project/outline.qmd
         text: Project
-      - href: https://github.com/orgs/CS152/
-        text: Github
       - href: https://www.gradescope.com/courses/710173
         text: Gradescope
 

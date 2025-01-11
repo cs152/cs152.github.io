@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.319">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>CS 152: Neural Networks - Lecture 4: Feature transforms</title>
+<title>Lecture 4: Feature transforms – CS 152: Neural Networks</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,7 +22,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +33,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -57,7 +57,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -79,7 +79,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -88,18 +94,47 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 <script type="module" src="../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
 <link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -107,43 +142,47 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">CS 152: Neural Networks</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html" rel="" target="">
- <span class="menu-text">Home</span></a>
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../calendar/calendar.html" rel="" target="">
- <span class="menu-text">Calendar</span></a>
+    <a class="nav-link" href="../calendar/calendar.html"> 
+<span class="menu-text">Calendar</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://github.com/orgs/CS152-Neural-Networks-Fall-2023/repositories" rel="" target="">
- <span class="menu-text">Homeworks</span></a>
+    <a class="nav-link" href="https://drive.google.com/drive/folders/1JFhwmcFBTHiRbfhQ0VRDj9xIPxFpHuWj?usp=drive_link"> 
+<span class="menu-text">Homeworks</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://harveymuddcollege.instructure.com/courses/615/" rel="" target="">
- <span class="menu-text">Canvas</span></a>
+    <a class="nav-link" href="../assignments/final-project/outline.html"> 
+<span class="menu-text">Project</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://github.com/orgs/CS152-Neural-Networks-Fall-2023/" rel="" target="">
- <span class="menu-text">Github</span></a>
+    <a class="nav-link" href="https://github.com/orgs/CS152/"> 
+<span class="menu-text">Github</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://www.gradescope.com/courses/710173"> 
+<span class="menu-text">Gradescope</span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools ms-auto">
-</div>
           </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -193,7 +232,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
+
 </header>
+
 
 <div class="cell">
 <div class="sourceCode cell-code hidden" id="cb1" data-startfrom="25" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 24;"><span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>Plot <span class="op">=</span> <span class="im">import</span>(<span class="st">"https://esm.sh/@observablehq/plot"</span>) </span>
@@ -730,7 +771,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div class="cell" data-execution_count="1">
+<div id="1a34336f" class="cell" data-execution_count="1">
 <div class="cell-output cell-output-display">
 <script type="ojs-define">{"contents": [{"name": "data_raw", "value": {"mpg": [18.0, 15.0, 18.0, 16.0, 17.0, 15.0, 14.0, 14.0, 14.0, 15.0, 15.0, 14.0, 15.0, 14.0, 24.0, 22.0, 18.0, 21.0, 27.0, 26.0, 25.0, 24.0, 25.0, 26.0, 21.0, 10.0, 10.0, 11.0, 9.0, 27.0, 28.0, 25.0, 25.0, 19.0, 16.0, 17.0, 19.0, 18.0, 14.0, 14.0, 14.0, 14.0, 12.0, 13.0, 13.0, 18.0, 22.0, 19.0, 18.0, 23.0, 28.0, 30.0, 30.0, 31.0, 35.0, 27.0, 26.0, 24.0, 25.0, 23.0, 20.0, 21.0, 13.0, 14.0, 15.0, 14.0, 17.0, 11.0, 13.0, 12.0, 13.0, 19.0, 15.0, 13.0, 13.0, 14.0, 18.0, 22.0, 21.0, 26.0, 22.0, 28.0, 23.0, 28.0, 27.0, 13.0, 14.0, 13.0, 14.0, 15.0, 12.0, 13.0, 13.0, 14.0, 13.0, 12.0, 13.0, 18.0, 16.0, 18.0, 18.0, 23.0, 26.0, 11.0, 12.0, 13.0, 12.0, 18.0, 20.0, 21.0, 22.0, 18.0, 19.0, 21.0, 26.0, 15.0, 16.0, 29.0, 24.0, 20.0, 19.0, 15.0, 24.0, 20.0, 11.0, 20.0, 21.0, 19.0, 15.0, 31.0, 26.0, 32.0, 25.0, 16.0, 16.0, 18.0, 16.0, 13.0, 14.0, 14.0, 14.0, 29.0, 26.0, 26.0, 31.0, 32.0, 28.0, 24.0, 26.0, 24.0, 26.0, 31.0, 19.0, 18.0, 15.0, 15.0, 16.0, 15.0, 16.0, 14.0, 17.0, 16.0, 15.0, 18.0, 21.0, 20.0, 13.0, 29.0, 23.0, 20.0, 23.0, 24.0, 25.0, 24.0, 18.0, 29.0, 19.0, 23.0, 23.0, 22.0, 25.0, 33.0, 28.0, 25.0, 25.0, 26.0, 27.0, 17.5, 16.0, 15.5, 14.5, 22.0, 22.0, 24.0, 22.5, 29.0, 24.5, 29.0, 33.0, 20.0, 18.0, 18.5, 17.5, 29.5, 32.0, 28.0, 26.5, 20.0, 13.0, 19.0, 19.0, 16.5, 16.5, 13.0, 13.0, 13.0, 31.5, 30.0, 36.0, 25.5, 33.5, 17.5, 17.0, 15.5, 15.0, 17.5, 20.5, 19.0, 18.5, 16.0, 15.5, 15.5, 16.0, 29.0, 24.5, 26.0, 25.5, 30.5, 33.5, 30.0, 30.5, 22.0, 21.5, 21.5, 43.1, 36.1, 32.8, 39.4, 36.1, 19.9, 19.4, 20.2, 19.2, 20.5, 20.2, 25.1, 20.5, 19.4, 20.6, 20.8, 18.6, 18.1, 19.2, 17.7, 18.1, 17.5, 30.0, 27.5, 27.2, 30.9, 21.1, 23.2, 23.8, 23.9, 20.3, 17.0, 21.6, 16.2, 31.5, 29.5, 21.5, 19.8, 22.3, 20.2, 20.6, 17.0, 17.6, 16.5, 18.2, 16.9, 15.5, 19.2, 18.5, 31.9, 34.1, 35.7, 27.4, 25.4, 23.0, 27.2, 23.9, 34.2, 34.5, 31.8, 37.3, 28.4, 28.8, 26.8, 33.5, 41.5, 38.1, 32.1, 37.2, 28.0, 26.4, 24.3, 19.1, 34.3, 29.8, 31.3, 37.0, 32.2, 46.6, 27.9, 40.8, 44.3, 43.4, 36.4, 30.0, 44.6, 40.9, 33.8, 29.8, 32.7, 23.7, 35.0, 23.6, 32.4, 27.2, 26.6, 25.8, 23.5, 30.0, 39.1, 39.0, 35.1, 32.3, 37.0, 37.7, 34.1, 34.7, 34.4, 29.9, 33.0, 34.5, 33.7, 32.4, 32.9, 31.6, 28.1, 30.7, 25.4, 24.2, 22.4, 26.6, 20.2, 17.6, 28.0, 27.0, 34.0, 31.0, 29.0, 27.0, 24.0, 23.0, 36.0, 37.0, 31.0, 38.0, 36.0, 36.0, 36.0, 34.0, 38.0, 32.0, 38.0, 25.0, 38.0, 26.0, 22.0, 32.0, 36.0, 27.0, 27.0, 44.0, 32.0, 28.0, 31.0], "cylinders": [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 4, 6, 6, 6, 4, 4, 4, 4, 4, 4, 6, 8, 8, 8, 8, 4, 4, 4, 4, 6, 6, 6, 6, 6, 8, 8, 8, 8, 8, 8, 8, 6, 4, 6, 6, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 8, 8, 8, 8, 8, 8, 8, 8, 8, 3, 8, 8, 8, 8, 4, 4, 4, 4, 4, 4, 4, 4, 4, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 6, 6, 6, 6, 6, 4, 8, 8, 8, 8, 6, 4, 4, 4, 3, 4, 6, 4, 8, 8, 4, 4, 4, 4, 8, 4, 6, 8, 6, 6, 6, 6, 4, 4, 4, 4, 6, 6, 6, 8, 8, 8, 8, 8, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 6, 6, 6, 6, 8, 8, 8, 8, 6, 6, 6, 6, 6, 8, 8, 4, 4, 6, 4, 4, 4, 4, 6, 4, 6, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 8, 8, 8, 8, 6, 6, 6, 6, 4, 4, 4, 4, 6, 6, 6, 6, 4, 4, 4, 4, 4, 8, 4, 6, 6, 8, 8, 8, 8, 4, 4, 4, 4, 4, 8, 8, 8, 8, 6, 6, 6, 6, 8, 8, 8, 8, 4, 4, 4, 4, 4, 4, 4, 4, 6, 4, 3, 4, 4, 4, 4, 4, 8, 8, 8, 6, 6, 6, 4, 6, 6, 6, 6, 6, 6, 8, 6, 8, 8, 4, 4, 4, 4, 4, 4, 4, 4, 5, 6, 4, 6, 4, 4, 6, 6, 4, 6, 6, 8, 8, 8, 8, 8, 8, 8, 8, 4, 4, 4, 4, 5, 8, 4, 8, 4, 4, 4, 4, 4, 6, 6, 4, 4, 4, 4, 4, 4, 4, 4, 6, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 4, 4, 4, 4, 4, 6, 3, 4, 4, 4, 4, 4, 4, 6, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 6, 6, 6, 6, 8, 6, 6, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 6, 6, 4, 6, 4, 4, 4, 4, 4, 4, 4, 4], "displacement": [307.0, 350.0, 318.0, 304.0, 302.0, 429.0, 454.0, 440.0, 455.0, 390.0, 383.0, 340.0, 400.0, 455.0, 113.0, 198.0, 199.0, 200.0, 97.0, 97.0, 110.0, 107.0, 104.0, 121.0, 199.0, 360.0, 307.0, 318.0, 304.0, 97.0, 140.0, 113.0, 98.0, 232.0, 225.0, 250.0, 250.0, 232.0, 350.0, 400.0, 351.0, 318.0, 383.0, 400.0, 400.0, 258.0, 140.0, 250.0, 250.0, 122.0, 116.0, 79.0, 88.0, 71.0, 72.0, 97.0, 91.0, 113.0, 97.5, 97.0, 140.0, 122.0, 350.0, 400.0, 318.0, 351.0, 304.0, 429.0, 350.0, 350.0, 400.0, 70.0, 304.0, 307.0, 302.0, 318.0, 121.0, 121.0, 120.0, 96.0, 122.0, 97.0, 120.0, 98.0, 97.0, 350.0, 304.0, 350.0, 302.0, 318.0, 429.0, 400.0, 351.0, 318.0, 440.0, 455.0, 360.0, 225.0, 250.0, 232.0, 250.0, 198.0, 97.0, 400.0, 400.0, 360.0, 350.0, 232.0, 97.0, 140.0, 108.0, 70.0, 122.0, 155.0, 98.0, 350.0, 400.0, 68.0, 116.0, 114.0, 121.0, 318.0, 121.0, 156.0, 350.0, 198.0, 200.0, 232.0, 250.0, 79.0, 122.0, 71.0, 140.0, 250.0, 258.0, 225.0, 302.0, 350.0, 318.0, 302.0, 304.0, 98.0, 79.0, 97.0, 76.0, 83.0, 90.0, 90.0, 116.0, 120.0, 108.0, 79.0, 225.0, 250.0, 250.0, 250.0, 400.0, 350.0, 318.0, 351.0, 231.0, 250.0, 258.0, 225.0, 231.0, 262.0, 302.0, 97.0, 140.0, 232.0, 140.0, 134.0, 90.0, 119.0, 171.0, 90.0, 232.0, 115.0, 120.0, 121.0, 121.0, 91.0, 107.0, 116.0, 140.0, 98.0, 101.0, 305.0, 318.0, 304.0, 351.0, 225.0, 250.0, 200.0, 232.0, 85.0, 98.0, 90.0, 91.0, 225.0, 250.0, 250.0, 258.0, 97.0, 85.0, 97.0, 140.0, 130.0, 318.0, 120.0, 156.0, 168.0, 350.0, 350.0, 302.0, 318.0, 98.0, 111.0, 79.0, 122.0, 85.0, 305.0, 260.0, 318.0, 302.0, 250.0, 231.0, 225.0, 250.0, 400.0, 350.0, 400.0, 351.0, 97.0, 151.0, 97.0, 140.0, 98.0, 98.0, 97.0, 97.0, 146.0, 121.0, 80.0, 90.0, 98.0, 78.0, 85.0, 91.0, 260.0, 318.0, 302.0, 231.0, 200.0, 200.0, 140.0, 225.0, 232.0, 231.0, 200.0, 225.0, 258.0, 305.0, 231.0, 302.0, 318.0, 98.0, 134.0, 119.0, 105.0, 134.0, 156.0, 151.0, 119.0, 131.0, 163.0, 121.0, 163.0, 89.0, 98.0, 231.0, 200.0, 140.0, 232.0, 225.0, 305.0, 302.0, 351.0, 318.0, 350.0, 351.0, 267.0, 360.0, 89.0, 86.0, 98.0, 121.0, 183.0, 350.0, 141.0, 260.0, 105.0, 105.0, 85.0, 91.0, 151.0, 173.0, 173.0, 151.0, 98.0, 89.0, 98.0, 86.0, 151.0, 140.0, 151.0, 225.0, 97.0, 134.0, 120.0, 119.0, 108.0, 86.0, 156.0, 85.0, 90.0, 90.0, 121.0, 146.0, 91.0, 85.0, 97.0, 89.0, 168.0, 70.0, 122.0, 140.0, 107.0, 135.0, 151.0, 156.0, 173.0, 135.0, 79.0, 86.0, 81.0, 97.0, 85.0, 89.0, 91.0, 105.0, 98.0, 98.0, 105.0, 100.0, 107.0, 108.0, 119.0, 120.0, 141.0, 145.0, 168.0, 146.0, 231.0, 350.0, 200.0, 225.0, 112.0, 112.0, 112.0, 112.0, 135.0, 151.0, 140.0, 151.0, 105.0, 91.0, 91.0, 105.0, 98.0, 120.0, 107.0, 108.0, 91.0, 91.0, 91.0, 181.0, 262.0, 156.0, 232.0, 144.0, 135.0, 151.0, 140.0, 97.0, 135.0, 120.0, 119.0], "horsepower": ["130", "165", "150", "150", "140", "198", "220", "215", "225", "190", "170", "160", "150", "225", "95", "95", "97", "85", "88", "46", "87", "90", "95", "113", "90", "215", "200", "210", "193", "88", "90", "95", "?", "100", "105", "100", "88", "100", "165", "175", "153", "150", "180", "170", "175", "110", "72", "100", "88", "86", "90", "70", "76", "65", "69", "60", "70", "95", "80", "54", "90", "86", "165", "175", "150", "153", "150", "208", "155", "160", "190", "97", "150", "130", "140", "150", "112", "76", "87", "69", "86", "92", "97", "80", "88", "175", "150", "145", "137", "150", "198", "150", "158", "150", "215", "225", "175", "105", "100", "100", "88", "95", "46", "150", "167", "170", "180", "100", "88", "72", "94", "90", "85", "107", "90", "145", "230", "49", "75", "91", "112", "150", "110", "122", "180", "95", "?", "100", "100", "67", "80", "65", "75", "100", "110", "105", "140", "150", "150", "140", "150", "83", "67", "78", "52", "61", "75", "75", "75", "97", "93", "67", "95", "105", "72", "72", "170", "145", "150", "148", "110", "105", "110", "95", "110", "110", "129", "75", "83", "100", "78", "96", "71", "97", "97", "70", "90", "95", "88", "98", "115", "53", "86", "81", "92", "79", "83", "140", "150", "120", "152", "100", "105", "81", "90", "52", "60", "70", "53", "100", "78", "110", "95", "71", "70", "75", "72", "102", "150", "88", "108", "120", "180", "145", "130", "150", "68", "80", "58", "96", "70", "145", "110", "145", "130", "110", "105", "100", "98", "180", "170", "190", "149", "78", "88", "75", "89", "63", "83", "67", "78", "97", "110", "110", "48", "66", "52", "70", "60", "110", "140", "139", "105", "95", "85", "88", "100", "90", "105", "85", "110", "120", "145", "165", "139", "140", "68", "95", "97", "75", "95", "105", "85", "97", "103", "125", "115", "133", "71", "68", "115", "85", "88", "90", "110", "130", "129", "138", "135", "155", "142", "125", "150", "71", "65", "80", "80", "77", "125", "71", "90", "70", "70", "65", "69", "90", "115", "115", "90", "76", "60", "70", "65", "90", "88", "90", "90", "78", "90", "75", "92", "75", "65", "105", "65", "48", "48", "67", "67", "67", "?", "67", "62", "132", "100", "88", "?", "72", "84", "84", "92", "110", "84", "58", "64", "60", "67", "65", "62", "68", "63", "65", "65", "74", "?", "75", "75", "100", "74", "80", "76", "116", "120", "110", "105", "88", "85", "88", "88", "88", "85", "84", "90", "92", "?", "74", "68", "68", "63", "70", "88", "75", "70", "67", "67", "67", "110", "85", "92", "112", "96", "84", "90", "86", "52", "84", "79", "82"], "weight": [3504, 3693, 3436, 3433, 3449, 4341, 4354, 4312, 4425, 3850, 3563, 3609, 3761, 3086, 2372, 2833, 2774, 2587, 2130, 1835, 2672, 2430, 2375, 2234, 2648, 4615, 4376, 4382, 4732, 2130, 2264, 2228, 2046, 2634, 3439, 3329, 3302, 3288, 4209, 4464, 4154, 4096, 4955, 4746, 5140, 2962, 2408, 3282, 3139, 2220, 2123, 2074, 2065, 1773, 1613, 1834, 1955, 2278, 2126, 2254, 2408, 2226, 4274, 4385, 4135, 4129, 3672, 4633, 4502, 4456, 4422, 2330, 3892, 4098, 4294, 4077, 2933, 2511, 2979, 2189, 2395, 2288, 2506, 2164, 2100, 4100, 3672, 3988, 4042, 3777, 4952, 4464, 4363, 4237, 4735, 4951, 3821, 3121, 3278, 2945, 3021, 2904, 1950, 4997, 4906, 4654, 4499, 2789, 2279, 2401, 2379, 2124, 2310, 2472, 2265, 4082, 4278, 1867, 2158, 2582, 2868, 3399, 2660, 2807, 3664, 3102, 2875, 2901, 3336, 1950, 2451, 1836, 2542, 3781, 3632, 3613, 4141, 4699, 4457, 4638, 4257, 2219, 1963, 2300, 1649, 2003, 2125, 2108, 2246, 2489, 2391, 2000, 3264, 3459, 3432, 3158, 4668, 4440, 4498, 4657, 3907, 3897, 3730, 3785, 3039, 3221, 3169, 2171, 2639, 2914, 2592, 2702, 2223, 2545, 2984, 1937, 3211, 2694, 2957, 2945, 2671, 1795, 2464, 2220, 2572, 2255, 2202, 4215, 4190, 3962, 4215, 3233, 3353, 3012, 3085, 2035, 2164, 1937, 1795, 3651, 3574, 3645, 3193, 1825, 1990, 2155, 2565, 3150, 3940, 3270, 2930, 3820, 4380, 4055, 3870, 3755, 2045, 2155, 1825, 2300, 1945, 3880, 4060, 4140, 4295, 3520, 3425, 3630, 3525, 4220, 4165, 4325, 4335, 1940, 2740, 2265, 2755, 2051, 2075, 1985, 2190, 2815, 2600, 2720, 1985, 1800, 1985, 2070, 1800, 3365, 3735, 3570, 3535, 3155, 2965, 2720, 3430, 3210, 3380, 3070, 3620, 3410, 3425, 3445, 3205, 4080, 2155, 2560, 2300, 2230, 2515, 2745, 2855, 2405, 2830, 3140, 2795, 3410, 1990, 2135, 3245, 2990, 2890, 3265, 3360, 3840, 3725, 3955, 3830, 4360, 4054, 3605, 3940, 1925, 1975, 1915, 2670, 3530, 3900, 3190, 3420, 2200, 2150, 2020, 2130, 2670, 2595, 2700, 2556, 2144, 1968, 2120, 2019, 2678, 2870, 3003, 3381, 2188, 2711, 2542, 2434, 2265, 2110, 2800, 2110, 2085, 2335, 2950, 3250, 1850, 1835, 2145, 1845, 2910, 2420, 2500, 2905, 2290, 2490, 2635, 2620, 2725, 2385, 1755, 1875, 1760, 2065, 1975, 2050, 1985, 2215, 2045, 2380, 2190, 2320, 2210, 2350, 2615, 2635, 3230, 3160, 2900, 2930, 3415, 3725, 3060, 3465, 2605, 2640, 2395, 2575, 2525, 2735, 2865, 3035, 1980, 2025, 1970, 2125, 2125, 2160, 2205, 2245, 1965, 1965, 1995, 2945, 3015, 2585, 2835, 2665, 2370, 2950, 2790, 2130, 2295, 2625, 2720], "acceleration": [12.0, 11.5, 11.0, 12.0, 10.5, 10.0, 9.0, 8.5, 10.0, 8.5, 10.0, 8.0, 9.5, 10.0, 15.0, 15.5, 15.5, 16.0, 14.5, 20.5, 17.5, 14.5, 17.5, 12.5, 15.0, 14.0, 15.0, 13.5, 18.5, 14.5, 15.5, 14.0, 19.0, 13.0, 15.5, 15.5, 15.5, 15.5, 12.0, 11.5, 13.5, 13.0, 11.5, 12.0, 12.0, 13.5, 19.0, 15.0, 14.5, 14.0, 14.0, 19.5, 14.5, 19.0, 18.0, 19.0, 20.5, 15.5, 17.0, 23.5, 19.5, 16.5, 12.0, 12.0, 13.5, 13.0, 11.5, 11.0, 13.5, 13.5, 12.5, 13.5, 12.5, 14.0, 16.0, 14.0, 14.5, 18.0, 19.5, 18.0, 16.0, 17.0, 14.5, 15.0, 16.5, 13.0, 11.5, 13.0, 14.5, 12.5, 11.5, 12.0, 13.0, 14.5, 11.0, 11.0, 11.0, 16.5, 18.0, 16.0, 16.5, 16.0, 21.0, 14.0, 12.5, 13.0, 12.5, 15.0, 19.0, 19.5, 16.5, 13.5, 18.5, 14.0, 15.5, 13.0, 9.5, 19.5, 15.5, 14.0, 15.5, 11.0, 14.0, 13.5, 11.0, 16.5, 17.0, 16.0, 17.0, 19.0, 16.5, 21.0, 17.0, 17.0, 18.0, 16.5, 14.0, 14.5, 13.5, 16.0, 15.5, 16.5, 15.5, 14.5, 16.5, 19.0, 14.5, 15.5, 14.0, 15.0, 15.5, 16.0, 16.0, 16.0, 21.0, 19.5, 11.5, 14.0, 14.5, 13.5, 21.0, 18.5, 19.0, 19.0, 15.0, 13.5, 12.0, 16.0, 17.0, 16.0, 18.5, 13.5, 16.5, 17.0, 14.5, 14.0, 17.0, 15.0, 17.0, 14.5, 13.5, 17.5, 15.5, 16.9, 14.9, 17.7, 15.3, 13.0, 13.0, 13.9, 12.8, 15.4, 14.5, 17.6, 17.6, 22.2, 22.1, 14.2, 17.4, 17.7, 21.0, 16.2, 17.8, 12.2, 17.0, 16.4, 13.6, 15.7, 13.2, 21.9, 15.5, 16.7, 12.1, 12.0, 15.0, 14.0, 18.5, 14.8, 18.6, 15.5, 16.8, 12.5, 19.0, 13.7, 14.9, 16.4, 16.9, 17.7, 19.0, 11.1, 11.4, 12.2, 14.5, 14.5, 16.0, 18.2, 15.8, 17.0, 15.9, 16.4, 14.1, 14.5, 12.8, 13.5, 21.5, 14.4, 19.4, 18.6, 16.4, 15.5, 13.2, 12.8, 19.2, 18.2, 15.8, 15.4, 17.2, 17.2, 15.8, 16.7, 18.7, 15.1, 13.2, 13.4, 11.2, 13.7, 16.5, 14.2, 14.7, 14.5, 14.8, 16.7, 17.6, 14.9, 15.9, 13.6, 15.7, 15.8, 14.9, 16.6, 15.4, 18.2, 17.3, 18.2, 16.6, 15.4, 13.4, 13.2, 15.2, 14.9, 14.3, 15.0, 13.0, 14.0, 15.2, 14.4, 15.0, 20.1, 17.4, 24.8, 22.2, 13.2, 14.9, 19.2, 14.7, 16.0, 11.3, 12.9, 13.2, 14.7, 18.8, 15.5, 16.4, 16.5, 18.1, 20.1, 18.7, 15.8, 15.5, 17.5, 15.0, 15.2, 17.9, 14.4, 19.2, 21.7, 23.7, 19.9, 21.8, 13.8, 17.3, 18.0, 15.3, 11.4, 12.5, 15.1, 14.3, 17.0, 15.7, 16.4, 14.4, 12.6, 12.9, 16.9, 16.4, 16.1, 17.8, 19.4, 17.3, 16.0, 14.9, 16.2, 20.7, 14.2, 15.8, 14.4, 16.8, 14.8, 18.3, 20.4, 19.6, 12.6, 13.8, 15.8, 19.0, 17.1, 16.6, 19.6, 18.6, 18.0, 16.2, 16.0, 18.0, 16.4, 20.5, 15.3, 18.2, 17.6, 14.7, 17.3, 14.5, 14.5, 16.9, 15.0, 15.7, 16.2, 16.4, 17.0, 14.5, 14.7, 13.9, 13.0, 17.3, 15.6, 24.6, 11.6, 18.6, 19.4], "model year": [70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82], "origin": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 3, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 3, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 2, 1, 3, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 2, 2, 2, 2, 1, 3, 3, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 3, 1, 3, 3, 1, 1, 2, 1, 1, 2, 2, 2, 2, 1, 2, 3, 1, 1, 1, 1, 1, 3, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 1, 2, 2, 3, 3, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 3, 2, 3, 1, 2, 1, 2, 2, 2, 2, 3, 2, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 3, 1, 1, 1, 1, 2, 3, 3, 1, 2, 1, 2, 3, 2, 1, 1, 1, 1, 3, 1, 2, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 3, 1, 1, 1, 3, 2, 3, 2, 3, 2, 1, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 1, 3, 1, 1, 3, 2, 2, 2, 2, 2, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 3, 1, 1, 2, 1, 2, 1, 1, 1, 3, 2, 1, 1, 1, 1, 2, 3, 1, 3, 1, 1, 1, 1, 2, 3, 3, 3, 3, 3, 1, 3, 2, 2, 2, 2, 3, 2, 3, 2, 3, 3, 2, 1, 3, 1, 1, 1, 1, 1, 3, 1, 3, 3, 3, 3, 3, 1, 1, 1, 2, 2, 3, 3, 3, 3, 2, 2, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 3, 3, 1, 1, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 3, 1, 1, 1, 2, 1, 1, 1], "car name": ["chevrolet chevelle malibu", "buick skylark 320", "plymouth satellite", "amc rebel sst", "ford torino", "ford galaxie 500", "chevrolet impala", "plymouth fury iii", "pontiac catalina", "amc ambassador dpl", "dodge challenger se", "plymouth 'cuda 340", "chevrolet monte carlo", "buick estate wagon (sw)", "toyota corona mark ii", "plymouth duster", "amc hornet", "ford maverick", "datsun pl510", "volkswagen 1131 deluxe sedan", "peugeot 504", "audi 100 ls", "saab 99e", "bmw 2002", "amc gremlin", "ford f250", "chevy c20", "dodge d200", "hi 1200d", "datsun pl510", "chevrolet vega 2300", "toyota corona", "ford pinto", "amc gremlin", "plymouth satellite custom", "chevrolet chevelle malibu", "ford torino 500", "amc matador", "chevrolet impala", "pontiac catalina brougham", "ford galaxie 500", "plymouth fury iii", "dodge monaco (sw)", "ford country squire (sw)", "pontiac safari (sw)", "amc hornet sportabout (sw)", "chevrolet vega (sw)", "pontiac firebird", "ford mustang", "mercury capri 2000", "opel 1900", "peugeot 304", "fiat 124b", "toyota corolla 1200", "datsun 1200", "volkswagen model 111", "plymouth cricket", "toyota corona hardtop", "dodge colt hardtop", "volkswagen type 3", "chevrolet vega", "ford pinto runabout", "chevrolet impala", "pontiac catalina", "plymouth fury iii", "ford galaxie 500", "amc ambassador sst", "mercury marquis", "buick lesabre custom", "oldsmobile delta 88 royale", "chrysler newport royal", "mazda rx2 coupe", "amc matador (sw)", "chevrolet chevelle concours (sw)", "ford gran torino (sw)", "plymouth satellite custom (sw)", "volvo 145e (sw)", "volkswagen 411 (sw)", "peugeot 504 (sw)", "renault 12 (sw)", "ford pinto (sw)", "datsun 510 (sw)", "toyouta corona mark ii (sw)", "dodge colt (sw)", "toyota corolla 1600 (sw)", "buick century 350", "amc matador", "chevrolet malibu", "ford gran torino", "dodge coronet custom", "mercury marquis brougham", "chevrolet caprice classic", "ford ltd", "plymouth fury gran sedan", "chrysler new yorker brougham", "buick electra 225 custom", "amc ambassador brougham", "plymouth valiant", "chevrolet nova custom", "amc hornet", "ford maverick", "plymouth duster", "volkswagen super beetle", "chevrolet impala", "ford country", "plymouth custom suburb", "oldsmobile vista cruiser", "amc gremlin", "toyota carina", "chevrolet vega", "datsun 610", "maxda rx3", "ford pinto", "mercury capri v6", "fiat 124 sport coupe", "chevrolet monte carlo s", "pontiac grand prix", "fiat 128", "opel manta", "audi 100ls", "volvo 144ea", "dodge dart custom", "saab 99le", "toyota mark ii", "oldsmobile omega", "plymouth duster", "ford maverick", "amc hornet", "chevrolet nova", "datsun b210", "ford pinto", "toyota corolla 1200", "chevrolet vega", "chevrolet chevelle malibu classic", "amc matador", "plymouth satellite sebring", "ford gran torino", "buick century luxus (sw)", "dodge coronet custom (sw)", "ford gran torino (sw)", "amc matador (sw)", "audi fox", "volkswagen dasher", "opel manta", "toyota corona", "datsun 710", "dodge colt", "fiat 128", "fiat 124 tc", "honda civic", "subaru", "fiat x1.9", "plymouth valiant custom", "chevrolet nova", "mercury monarch", "ford maverick", "pontiac catalina", "chevrolet bel air", "plymouth grand fury", "ford ltd", "buick century", "chevroelt chevelle malibu", "amc matador", "plymouth fury", "buick skyhawk", "chevrolet monza 2+2", "ford mustang ii", "toyota corolla", "ford pinto", "amc gremlin", "pontiac astro", "toyota corona", "volkswagen dasher", "datsun 710", "ford pinto", "volkswagen rabbit", "amc pacer", "audi 100ls", "peugeot 504", "volvo 244dl", "saab 99le", "honda civic cvcc", "fiat 131", "opel 1900", "capri ii", "dodge colt", "renault 12tl", "chevrolet chevelle malibu classic", "dodge coronet brougham", "amc matador", "ford gran torino", "plymouth valiant", "chevrolet nova", "ford maverick", "amc hornet", "chevrolet chevette", "chevrolet woody", "vw rabbit", "honda civic", "dodge aspen se", "ford granada ghia", "pontiac ventura sj", "amc pacer d/l", "volkswagen rabbit", "datsun b-210", "toyota corolla", "ford pinto", "volvo 245", "plymouth volare premier v8", "peugeot 504", "toyota mark ii", "mercedes-benz 280s", "cadillac seville", "chevy c10", "ford f108", "dodge d100", "honda accord cvcc", "buick opel isuzu deluxe", "renault 5 gtl", "plymouth arrow gs", "datsun f-10 hatchback", "chevrolet caprice classic", "oldsmobile cutlass supreme", "dodge monaco brougham", "mercury cougar brougham", "chevrolet concours", "buick skylark", "plymouth volare custom", "ford granada", "pontiac grand prix lj", "chevrolet monte carlo landau", "chrysler cordoba", "ford thunderbird", "volkswagen rabbit custom", "pontiac sunbird coupe", "toyota corolla liftback", "ford mustang ii 2+2", "chevrolet chevette", "dodge colt m/m", "subaru dl", "volkswagen dasher", "datsun 810", "bmw 320i", "mazda rx-4", "volkswagen rabbit custom diesel", "ford fiesta", "mazda glc deluxe", "datsun b210 gx", "honda civic cvcc", "oldsmobile cutlass salon brougham", "dodge diplomat", "mercury monarch ghia", "pontiac phoenix lj", "chevrolet malibu", "ford fairmont (auto)", "ford fairmont (man)", "plymouth volare", "amc concord", "buick century special", "mercury zephyr", "dodge aspen", "amc concord d/l", "chevrolet monte carlo landau", "buick regal sport coupe (turbo)", "ford futura", "dodge magnum xe", "chevrolet chevette", "toyota corona", "datsun 510", "dodge omni", "toyota celica gt liftback", "plymouth sapporo", "oldsmobile starfire sx", "datsun 200-sx", "audi 5000", "volvo 264gl", "saab 99gle", "peugeot 604sl", "volkswagen scirocco", "honda accord lx", "pontiac lemans v6", "mercury zephyr 6", "ford fairmont 4", "amc concord dl 6", "dodge aspen 6", "chevrolet caprice classic", "ford ltd landau", "mercury grand marquis", "dodge st. regis", "buick estate wagon (sw)", "ford country squire (sw)", "chevrolet malibu classic (sw)", "chrysler lebaron town @ country (sw)", "vw rabbit custom", "maxda glc deluxe", "dodge colt hatchback custom", "amc spirit dl", "mercedes benz 300d", "cadillac eldorado", "peugeot 504", "oldsmobile cutlass salon brougham", "plymouth horizon", "plymouth horizon tc3", "datsun 210", "fiat strada custom", "buick skylark limited", "chevrolet citation", "oldsmobile omega brougham", "pontiac phoenix", "vw rabbit", "toyota corolla tercel", "chevrolet chevette", "datsun 310", "chevrolet citation", "ford fairmont", "amc concord", "dodge aspen", "audi 4000", "toyota corona liftback", "mazda 626", "datsun 510 hatchback", "toyota corolla", "mazda glc", "dodge colt", "datsun 210", "vw rabbit c (diesel)", "vw dasher (diesel)", "audi 5000s (diesel)", "mercedes-benz 240d", "honda civic 1500 gl", "renault lecar deluxe", "subaru dl", "vokswagen rabbit", "datsun 280-zx", "mazda rx-7 gs", "triumph tr7 coupe", "ford mustang cobra", "honda accord", "plymouth reliant", "buick skylark", "dodge aries wagon (sw)", "chevrolet citation", "plymouth reliant", "toyota starlet", "plymouth champ", "honda civic 1300", "subaru", "datsun 210 mpg", "toyota tercel", "mazda glc 4", "plymouth horizon 4", "ford escort 4w", "ford escort 2h", "volkswagen jetta", "renault 18i", "honda prelude", "toyota corolla", "datsun 200sx", "mazda 626", "peugeot 505s turbo diesel", "volvo diesel", "toyota cressida", "datsun 810 maxima", "buick century", "oldsmobile cutlass ls", "ford granada gl", "chrysler lebaron salon", "chevrolet cavalier", "chevrolet cavalier wagon", "chevrolet cavalier 2-door", "pontiac j2000 se hatchback", "dodge aries se", "pontiac phoenix", "ford fairmont futura", "amc concord dl", "volkswagen rabbit l", "mazda glc custom l", "mazda glc custom", "plymouth horizon miser", "mercury lynx l", "nissan stanza xe", "honda accord", "toyota corolla", "honda civic", "honda civic (auto)", "datsun 310 gx", "buick century limited", "oldsmobile cutlass ciera (diesel)", "chrysler lebaron medallion", "ford granada l", "toyota celica gt", "dodge charger 2.2", "chevrolet camaro", "ford mustang gl", "vw pickup", "dodge rampage", "ford ranger", "chevy s-10"]}}]}</script>
 </div>
@@ -741,13 +782,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="ojs-cell-2" data-nodetype="declaration">
 
 </div>
-</div>
-</div>
-<div class="cell" data-execution_count="2">
-<div class="cell-output cell-output-display">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.0</span>
-
-</pre>
 </div>
 </div>
 <section id="neural-networks" class="level1">
@@ -761,9 +795,9 @@ f(\mathbf{x})=\phi(\mathbf{x})^T \mathbf{w} = w_4 e^{x_1} + w_3 \sin(x_1) + w_2x
 </section>
 <section id="feature-transforms-revisited-1" class="level2">
 <h2 class="anchored" data-anchor-id="feature-transforms-revisited-1">Feature transforms revisited</h2>
-<div class="cell" data-execution_count="3">
+<div id="f1a0d5d6" class="cell" data-execution_count="3">
 <div class="cell-output cell-output-display">
-<script type="ojs-define">{"contents": [{"name": "quadratic_data", "value": [[-0.6965175865115754, 1.4593824513196996], [2.7832382885128384, 7.746810354793744], [2.97381343395291, 8.224975159910095], [2.434147220857673, 5.527941210233325], [0.041654589669504194, -0.8874241834410392], [0.859175620061527, 1.2342914739334092], [-2.110931100421684, 4.127303467108092], [-1.6635371545700286, 4.098943166845405], [2.273633440744767, 4.327974188788097], [-0.13395574909644736, -0.3132489485763541], [1.7347453843021983, 2.0583951662888045], [2.57219299447552, 5.8965741127268565], [-1.9180102141731312, 3.5108177676615404], [-2.0823164621432357, 4.037488918344877], [2.720611090975167, 7.727417393159044], [-0.8993258479045663, 1.7424692749748], [-2.0595666247486015, 4.432564768080646], [2.781099968237137, 7.591982179897362], [1.194676682935496, 0.27155125643462297], [-0.3083248429780694, -0.35904792767640137], [2.0033302507842237, 4.6551259432454035], [2.7896358022379983, 8.469214100243782], [1.0058135006434057, 1.1642127197614833], [-0.4743101235329963, -0.13556044235036085], [0.15631630700903898, -0.0660818576759327], [1.7853893212610696, 3.2338325201361906], [1.1367539939820759, 0.2920496221014781], [-0.8941021848375899, 0.8456619245234281], [1.5291675268132607, 2.1775278867489343], [0.5754085213695896, 0.11366165878372717], [-1.8969280365874959, 2.8732003633111427], [-2.656002666857183, 6.1374490518309255], [-2.861188758419838, 7.303750390415474], [1.9949931341741305, 3.9279313129043527], [0.5410311735779798, -0.4104415180014195], [-0.45844404735116484, 0.47923939544248784], [2.0413569021304987, 3.19435382843177], [0.6785749840057838, 0.6791286414759558], [2.766180026781699, 6.96428016650874], [-2.3751351600493815, 5.610873406871609], [0.3139214884480941, 0.9557675978426521], [-0.4899407373909783, 0.616326331216274], [-2.4514712722302394, 6.147317543263406], [-1.5522297377478265, 2.0080208092499454], [-0.35698881399183024, 0.18956118009386025], [2.2919987522658163, 5.391465893016348], [-1.9692073212001198, 4.486794490491071], [-1.1669687043613222, 1.7764053567964713], [2.6137832973561324, 6.712973710116697], [2.901063358749706, 8.398609741072645], [2.3146416615697785, 4.94616097718789], [-1.710715410116443, 3.1635564097450164], [-0.214344086296407, -0.641355987589696], [-0.04563435236366775, -0.965670819629697], [2.9042649920967305, 8.034497081396948], [0.6523514224643847, 0.7783931198390779], [0.34894951755600845, -0.08810294062475756], [0.6643942301423182, 0.6484571863832789], [1.9054151165331925, 3.2533114042783615], [-0.14711938081818854, -0.4305282749465229], [0.6233154143891646, 1.0196233900894869], [2.5662233392536544, 7.7889569647957515], [0.39691946497969965, -0.27492467805395604], [0.950455507611415, 0.7976922002873499], [1.814698368613766, 3.3980573357026866], [-0.10514515719791362, 0.8043839370184166], [-1.3993796763671797, 2.5119794568795877], [2.00462689118962, 4.6922317170125165], [2.4991979834276723, 6.384991678622155], [1.5568738124502346, 2.254039813080477], [0.11418046917021218, 0.7117845752145239], [-0.9577702976615017, 1.049097640521204], [0.10967321340856806, -0.04195245018741953], [1.2974441285763572, 2.3775605500645884], [1.0107253071925495, 1.815583864905657], [-1.2060597653145904, 2.3303654139187255], [2.531320056916278, 6.512158515046547], [-1.8487502802269282, 2.7419542110075334], [-0.14816881759479816, 0.6695600969737168], [-1.6359031899068603, 3.046415855504275], [-2.2090006982094734, 5.219620390312328], [-2.1926475246498027, 5.598358392389919], [1.3893962220550398, 2.4426603041179638], [1.5189006138108123, 2.7693827843094314], [1.4148246771851465, 1.93388586086623], [2.0245958604443786, 4.573748775813245], [-1.7757406652063965, 3.480731502317866], [0.2851860458626163, -0.15892992141278944], [2.956984081366339, 8.587194593427125], [-1.1154579231465576, 0.803432464806723], [2.1221403045515963, 3.8887999660432886], [0.03378767167564023, -0.5771694057637416], [1.3690730163569373, 0.8838981872379296], [-1.6236921855246795, 2.8023429192491927], [-2.5181740668184083, 6.291242566824861], [2.3886454442577314, 4.987957303749751], [2.179963303488977, 4.570103741055074], [2.293268998432823, 5.427052539348513], [-2.1250700990432003, 4.420119762553426], [-2.576261549936376, 5.758216204447544]]}]}</script>
+<script type="ojs-define">{"contents": [{"name": "quadratic_data", "value": [[-0.6619497953727969, 1.2930996342786996], [-1.2676079379706664, 1.9910344680915641], [-1.9325269785929347, 3.720618339627254], [-1.3268373127546844, 1.7135205737698218], [1.5949327482017805, 2.9678322302347446], [1.57658982362255, 3.685497259205912], [-1.4557645027597876, 1.6592966149470934], [-2.2287955628695206, 4.6866841011148646], [2.909920945820332, 8.409867935200138], [-2.306238189061049, 4.459701704155451], [0.6282426457382555, 0.8453642550564493], [-1.3697439034827863, 3.075356635243273], [1.2000068387678535, 1.8929216930026422], [-0.3945966028365122, -0.5521588680409513], [-2.9198504469888737, 8.710929413281288], [1.690365215083924, 2.971683010894812], [2.065713441276084, 4.050463952438396], [2.083757537807145, 4.20285696754157], [2.8987208505258124, 7.114479040600302], [2.4773874265161604, 6.122974727883522], [-1.0623738614826637, 1.1087016873733788], [0.9691310506993087, 0.885594973830345], [2.230133108656566, 5.484233387979841], [-0.6900454557880362, 0.2613164697748361], [0.370029550483129, -0.6773254036568026], [-2.077483646685128, 4.079667970996687], [0.234707214218016, -0.3091021357562237], [0.6595991025126144, 0.5817989909321967], [1.9179548925697372, 4.48471667174222], [0.8444231537894629, 0.49837736128833676], [0.003143487365091957, 0.671163055664533], [-0.11016998831245761, -0.5384090756216877], [0.4364461085037421, 0.04781804986987934], [2.9681558789526434, 8.737014812118222], [2.334427287435524, 4.418679519255803], [2.5895313830632176, 6.68167079405783], [2.7008839629180033, 6.518432366057862], [-1.0278815299250532, 1.1112227511704214], [-0.9325249310246613, 0.4394081554969905], [-0.3533812775658465, -0.19308972407772823], [0.42491255472614453, 0.6760867723978772], [0.6863531781068444, 0.6076451392476243], [-0.21453206583882167, 0.5264484287721816], [-0.8027695057886128, 0.9050250162506753], [1.731525777820286, 3.4448706566824354], [-2.0274053657719744, 4.932423397908884], [-2.633273523113626, 7.587587958428496], [2.7251519698198923, 7.011673129847946], [0.6645401943144886, -0.26345302622892985], [-1.1589399211724907, 0.9598182313447386], [1.5572839969097965, 2.071747367708779], [2.236486698670488, 5.720096799329795], [-0.13358604850416, 0.899279379455979], [-0.9203103159732322, 0.37602182491178593], [2.9162199784978284, 7.968617162473399], [0.9547435316742119, 1.982697414422439], [-2.358409195298104, 5.408016998362104], [1.6739256908768514, 2.4646256994806848], [1.5496058780377773, 2.346092794556141], [0.5753985201224547, 0.016707710950248367], [2.88808694595982, 7.506975085914823], [0.2909063081466705, -0.3071442256746227], [1.9799173361545694, 3.974282214583227], [2.347478319491298, 5.9130187752810865], [-0.048301513341500346, -0.22896635133298146], [-2.5118709678454954, 5.882002190673856], [2.027513954205121, 4.562099609416613], [0.752949841661986, 0.8694373201306211], [-2.632856095353973, 6.046296254270875], [2.7572723192880666, 7.294095256134938], [0.7620456534865552, 1.1180579195905196], [-1.4145072393489417, 1.6444168685865752], [2.711838415859086, 7.123155000271024], [2.637554962592012, 7.030313361847555], [1.5216360666926043, 2.275051597726789], [-2.681174715155888, 7.679008145563321], [2.031734442023655, 4.260011873362641], [-0.9570465295540989, 0.5971507564124634], [-1.846081338567749, 3.5757735650314175], [-1.9624341407398895, 3.8428429256743355], [-0.9445269815704678, 1.2261075267827382], [0.11283631701083019, 0.17290662587311853], [-2.7395053478717415, 7.927683325482564], [2.220196921378064, 5.079884497069874], [2.791406644126071, 7.5178154471802765], [-1.1108089185374295, 0.6509381551116682], [-2.664422462344607, 6.725562798409657], [0.5743628506234799, 0.00524945630464313], [2.7494486339431097, 7.096025146910686], [2.884645334624846, 8.190453512490292], [-2.219042912476664, 4.435362858183726], [2.6652664050699206, 6.956168750824699], [2.271583804937018, 5.2196146677047786], [-2.0701913699855488, 3.9110856909769263], [-1.1685258747766092, 2.0885981932716886], [0.3702216826875375, 0.9438919503200459], [-0.8316881479889959, 1.0559296016709285], [-2.866519383009093, 8.551868363393545], [2.548597779568757, 6.6863714803344125], [2.0387712721373843, 3.412998890985239]]}]}</script>
 </div>
 </div>
 <div class="cell">
@@ -847,9 +881,9 @@ f(\mathbf{x})=\phi(\mathbf{x})^T \mathbf{w}_0,\quad \phi(\mathbf{x}) = \begin{bm
 </div>
 </div>
 </div><div class="column" style="width:60%;">
-<div class="cell" data-execution_count="4">
+<div id="3fee89d2" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-display">
-<script type="ojs-define">{"contents": [{"name": "quadratic_data2", "value": [[-1.0209752037617987, 0.7730206727149643], [1.1221483131784185, 0.8601119854082231], [0.9081262862686348, 1.4945696725336233], [1.2899116590120805, 1.1849379199397339], [-2.149117373338253, 5.1670535698370745], [-0.1409965377274398, 0.24298681744714246], [1.1289861710217242, 0.09246100460186035], [2.679213375550031, 7.905059968880588], [0.9766476406598601, 0.7637193718639166], [1.7251602206730707, 3.502833785719716], [-1.4792726947321015, 3.216744769292003], [1.1230804004703128, 1.733730724888974], [-1.8414647289798698, 3.0704453330761616], [-0.5202799884701133, -0.3186433605758185], [-1.055606115772937, 0.16331013426209673], [0.4576555799729203, -1.2386691245739652], [-2.414856698568418, 5.61111992561717], [-0.14624333545684953, -0.4486393459797848], [1.2489308150908158, 1.1009636501566646], [-2.535747805342906, 6.804378795415312], [1.6823246777592757, 3.049574221503748], [-0.8658864100156087, -0.18245240681525698], [0.5256267846379643, 0.8461823008818556], [-0.4951654974075397, 0.20170413118771693], [0.4217419397437032, 0.17838328160426378], [-2.939857699315103, 7.655320234869306], [-2.9796319530662663, 8.257309691835598], [-0.02755959719295209, 0.46783301560845436], [1.3582101778914435, 1.7140592664437941], [0.0007633656837673364, -0.4622855402155918], [1.9605211818814192, 4.69747960588294], [-1.43658737801571, 1.7053223101944468], [2.1353364984107763, 4.271290416011688], [1.4110394973643743, 1.4545568787371748], [-1.9184861452197481, 3.452758108714089], [2.39637295664196, 5.965444027353381], [0.5591566499952312, -0.5994346321711428], [2.2882150951291127, 5.2334595140900895], [-2.626688332880417, 7.618040429236519], [0.6303493856535924, 0.33510584599559645], [2.5425437632591628, 7.565982294812663], [-1.5238762444915157, 2.4286155760986645], [-1.338267426438884, 2.1632628207262825], [2.9703900014450744, 8.679826137479957], [1.7038962749857287, 3.6209854378097335], [1.9824399395793355, 4.043198533798336], [2.2056217715652853, 5.614140265494393], [0.5080135188527244, -0.4552885310107833], [2.8771737557728523, 8.139817988164967], [-1.1977542491392235, 1.196854512074218], [2.7556641679958487, 8.160386192783434], [2.541927321340127, 6.531581101715222], [0.17314527879805253, 0.8043678284877902], [1.0124946193786633, 0.6742396057438438], [-2.8177903121536314, 7.690484559232112], [-2.2128768775496788, 5.069251972095131], [-0.11104876550687948, 0.22085478232824987], [-0.44836284791131487, 1.160645638177753], [-2.324859853921059, 6.00947154639865], [-2.990526074782536, 8.348231622613412], [1.6661161317902895, 3.1829719345571594], [1.3581883526079324, 1.7261560889696108], [-1.8038970387343631, 3.4523004259126915], [1.30176901658022, 2.3831551037776166], [1.2553651515433266, 1.815312964379761], [2.707170665996771, 7.067075778370923], [2.8261737074309323, 8.811065761436925], [-1.4419961728663737, 2.032830405646752], [0.5159313808933241, 0.9322112883841506], [0.7906776573397809, 0.1714108610020738], [-1.8598870668735026, 2.7689676771330465], [-0.372971552080243, 1.2941882043621575], [1.8282190582034143, 3.241077078121211], [2.2328513687132165, 5.386848785277557], [2.089768911536739, 3.882587998019221], [1.3739174401650711, 1.6939726244876514], [-0.6117513943122121, 0.22605694222421635], [1.1596058245890584, 0.5047854029710865], [-1.8625890757510406, 3.3832207339376734], [-1.4609125454275351, 1.2747589780196802], [2.2435594689125082, 4.844035991156243], [-2.3811568478671363, 5.461429451276931], [1.8364749131179492, 3.024808907290536], [2.8923686627077236, 7.957015085941847], [-2.79032579602069, 7.756026281267414], [-2.448995294480514, 5.601590495022034], [2.063357337213972, 5.041175667817313], [-1.659187944136146, 2.7780352907686905], [1.2996385907197432, 0.6648924180641722], [-2.840830113614013, 6.860228465961324], [-0.37270813321267093, 0.20563042722541702], [1.8947823060048732, 2.674712311005371], [2.815264765948383, 7.346165862792383], [-0.19108841557150846, -0.34020122194787505], [1.7657130056442343, 3.326281423922665], [1.735891664180948, 3.2588020285256385], [0.9245417368795672, 0.45853423171228813], [1.48584804664997, 2.907281809926415], [1.9570976880222286, 4.038640671995057], [-0.5717395470606776, -0.06336691280731321]]}]}</script>
+<script type="ojs-define">{"contents": [{"name": "quadratic_data2", "value": [[2.819683437483331, 7.947448224747148], [1.6536701078260467, 2.2154971526196503], [2.970166451609064, 9.273999014731709], [0.1442801071134303, -0.1581626846100791], [0.790670053270282, 1.0834672841734083], [0.08468516428546513, 0.372625159332372], [1.9343361207181395, 2.725140807916717], [-2.856718938878421, 8.25131621432352], [-0.19678468681979489, 0.7547597499838297], [1.5795703453101577, 2.3440837755114243], [-2.33742541301255, 4.413468884238844], [-1.9089045357564933, 3.3560118067023423], [-2.486542226869341, 6.011380020215392], [-1.3054230823905004, 1.0653086445461588], [-0.6595033453500498, 1.498065636751107], [-1.553002996527032, 1.7890281061056996], [-2.5843156973940147, 6.81934617660195], [0.05541880912897579, 0.45648521769026695], [2.5665216797693002, 5.523780636499658], [0.7716861992004835, -0.34910347587542556], [-0.10620320139940587, -0.14191799475363762], [0.6373775161884132, 0.8305845457953733], [-0.9230930873143048, 0.9885461405480479], [-1.9698906911886451, 2.790449061922984], [-0.41710928958308635, -0.5017224567491344], [2.4671243006453416, 5.695812005739171], [0.33671963757281675, -0.24943461289626753], [-1.1017695564891616, 1.1646173424669635], [2.2419079813024654, 4.9491876574869895], [2.1244970525819653, 5.16566416016223], [-0.41985745471245384, 0.12167223807599147], [-0.3845582582495908, -0.4686388990035827], [0.8923450043941239, -0.17362838735567943], [2.9651404561485446, 9.65746521698223], [2.628728106372665, 6.363255228457868], [1.217603886323829, 1.0031315403169367], [2.3896470032741552, 5.395727689643421], [0.5299279613603627, -0.036173756916713595], [0.2554690540017601, 0.16752863848118088], [-0.46964378250380623, -0.13126825032907283], [2.3351135177470006, 5.273768659820997], [0.4539644118802948, 0.15380970457904455], [0.8986522263820236, 0.6181014213509775], [0.1649067455037363, -0.5075099932919899], [2.358258279202156, 5.7799470469487675], [1.0626104160058967, 0.4238012309948568], [-1.500702550669054, 2.1349925529529066], [2.805051532105346, 8.209935204474913], [1.5919024505790613, 2.1668317845173575], [-1.1854379605752832, 2.082270815914263], [-2.574788025637203, 6.425375376386432], [1.4502686107146054, 1.2100630093716145], [-0.3504153877296403, -0.029452847167020332], [-1.9413375258174628, 4.751465919091162], [2.962840641633883, 9.563003795166038], [-2.258641879285883, 5.131644929675024], [-0.31533422997927474, -0.5659645592892426], [-2.1244820793182013, 4.776376393246728], [2.3881448902969904, 6.415287701729437], [-1.402503649488249, 2.2553801944296], [-0.4225756668363685, -0.7833706183221463], [-1.7612210465683706, 2.6583563537977155], [2.873363522238419, 8.470105700097449], [0.5230015643513415, 0.8544832149191888], [2.8636520303308677, 7.5922671819429075], [-1.5050206342040262, 2.2846430424237267], [-2.860451038237975, 8.79122610251462], [-2.610590826422289, 7.473807820979142], [2.7599762185995447, 7.09153483061824], [1.7532760568808978, 2.9836077274133883], [0.7045727317991473, 0.41878799803151867], [2.9002091049832677, 8.714730112535625], [2.1908821379045786, 5.951571841187331], [-1.2157215635971985, 0.710642492448829], [-0.021203335783937405, 0.37177531113550294], [-2.089345768533806, 4.580308261841322], [-0.3949880425665082, -0.7278883121098], [1.6048622680265776, 2.4975574078974754], [1.3988274517792174, 1.9393819669979417], [-0.8179509952953667, 1.9177951319222186], [-1.1586344876671038, 0.7595619604669088], [1.3367047102609089, 1.4018725266355234], [1.3215297276895601, 2.1442257358696035], [-1.8969905928692032, 3.585655734733605], [0.22595866508406637, 0.5179308699042346], [2.4446506920828774, 6.8832209596742775], [0.28159567914961503, 1.6174912136422892], [0.6412963551321713, 1.2262815685012771], [-1.3490240184886346, 2.446741572820687], [0.2252262088756094, -0.27580451726307087], [1.705828257703967, 2.7096119588652137], [-0.7408894296041857, 0.7380319780467007], [-0.8376943725815202, 0.2989518795002578], [0.7316983995261745, 0.834720708082014], [1.2985776179992117, 1.0693402159941434], [2.3745816297351894, 6.169997389047933], [0.6690480566173185, 1.2784359935087657], [1.365113878703518, 2.277910403012245], [-1.183871081519396, 1.2716183850998137], [-1.2070986894636209, 1.8113302120910242]]}]}</script>
 </div>
 </div>
 <div class="cell">
@@ -917,7 +951,7 @@ f(\mathbf{x})=\phi(\mathbf{x})^T \mathbf{w}_0,\quad \phi(\mathbf{x}) = \begin{bm
 <p>We often describe neural networks using a node-link diagram:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="nn.svg" class="img-fluid figure-img"></p>
+<p><img src="nn.svg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
 </figure>
 </div>
 </section>
@@ -985,7 +1019,7 @@ f(\mathbf{x})= w_{01} (\mathbf{x}^T \mathbf{w}_1) +  w_{02} (\mathbf{x}^T \mathb
 
 </main> <!-- /main -->
 <script type="ojs-module-contents">
-{"contents":[{"methodName":"interpret","cellName":"ojs-cell-1","inline":false,"source":"Plot = import(\"https://esm.sh/@observablehq/plot\") \nd3 = require(\"d3@7\")\ntopojson = require(\"topojson\")\nMathJax = require(\"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js\").catch(() => window.MathJax)\ntf = require(\"https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js\").catch(() => window.tf)\n\nTHREE = {\n  const THREE = window.THREE = await require(\"three@0.130.0/build/three.min.js\");\n  await require(\"three@0.130.0/examples/js/controls/OrbitControls.js\").catch(() => {});\n  await require(\"three@0.130.0/examples/js/loaders/SVGLoader.js\").catch(() => {});\n  return THREE;\n}\n\nfunction sample(f, start, end, nsamples=100) {\n  let arr = [...Array(nsamples).keys()]\n  let dist = end - start\n  function arrmap(ind) {\n    const x = (ind * dist) / nsamples + start;\n    return [x, f(x)];\n  }\n  return arr.map(arrmap)\n}\n\nfunction sigmoid(x){\n  return 1 / (1 + Math.exp(-x));\n}\n\nfunction sum(x) {\n  let s = 0;\n  for (let i = 0; i < x.length; i++ ) {\n    s += x[i];\n  }\n  return s;\n}\n\nfunction mean(x) {\n  let s = 0;\n  for (let i = 0; i < x.length; i++ ) {\n    s += x[i];\n  }\n  return s / x.length;\n}\n\nfunction cross_ent(x, y) {\n  return y ? -Math.log(sigmoid(x)) : -Math.log(sigmoid(-x));\n}\n\nfunction se(x, y) {\n  return (x - y) * (x - y);\n}\n\nfunction shuffle(array) {\n  let currentIndex = array.length,  randomIndex;\n\n  // While there remain elements to shuffle.\n  while (currentIndex > 0) {\n\n    // Pick a remaining element.\n    randomIndex = Math.floor(Math.random() * currentIndex);\n    currentIndex--;\n\n    // And swap it with the current element.\n    [array[currentIndex], array[randomIndex]] = [\n      array[randomIndex], array[currentIndex]];\n  }\n\n  return array;\n}\n\nfunction acc(x, y) {\n  return Number(y == (x  > 0));\n}\n\nfunction grid_func(f, width, height, x1, y1, x2, y2) {\n  let values = new Array(width * height);\n  const xstride = (x2 - x1) / width;\n  const ystride = (y2 - y1) / height;\n\n  \n  let y = 0;\n  let x = 0;\n  let ind = 0;\n  for (let i = 0; i < height; i++ ) {\n    for (let j = 0; j < width; j++, ind++) {\n      x = x1 + j * xstride;\n      y = y1 + i * ystride;\n      values[ind] = f(x, y);\n    }\n  }\n  return {width: width, height: height, x1: x1, y1: y1, x2: x2, y2: y2, values: values};\n}\n\nfunction get_accessors(keys, byindex=false) {\n  let isString = value => typeof value === 'string';\n  \n  let index = 0;\n  let indexmap = {};\n  let accessors = [];\n  for (let i = 0; i < keys.length; i++){\n    let k = keys[i];\n    if (Array.isArray(k)) {\n      let access = isString(k[0]) ? (x => x[k[0]]) : k[0];\n      \n      if (byindex) {\n        if (isString(k[0]) && !(k[0] in indexmap)) {\n          indexmap[k[0]] = index;\n          index++;\n        }\n        let accessindex = indexmap[k[0]];\n        access = x => x[accessindex];\n        let process = k[1];\n        let final_access = x => process(access(x));\n        accessors.push(final_access);\n      }\n      else {\n        let process = k[1];\n        let final_access = x => process(access(x));\n        accessors.push(final_access);\n      }\n      \n    }\n    else {\n      let access = isString(k) ? (x => x[k]) : k;\n      if (byindex) { \n        if (isString(k) && !(k in indexmap)) {\n          indexmap[k] = index;\n          index++;\n        }\n        let accessindex = indexmap[k];\n        access = x => x[accessindex];\n      }\n      accessors.push(access); \n    }\n  }\n  return accessors;\n}\n\nfunction predict(obs, weights, keys=[\"0\", \"1\", \"2\", \"3\"], byindex=false) {\n  let isString = value => typeof value === 'string';\n  let accessors = get_accessors(keys, byindex);\n  \n  let output = weights[0];\n  let wi = 1;\n  for (let i = 0; (i < keys.length) && (wi < weights.length); i++, wi++){\n    output += weights[wi] * accessors[i](obs);\n  }\n  return output;\n}\n\nfunction mean_loss(f, data, weights, keys, label, l2=0) {\n  let reg = 0;\n  if (l2 > 0){\n    for (let i = 1; i < weights.length; i++) {\n      reg += weights[i] * weights[i];\n    }\n  }\n  \n  const isString = value => typeof value === 'string';\n  const get_label = isString(label) ? (x => x[label]) : label;\n  return mean(data.map(x => f(predict(x, weights, keys), get_label(x)))) + l2 * reg;\n}\n\nfunction get_domains(data, accessors, margin=0.1) {\n  let domains = [];\n  for (let i = 0; i < accessors.length; i++){\n    let xdomain = d3.extent(data, accessors[i]);\n    let xdsize = (xdomain[1] - xdomain[0]);\n    let xmin = xdomain[0] - xdsize * margin;\n    let xmax = xdomain[1] + xdsize * margin;\n    domains.push([xmin, xmax]);\n  }\n  return domains;\n}\n\nfunction logisticPlot2d(data, weights, keys, label, interval=0.05) {\n  const accuracy = mean_loss(acc, data, weights, keys, label);\n  \n  let isString = value => typeof value === 'string';\n  let accessors = get_accessors(keys);\n  let index_accessors = get_accessors(keys, true);\n  let domains = get_domains(data, accessors);\n  const get_label = isString(label) ? (x => x[label]) : label;\n  \n  return Plot.plot({\n    x: {tickSpacing: 80, label: \"x\"},\n    y: {tickSpacing: 80, label: \"y\"},\n    title: \"Accuracy: \" + accuracy.toFixed(3),\n    color: {type: \"linear\", legend: true, scheme: \"BuRd\", domain: [-0.5, 1.5]},\n    marks: [\n      Plot.contour({\n        fill: (x, y) => sigmoid(predict([x, y], weights, index_accessors)),\n        x1: domains[0][0], y1: domains[1][0], x2: domains[0][1], y2: domains[1][1], interval: interval,\n      }),\n      Plot.dot(data, {x: accessors[0], y: accessors[1], stroke: x=> (get_label(x) ? 1.35 : -0.35)})\n    ]\n  });\n}\n\nfunction logisticLossPlot2d(data, weights, keys, label) {\n  const loss = mean_loss(cross_ent, data, weights, keys, label);\n  \n  let isString = value => typeof value === 'string';\n  let accessors = get_accessors(keys);\n  let index_accessors = get_accessors(keys, true);\n  let domains = get_domains(data, accessors);\n  const get_label = isString(label) ? (x => x[label]) : label;\n  \n  return Plot.plot({\n    x: {tickSpacing: 80, label: \"x\"},\n    y: {tickSpacing: 80, label: \"y\"},\n    title: \"Loss: \" + loss.toFixed(3),\n    color: {type: \"linear\", legend: true, scheme: \"BuRd\", domain: [0, 5]},\n    marks: [\n      Plot.contour({\n        value: (x, y) => predict([x, y], weights, index_accessors),\n        fillOpacity: 0.2,\n        stroke: \"black\", x1: domains[0][0], y1: domains[1][0], x2: domains[0][1], y2: domains[1][1],\n        thresholds: [-1e6,  0, 0.00001]\n      }),\n      Plot.dot(data, {x: accessors[0], y: accessors[1], stroke: x=> cross_ent(predict(x, weights, keys), get_label(x)), \n                      strokeOpacity: 0.5 })\n    ]\n  });\n}\n\nfunction lossPlot2d(f, data, keys, label, l2=0, res=100, x1=-40, y1=-0.015, x2=40,  y2=0.015, vmax=50, nlines=25, ctype=\"sqrt\", scale=(x => x)) {\n  let grid = 0;\n  function lossFunc(w, b) {\n    return scale(mean_loss(f, data, [w, b], keys, label, l2));\n  }\n\n  grid = grid_func(lossFunc,\n                 res, res, x1, y1, x2, y2\n                );\n\n  function plot2d(weights) {\n    let w = weights;\n    if (!(Array.isArray(w[0]))){\n      w = [w];\n    }\n\n    var arrows = w.slice(0, w.length - 1).map(function(e, i) {\n      return e.concat(w[i+1]);\n    });\n\n    let interval= vmax / nlines; \n    let thresholds = [];\n    for (let i = 0; i < nlines; i++) {\n      thresholds.push(i * interval);\n    }\n    let loss = mean_loss(f, data, w[w.length - 1], keys, label, l2)\n    return Plot.plot({\n      title: \"Loss: \" + loss.toFixed(3),\n      color: {type: \"linear\", legend: true, label: \"Loss\", scheme: \"BuRd\", domain: [0, vmax], type: ctype},\n      marks: [\n        Plot.contour(grid.values, {width: grid.width, height: grid.height, x1: grid.x1, x2:grid.x2, y1: grid.y1, y2: grid.y2,\n          stroke: Plot.identity, thresholds: thresholds}),\n        Plot.dot(w),\n        Plot.arrow(arrows, {x1: \"0\", y1: \"1\", x2: \"2\", y2: \"3\", stroke: \"black\"})\n      ]\n    })\n  }\n  return plot2d;\n}\n\n\n\nfunction regressionPlot(data, weights, keys, label, l2, f=se, stroke=\"\") {\n  let loss = mean_loss(f, data, weights, keys, label, l2);\n  let isString = value => typeof value === 'string';\n  \n  let accessors = get_accessors(keys);\n  let index_accessors = get_accessors(keys, true);\n  let domains = get_domains(data, get_accessors([label].concat(keys)));\n  const get_label = isString(label) ? (x => x[label]) : label;\n\n  let stroke_shade = stroke;\n  if (stroke == \"\") {\n    stroke_shade = (x => f(predict(x, weights, keys), get_label(x)))\n  }\n  \n  return Plot.plot({\n    y: {domain: domains[0]},\n    title: \"Loss: \" + loss.toFixed(3),\n    color: {type: \"linear\", legend: true, label: \"Loss\", scheme: \"BuRd\", domain: [0, 100]},\n    marks: [\n      Plot.line(sample((x) => predict([x], weights, index_accessors), domains[1][0], domains[1][1]), {stroke: 'black'}),\n      Plot.dot(data, {x: accessors[0], y: get_label, stroke: stroke_shade })\n    ]\n  })\n}\n\nfunction errorPlot(data, weights, keys, label, f, options={}) {\n  const isString = value => typeof value === 'string';\n  const get_label = isString(label) ? (x => x[label]) : label;\n  let errors = data.map(x => [predict(x, weights, keys) - get_label(x), f(predict(x, weights, keys), get_label(x))]);\n\n  \n  let sigma = (options['sigma'] || 1);\n  let plots = [];\n  const xdomain = (options['xdomain'] || [-30, 30]);\n  const ydomain = (options['ydomain'] || [0, 0.1]);\n  \n\n  if (options['plotnormal']){\n    let pdf = x => Math.exp(-0.5 * x * x / sigma) * ydomain[1];\n    let normal = Plot.line(sample(pdf, xdomain[0], xdomain[1]), {stroke: 'crimson'});    \n    plots.push(normal);\n  }\n  if (options['plotlaplace']){\n    let pdf = x => Math.exp(-0.5 * Math.abs(x) / sigma) * ydomain[1];\n    let normal = Plot.line(sample(pdf, xdomain[0], xdomain[1]), {stroke: 'green'});    \n    plots.push(normal);\n  }\n  \n  return Plot.plot({\n    y: {grid: true, domain: ydomain},\n    x: {domain: xdomain},\n    color: {type: \"linear\", legend: true, label: \"Loss\", scheme: \"BuRd\", domain: [0, 100]},\n    marks: [\n      //Plot.rectY(errors, Plot.binX({y: \"count\", fill: x => mean(x.map(v => v[1]))}, {x: \"0\"})),\n      \n      Plot.rectY(errors, Plot.binX({y: \"proportion\"}, {x: \"0\", fill: 'steelblue', interval: 1})),\n      Plot.ruleY([0])\n    ].concat(plots)\n  })\n}\n\nfunction nnPlot(data, weights, keys, label, l2, f=se, stroke=\"\", options=[]) {\n  let loss = mean_loss(f, data, weights, keys, label, l2);\n  let isString = value => typeof value === 'string';\n  \n  let accessors = get_accessors(keys);\n  let index_accessors = get_accessors(keys, true);\n  let domains = get_domains(data, get_accessors([label].concat(keys)));\n  const get_label = isString(label) ? (x => x[label]) : label;\n\n  let stroke_shade = stroke;\n  if (stroke == \"\") {\n    stroke_shade = (x => f(predict(x, weights, keys), get_label(x)))\n  }\n\n  let a = []\n  if (options.indexOf(\"Show feature transforms\") >= 0){\n    a = [Plot.line(sample((x) =>  keys[1][1](x), domains[1][0], domains[1][1]), {stroke: 'red'}),\n      Plot.line(sample((x) => keys[2][1](x), domains[1][0], domains[1][1]), {stroke: 'blue'})]\n  }\n  \n  return Plot.plot({\n    y: {domain: domains[0]},\n    title: \"Loss: \" + loss.toFixed(3),\n    color: {type: \"linear\", legend: true, label: \"Loss\", scheme: \"BuRd\", domain: [0, 100]},\n    marks: [\n      Plot.line(sample((x) => predict([x], weights, index_accessors), domains[1][0], domains[1][1]), {stroke: 'black'}),\n      Plot.dot(data, {x: accessors[0], y: get_label, stroke: stroke_shade })\n    ].concat(a)\n  })\n}\n"},{"methodName":"interpret","cellName":"ojs-cell-2","inline":false,"source":"data = transpose(data_raw)\n"},{"methodName":"interpret","cellName":"ojs-cell-3","inline":false,"source":"viewof form_mpg_4 = Inputs.form(\n  [\n    Inputs.range([-10, 10], {step: 0.01, label: \"b\", value: 1}),\n    Inputs.range([-10, 10], {step: 0.0001, label: \"w_1\", value: -0.0077}),\n    Inputs.range([-10, 10], {step: 0.0001, label: \"w_2\", value: 0}),\n    Inputs.range([-10, 10], {step: 0.0001, label: \"w_3\", value: 0}),\n    Inputs.range([-0.5, 0.5], {step: 0.0001, label: \"w_4\", value: 0}),\n  ]\n)\n"},{"methodName":"interpret","cellName":"ojs-cell-4","inline":false,"source":"regressionPlot(quadratic_data, form_mpg_4, [\"0\", [\"0\", x => (x) * (x)], [\"0\", x => Math.sin(x)], [\"0\", x => Math.exp(x)]], \"1\", 0, se)\n"},{"methodName":"interpret","cellName":"ojs-cell-5","inline":false,"source":"viewof form_nn = Inputs.form(\n  [\n    Inputs.range([-10, 10], {step: 0.01, label: \"b_0\", value: 0.33}),\n    Inputs.range([-10, 10], {step: 0.0001, label: \"w_01\", value: 9.2376}),\n    Inputs.range([-10, 10], {step: 0.0001, label: \"w_02\", value: 8.3719}),\n    Inputs.range([-10, 10], {step: 0.0001, label: \"w_11\", value: -2.4219}),\n    Inputs.range([-10, 10], {step: 0.0001, label: \"b_1\", value: -5.457}),\n    Inputs.range([-10, 10], {step: 0.0001, label: \"w_21\", value: 2.6795}),\n    Inputs.range([-10, 10], {step: 0.0001, label: \"b_2\", value: -5.4557}),\n    Inputs.checkbox([\"Show feature transforms\"], {}),\n\n  ]\n)\n"},{"methodName":"interpret","cellName":"ojs-cell-6","inline":false,"source":"function nnPlot(data, weights, keys, label, l2, f=se, stroke=\"\", options=[]) {\n  let loss = mean_loss(f, data, weights, keys, label, l2);\n  let isString = value => typeof value === 'string';\n  \n  let accessors = get_accessors(keys);\n  let index_accessors = get_accessors(keys, true);\n  let domains = get_domains(data, get_accessors([label].concat(keys)));\n  const get_label = isString(label) ? (x => x[label]) : label;\n\n  let stroke_shade = stroke;\n  if (stroke == \"\") {\n    stroke_shade = (x => f(predict(x, weights, keys), get_label(x)))\n  }\n\n  let a = []\n  if (options.indexOf(\"Show feature transforms\") >= 0){\n    a = [Plot.line(sample((x) =>  keys[1][1](x), domains[1][0], domains[1][1]), {stroke: 'red'}),\n      Plot.line(sample((x) => keys[2][1](x), domains[1][0], domains[1][1]), {stroke: 'blue'})]\n  }\n  \n  return Plot.plot({\n    y: {domain: domains[0]},\n    title: \"Loss: \" + loss.toFixed(3),\n    color: {type: \"linear\", legend: true, label: \"Loss\", scheme: \"BuRd\", domain: [0, 100]},\n    marks: [\n      Plot.line(sample((x) => predict([x], weights, index_accessors), domains[1][0], domains[1][1]), {stroke: 'black'}),\n      Plot.dot(data, {x: accessors[0], y: get_label, stroke: stroke_shade })\n    ].concat(a)\n  })\n}\n"},{"methodName":"interpret","cellName":"ojs-cell-7","inline":false,"source":"\nnnPlot(quadratic_data2, [form_nn[0], 0, form_nn[1], form_nn[2]],\n    \n        [\"0\", [\"0\", x => sigmoid(form_nn[3] * x + form_nn[4], 0)], \n        [\"0\", x => sigmoid(form_nn[5] * x + form_nn[6], 0)], \n        ], \"1\", 0, se, \"\", form_nn[7])\n"},{"methodName":"interpret","cellName":"ojs-cell-8","inline":false,"source":"viewof form_lnn = Inputs.form(\n  [\n    Inputs.range([-10, 10], {step: 0.01, label: \"b_0\", value: 0.33}),\n    Inputs.range([-10, 10], {step: 0.0001, label: \"w_01\", value: 9.2376}),\n    Inputs.range([-10, 10], {step: 0.0001, label: \"w_02\", value: 8.3719}),\n    Inputs.range([-10, 10], {step: 0.0001, label: \"w_11\", value: -2.4219}),\n    Inputs.range([-10, 10], {step: 0.0001, label: \"b_1\", value: -5.457}),\n    Inputs.range([-10, 10], {step: 0.0001, label: \"w_21\", value: 2.6795}),\n    Inputs.range([-10, 10], {step: 0.0001, label: \"b_2\", value: -5.4557}),\n    Inputs.checkbox([\"Show feature transforms\"], {}),\n\n  ]\n)\n"},{"methodName":"interpret","cellName":"ojs-cell-9","inline":false,"source":"\nnnPlot(quadratic_data2, [form_lnn[0], 0, form_lnn[1], form_lnn[2]],\n    \n        [\"0\", [\"0\", x => form_lnn[3] * x + form_lnn[4]], \n        [\"0\", x => form_lnn[5] * x + form_lnn[6]], \n        ], \"1\", 0, se, \"\", form_lnn[7])\n"},{"methodName":"interpretQuiet","source":"shinyInput('form_mpg_4')"},{"methodName":"interpretQuiet","source":"shinyInput('form_nn')"},{"methodName":"interpretQuiet","source":"shinyInput('form_lnn')"}]}
+eyJjb250ZW50cyI6W3sibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IlBsb3QgPSBpbXBvcnQoXCJodHRwczovL2VzbS5zaC9Ab2JzZXJ2YWJsZWhxL3Bsb3RcIikgXG5kMyA9IHJlcXVpcmUoXCJkM0A3XCIpXG50b3BvanNvbiA9IHJlcXVpcmUoXCJ0b3BvanNvblwiKVxuTWF0aEpheCA9IHJlcXVpcmUoXCJodHRwczovL2NkbmpzLmNsb3VkZmxhcmUuY29tL2FqYXgvbGlicy9tYXRoamF4LzMuMi4yL2VzNS90ZXgtc3ZnLm1pbi5qc1wiKS5jYXRjaCgoKSA9PiB3aW5kb3cuTWF0aEpheClcbnRmID0gcmVxdWlyZShcImh0dHBzOi8vY2RuLmpzZGVsaXZyLm5ldC9ucG0vQHRlbnNvcmZsb3cvdGZqc0BsYXRlc3QvZGlzdC90Zi5taW4uanNcIikuY2F0Y2goKCkgPT4gd2luZG93LnRmKVxuXG5USFJFRSA9IHtcbiAgY29uc3QgVEhSRUUgPSB3aW5kb3cuVEhSRUUgPSBhd2FpdCByZXF1aXJlKFwidGhyZWVAMC4xMzAuMC9idWlsZC90aHJlZS5taW4uanNcIik7XG4gIGF3YWl0IHJlcXVpcmUoXCJ0aHJlZUAwLjEzMC4wL2V4YW1wbGVzL2pzL2NvbnRyb2xzL09yYml0Q29udHJvbHMuanNcIikuY2F0Y2goKCkgPT4ge30pO1xuICBhd2FpdCByZXF1aXJlKFwidGhyZWVAMC4xMzAuMC9leGFtcGxlcy9qcy9sb2FkZXJzL1NWR0xvYWRlci5qc1wiKS5jYXRjaCgoKSA9PiB7fSk7XG4gIHJldHVybiBUSFJFRTtcbn1cblxuZnVuY3Rpb24gc2FtcGxlKGYsIHN0YXJ0LCBlbmQsIG5zYW1wbGVzPTEwMCkge1xuICBsZXQgYXJyID0gWy4uLkFycmF5KG5zYW1wbGVzKS5rZXlzKCldXG4gIGxldCBkaXN0ID0gZW5kIC0gc3RhcnRcbiAgZnVuY3Rpb24gYXJybWFwKGluZCkge1xuICAgIGNvbnN0IHggPSAoaW5kICogZGlzdCkgLyBuc2FtcGxlcyArIHN0YXJ0O1xuICAgIHJldHVybiBbeCwgZih4KV07XG4gIH1cbiAgcmV0dXJuIGFyci5tYXAoYXJybWFwKVxufVxuXG5mdW5jdGlvbiBzaWdtb2lkKHgpe1xuICByZXR1cm4gMSAvICgxICsgTWF0aC5leHAoLXgpKTtcbn1cblxuZnVuY3Rpb24gc3VtKHgpIHtcbiAgbGV0IHMgPSAwO1xuICBmb3IgKGxldCBpID0gMDsgaSA8IHgubGVuZ3RoOyBpKysgKSB7XG4gICAgcyArPSB4W2ldO1xuICB9XG4gIHJldHVybiBzO1xufVxuXG5mdW5jdGlvbiBtZWFuKHgpIHtcbiAgbGV0IHMgPSAwO1xuICBmb3IgKGxldCBpID0gMDsgaSA8IHgubGVuZ3RoOyBpKysgKSB7XG4gICAgcyArPSB4W2ldO1xuICB9XG4gIHJldHVybiBzIC8geC5sZW5ndGg7XG59XG5cbmZ1bmN0aW9uIGNyb3NzX2VudCh4LCB5KSB7XG4gIHJldHVybiB5ID8gLU1hdGgubG9nKHNpZ21vaWQoeCkpIDogLU1hdGgubG9nKHNpZ21vaWQoLXgpKTtcbn1cblxuZnVuY3Rpb24gc2UoeCwgeSkge1xuICByZXR1cm4gKHggLSB5KSAqICh4IC0geSk7XG59XG5cbmZ1bmN0aW9uIHNodWZmbGUoYXJyYXkpIHtcbiAgbGV0IGN1cnJlbnRJbmRleCA9IGFycmF5Lmxlbmd0aCwgIHJhbmRvbUluZGV4O1xuXG4gIC8vIFdoaWxlIHRoZXJlIHJlbWFpbiBlbGVtZW50cyB0byBzaHVmZmxlLlxuICB3aGlsZSAoY3VycmVudEluZGV4ID4gMCkge1xuXG4gICAgLy8gUGljayBhIHJlbWFpbmluZyBlbGVtZW50LlxuICAgIHJhbmRvbUluZGV4ID0gTWF0aC5mbG9vcihNYXRoLnJhbmRvbSgpICogY3VycmVudEluZGV4KTtcbiAgICBjdXJyZW50SW5kZXgtLTtcblxuICAgIC8vIEFuZCBzd2FwIGl0IHdpdGggdGhlIGN1cnJlbnQgZWxlbWVudC5cbiAgICBbYXJyYXlbY3VycmVudEluZGV4XSwgYXJyYXlbcmFuZG9tSW5kZXhdXSA9IFtcbiAgICAgIGFycmF5W3JhbmRvbUluZGV4XSwgYXJyYXlbY3VycmVudEluZGV4XV07XG4gIH1cblxuICByZXR1cm4gYXJyYXk7XG59XG5cbmZ1bmN0aW9uIGFjYyh4LCB5KSB7XG4gIHJldHVybiBOdW1iZXIoeSA9PSAoeCAgPiAwKSk7XG59XG5cbmZ1bmN0aW9uIGdyaWRfZnVuYyhmLCB3aWR0aCwgaGVpZ2h0LCB4MSwgeTEsIHgyLCB5Mikge1xuICBsZXQgdmFsdWVzID0gbmV3IEFycmF5KHdpZHRoICogaGVpZ2h0KTtcbiAgY29uc3QgeHN0cmlkZSA9ICh4MiAtIHgxKSAvIHdpZHRoO1xuICBjb25zdCB5c3RyaWRlID0gKHkyIC0geTEpIC8gaGVpZ2h0O1xuXG4gIFxuICBsZXQgeSA9IDA7XG4gIGxldCB4ID0gMDtcbiAgbGV0IGluZCA9IDA7XG4gIGZvciAobGV0IGkgPSAwOyBpIDwgaGVpZ2h0OyBpKysgKSB7XG4gICAgZm9yIChsZXQgaiA9IDA7IGogPCB3aWR0aDsgaisrLCBpbmQrKykge1xuICAgICAgeCA9IHgxICsgaiAqIHhzdHJpZGU7XG4gICAgICB5ID0geTEgKyBpICogeXN0cmlkZTtcbiAgICAgIHZhbHVlc1tpbmRdID0gZih4LCB5KTtcbiAgICB9XG4gIH1cbiAgcmV0dXJuIHt3aWR0aDogd2lkdGgsIGhlaWdodDogaGVpZ2h0LCB4MTogeDEsIHkxOiB5MSwgeDI6IHgyLCB5MjogeTIsIHZhbHVlczogdmFsdWVzfTtcbn1cblxuZnVuY3Rpb24gZ2V0X2FjY2Vzc29ycyhrZXlzLCBieWluZGV4PWZhbHNlKSB7XG4gIGxldCBpc1N0cmluZyA9IHZhbHVlID0+IHR5cGVvZiB2YWx1ZSA9PT0gJ3N0cmluZyc7XG4gIFxuICBsZXQgaW5kZXggPSAwO1xuICBsZXQgaW5kZXhtYXAgPSB7fTtcbiAgbGV0IGFjY2Vzc29ycyA9IFtdO1xuICBmb3IgKGxldCBpID0gMDsgaSA8IGtleXMubGVuZ3RoOyBpKyspe1xuICAgIGxldCBrID0ga2V5c1tpXTtcbiAgICBpZiAoQXJyYXkuaXNBcnJheShrKSkge1xuICAgICAgbGV0IGFjY2VzcyA9IGlzU3RyaW5nKGtbMF0pID8gKHggPT4geFtrWzBdXSkgOiBrWzBdO1xuICAgICAgXG4gICAgICBpZiAoYnlpbmRleCkge1xuICAgICAgICBpZiAoaXNTdHJpbmcoa1swXSkgJiYgIShrWzBdIGluIGluZGV4bWFwKSkge1xuICAgICAgICAgIGluZGV4bWFwW2tbMF1dID0gaW5kZXg7XG4gICAgICAgICAgaW5kZXgrKztcbiAgICAgICAgfVxuICAgICAgICBsZXQgYWNjZXNzaW5kZXggPSBpbmRleG1hcFtrWzBdXTtcbiAgICAgICAgYWNjZXNzID0geCA9PiB4W2FjY2Vzc2luZGV4XTtcbiAgICAgICAgbGV0IHByb2Nlc3MgPSBrWzFdO1xuICAgICAgICBsZXQgZmluYWxfYWNjZXNzID0geCA9PiBwcm9jZXNzKGFjY2Vzcyh4KSk7XG4gICAgICAgIGFjY2Vzc29ycy5wdXNoKGZpbmFsX2FjY2Vzcyk7XG4gICAgICB9XG4gICAgICBlbHNlIHtcbiAgICAgICAgbGV0IHByb2Nlc3MgPSBrWzFdO1xuICAgICAgICBsZXQgZmluYWxfYWNjZXNzID0geCA9PiBwcm9jZXNzKGFjY2Vzcyh4KSk7XG4gICAgICAgIGFjY2Vzc29ycy5wdXNoKGZpbmFsX2FjY2Vzcyk7XG4gICAgICB9XG4gICAgICBcbiAgICB9XG4gICAgZWxzZSB7XG4gICAgICBsZXQgYWNjZXNzID0gaXNTdHJpbmcoaykgPyAoeCA9PiB4W2tdKSA6IGs7XG4gICAgICBpZiAoYnlpbmRleCkgeyBcbiAgICAgICAgaWYgKGlzU3RyaW5nKGspICYmICEoayBpbiBpbmRleG1hcCkpIHtcbiAgICAgICAgICBpbmRleG1hcFtrXSA9IGluZGV4O1xuICAgICAgICAgIGluZGV4Kys7XG4gICAgICAgIH1cbiAgICAgICAgbGV0IGFjY2Vzc2luZGV4ID0gaW5kZXhtYXBba107XG4gICAgICAgIGFjY2VzcyA9IHggPT4geFthY2Nlc3NpbmRleF07XG4gICAgICB9XG4gICAgICBhY2Nlc3NvcnMucHVzaChhY2Nlc3MpOyBcbiAgICB9XG4gIH1cbiAgcmV0dXJuIGFjY2Vzc29ycztcbn1cblxuZnVuY3Rpb24gcHJlZGljdChvYnMsIHdlaWdodHMsIGtleXM9W1wiMFwiLCBcIjFcIiwgXCIyXCIsIFwiM1wiXSwgYnlpbmRleD1mYWxzZSkge1xuICBsZXQgaXNTdHJpbmcgPSB2YWx1ZSA9PiB0eXBlb2YgdmFsdWUgPT09ICdzdHJpbmcnO1xuICBsZXQgYWNjZXNzb3JzID0gZ2V0X2FjY2Vzc29ycyhrZXlzLCBieWluZGV4KTtcbiAgXG4gIGxldCBvdXRwdXQgPSB3ZWlnaHRzWzBdO1xuICBsZXQgd2kgPSAxO1xuICBmb3IgKGxldCBpID0gMDsgKGkgPCBrZXlzLmxlbmd0aCkgJiYgKHdpIDwgd2VpZ2h0cy5sZW5ndGgpOyBpKyssIHdpKyspe1xuICAgIG91dHB1dCArPSB3ZWlnaHRzW3dpXSAqIGFjY2Vzc29yc1tpXShvYnMpO1xuICB9XG4gIHJldHVybiBvdXRwdXQ7XG59XG5cbmZ1bmN0aW9uIG1lYW5fbG9zcyhmLCBkYXRhLCB3ZWlnaHRzLCBrZXlzLCBsYWJlbCwgbDI9MCkge1xuICBsZXQgcmVnID0gMDtcbiAgaWYgKGwyID4gMCl7XG4gICAgZm9yIChsZXQgaSA9IDE7IGkgPCB3ZWlnaHRzLmxlbmd0aDsgaSsrKSB7XG4gICAgICByZWcgKz0gd2VpZ2h0c1tpXSAqIHdlaWdodHNbaV07XG4gICAgfVxuICB9XG4gIFxuICBjb25zdCBpc1N0cmluZyA9IHZhbHVlID0+IHR5cGVvZiB2YWx1ZSA9PT0gJ3N0cmluZyc7XG4gIGNvbnN0IGdldF9sYWJlbCA9IGlzU3RyaW5nKGxhYmVsKSA/ICh4ID0+IHhbbGFiZWxdKSA6IGxhYmVsO1xuICByZXR1cm4gbWVhbihkYXRhLm1hcCh4ID0+IGYocHJlZGljdCh4LCB3ZWlnaHRzLCBrZXlzKSwgZ2V0X2xhYmVsKHgpKSkpICsgbDIgKiByZWc7XG59XG5cbmZ1bmN0aW9uIGdldF9kb21haW5zKGRhdGEsIGFjY2Vzc29ycywgbWFyZ2luPTAuMSkge1xuICBsZXQgZG9tYWlucyA9IFtdO1xuICBmb3IgKGxldCBpID0gMDsgaSA8IGFjY2Vzc29ycy5sZW5ndGg7IGkrKyl7XG4gICAgbGV0IHhkb21haW4gPSBkMy5leHRlbnQoZGF0YSwgYWNjZXNzb3JzW2ldKTtcbiAgICBsZXQgeGRzaXplID0gKHhkb21haW5bMV0gLSB4ZG9tYWluWzBdKTtcbiAgICBsZXQgeG1pbiA9IHhkb21haW5bMF0gLSB4ZHNpemUgKiBtYXJnaW47XG4gICAgbGV0IHhtYXggPSB4ZG9tYWluWzFdICsgeGRzaXplICogbWFyZ2luO1xuICAgIGRvbWFpbnMucHVzaChbeG1pbiwgeG1heF0pO1xuICB9XG4gIHJldHVybiBkb21haW5zO1xufVxuXG5mdW5jdGlvbiBsb2dpc3RpY1Bsb3QyZChkYXRhLCB3ZWlnaHRzLCBrZXlzLCBsYWJlbCwgaW50ZXJ2YWw9MC4wNSkge1xuICBjb25zdCBhY2N1cmFjeSA9IG1lYW5fbG9zcyhhY2MsIGRhdGEsIHdlaWdodHMsIGtleXMsIGxhYmVsKTtcbiAgXG4gIGxldCBpc1N0cmluZyA9IHZhbHVlID0+IHR5cGVvZiB2YWx1ZSA9PT0gJ3N0cmluZyc7XG4gIGxldCBhY2Nlc3NvcnMgPSBnZXRfYWNjZXNzb3JzKGtleXMpO1xuICBsZXQgaW5kZXhfYWNjZXNzb3JzID0gZ2V0X2FjY2Vzc29ycyhrZXlzLCB0cnVlKTtcbiAgbGV0IGRvbWFpbnMgPSBnZXRfZG9tYWlucyhkYXRhLCBhY2Nlc3NvcnMpO1xuICBjb25zdCBnZXRfbGFiZWwgPSBpc1N0cmluZyhsYWJlbCkgPyAoeCA9PiB4W2xhYmVsXSkgOiBsYWJlbDtcbiAgXG4gIHJldHVybiBQbG90LnBsb3Qoe1xuICAgIHg6IHt0aWNrU3BhY2luZzogODAsIGxhYmVsOiBcInhcIn0sXG4gICAgeToge3RpY2tTcGFjaW5nOiA4MCwgbGFiZWw6IFwieVwifSxcbiAgICB0aXRsZTogXCJBY2N1cmFjeTogXCIgKyBhY2N1cmFjeS50b0ZpeGVkKDMpLFxuICAgIGNvbG9yOiB7dHlwZTogXCJsaW5lYXJcIiwgbGVnZW5kOiB0cnVlLCBzY2hlbWU6IFwiQnVSZFwiLCBkb21haW46IFstMC41LCAxLjVdfSxcbiAgICBtYXJrczogW1xuICAgICAgUGxvdC5jb250b3VyKHtcbiAgICAgICAgZmlsbDogKHgsIHkpID0+IHNpZ21vaWQocHJlZGljdChbeCwgeV0sIHdlaWdodHMsIGluZGV4X2FjY2Vzc29ycykpLFxuICAgICAgICB4MTogZG9tYWluc1swXVswXSwgeTE6IGRvbWFpbnNbMV1bMF0sIHgyOiBkb21haW5zWzBdWzFdLCB5MjogZG9tYWluc1sxXVsxXSwgaW50ZXJ2YWw6IGludGVydmFsLFxuICAgICAgfSksXG4gICAgICBQbG90LmRvdChkYXRhLCB7eDogYWNjZXNzb3JzWzBdLCB5OiBhY2Nlc3NvcnNbMV0sIHN0cm9rZTogeD0+IChnZXRfbGFiZWwoeCkgPyAxLjM1IDogLTAuMzUpfSlcbiAgICBdXG4gIH0pO1xufVxuXG5mdW5jdGlvbiBsb2dpc3RpY0xvc3NQbG90MmQoZGF0YSwgd2VpZ2h0cywga2V5cywgbGFiZWwpIHtcbiAgY29uc3QgbG9zcyA9IG1lYW5fbG9zcyhjcm9zc19lbnQsIGRhdGEsIHdlaWdodHMsIGtleXMsIGxhYmVsKTtcbiAgXG4gIGxldCBpc1N0cmluZyA9IHZhbHVlID0+IHR5cGVvZiB2YWx1ZSA9PT0gJ3N0cmluZyc7XG4gIGxldCBhY2Nlc3NvcnMgPSBnZXRfYWNjZXNzb3JzKGtleXMpO1xuICBsZXQgaW5kZXhfYWNjZXNzb3JzID0gZ2V0X2FjY2Vzc29ycyhrZXlzLCB0cnVlKTtcbiAgbGV0IGRvbWFpbnMgPSBnZXRfZG9tYWlucyhkYXRhLCBhY2Nlc3NvcnMpO1xuICBjb25zdCBnZXRfbGFiZWwgPSBpc1N0cmluZyhsYWJlbCkgPyAoeCA9PiB4W2xhYmVsXSkgOiBsYWJlbDtcbiAgXG4gIHJldHVybiBQbG90LnBsb3Qoe1xuICAgIHg6IHt0aWNrU3BhY2luZzogODAsIGxhYmVsOiBcInhcIn0sXG4gICAgeToge3RpY2tTcGFjaW5nOiA4MCwgbGFiZWw6IFwieVwifSxcbiAgICB0aXRsZTogXCJMb3NzOiBcIiArIGxvc3MudG9GaXhlZCgzKSxcbiAgICBjb2xvcjoge3R5cGU6IFwibGluZWFyXCIsIGxlZ2VuZDogdHJ1ZSwgc2NoZW1lOiBcIkJ1UmRcIiwgZG9tYWluOiBbMCwgNV19LFxuICAgIG1hcmtzOiBbXG4gICAgICBQbG90LmNvbnRvdXIoe1xuICAgICAgICB2YWx1ZTogKHgsIHkpID0+IHByZWRpY3QoW3gsIHldLCB3ZWlnaHRzLCBpbmRleF9hY2Nlc3NvcnMpLFxuICAgICAgICBmaWxsT3BhY2l0eTogMC4yLFxuICAgICAgICBzdHJva2U6IFwiYmxhY2tcIiwgeDE6IGRvbWFpbnNbMF1bMF0sIHkxOiBkb21haW5zWzFdWzBdLCB4MjogZG9tYWluc1swXVsxXSwgeTI6IGRvbWFpbnNbMV1bMV0sXG4gICAgICAgIHRocmVzaG9sZHM6IFstMWU2LCAgMCwgMC4wMDAwMV1cbiAgICAgIH0pLFxuICAgICAgUGxvdC5kb3QoZGF0YSwge3g6IGFjY2Vzc29yc1swXSwgeTogYWNjZXNzb3JzWzFdLCBzdHJva2U6IHg9PiBjcm9zc19lbnQocHJlZGljdCh4LCB3ZWlnaHRzLCBrZXlzKSwgZ2V0X2xhYmVsKHgpKSwgXG4gICAgICAgICAgICAgICAgICAgICAgc3Ryb2tlT3BhY2l0eTogMC41IH0pXG4gICAgXVxuICB9KTtcbn1cblxuZnVuY3Rpb24gbG9zc1Bsb3QyZChmLCBkYXRhLCBrZXlzLCBsYWJlbCwgbDI9MCwgcmVzPTEwMCwgeDE9LTQwLCB5MT0tMC4wMTUsIHgyPTQwLCAgeTI9MC4wMTUsIHZtYXg9NTAsIG5saW5lcz0yNSwgY3R5cGU9XCJzcXJ0XCIsIHNjYWxlPSh4ID0+IHgpKSB7XG4gIGxldCBncmlkID0gMDtcbiAgZnVuY3Rpb24gbG9zc0Z1bmModywgYikge1xuICAgIHJldHVybiBzY2FsZShtZWFuX2xvc3MoZiwgZGF0YSwgW3csIGJdLCBrZXlzLCBsYWJlbCwgbDIpKTtcbiAgfVxuXG4gIGdyaWQgPSBncmlkX2Z1bmMobG9zc0Z1bmMsXG4gICAgICAgICAgICAgICAgIHJlcywgcmVzLCB4MSwgeTEsIHgyLCB5MlxuICAgICAgICAgICAgICAgICk7XG5cbiAgZnVuY3Rpb24gcGxvdDJkKHdlaWdodHMpIHtcbiAgICBsZXQgdyA9IHdlaWdodHM7XG4gICAgaWYgKCEoQXJyYXkuaXNBcnJheSh3WzBdKSkpe1xuICAgICAgdyA9IFt3XTtcbiAgICB9XG5cbiAgICB2YXIgYXJyb3dzID0gdy5zbGljZSgwLCB3Lmxlbmd0aCAtIDEpLm1hcChmdW5jdGlvbihlLCBpKSB7XG4gICAgICByZXR1cm4gZS5jb25jYXQod1tpKzFdKTtcbiAgICB9KTtcblxuICAgIGxldCBpbnRlcnZhbD0gdm1heCAvIG5saW5lczsgXG4gICAgbGV0IHRocmVzaG9sZHMgPSBbXTtcbiAgICBmb3IgKGxldCBpID0gMDsgaSA8IG5saW5lczsgaSsrKSB7XG4gICAgICB0aHJlc2hvbGRzLnB1c2goaSAqIGludGVydmFsKTtcbiAgICB9XG4gICAgbGV0IGxvc3MgPSBtZWFuX2xvc3MoZiwgZGF0YSwgd1t3Lmxlbmd0aCAtIDFdLCBrZXlzLCBsYWJlbCwgbDIpXG4gICAgcmV0dXJuIFBsb3QucGxvdCh7XG4gICAgICB0aXRsZTogXCJMb3NzOiBcIiArIGxvc3MudG9GaXhlZCgzKSxcbiAgICAgIGNvbG9yOiB7dHlwZTogXCJsaW5lYXJcIiwgbGVnZW5kOiB0cnVlLCBsYWJlbDogXCJMb3NzXCIsIHNjaGVtZTogXCJCdVJkXCIsIGRvbWFpbjogWzAsIHZtYXhdLCB0eXBlOiBjdHlwZX0sXG4gICAgICBtYXJrczogW1xuICAgICAgICBQbG90LmNvbnRvdXIoZ3JpZC52YWx1ZXMsIHt3aWR0aDogZ3JpZC53aWR0aCwgaGVpZ2h0OiBncmlkLmhlaWdodCwgeDE6IGdyaWQueDEsIHgyOmdyaWQueDIsIHkxOiBncmlkLnkxLCB5MjogZ3JpZC55MixcbiAgICAgICAgICBzdHJva2U6IFBsb3QuaWRlbnRpdHksIHRocmVzaG9sZHM6IHRocmVzaG9sZHN9KSxcbiAgICAgICAgUGxvdC5kb3QodyksXG4gICAgICAgIFBsb3QuYXJyb3coYXJyb3dzLCB7eDE6IFwiMFwiLCB5MTogXCIxXCIsIHgyOiBcIjJcIiwgeTI6IFwiM1wiLCBzdHJva2U6IFwiYmxhY2tcIn0pXG4gICAgICBdXG4gICAgfSlcbiAgfVxuICByZXR1cm4gcGxvdDJkO1xufVxuXG5cblxuZnVuY3Rpb24gcmVncmVzc2lvblBsb3QoZGF0YSwgd2VpZ2h0cywga2V5cywgbGFiZWwsIGwyLCBmPXNlLCBzdHJva2U9XCJcIikge1xuICBsZXQgbG9zcyA9IG1lYW5fbG9zcyhmLCBkYXRhLCB3ZWlnaHRzLCBrZXlzLCBsYWJlbCwgbDIpO1xuICBsZXQgaXNTdHJpbmcgPSB2YWx1ZSA9PiB0eXBlb2YgdmFsdWUgPT09ICdzdHJpbmcnO1xuICBcbiAgbGV0IGFjY2Vzc29ycyA9IGdldF9hY2Nlc3NvcnMoa2V5cyk7XG4gIGxldCBpbmRleF9hY2Nlc3NvcnMgPSBnZXRfYWNjZXNzb3JzKGtleXMsIHRydWUpO1xuICBsZXQgZG9tYWlucyA9IGdldF9kb21haW5zKGRhdGEsIGdldF9hY2Nlc3NvcnMoW2xhYmVsXS5jb25jYXQoa2V5cykpKTtcbiAgY29uc3QgZ2V0X2xhYmVsID0gaXNTdHJpbmcobGFiZWwpID8gKHggPT4geFtsYWJlbF0pIDogbGFiZWw7XG5cbiAgbGV0IHN0cm9rZV9zaGFkZSA9IHN0cm9rZTtcbiAgaWYgKHN0cm9rZSA9PSBcIlwiKSB7XG4gICAgc3Ryb2tlX3NoYWRlID0gKHggPT4gZihwcmVkaWN0KHgsIHdlaWdodHMsIGtleXMpLCBnZXRfbGFiZWwoeCkpKVxuICB9XG4gIFxuICByZXR1cm4gUGxvdC5wbG90KHtcbiAgICB5OiB7ZG9tYWluOiBkb21haW5zWzBdfSxcbiAgICB0aXRsZTogXCJMb3NzOiBcIiArIGxvc3MudG9GaXhlZCgzKSxcbiAgICBjb2xvcjoge3R5cGU6IFwibGluZWFyXCIsIGxlZ2VuZDogdHJ1ZSwgbGFiZWw6IFwiTG9zc1wiLCBzY2hlbWU6IFwiQnVSZFwiLCBkb21haW46IFswLCAxMDBdfSxcbiAgICBtYXJrczogW1xuICAgICAgUGxvdC5saW5lKHNhbXBsZSgoeCkgPT4gcHJlZGljdChbeF0sIHdlaWdodHMsIGluZGV4X2FjY2Vzc29ycyksIGRvbWFpbnNbMV1bMF0sIGRvbWFpbnNbMV1bMV0pLCB7c3Ryb2tlOiAnYmxhY2snfSksXG4gICAgICBQbG90LmRvdChkYXRhLCB7eDogYWNjZXNzb3JzWzBdLCB5OiBnZXRfbGFiZWwsIHN0cm9rZTogc3Ryb2tlX3NoYWRlIH0pXG4gICAgXVxuICB9KVxufVxuXG5mdW5jdGlvbiBlcnJvclBsb3QoZGF0YSwgd2VpZ2h0cywga2V5cywgbGFiZWwsIGYsIG9wdGlvbnM9e30pIHtcbiAgY29uc3QgaXNTdHJpbmcgPSB2YWx1ZSA9PiB0eXBlb2YgdmFsdWUgPT09ICdzdHJpbmcnO1xuICBjb25zdCBnZXRfbGFiZWwgPSBpc1N0cmluZyhsYWJlbCkgPyAoeCA9PiB4W2xhYmVsXSkgOiBsYWJlbDtcbiAgbGV0IGVycm9ycyA9IGRhdGEubWFwKHggPT4gW3ByZWRpY3QoeCwgd2VpZ2h0cywga2V5cykgLSBnZXRfbGFiZWwoeCksIGYocHJlZGljdCh4LCB3ZWlnaHRzLCBrZXlzKSwgZ2V0X2xhYmVsKHgpKV0pO1xuXG4gIFxuICBsZXQgc2lnbWEgPSAob3B0aW9uc1snc2lnbWEnXSB8fCAxKTtcbiAgbGV0IHBsb3RzID0gW107XG4gIGNvbnN0IHhkb21haW4gPSAob3B0aW9uc1sneGRvbWFpbiddIHx8IFstMzAsIDMwXSk7XG4gIGNvbnN0IHlkb21haW4gPSAob3B0aW9uc1sneWRvbWFpbiddIHx8IFswLCAwLjFdKTtcbiAgXG5cbiAgaWYgKG9wdGlvbnNbJ3Bsb3Rub3JtYWwnXSl7XG4gICAgbGV0IHBkZiA9IHggPT4gTWF0aC5leHAoLTAuNSAqIHggKiB4IC8gc2lnbWEpICogeWRvbWFpblsxXTtcbiAgICBsZXQgbm9ybWFsID0gUGxvdC5saW5lKHNhbXBsZShwZGYsIHhkb21haW5bMF0sIHhkb21haW5bMV0pLCB7c3Ryb2tlOiAnY3JpbXNvbid9KTsgICAgXG4gICAgcGxvdHMucHVzaChub3JtYWwpO1xuICB9XG4gIGlmIChvcHRpb25zWydwbG90bGFwbGFjZSddKXtcbiAgICBsZXQgcGRmID0geCA9PiBNYXRoLmV4cCgtMC41ICogTWF0aC5hYnMoeCkgLyBzaWdtYSkgKiB5ZG9tYWluWzFdO1xuICAgIGxldCBub3JtYWwgPSBQbG90LmxpbmUoc2FtcGxlKHBkZiwgeGRvbWFpblswXSwgeGRvbWFpblsxXSksIHtzdHJva2U6ICdncmVlbid9KTsgICAgXG4gICAgcGxvdHMucHVzaChub3JtYWwpO1xuICB9XG4gIFxuICByZXR1cm4gUGxvdC5wbG90KHtcbiAgICB5OiB7Z3JpZDogdHJ1ZSwgZG9tYWluOiB5ZG9tYWlufSxcbiAgICB4OiB7ZG9tYWluOiB4ZG9tYWlufSxcbiAgICBjb2xvcjoge3R5cGU6IFwibGluZWFyXCIsIGxlZ2VuZDogdHJ1ZSwgbGFiZWw6IFwiTG9zc1wiLCBzY2hlbWU6IFwiQnVSZFwiLCBkb21haW46IFswLCAxMDBdfSxcbiAgICBtYXJrczogW1xuICAgICAgLy9QbG90LnJlY3RZKGVycm9ycywgUGxvdC5iaW5YKHt5OiBcImNvdW50XCIsIGZpbGw6IHggPT4gbWVhbih4Lm1hcCh2ID0+IHZbMV0pKX0sIHt4OiBcIjBcIn0pKSxcbiAgICAgIFxuICAgICAgUGxvdC5yZWN0WShlcnJvcnMsIFBsb3QuYmluWCh7eTogXCJwcm9wb3J0aW9uXCJ9LCB7eDogXCIwXCIsIGZpbGw6ICdzdGVlbGJsdWUnLCBpbnRlcnZhbDogMX0pKSxcbiAgICAgIFBsb3QucnVsZVkoWzBdKVxuICAgIF0uY29uY2F0KHBsb3RzKVxuICB9KVxufVxuXG5mdW5jdGlvbiBublBsb3QoZGF0YSwgd2VpZ2h0cywga2V5cywgbGFiZWwsIGwyLCBmPXNlLCBzdHJva2U9XCJcIiwgb3B0aW9ucz1bXSkge1xuICBsZXQgbG9zcyA9IG1lYW5fbG9zcyhmLCBkYXRhLCB3ZWlnaHRzLCBrZXlzLCBsYWJlbCwgbDIpO1xuICBsZXQgaXNTdHJpbmcgPSB2YWx1ZSA9PiB0eXBlb2YgdmFsdWUgPT09ICdzdHJpbmcnO1xuICBcbiAgbGV0IGFjY2Vzc29ycyA9IGdldF9hY2Nlc3NvcnMoa2V5cyk7XG4gIGxldCBpbmRleF9hY2Nlc3NvcnMgPSBnZXRfYWNjZXNzb3JzKGtleXMsIHRydWUpO1xuICBsZXQgZG9tYWlucyA9IGdldF9kb21haW5zKGRhdGEsIGdldF9hY2Nlc3NvcnMoW2xhYmVsXS5jb25jYXQoa2V5cykpKTtcbiAgY29uc3QgZ2V0X2xhYmVsID0gaXNTdHJpbmcobGFiZWwpID8gKHggPT4geFtsYWJlbF0pIDogbGFiZWw7XG5cbiAgbGV0IHN0cm9rZV9zaGFkZSA9IHN0cm9rZTtcbiAgaWYgKHN0cm9rZSA9PSBcIlwiKSB7XG4gICAgc3Ryb2tlX3NoYWRlID0gKHggPT4gZihwcmVkaWN0KHgsIHdlaWdodHMsIGtleXMpLCBnZXRfbGFiZWwoeCkpKVxuICB9XG5cbiAgbGV0IGEgPSBbXVxuICBpZiAob3B0aW9ucy5pbmRleE9mKFwiU2hvdyBmZWF0dXJlIHRyYW5zZm9ybXNcIikgPj0gMCl7XG4gICAgYSA9IFtQbG90LmxpbmUoc2FtcGxlKCh4KSA9PiAga2V5c1sxXVsxXSh4KSwgZG9tYWluc1sxXVswXSwgZG9tYWluc1sxXVsxXSksIHtzdHJva2U6ICdyZWQnfSksXG4gICAgICBQbG90LmxpbmUoc2FtcGxlKCh4KSA9PiBrZXlzWzJdWzFdKHgpLCBkb21haW5zWzFdWzBdLCBkb21haW5zWzFdWzFdKSwge3N0cm9rZTogJ2JsdWUnfSldXG4gIH1cbiAgXG4gIHJldHVybiBQbG90LnBsb3Qoe1xuICAgIHk6IHtkb21haW46IGRvbWFpbnNbMF19LFxuICAgIHRpdGxlOiBcIkxvc3M6IFwiICsgbG9zcy50b0ZpeGVkKDMpLFxuICAgIGNvbG9yOiB7dHlwZTogXCJsaW5lYXJcIiwgbGVnZW5kOiB0cnVlLCBsYWJlbDogXCJMb3NzXCIsIHNjaGVtZTogXCJCdVJkXCIsIGRvbWFpbjogWzAsIDEwMF19LFxuICAgIG1hcmtzOiBbXG4gICAgICBQbG90LmxpbmUoc2FtcGxlKCh4KSA9PiBwcmVkaWN0KFt4XSwgd2VpZ2h0cywgaW5kZXhfYWNjZXNzb3JzKSwgZG9tYWluc1sxXVswXSwgZG9tYWluc1sxXVsxXSksIHtzdHJva2U6ICdibGFjayd9KSxcbiAgICAgIFBsb3QuZG90KGRhdGEsIHt4OiBhY2Nlc3NvcnNbMF0sIHk6IGdldF9sYWJlbCwgc3Ryb2tlOiBzdHJva2Vfc2hhZGUgfSlcbiAgICBdLmNvbmNhdChhKVxuICB9KVxufVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0yIiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoiZGF0YSA9IHRyYW5zcG9zZShkYXRhX3JhdylcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMyIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6InZpZXdvZiBmb3JtX21wZ180ID0gSW5wdXRzLmZvcm0oXG4gIFtcbiAgICBJbnB1dHMucmFuZ2UoWy0xMCwgMTBdLCB7c3RlcDogMC4wMSwgbGFiZWw6IFwiYlwiLCB2YWx1ZTogMX0pLFxuICAgIElucHV0cy5yYW5nZShbLTEwLCAxMF0sIHtzdGVwOiAwLjAwMDEsIGxhYmVsOiBcIndfMVwiLCB2YWx1ZTogLTAuMDA3N30pLFxuICAgIElucHV0cy5yYW5nZShbLTEwLCAxMF0sIHtzdGVwOiAwLjAwMDEsIGxhYmVsOiBcIndfMlwiLCB2YWx1ZTogMH0pLFxuICAgIElucHV0cy5yYW5nZShbLTEwLCAxMF0sIHtzdGVwOiAwLjAwMDEsIGxhYmVsOiBcIndfM1wiLCB2YWx1ZTogMH0pLFxuICAgIElucHV0cy5yYW5nZShbLTAuNSwgMC41XSwge3N0ZXA6IDAuMDAwMSwgbGFiZWw6IFwid180XCIsIHZhbHVlOiAwfSksXG4gIF1cbilcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtNCIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6InJlZ3Jlc3Npb25QbG90KHF1YWRyYXRpY19kYXRhLCBmb3JtX21wZ180LCBbXCIwXCIsIFtcIjBcIiwgeCA9PiAoeCkgKiAoeCldLCBbXCIwXCIsIHggPT4gTWF0aC5zaW4oeCldLCBbXCIwXCIsIHggPT4gTWF0aC5leHAoeCldXSwgXCIxXCIsIDAsIHNlKVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC01IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoidmlld29mIGZvcm1fbm4gPSBJbnB1dHMuZm9ybShcbiAgW1xuICAgIElucHV0cy5yYW5nZShbLTEwLCAxMF0sIHtzdGVwOiAwLjAxLCBsYWJlbDogXCJiXzBcIiwgdmFsdWU6IDAuMzN9KSxcbiAgICBJbnB1dHMucmFuZ2UoWy0xMCwgMTBdLCB7c3RlcDogMC4wMDAxLCBsYWJlbDogXCJ3XzAxXCIsIHZhbHVlOiA5LjIzNzZ9KSxcbiAgICBJbnB1dHMucmFuZ2UoWy0xMCwgMTBdLCB7c3RlcDogMC4wMDAxLCBsYWJlbDogXCJ3XzAyXCIsIHZhbHVlOiA4LjM3MTl9KSxcbiAgICBJbnB1dHMucmFuZ2UoWy0xMCwgMTBdLCB7c3RlcDogMC4wMDAxLCBsYWJlbDogXCJ3XzExXCIsIHZhbHVlOiAtMi40MjE5fSksXG4gICAgSW5wdXRzLnJhbmdlKFstMTAsIDEwXSwge3N0ZXA6IDAuMDAwMSwgbGFiZWw6IFwiYl8xXCIsIHZhbHVlOiAtNS40NTd9KSxcbiAgICBJbnB1dHMucmFuZ2UoWy0xMCwgMTBdLCB7c3RlcDogMC4wMDAxLCBsYWJlbDogXCJ3XzIxXCIsIHZhbHVlOiAyLjY3OTV9KSxcbiAgICBJbnB1dHMucmFuZ2UoWy0xMCwgMTBdLCB7c3RlcDogMC4wMDAxLCBsYWJlbDogXCJiXzJcIiwgdmFsdWU6IC01LjQ1NTd9KSxcbiAgICBJbnB1dHMuY2hlY2tib3goW1wiU2hvdyBmZWF0dXJlIHRyYW5zZm9ybXNcIl0sIHt9KSxcblxuICBdXG4pXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTYiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJmdW5jdGlvbiBublBsb3QoZGF0YSwgd2VpZ2h0cywga2V5cywgbGFiZWwsIGwyLCBmPXNlLCBzdHJva2U9XCJcIiwgb3B0aW9ucz1bXSkge1xuICBsZXQgbG9zcyA9IG1lYW5fbG9zcyhmLCBkYXRhLCB3ZWlnaHRzLCBrZXlzLCBsYWJlbCwgbDIpO1xuICBsZXQgaXNTdHJpbmcgPSB2YWx1ZSA9PiB0eXBlb2YgdmFsdWUgPT09ICdzdHJpbmcnO1xuICBcbiAgbGV0IGFjY2Vzc29ycyA9IGdldF9hY2Nlc3NvcnMoa2V5cyk7XG4gIGxldCBpbmRleF9hY2Nlc3NvcnMgPSBnZXRfYWNjZXNzb3JzKGtleXMsIHRydWUpO1xuICBsZXQgZG9tYWlucyA9IGdldF9kb21haW5zKGRhdGEsIGdldF9hY2Nlc3NvcnMoW2xhYmVsXS5jb25jYXQoa2V5cykpKTtcbiAgY29uc3QgZ2V0X2xhYmVsID0gaXNTdHJpbmcobGFiZWwpID8gKHggPT4geFtsYWJlbF0pIDogbGFiZWw7XG5cbiAgbGV0IHN0cm9rZV9zaGFkZSA9IHN0cm9rZTtcbiAgaWYgKHN0cm9rZSA9PSBcIlwiKSB7XG4gICAgc3Ryb2tlX3NoYWRlID0gKHggPT4gZihwcmVkaWN0KHgsIHdlaWdodHMsIGtleXMpLCBnZXRfbGFiZWwoeCkpKVxuICB9XG5cbiAgbGV0IGEgPSBbXVxuICBpZiAob3B0aW9ucy5pbmRleE9mKFwiU2hvdyBmZWF0dXJlIHRyYW5zZm9ybXNcIikgPj0gMCl7XG4gICAgYSA9IFtQbG90LmxpbmUoc2FtcGxlKCh4KSA9PiAga2V5c1sxXVsxXSh4KSwgZG9tYWluc1sxXVswXSwgZG9tYWluc1sxXVsxXSksIHtzdHJva2U6ICdyZWQnfSksXG4gICAgICBQbG90LmxpbmUoc2FtcGxlKCh4KSA9PiBrZXlzWzJdWzFdKHgpLCBkb21haW5zWzFdWzBdLCBkb21haW5zWzFdWzFdKSwge3N0cm9rZTogJ2JsdWUnfSldXG4gIH1cbiAgXG4gIHJldHVybiBQbG90LnBsb3Qoe1xuICAgIHk6IHtkb21haW46IGRvbWFpbnNbMF19LFxuICAgIHRpdGxlOiBcIkxvc3M6IFwiICsgbG9zcy50b0ZpeGVkKDMpLFxuICAgIGNvbG9yOiB7dHlwZTogXCJsaW5lYXJcIiwgbGVnZW5kOiB0cnVlLCBsYWJlbDogXCJMb3NzXCIsIHNjaGVtZTogXCJCdVJkXCIsIGRvbWFpbjogWzAsIDEwMF19LFxuICAgIG1hcmtzOiBbXG4gICAgICBQbG90LmxpbmUoc2FtcGxlKCh4KSA9PiBwcmVkaWN0KFt4XSwgd2VpZ2h0cywgaW5kZXhfYWNjZXNzb3JzKSwgZG9tYWluc1sxXVswXSwgZG9tYWluc1sxXVsxXSksIHtzdHJva2U6ICdibGFjayd9KSxcbiAgICAgIFBsb3QuZG90KGRhdGEsIHt4OiBhY2Nlc3NvcnNbMF0sIHk6IGdldF9sYWJlbCwgc3Ryb2tlOiBzdHJva2Vfc2hhZGUgfSlcbiAgICBdLmNvbmNhdChhKVxuICB9KVxufVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC03IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoiXG5ublBsb3QocXVhZHJhdGljX2RhdGEyLCBbZm9ybV9ublswXSwgMCwgZm9ybV9ublsxXSwgZm9ybV9ublsyXV0sXG4gICAgXG4gICAgICAgIFtcIjBcIiwgW1wiMFwiLCB4ID0+IHNpZ21vaWQoZm9ybV9ublszXSAqIHggKyBmb3JtX25uWzRdLCAwKV0sIFxuICAgICAgICBbXCIwXCIsIHggPT4gc2lnbW9pZChmb3JtX25uWzVdICogeCArIGZvcm1fbm5bNl0sIDApXSwgXG4gICAgICAgIF0sIFwiMVwiLCAwLCBzZSwgXCJcIiwgZm9ybV9ubls3XSlcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtOCIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6InZpZXdvZiBmb3JtX2xubiA9IElucHV0cy5mb3JtKFxuICBbXG4gICAgSW5wdXRzLnJhbmdlKFstMTAsIDEwXSwge3N0ZXA6IDAuMDEsIGxhYmVsOiBcImJfMFwiLCB2YWx1ZTogMC4zM30pLFxuICAgIElucHV0cy5yYW5nZShbLTEwLCAxMF0sIHtzdGVwOiAwLjAwMDEsIGxhYmVsOiBcIndfMDFcIiwgdmFsdWU6IDkuMjM3Nn0pLFxuICAgIElucHV0cy5yYW5nZShbLTEwLCAxMF0sIHtzdGVwOiAwLjAwMDEsIGxhYmVsOiBcIndfMDJcIiwgdmFsdWU6IDguMzcxOX0pLFxuICAgIElucHV0cy5yYW5nZShbLTEwLCAxMF0sIHtzdGVwOiAwLjAwMDEsIGxhYmVsOiBcIndfMTFcIiwgdmFsdWU6IC0yLjQyMTl9KSxcbiAgICBJbnB1dHMucmFuZ2UoWy0xMCwgMTBdLCB7c3RlcDogMC4wMDAxLCBsYWJlbDogXCJiXzFcIiwgdmFsdWU6IC01LjQ1N30pLFxuICAgIElucHV0cy5yYW5nZShbLTEwLCAxMF0sIHtzdGVwOiAwLjAwMDEsIGxhYmVsOiBcIndfMjFcIiwgdmFsdWU6IDIuNjc5NX0pLFxuICAgIElucHV0cy5yYW5nZShbLTEwLCAxMF0sIHtzdGVwOiAwLjAwMDEsIGxhYmVsOiBcImJfMlwiLCB2YWx1ZTogLTUuNDU1N30pLFxuICAgIElucHV0cy5jaGVja2JveChbXCJTaG93IGZlYXR1cmUgdHJhbnNmb3Jtc1wiXSwge30pLFxuXG4gIF1cbilcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtOSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6Ilxubm5QbG90KHF1YWRyYXRpY19kYXRhMiwgW2Zvcm1fbG5uWzBdLCAwLCBmb3JtX2xublsxXSwgZm9ybV9sbm5bMl1dLFxuICAgIFxuICAgICAgICBbXCIwXCIsIFtcIjBcIiwgeCA9PiBmb3JtX2xublszXSAqIHggKyBmb3JtX2xubls0XV0sIFxuICAgICAgICBbXCIwXCIsIHggPT4gZm9ybV9sbm5bNV0gKiB4ICsgZm9ybV9sbm5bNl1dLCBcbiAgICAgICAgXSwgXCIxXCIsIDAsIHNlLCBcIlwiLCBmb3JtX2xubls3XSlcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgnZm9ybV9tcGdfNCcpIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJzaGlueUlucHV0KCdmb3JtX25uJykifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6InNoaW55SW5wdXQoJ2Zvcm1fbG5uJykifV19
 </script>
 <script type="module">
 if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
@@ -1030,18 +1064,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -1073,11 +1096,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1087,8 +1149,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1100,7 +1171,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1144,6 +1338,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1169,6 +1364,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1229,6 +1450,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+
 
 
 

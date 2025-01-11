@@ -1164,9 +1164,9 @@ y_values = np.random.randn(1,10)  # Gaussian distribution
 plt.plot(x_values, y_values, 'ko');
 ```
 
-The string determines the plot appearance \-- in this case, black circles. You can use color strings ('r', 'g', 'b', 'm', 'c', 'y', \...) or use the "Color" keyword to specify an RGB color. Marker appearance ('o','s','v','.', \...) controls how the points look.
+The string determines the plot appearance -- in this case, black circles. You can use color strings ('r', 'g', 'b', 'm', 'c', 'y', ...) or use the "Color" keyword to specify an RGB color. Marker appearance ('o','s','v','.', ...) controls how the points look.
 
-If we connect those points using a line appearance specification ('-','\--',':',\...), it will not look very good, because the points are not ordered in any meaningful way. Let's try a line plot using an ordered sequence of x values:
+If we connect those points using a line appearance specification ('-','--',':',...), it will not look very good, because the points are not ordered in any meaningful way. Let's try a line plot using an ordered sequence of x values:
 
 ```{python}
 x_values = np.linspace(0,8,100)
@@ -1188,7 +1188,7 @@ plt.plot(x_values, y1, 'b-', x_values, y2, 'g--');  # plot two curves
 plt.plot(x_values, y3, 'r:'); # add a curve to the plot
 ```
 
-You may want to explicitly set the plot ranges \-- perhaps the most common pattern is to plot something, get the plot's ranges, and then restore them later after plotting another function:
+You may want to explicitly set the plot ranges -- perhaps the most common pattern is to plot something, get the plot's ranges, and then restore them later after plotting another function:
 
 ```{python}
 x_values = np.linspace(0,8,100)
@@ -1204,6 +1204,7 @@ plt.axis(ax);                 # restore the original plot's axis ranges
 ```
 
 ## Legends
+
 When plotting multiple point sets or curves we'll likely want to be able to distinguish what each plot represents. We can do this by specifying a *label* for each plot, then adding a *legend* that tells us what each represents.
 
 ```{python}
@@ -1217,9 +1218,11 @@ plt.plot(x_values, y2, 'g--', label='$(x-3)^2 / 12$')
 plt.plot(x_values, y3, 'r:', label='$.5x-1$'); # add a curve to the plot
 plt.legend();
 ```
+
 Here surrounding text in a label with `$ $` allows us to write mathamatical equations as in LaTex!
 
 ## Titles and labels
+
 Typically we would like those viewing our plot to understand what the axes mean! We can label the x and y axes using `plt.xlabel()` and `plt.ylabel()` respectively. We can also set a title for our plot using `plt.title()`
 
 ```{python}
@@ -1246,7 +1249,7 @@ The outputs of hist include the bin locations, the number of data in each bin, a
 
 It is often useful to put more than one plot together in a group; you can do this using the subplot function. There are various options; for example, "sharex" and "sharey" allow multiple plots to share a single axis range (or, you can set it manually, of course).
 
-I often find it necessary to also change the geometry of the figure for multiple subplots \-- although this is more generally useful as well, if you have a plot that looks better wider and shorter, for example.
+I often find it necessary to also change the geometry of the figure for multiple subplots -- although this is more generally useful as well, if you have a plot that looks better wider and shorter, for example.
 
 ```{python}
 fig,ax = plt.subplots(1,3, figsize=(8.0, 2.0))      # make a 1 x 3 grid of plots:
@@ -1257,6 +1260,7 @@ ax[2].plot(x_values, y3, 'r:');   #   and y3 in the last
 ```
 
 ## Subplot options
+
 If we want to add legends or labeling to individual subplots we need to call methods of the individual subplot objects. In this case, the methods we need change a bit! Rather than using `plt.title()`, `plt.xlabel()` and `plt.ylabel()`, we need to use the methods `ax.set_title()`, `ax.set_xlabel()` and `ax.set_ylabel()`
 
 ```{python}

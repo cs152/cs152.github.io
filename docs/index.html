@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.319">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>CS 152: Neural Networks - Course Syllabus</title>
+<title>Course Syllabus – CS 152: Neural Networks</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,7 +22,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +33,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -79,7 +79,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -88,13 +94,42 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -102,47 +137,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">CS 152: Neural Networks</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" rel="" target="" aria-current="page">
- <span class="menu-text">Home</span></a>
+    <a class="nav-link active" href="./index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./calendar/calendar.html" rel="" target="">
- <span class="menu-text">Calendar</span></a>
+    <a class="nav-link" href="./calendar/calendar.html"> 
+<span class="menu-text">Calendar</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://drive.google.com/drive/folders/1JFhwmcFBTHiRbfhQ0VRDj9xIPxFpHuWj?usp=drive_link" rel="" target="">
- <span class="menu-text">Homeworks</span></a>
+    <a class="nav-link" href="https://drive.google.com/drive/folders/1JFhwmcFBTHiRbfhQ0VRDj9xIPxFpHuWj?usp=drive_link"> 
+<span class="menu-text">Homeworks</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./assignments/final-project/outline.html" rel="" target="">
- <span class="menu-text">Project</span></a>
+    <a class="nav-link" href="./assignments/final-project/outline.html"> 
+<span class="menu-text">Project</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://github.com/orgs/CS152/" rel="" target="">
- <span class="menu-text">Github</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="https://www.gradescope.com/courses/710173" rel="" target="">
- <span class="menu-text">Gradescope</span></a>
+    <a class="nav-link" href="https://www.gradescope.com/courses/710173"> 
+<span class="menu-text">Gradescope</span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools ms-auto">
-</div>
           </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -224,7 +255,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
+
 </header>
+
 
 <section id="course-description" class="level1">
 <h1>Course Description</h1>
@@ -235,7 +268,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="instructor">Instructor</h2>
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
-<p><img src="pictures/gabe.png" class="img-fluid figure-img" width="300"></p>
+<p><img src="pictures/gabe.png" class="img-fluid quarto-figure quarto-figure-left figure-img" width="300"></p>
 </figure>
 </div>
 <p>Prof.&nbsp;Gabe Hope (he/him)</p>
@@ -249,21 +282,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>I am originally from New York City</p></li>
 <li><p>I have a Bachelor of Science (BS) in computer science and finance from Washington University in St.&nbsp;Louis.</p></li>
 <li><p>I have a Master of Science (MS) from Brown University (This was actually the start of my Ph.D.)</p></li>
-<li><p>I earned my Ph.D.&nbsp;from the University of California, Irvine advised by <a href="https://www.ics.uci.edu/~sudderth/">Erik Sudderth</a>. I graduated just this June!</p></li>
+<li><p>I earned my Ph.D.&nbsp;from the University of California, Irvine advised by <a href="https://www.ics.uci.edu/~sudderth/">Erik Sudderth</a>.</p></li>
 <li><p>My research focuses on using neural networks to find interpretable structures in data. I mainly focus on image data, though I have also worked on analyzing motion-capture, audio and climate data among other things!</p></li>
 </ul>
 </section>
 </section>
 <section id="grutors-and-hours" class="level2">
 <h2 class="anchored" data-anchor-id="grutors-and-hours">Grutors (and hours)</h2>
-<ul>
-<li>Hoang Chu: <strong>Wednesday 4-5pm - McGregor 339</strong></li>
-<li>Sophie Bekerman: <strong>Wednesday 5-6pm - McGregor 339</strong></li>
-<li>Isaac Hershenon: <strong>Thursday 7-8 - McGregor 339pm</strong></li>
-<li>Hayley Walters: <strong>Friday 2-3pm - McGregor 331</strong></li>
-<li>Isaac Chung: <strong>Friday 3-4pm - McGregor 331</strong></li>
-<li>Ian Li: <strong>Friday 4-5pm - McGregor 331</strong></li>
-</ul>
 </section>
 <section id="topics-covered" class="level2">
 <h2 class="anchored" data-anchor-id="topics-covered">Topics covered</h2>
@@ -283,7 +308,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="textbook">Textbook</h2>
 <p><a href="https://probml.github.io/pml-book/">Probabilistic Machine Learning</a> by Kevin Murphy. Full text for <a href="https://probml.github.io/pml-book/book1.html">book 1</a> and <a href="https://probml.github.io/pml-book/book2.html">book 2</a> are available for free online.</p>
 <p><strong>Open door policy:</strong> If my door is open, feel free to stop in, say hi and ask questions about the course, research or any other academic issues. If the door is closed, feel free to knock. I often like to close my door to focus, but it does not always mean I am unable to talk. If I don’t answer promptly I am either out of office or in a meeting and am unable to talk. If in doubt, feel free contact me on slack. Note that I generally prefer to keep longer discussion of course materials to designated office hours.</p>
-<p><strong>Scheduling meetings:</strong> You may also schedule a 1-on-1 meeting with me if needed through this link: <a href="https://calendly.com/prof-gabe/one-on-one-with-prof-gabe" class="uri">https://calendly.com/prof-gabe/one-on-one-with-prof-gabe</a>.</p>
 </section>
 </section>
 <section id="software-and-tools" class="level1">
@@ -338,8 +362,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="homework-assignments-60-of-course-grade" class="level2">
 <h2 class="anchored" data-anchor-id="homework-assignments-60-of-course-grade">Homework assignments (60% of course grade)</h2>
 <p><strong>Frequency and deadlines:</strong> Homeworks will be assigned on a weekly basis throughout the semester, with the exception of weeks where final project checkpoints are due. Homeworks are assigned on Wednesdays and must be submitted on gradescope and Github by the end of the following Thursday (11:59pm Thursday).</p>
-<p><strong>Submission</strong> Homework assignments are submitted by uploading a solution PDF to Gradescope and pushing to the corresponding Github repository. See the instructions under software and tools!</p>
-<p><strong>Late policy:</strong> A student will be automatically granted a 1-day extension on any homework assignment (to Friday 11:59pm) by simply messaging or emailing me to ask for one <strong>before the due date</strong>. These should be used to handle cases such as travel, interviews, short-term illness, stressful weeks, etc. There is no limit on the number of homework assignments on which you may use a one-day extension so long as you notify me.</p>
+<p><strong>Submission</strong> Homework assignments are submitted by uploading a solution PDF to Gradescope. You must convert your completed notebook to PDF using the <a href="https://blank-app-ufu2uvdeosc.streamlit.app/">CS152 conversion tool</a>. This page will extract and separate the answers for each question. Please make sure to check that all answers are included before submitting the PDF to Gradescope. Incorrectly formatted submissions are subject to a 10% penalty. See further instructions under software and tools!</p>
+<p><strong>Late policy:</strong> A student will be automatically granted a 1-day extension on any homework assignment (to Friday 11:59pm) by simply messaging me on Slack to ask for one <strong>before the due date</strong>. These should be used to handle cases such as travel, interviews, short-term illness, stressful weeks, etc. There is no limit on the number of homework assignments on which you may use a one-day extension so long as you notify me.</p>
 <p><strong>Drops:</strong> The lowest <strong>2</strong> homework scores will be dropped unconditionally. Your homework score will be computed as the average of the remaining scores.</p>
 <p><strong>Extension policy:</strong> For situations such as extended illnesses, family emergencies, or other significant and unforeseen circumstances preventing you from working, I’m happy to work with you to try to find a way to give you the space you need while being able to come back to the course when you’re able. The best way to start this conversation is by directly emailing me (ghope@g.hmc.edu). To protect your privacy about the reasons for these circumstances and to ensure you get the support you need, I may ask you to reach out about this to your campus’ Division of Student Affairs, Dean of Students office, or your Student Disability Services coordinator to verify what kind of accommodation makes sense and to ensure you’re being supported across your other courses. If it’s more comfortable, you may also choose to reach out to any of these groups to reach out to me before contacting me yourself.</p>
 </section>
@@ -352,8 +376,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Following the guidelines for respectful discussion (as outlined in course policies)</p></li>
 <li><p>Class attendance</p></li>
 <li><p>Attending office hours outside class</p></li>
+<li><p>Support provided to peers, e.g.&nbsp;by helping others debug or answering questions on Slack.</p></li>
 </ul>
-<p>Earning a perfect participation grade will <em>not</em> require full marks for all of these criteria. A perfect participation grade will be earned by any student who: attends class regularly (&gt; 80% of the time) and participates respectfully in class at least every 1-2 weeks. Attending office hours is not strictly required, but if you are struggling to participate in class, I will assign bonus points to your participation grade for attending. If you have questions about your participation grade at any point, please contact me.</p>
+<p>Earning a perfect participation grade will <em>not</em> require full marks for all of these criteria, and it is expected that most students will earn full credit for participation. A perfect participation grade will be earned by any student who: attends class regularly (&gt; 80% of the time) and at least occasionally participates respectfully in class. Attending office hours is not strictly required, but if you miss class or are struggling to participate, I will assign bonus points to your participation grade for attending. If you have questions about your participation grade at any point, please contact me.</p>
 </section>
 <section id="final-project-30-of-course-grade" class="level2">
 <h2 class="anchored" data-anchor-id="final-project-30-of-course-grade">Final Project (30% of course grade)</h2>
@@ -414,10 +439,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="collaboration-policy" class="level2">
 <h2 class="anchored" data-anchor-id="collaboration-policy">Collaboration policy</h2>
-<p>You are encouraged to discuss homework assignments with other students, but the final work that you submit for each assignment must be still be your own. This means you <strong>may</strong>:</p>
+<p>You are encouraged to discuss and collaborate on homework assignments with other students, but you must write-up all final answers on your own. This means you <strong>may</strong>:</p>
 <ul>
 <li><p>Discuss published course materials and topics</p></li>
-<li><p>Discuss approaches to problems with other students, including while working on the assignments (work in small groups)</p></li>
+<li><p>Discuss approaches to problems with other students, including while working on the assignments (work in small groups).</p></li>
 <li><p>Share helpful examples and resources with other students</p></li>
 <li><p>Help other students with technical issues such as setting up GitHub and Python environments.</p></li>
 <li><p>View another student’s code for the purpose of debugging small technical issues (exceptions, syntax errors etc.)</p></li>
@@ -430,7 +455,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Fail to acknowledge collaborators.</p></li>
 </ul>
 <p>This collaboration policy is covered by the Harvey Mudd honor code and violations will be referred to the honor code board.</p>
-<p>Each homework will have space for you to indicate who you discussed the assignment with. If you would like help finding other students to study with, please let me know and I can work to set you up with a study group.</p>
+<p>Each homework will have space for you to indicate who you discussed the assignment with. Please use the #team-matching channel on the course Slack to find study partners.</p>
 </section>
 <section id="ai-policy" class="level2">
 <h2 class="anchored" data-anchor-id="ai-policy">AI Policy</h2>
@@ -571,18 +596,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -614,11 +628,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -628,8 +681,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -641,7 +703,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -685,6 +870,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -710,6 +896,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -770,6 +982,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+
 
 
 

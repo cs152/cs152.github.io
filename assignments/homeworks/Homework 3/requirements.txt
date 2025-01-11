@@ -1,0 +1,8 @@
+numpy
+seaborn
+matplotlib
+tensorflow
+scikit-learn
+tensorflow-datasets==4.0
+tqdm
+autograd

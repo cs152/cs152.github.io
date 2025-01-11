@@ -32,18 +32,12 @@ Prof. Gabe Hope (he/him)
 
 -   I have a Master of Science (MS) from Brown University (This was actually the start of my Ph.D.)
 
--   I earned my Ph.D. from the University of California, Irvine advised by [Erik Sudderth](https://www.ics.uci.edu/~sudderth/). I graduated just this June!
+-   I earned my Ph.D. from the University of California, Irvine advised by [Erik Sudderth](https://www.ics.uci.edu/~sudderth/).
 
 -   My research focuses on using neural networks to find interpretable structures in data. I mainly focus on image data, though I have also worked on analyzing motion-capture, audio and climate data among other things!
 
 ## Grutors (and hours)
 
--   Hoang Chu: **Wednesday 4-5pm - McGregor 339**
--   Sophie Bekerman: **Wednesday 5-6pm - McGregor 339**
--   Isaac Hershenon: **Thursday 7-8 - McGregor 339pm**
--   Hayley Walters: **Friday 2-3pm - McGregor 331**
--   Isaac Chung: **Friday 3-4pm - McGregor 331**
--   Ian Li: **Friday 4-5pm - McGregor 331**
 
 ## Topics covered
 
@@ -71,7 +65,6 @@ Prof. Gabe Hope (he/him)
 
 **Open door policy:** If my door is open, feel free to stop in, say hi and ask questions about the course, research or any other academic issues. If the door is closed, feel free to knock. I often like to close my door to focus, but it does not always mean I am unable to talk. If I don't answer promptly I am either out of office or in a meeting and am unable to talk. If in doubt, feel free contact me on slack. Note that I generally prefer to keep longer discussion of course materials to designated office hours.
 
-**Scheduling meetings:** You may also schedule a 1-on-1 meeting with me if needed through this link: <https://calendly.com/prof-gabe/one-on-one-with-prof-gabe>.
 
 # Software and tools
 
@@ -141,9 +134,9 @@ I will be assigning course grades based on three categories: homework assignment
 
 **Frequency and deadlines:** Homeworks will be assigned on a weekly basis throughout the semester, with the exception of weeks where final project checkpoints are due. Homeworks are assigned on Wednesdays and must be submitted on gradescope and Github by the end of the following Thursday (11:59pm Thursday).
 
-**Submission** Homework assignments are submitted by uploading a solution PDF to Gradescope and pushing to the corresponding Github repository. See the instructions under software and tools!
+**Submission** Homework assignments are submitted by uploading a solution PDF to Gradescope. You must convert your completed notebook to PDF using the [CS152 conversion tool](https://blank-app-ufu2uvdeosc.streamlit.app/). This page will extract and separate the answers for each question. Please make sure to check that all answers are included before submitting the PDF to Gradescope. Incorrectly formatted submissions are subject to a 10% penalty. See further instructions under software and tools!
 
-**Late policy:** A student will be automatically granted a 1-day extension on any homework assignment (to Friday 11:59pm) by simply messaging or emailing me to ask for one **before the due date**. These should be used to handle cases such as travel, interviews, short-term illness, stressful weeks, etc. There is no limit on the number of homework assignments on which you may use a one-day extension so long as you notify me.
+**Late policy:** A student will be automatically granted a 1-day extension on any homework assignment (to Friday 11:59pm) by simply messaging me on Slack to ask for one **before the due date**. These should be used to handle cases such as travel, interviews, short-term illness, stressful weeks, etc. There is no limit on the number of homework assignments on which you may use a one-day extension so long as you notify me.
 
 **Drops:** The lowest **2** homework scores will be dropped unconditionally. Your homework score will be computed as the average of the remaining scores.
 
@@ -163,7 +156,9 @@ This course is not generally a discussion-based class, however there will be cer
 
 -   Attending office hours outside class
 
-Earning a perfect participation grade will *not* require full marks for all of these criteria. A perfect participation grade will be earned by any student who: attends class regularly (\> 80% of the time) and participates respectfully in class at least every 1-2 weeks. Attending office hours is not strictly required, but if you are struggling to participate in class, I will assign bonus points to your participation grade for attending. If you have questions about your participation grade at any point, please contact me.
+-   Support provided to peers, e.g. by helping others debug or answering questions on Slack.
+
+Earning a perfect participation grade will *not* require full marks for all of these criteria, and it is expected that most students will earn full credit for participation. A perfect participation grade will be earned by any student who: attends class regularly (\> 80% of the time) and at least occasionally participates respectfully in class. Attending office hours is not strictly required, but if you miss class or are struggling to participate, I will assign bonus points to your participation grade for attending. If you have questions about your participation grade at any point, please contact me.
 
 ## Final Project (30% of course grade)
 
@@ -237,11 +232,11 @@ The goal of in-class discussions to understand each others perspectives and to c
 
 ## Collaboration policy
 
-You are encouraged to discuss homework assignments with other students, but the final work that you submit for each assignment must be still be your own. This means you **may**:
+You are encouraged to discuss and collaborate on homework assignments with other students, but you must write-up all final answers on your own. This means you **may**:
 
 -   Discuss published course materials and topics
 
--   Discuss approaches to problems with other students, including while working on the assignments (work in small groups)
+-   Discuss approaches to problems with other students, including while working on the assignments (work in small groups).
 
 -   Share helpful examples and resources with other students
 
@@ -261,7 +256,7 @@ You **may not:**
 
 This collaboration policy is covered by the Harvey Mudd honor code and violations will be referred to the honor code board.
 
-Each homework will have space for you to indicate who you discussed the assignment with. If you would like help finding other students to study with, please let me know and I can work to set you up with a study group.
+Each homework will have space for you to indicate who you discussed the assignment with. Please use the #team-matching channel on the course Slack to find study partners.
 
 ## AI Policy
 

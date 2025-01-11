@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.319">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>CS 152: Neural Networks - Hints for homework 2</title>
+<title>Hints for homework 2 – CS 152: Neural Networks</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,7 +22,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +33,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -79,7 +79,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -88,13 +94,42 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -102,47 +137,47 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">CS 152: Neural Networks</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html" rel="" target="">
- <span class="menu-text">Home</span></a>
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../calendar/calendar.html" rel="" target="">
- <span class="menu-text">Calendar</span></a>
+    <a class="nav-link" href="../calendar/calendar.html"> 
+<span class="menu-text">Calendar</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://drive.google.com/drive/folders/1JFhwmcFBTHiRbfhQ0VRDj9xIPxFpHuWj?usp=drive_link" rel="" target="">
- <span class="menu-text">Homeworks</span></a>
+    <a class="nav-link" href="https://drive.google.com/drive/folders/1JFhwmcFBTHiRbfhQ0VRDj9xIPxFpHuWj?usp=drive_link"> 
+<span class="menu-text">Homeworks</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../assignments/final-project/outline.html" rel="" target="">
- <span class="menu-text">Project</span></a>
+    <a class="nav-link" href="../assignments/final-project/outline.html"> 
+<span class="menu-text">Project</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://github.com/orgs/CS152/" rel="" target="">
- <span class="menu-text">Github</span></a>
+    <a class="nav-link" href="https://github.com/orgs/CS152/"> 
+<span class="menu-text">Github</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://www.gradescope.com/courses/710173" rel="" target="">
- <span class="menu-text">Gradescope</span></a>
+    <a class="nav-link" href="https://www.gradescope.com/courses/710173"> 
+<span class="menu-text">Gradescope</span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools ms-auto">
-</div>
           </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -179,9 +214,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
+
 </header>
 
-<div class="cell" data-execution_count="1">
+
+<div id="c1fcd2a1" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -197,7 +234,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
                 \vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots \\
                 X_{N1} &amp; X_{N2} &amp; \dots  &amp; X_{Nd} &amp; 1 \\  
                 \end{bmatrix}\]</span></p>
-<div class="cell" data-execution_count="2">
+<div id="3a8e8b20" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Example 4x4 matrix</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.zeros((<span class="dv">4</span>,<span class="dv">4</span>))</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>X</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -208,7 +245,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
        [0., 0., 0., 0.]])</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="3">
+<div id="0bea1d2a" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Using np.concatenate</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>ones <span class="op">=</span> np.ones((X.shape[<span class="dv">0</span>], <span class="dv">1</span>))</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>Xaug <span class="op">=</span> np.concatenate([X, ones], axis<span class="op">=</span><span class="dv">1</span>)</span>
@@ -220,7 +257,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
        [0., 0., 0., 0., 1.]])</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="4">
+<div id="4855093d" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Using np.pad</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>Xaug <span class="op">=</span> np.pad(X, [(<span class="dv">0</span>,<span class="dv">0</span>), (<span class="dv">0</span>,<span class="dv">1</span>)], constant_values<span class="op">=</span><span class="fl">1.</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>Xaug</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -232,7 +269,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>We could also use pad to add a 1 to a one-dimensional vector:</p>
-<div class="cell" data-execution_count="5">
+<div id="a5af64cb" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Example vector</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.zeros((<span class="dv">4</span>,))</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>xaug <span class="op">=</span> np.pad(x, [(<span class="dv">0</span>,<span class="dv">1</span>)], constant_values<span class="op">=</span><span class="fl">1.</span>)</span>
@@ -247,27 +284,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="question-2" class="level2">
 <h2 class="anchored" data-anchor-id="question-2">Question 2</h2>
 <p>In order to plot a function with MatPlotLib, we need to provide the <code>np.plot</code> function with a set of inputs and outputs. For example, let’s say we want to plot the function <span class="math display">\[f(x) = \sin(x)\]</span> for inputs between <span class="math inline">\(0\)</span> and <span class="math inline">\(10\)</span> (we say we want to plot <span class="math inline">\(\sin(x)\)</span> on the range <span class="math inline">\([0,10]\)</span>). We first need a set of inputs between <span class="math inline">\(0\)</span> and <span class="math inline">\(10\)</span>. The <code>np.linspace(a, b, n)</code> function will give us <code>n</code> equally-spaced values between <code>a</code> and <code>b</code>. We can use this to define the inputs to our function.</p>
-<div class="cell" data-execution_count="6">
+<div id="c6eafd7b" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then, we can compute the corresponding set of outputs:</p>
-<div class="cell" data-execution_count="7">
+<div id="64f4e802" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.sin(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Finally we can plot these values to <code>np.plot</code>, which will “connect-the-dots” to make a smooth plot.</p>
-<div class="cell" data-execution_count="8">
+<div id="a4686ac6" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>plt.plot(x, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="hw2-hint_files/figure-html/cell-9-output-1.png" width="590" height="411"></p>
+<div>
+<figure class="figure">
+<p><img src="hw2-hint_files/figure-html/cell-9-output-1.png" width="590" height="411" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>We can see more clearly what <code>np.plot</code> is doing if we lower the number of inputs that we use to plot our function and add markers at each point:</p>
-<div class="cell" data-execution_count="9">
+<div id="35b9a66e" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">10</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.sin(x)</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>plt.plot(x, y, marker<span class="op">=</span><span class="st">'o'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="hw2-hint_files/figure-html/cell-10-output-1.png" width="590" height="411"></p>
+<div>
+<figure class="figure">
+<p><img src="hw2-hint_files/figure-html/cell-10-output-1.png" width="590" height="411" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The prediction function for linear regression takes in vectors and outputs scalars: <span class="math display">\[f(\mathbf{x})=\mathbf{x}^T\mathbf{w}\]</span> We saw that we can rewrite the prediction function to make predictions for an entire set of inputs: <span class="math display">\[f(\mathbf{X})=\mathbf{X}\mathbf{w}\]</span> Where <span class="math display">\[
@@ -286,7 +331,7 @@ f(\mathbf{X}) =\mathbf{X}\mathbf{w}=
                 b
                 \end{bmatrix} \]</span></p>
 <p>In numpy, consider converting a range of inputs into a data matrix like the one above:</p>
-<div class="cell" data-execution_count="10">
+<div id="4320a977" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">6</span>) <span class="co"># Get range of inputs</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> x[:, <span class="va">None</span>]             <span class="co"># Convert vector into an Nx1 matrix</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a column of 1s</span></span>
@@ -322,30 +367,30 @@ X_{41} &amp; X_{42} \\
 X_{51} &amp; X_{52} \\
                 \end{bmatrix}\]</span></p>
 <p>We can use the index operator <code>[]</code> as follows:</p>
-<div class="cell" data-execution_count="11">
+<div id="2cde38e1" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.random.randint(<span class="dv">10</span>, size<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">2</span>))</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[[2 3]
- [7 2]
- [1 0]
- [1 9]
- [2 7]]</code></pre>
+<pre><code>[[9 7]
+ [2 0]
+ [7 7]
+ [4 1]
+ [4 9]]</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="12">
+<div id="c99868b2" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X[:<span class="dv">3</span>]) <span class="co"># Get first 3 rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[[2 3]
- [7 2]
- [1 0]]</code></pre>
+<pre><code>[[9 7]
+ [2 0]
+ [7 7]]</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="13">
+<div id="04dfd163" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X[<span class="dv">3</span>:]) <span class="co"># Get the rest of the rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[[1 9]
- [2 7]]</code></pre>
+<pre><code>[[4 1]
+ [4 9]]</code></pre>
 </div>
 </div>
 
@@ -388,18 +433,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -431,11 +465,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -445,8 +518,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -458,7 +540,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -502,6 +707,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -527,6 +733,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -587,6 +819,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+
 
 
 

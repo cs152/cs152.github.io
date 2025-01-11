@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.319">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>CS 152: Neural Networks – viz</title>
+<title>viz – CS 152: Neural Networks</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,7 +22,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +33,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -79,7 +79,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -88,8 +94,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 <script type="module" src="../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
@@ -102,47 +110,47 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">CS 152: Neural Networks</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html" rel="" target="">
- <span class="menu-text">Home</span></a>
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../calendar/calendar.html" rel="" target="">
- <span class="menu-text">Calendar</span></a>
+    <a class="nav-link" href="../calendar/calendar.html"> 
+<span class="menu-text">Calendar</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://drive.google.com/drive/folders/1JFhwmcFBTHiRbfhQ0VRDj9xIPxFpHuWj?usp=drive_link" rel="" target="">
- <span class="menu-text">Homeworks</span></a>
+    <a class="nav-link" href="https://drive.google.com/drive/folders/1JFhwmcFBTHiRbfhQ0VRDj9xIPxFpHuWj?usp=drive_link"> 
+<span class="menu-text">Homeworks</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../assignments/final-project/outline.html" rel="" target="">
- <span class="menu-text">Project</span></a>
+    <a class="nav-link" href="../assignments/final-project/outline.html"> 
+<span class="menu-text">Project</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://github.com/orgs/CS152/" rel="" target="">
- <span class="menu-text">Github</span></a>
+    <a class="nav-link" href="https://github.com/orgs/CS152/"> 
+<span class="menu-text">Github</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://www.gradescope.com/courses/710173" rel="" target="">
- <span class="menu-text">Gradescope</span></a>
+    <a class="nav-link" href="https://www.gradescope.com/courses/710173"> 
+<span class="menu-text">Gradescope</span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools ms-auto">
-</div>
           </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -150,11 +158,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
         
     </div>
 <!-- main -->
 <main class="content page-columns page-full" id="quarto-document-content">
+
 
 
 
@@ -820,7 +829,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div class="cell">
+<div class="cell hidden">
 <div class="sourceCode cell-code hidden" id="cb3" data-startfrom="636" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 635;"><span id="cb3-636"><a href="#cb3-636" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> <span class="fu">py</span><span class="vs">`</span></span>
 <span id="cb3-637"><a href="#cb3-637" aria-hidden="true" tabindex="-1"></a><span class="vs"># </span><span class="sc">${</span>plots<span class="sc">}</span></span>
 <span id="cb3-638"><a href="#cb3-638" aria-hidden="true" tabindex="-1"></a><span class="vs"># Setup the data and prediction functions</span></span>
@@ -1068,7 +1077,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </main> <!-- /main -->
 <script type="ojs-module-contents">
-{"contents":[{"methodName":"interpret","cellName":"ojs-cell-1","inline":false,"source":"MathJax = {\n  const MathJax = await require('mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML')\n    .catch(() => window.MathJax)\n  \n  // configure MathJax\n  MathJax.Hub.Config({\n    tex2jax: {inlineMath: [['$','$'], ['\\\\(','\\\\)']]},\n    displayMath: [ ['$$','$$'], [\"\\\\[\",\"\\\\]\"] ],\n    processEscapes: true\n  })  \n  return MathJax\n}\n\nPlotly = require(\"https://cdn.plot.ly/plotly-latest.min.js\");\ntfbase = require('@tensorflow/tfjs@4.11.0')\npyodide = {\n  const p =\n    await require(\"https://cdn.jsdelivr.net/pyodide/v0.22.1/full/pyodide.js\");\n  console.log(p);\n  return p.loadPyodide();\n}\n\nPyScope = function() {\n  let scope = pyodide.toPy({});\n  \n  let py = async (strings, ...expressions) => {\n    let globals = {};\n    const code = strings.reduce((result, string, index) => {\n      if (expressions[index]) {\n        const name = `x${index}`;\n        globals[name] = expressions[index];\n        return result + string + name;\n      }\n      return result + string;\n    }, '');\n    await pyodide.loadPackagesFromImports(code);\n    scope.update(pyodide.globals);\n    const result = await pyodide.runPythonAsync(\n      code,\n      {\n        globals: scope\n      }\n    );\n    if (result?.t2Js) return result.t2Js();\n    if (result?.toJs) return result.toJs();\n    return result;\n  };\n  \n  return py;\n}\n\npy = {\n  let testscope = PyScope();\n  let py = async (strings, ...expressions) => {\n    let globals = {};\n    const code = strings.reduce((result, string, index) => {\n      if (expressions[index]) {\n        const name = `x${index}`;\n        globals[name] = expressions[index];\n        return result + string + name;\n      }\n      return result + string;\n    }, '');\n    await pyodide.loadPackagesFromImports(code);\n    pyodide.globals.update(pyodide.toPy(globals))\n    const result = await pyodide.runPythonAsync(\n      code,\n      {globals: pyodide.globals}\n    );\n    if (result?.t2Js) return result.t2Js();\n    if (result?.toJs) return result.toJs();\n    return result;\n  };\n\n  const sigmoidGradConfig  = {\n    kernelName: tfbase.Sigmoid,\n    inputsToSave: ['x'],\n    gradFunc: (dy, saved) => {\n      const [x] = saved;\n      const y = tfbase.sigmoid(x);\n      return {x: () => tfbase.mul(dy, tfbase.mul(y, tfbase.sub(tfbase.scalar(1), y)))};\n    }\n  };\n  tfbase.registerGradient(sigmoidGradConfig);\n\n  const tanhGradConfig = {\n    kernelName: tfbase.Tanh,\n    inputsToSave: ['x'],\n    gradFunc: (dy, saved) => {\n      const [x] = saved;\n      const y = tfbase.tanh(x);\n      return {x: () => tfbase.mul(tfbase.sub(tfbase.scalar(1), tfbase.square(y)), dy)};\n    }\n  };\n  tfbase.registerGradient(tanhGradConfig);\n   const expGradConfig = {\n    kernelName: tfbase.Exp,\n    inputsToSave: ['x'],\n    gradFunc: (dy, saved) => {\n      const [x] = saved;\n      const y = tfbase.exp(x);\n      return {x: () => tfbase.mul(dy, y)};\n    }\n  }; \n  tfbase.registerGradient(expGradConfig);\n\n  function dispatchEvent(element){\n    element.dispatchEvent(new Event(\"input\", {bubbles: true}));\n  }\n  pyodide.globals.update(pyodide.toPy({Plotbase: Plot, tfbase: tfbase, Plotlybase: Plotly, dispatchEvent: dispatchEvent, d3base: d3}))\n  \nawait py`\nfrom pyodide.ffi import create_once_callable\nfrom types import SimpleNamespace\nfrom pyodide.ffi import to_js\nfrom js import Object, document\nimport pandas\nimport numpy as np\n\ntfbase = SimpleNamespace(**tfbase)\n\ndef convert_tensor(a, *args):\n  if isinstance(a, Parameter):\n    a = a.value.value\n  if isinstance(a, Tensor):\n    a = a.value\n  if isinstance(a, np.ndarray):\n    a = a.tolist()\n  return to_js(a)\n\ndef convert(a):\n  if isinstance(a, Parameter):\n    a = a.value.value\n  if isinstance(a, Tensor):\n    a = a.value\n  if isinstance(a, np.ndarray):\n    a = a.tolist()\n  return to_js(a, dict_converter=Object.fromEntries, default_converter=convert_tensor)\n\ndef convert_start(shape, start):\n  start = start or 0\n  if start < 0:\n    start = shape + start\n  start = min(start, shape - 1)\n  return start\n\ndef convert_end(shape, start, end): \n  start = convert_start(shape, start)\n  if end is None:\n    end = shape\n  else:\n    end = convert_start(shape, end)\n  return end - start\n\nclass Tensor:\n  keepall = False\n\n  class Keep:\n    def __enter__(self):\n        self.value = Tensor.keepall\n        Tensor.keepall = True\n    \n    def __exit__(self, *args):\n        Tensor.keepall = self.value\n\n  def __init__(self, *args, value=None, keep=None, **kwargs):\n    if keep is None:\n      self.keep = Tensor.keepall\n    else:\n      self.keep = keep\n\n    if not (value is None):\n      self.value = value\n    elif len(args) and isinstance(args[0], Tensor):\n      self.value = tfbase.add(args[0].value, 0)\n    elif len(args) and args[0] is None:\n      self.value = tfbase.tensor(0.)\n    else:\n      args = [convert(a) for a in args]\n      kwargs = {k: convert(a) for (k, a) in kwargs.items()}\n      self.value = tfbase.tensor(*args, **kwargs)\n\n  def __getattr__(self, name):\n    if name == 'T':\n      return self.transpose()\n    attr = getattr(self.value, name)\n    if callable(attr):\n      def run(*args, **kwargs):\n        args = [convert(a) for a in args]\n        kwargs = {k: convert(a) for (k, a) in kwargs.items()}\n        output = attr(*args, **kwargs)\n        return Tensor(value=output)\n      # Prevent premature garbage collection\n      run._ref = self\n      return run\n    return attr\n\n  def __add__(a, b):\n    return Tensor(value=tfbase.add(convert(a), convert(b)))\n  def __radd__(a, b):\n    return Tensor(value=tfbase.add(convert(b), convert(a)))\n  def __sub__(a, b):\n    return Tensor(value=tfbase.sub(convert(a), convert(b)))\n  def __rsub__(a, b):\n    return Tensor(value=tfbase.sub(convert(b), convert(a)))\n  def __mul__(a, b):\n    return Tensor(value=tfbase.mul(convert(a), convert(b)))\n  def __rmul__(a, b):\n    return Tensor(value=tfbase.mul(convert(b), convert(a)))\n  def __truediv__(a, b):\n    return Tensor(value=tfbase.div(convert(a), convert(b)))\n  def __rtruediv__(a, b):\n    return Tensor(value=tfbase.div(convert(b), convert(a)))\n  def __floordiv__(a, b):\n    return Tensor(value=tfbase.floorDiv(convert(a), convert(b)))\n  def __rfloordiv__(a, b):\n    return Tensor(value=tfbase.floorDiv(convert(b), convert(a)))\n  def __pow__(a, b):\n    return Tensor(value=tfbase.pow(convert(a), convert(b)))\n  def __rpow__(a, b):\n    return Tensor(value=tfbase.pow(convert(b), convert(a)))\n  def __neg__(a):\n    return Tensor(value=tfbase.neg(convert(a)))\n  def __eq__(a, b):\n    return Tensor(value=tfbase.equal(convert(a), convert(b)))\n  def __neq__(a, b):\n    return Tensor(value=tfbase.notEqual(convert(a), convert(b)))\n  def __lt__(a, b):\n    return Tensor(value=tfbase.less(convert(a), convert(b)))\n  def __gt__(a, b):\n    return Tensor(value=tfbase.greater(convert(a), convert(b)))\n  def __leq__(a, b):\n    return Tensor(value=tfbase.lessEqual(convert(a), convert(b)))\n  def __geq__(a, b):\n    return Tensor(value=tfbase.greaterEqual(convert(a), convert(b)))\n\n  def __del__(self):\n    if hasattr(self.value, 'dispose') and not self.keep:\n      self.value.dispose()\n\n  def __iter__(self):\n    for x in self.value.arraySync():\n        yield Tensor(x)\n\n  def __getitem__(self, args):\n    tosqueeze = []\n    starts, ends, steps = [], [], []\n    value = self\n    \n    if not (type(args) is tuple):\n      args = (args,)\n    \n    for ind in range(len(args)):\n      if args[ind] is Ellipsis:\n        start = args[:ind]\n        rest = args[(ind + 1):]\n        args = start + tuple([slice(None)] * (len(self.value.shape) - (len(start) + len(rest)))) + rest\n        break\n    \n    for i, (shape, dim) in enumerate(zip(self.value.shape, args)):\n      if isinstance(dim, slice):\n        starts.append(dim.start or 0)\n        ends.append(dim.stop or shape)\n        steps.append(dim.step or 1)\n      elif Tensor(dim).shape:\n        t = Tensor(dim)\n        if t.value.dtype == 'bool':\n          inds = [ind for (ind, e) in enumerate(t.value.arraySync()) if e]\n          inds = tf.cast(tf.reshape(Tensor(inds), [-1]), 'int32')\n          value = tf.gather(value, inds, i)\n        else:\n          inds = tf.cast(tf.reshape(t, [-1]), 'int32')\n          value = tf.gather(value, inds, i)\n      else:\n        starts.append(dim)\n        ends.append(dim + 1)\n        steps.append(1)\n        tosqueeze.append(i)\n    value = tf.stridedSlice(value, convert(starts), convert(ends), convert(steps))\n    if len(tosqueeze) > 0:\n      value = tf.squeeze(value, tosqueeze)\n    return value\n\n  def t2Js(self):\n    return to_js(self.value.arraySync())\n\nclass wrapper:\n  def __init__(self, f):\n    self.f = f\n\n  def __call__(self, x, *args, **kwargs):\n    with Tensor.Keep():\n      return convert(self.f(Tensor(value=x), *args, **kwargs))\n\nclass grad:\n  def __init__(self, f):\n    self.f = f\n    self.wrapper = wrapper(f)\n\n  def __call__(self, x, *args, **kwargs):\n    output = tfbase.grad(create_once_callable(self.wrapper))(x.value, *args, **kwargs)\n    return Tensor(value=output)\n\nclass wrappers:\n  def __init__(self, f):\n    self.f = f\n\n  def __call__(self, *args):\n    with Tensor.Keep():\n      wrapped_args = [Tensor(value=x) for x in args]\n      return convert(self.f(*wrapped_args))\n\nclass grads:\n  def __init__(self, f):\n    self.f = f\n    self.wrapper = wrappers(f)\n\n  def __call__(self, *args):\n    output = tfbase.grads(create_once_callable(self.wrapper))(to_js([arg.value for arg in args]))\n    return [Tensor(value=x) for x in output]\n\ntf = Tensor(value=tfbase)\nPlotbase = SimpleNamespace(**Plotbase)\nPlotlybase = SimpleNamespace(**Plotlybase)\nd3base = SimpleNamespace(**d3base)\n\ndef meshgrid(*args):\n  return tuple([Tensor(value=a) for a in tfbase.meshgrid(*[convert(arg) for arg in args])])\ntf.meshgrid = meshgrid\n\ndef default_convert(obj, default_f, other):\n  if isinstance(obj, Tensor):\n    obj = obj.t2Js()\n  if isinstance(obj, pandas.DataFrame):\n    obj = obj.to_dict('records') \n  return default_f(obj)\n\ndef plotconvert(a):\n  return to_js(a, dict_converter=Object.fromEntries, default_converter=default_convert)\n\nclass PlotWrapper:\n  def __init__(self, base=None):\n    self.base = base\n    \n  def __getattr__(self, name):\n    attr = getattr(self.base, name)\n    if callable(attr):\n      def run(*args, **kwargs):\n        args = [plotconvert(a) for a in args]\n        kwargs = {k: plotconvert(a) for (k, a) in kwargs.items()}\n        return attr(*args, **kwargs)\n      return run\n    return attr\n\nPlot = PlotWrapper(Plotbase)\nPlotly = PlotWrapper(Plotlybase)\nd3 = PlotWrapper(d3base)\n\ndef PlotlyFigure(width=800, height=None, hide_toolbar=True, overlay=True):\n  if height is None:\n    height = 0.75 * width\n\n  width, height = int(width), int(height)\n  container = document.createElement('div')\n  container.style.width = str(width) + 'px'\n  container.style.height = str(height) + 'px'\n  \n  lineplot = document.createElement('div')\n  lineplot.classList.add(\"plotlydiv\")\n\n  if hide_toolbar:\n    container.classList.add(\"hidetoolbar\")\n\n  container.append(lineplot)\n  if overlay:\n    overlay = document.createElement('div')\n    overlay.classList.add(\"plotlyoverlay\")\n    \n    container.append(overlay)\n    \n    container.style.position = 'relative'\n    overlay.style.top = '0'\n    overlay.style.bottom = '0'\n    overlay.style.width = '100%'\n    overlay.style.position = 'absolute'\n  return container\n  \ndef PlotlyInput(width=800, height=None, hide_toolbar=True, sync=None):\n  container = PlotlyFigure(width, height, hide_toolbar)\n  lineplot, overlay = container.childNodes[0], container.childNodes[1]\n  if sync is None:\n    sync = container\n\n  class mover:\n    def __init__(self):\n      self.mousedown = False\n    \n    def __call__(self, event):\n      if event.type == 'mousedown':\n        self.mousedown = True\n      if event.type == 'mouseleave':\n        self.mousedown = False\n      if event.type == 'mouseup':\n        self.mousedown = False\n  \n      if self.mousedown:\n        x = float(lineplot._fullLayout.xaxis.p2c(event.layerX - lineplot._fullLayout.margin.l))\n        y = float(lineplot._fullLayout.yaxis.p2c(event.layerY - lineplot._fullLayout.margin.t))\n        sync.value = to_js([x, y])\n        dispatchEvent(sync)\n        \n  \n  e = mover()\n  overlay.addEventListener('mousemove', to_js(e))\n  overlay.addEventListener('mousedown', to_js(e))\n  overlay.addEventListener('mouseup', to_js(e))\n  overlay.addEventListener('mouseleave', to_js(e))\n  container.value = to_js([0., 0.])\n  return container\n\ndef PlotlyReactive(container, traces=[], layout={}, options={}):\n  full_layout = dict(width=int(container.style.width.replace('px', '')), height=int(container.style.height.replace('px', '')))\n  full_layout.update(layout)\n  full_options = {'displayModeBar' : not container.classList.contains('hidetoolbar')}\n  full_options.update(options)\n  plot = container.childNodes[0]\n  Plotly.react(plot, traces, full_layout, full_options)\n\ndef colorMap(t, cmap='inferno', cmin=None, cmax=None, scale='linear', res=100):\n  import matplotlib.cm as cm\n  if cmin is None:\n    cmin = tf.min(t)\n  if cmax is None:\n    cmax = tf.max(t)\n  \n  t = (t - cmin) / (cmax - cmin)\n  if scale == 'log':\n    e = tf.exp(1)\n    t = t * (e - 1) + 1\n    t = tf.log(t)\n  cmap = Tensor(cm.get_cmap(cmap, res + 1)(range(res + 1)))\n  t = t * res\n  shape = t.shape\n  tflat = tf.reshape(t, [-1])\n  tfloor = tf.gather(cmap, tf.floor(tflat).cast('int32'))\n  tceil = tf.gather(cmap, tf.ceil(tflat).cast('int32'))\n  tfrac = tf.reshape(tflat - tf.floor(tflat), [-1, 1])\n  tflat = tfrac * tceil + (1. - tfrac) * tfloor\n  t = tf.reshape(tflat, list(shape) + [4])\n  return t\n\ndef plotTensor(t, canvas, size=None, cmap=None, interpolation='nearest', **kwargs):\n  if not (cmap is None):\n    t = colorMap(t, cmap, **kwargs)\n  if size is None:\n    size = (canvas.height, canvas.width)\n  if interpolation == 'bilinear':\n    t = tfbase.image['resizeBilinear'](t.value, list(size))\n  else:\n    t = tfbase.image['resizeNearestNeighbor'](t.value, list(size))\n  tfbase.browser['toPixels'](t, canvas)\n\nfrom itertools import chain\nimport math\n\nclass Module:\n    def __init__(self):\n        self._submodules = dict()\n        self.eval = False\n        self._store = False\n\n    def parameters(self):\n        return chain.from_iterable(map(lambda x: x.parameters(), self._submodules.values()))\n    \n    def __setattr__(self, name, value):\n        if isinstance(value, Module):\n            self._submodules[name] = value\n        super().__setattr__(name, value)\n\n    def __call__(self, *args, **kwargs):\n        value = self.forward(*args, **kwargs)\n        self._store = False\n        return value\n    \n    def forward(self):\n        raise NotImplementedError()\n    \n    def train(self):\n        self.eval = False\n        for sm in self._submodules.values():\n            sm.train()\n    \n    def eval(self):\n        self.eval = True\n        for sm in self._submodules.values():\n            sm.eval()\n\n    def store(self):\n        self.store = True\n        for sm in self._submodules.values():\n            sm.eval()\n\nclass Parameter(Module):\n    def __init__(self, value):\n        super().__init__()\n        self.value = value\n        self.temp = None\n        self.grad = None\n\n    def parameters(self):\n        return [self]\n    \nclass Sequential(Module):\n    def __init__(self, *args):\n        super().__init__()\n        self.sequence = []\n        for arg in args:\n            if isinstance(arg, Module):\n                self.sequence.append(arg)\n            else:\n                self.sequence.extend(arg)\n        \n        self._submodules = {k: v for (k,v) in enumerate(self.sequence)}\n\n    def __getitem__(self, index):\n        return self.sequence[index]\n\n    def forward(self, X):\n        for m in self.sequence:\n            X = m(X)\n        return X\n    \nModuleList = Sequential\n\nclass Sigmoid(Module):\n    def forward(self, X):\n        return tf.sigmoid(X)\n    \nclass ReLU(Module):\n    def forward(self, X):\n        return tf.relu(X)\n    \nclass Tanh(Module):\n    def forward(self, X):\n        return tf.tanh(X)\n    \nclass Linear(Module):\n    def __init__(self, in_features, out_features):\n        super().__init__()\n        # Kaiming He initialization\n        self.W = Parameter(tf.randomNormal([in_features, out_features]) * math.sqrt((2 / out_features) / 3))\n        self.b = Parameter(tf.randomNormal([out_features]) * math.sqrt((2 / out_features) / 3))\n        self.input = None\n\n    def forward(self, x):\n        # Returns a new Matrix\n        self.input = None\n        return tf.dot(x, self.W) + self.b\n\n\n\n        \nclass Optimizer:\n    def __init__(self, model, loss=None, store=False):\n        self.parameters = list(model.parameters())\n        self.model = model\n        self.loss = loss\n        self.store = store\n\n    def _grads(self, loss, *args, **kwargs):\n        def loss_internal(*params):\n            for val, param in zip(params, self.parameters):\n                param.temp = param.value\n                param.value = val\n            try:\n                l = loss(self.model, *args, **kwargs)\n            finally:\n                for param in self.parameters:\n                    param.value = param.temp\n                    param.temp = None\n            return l\n        \n        return grads(loss_internal)(*map(lambda p: p.value, self.parameters))\n    \n    def _step(self, grads):\n        raise NotImplementedError()\n    \n    def step(self, *args, **kwargs):\n        grads = self._grads(self.loss, *args, **kwargs)\n        if self.store:\n          for grad, param in zip(grads, self.parameters):\n            param.grad = grad\n        return self._step(grads)\n    \n    def stepWithLoss(self, loss, *args, **kwargs):\n        grads = self._grads(loss, *args, **kwargs)\n        return self._step(grads)\n    \nclass SGD(Optimizer):\n    def __init__(self, model, loss, lr=0.001, store=False):\n        super().__init__(model, loss, store)\n        self.lr = lr\n\n    def _step(self, grads):\n        for grad, param in zip(grads, self.parameters):\n            param.value = param.value - self.lr * grad\n`\n  \n  return py;\n}\n"},{"methodName":"interpret","cellName":"ojs-cell-2","inline":false,"source":"mpg = FileAttachment(\"auto-mpg.csv\").csv()\n"},{"methodName":"interpret","cellName":"ojs-cell-3","inline":false,"source":"data = py`\n# ${plots}\n# Setup the data and prediction functions\nimport pandas as pd\ndf = pd.DataFrame(${mpg})[['weight', 'mpg']]\ndf = df.astype(float).dropna().values\n\nx, y = df[:, :1], df[:, 1:]\nx = Tensor((x - x.mean()) / x.std())\ny = Tensor((y - y.mean()) / y.std())\n\ndef get_batch(batchsize, x, y):\n  return x, y\n\nscale = Tensor([[1., 1.]])\n\ndef predict(w, x):\n  w = w.reshape((-1, 2)) * scale\n  x = x.reshape((-1, 1))\n  x = tf.concat([x, tf.onesLike(x)], 1)\n  return tf.dot(x, w.T)\n\nwrange = tf.linspace(-3, 3, 25)\nbrange = tf.linspace(-3, 3, 25)\nww, bb = tf.meshgrid(wrange, brange)\nparamgrid = tf.stack([ww.flatten(), bb.flatten()]).T\neyetheta = 0\n\n(x, y)\n`\n\nsurfaces = py`\n# ${batch} ${plots}\n# Plot the loss surface\n\n\nl1weight = 0.\nl2weight = 0.\n\n\ndef loss(w, x, y):\n  w = w.reshape((-1, 2))\n  return (tf.mean((predict(w, x) - y) ** 2, 0)) + l1weight * tf.abs(w).sum(1) + l2weight * (w ** 2).sum(1) \n\nlossgrid = loss(paramgrid, x, y).reshape(ww.shape)\nlosscontour = plotconvert(dict(x=wrange, y=brange, z=lossgrid, type='contour', ncontours=25, showscale=False, ))\nlosssurface = plotconvert(dict(x=wrange, y=brange, z=lossgrid, type='surface', showlegend=False, showscale=False, opacity=0.8,  contours=dict(x=dict(show=True), y=dict(show=True))))\n`\n\npy`\n# ${surfaces}\n\ncweights = ${weights}\nstartpoint = dict(x=[cweights[0]], y=[cweights[1]], mode='markers', showlegend=False, marker=dict(color='firebrick', size=10, line= {'color': 'black', 'width': 3}))\n\n\nfullweightlist = [Tensor(cweights)]\nbatchweightlist = [Tensor(cweights)]\nsteps = int(${steps})\nlr = float(${learningrate}) if steps > 0 else 0.\n\nmomentum = 0.\nnxbatch, nybatch = batches[0]\nbatchgrad = grad(lambda t: loss(t, nxbatch, nybatch))(batchweightlist[-1])\nbeta = 0.\nvelocity = batchgrad\nmagnitude = batchgrad ** 2\nif beta > 0:\n  batchgrad = batchgrad / tf.sqrt(magnitude + 1e-8)\n\nfor i, (nxbatch, nybatch) in zip(range(max(1, steps)), batches):\n  fullgrad = lr * grad(lambda t: loss(t, x, y))(fullweightlist[-1])\n\n  bgrad = grad(lambda t: loss(t, nxbatch, nybatch))(batchweightlist[-1])\n  velocity = momentum * velocity + (1 - momentum) * bgrad\n  magnitude = beta * magnitude + (1. - beta) * (bgrad ** 2)\n  batchgrad = velocity\n  if beta > 0:\n    batchgrad = velocity / tf.sqrt(magnitude + 1e-8)\n  \n  fullweightlist.append((fullweightlist[-1] - fullgrad).flatten())\n  batchweightlist.append((batchweightlist[-1] - lr * batchgrad).flatten())\n  \n\nfullweights = tf.stack(fullweightlist)\nbatchweights = tf.stack(batchweightlist)\n\ngradplot = dict(x=fullweights[:, 0], y=fullweights[:, 1], showlegend=False, line=dict(color='black'))\nbatchgradplot = dict(x=batchweights[:, 0], y=batchweights[:, 1], showlegend=False, line=dict(color='orange'))\n\n\nzloss = loss(fullweights, x, y)\nbatchzloss = loss(batchweights, x, y)\nthreedgradplot = dict(x=fullweights[:, 0], y=fullweights[:, 1], z=zloss, showlegend=False, marker=dict(size=4), line=dict(color='black', width=4), type='scatter3d')\nthreedbatchgradplot = dict(x=batchweights[:, 0], y=batchweights[:, 1], z=batchzloss, showlegend=False, marker=dict(size=4), line=dict(color='orange', width=4), type='scatter3d')\n\nfinalloss = zloss[0].t2Js()\n\nPlotlyReactive(lossplot, [losscontour, startpoint, gradplot, batchgradplot], {'title': 'Loss = %.3f' % finalloss, 'showlegend': False, 'xaxis': {'range': [-3, 3], 'title': 'Slope (w)'}, 'yaxis': {'range': [-3, 3], 'title': {\n      'text': 'Bias (b)'\n    }}})\n`\n\nloss = py`\n# ${batch}\n# Plot the data scatterplot and prediction function\n\ninweights = ${weights}\ncweights = Tensor(inweights)\nerrors = ybatch.reshape((-1,)) - predict(cweights, xbatch.reshape((-1,)),).flatten()\nlosses = (errors) ** 2\nbatchdata = dict(x=xbatch.reshape((-1,)), y=ybatch.reshape((-1,)), mode='markers', marker=dict(color=tf.sqrt(losses), colorscale='RdBu', cmin=0, cmax=2))\n\nxrange = tf.linspace(-2, 3, 50)\npfunction = dict(x=xrange.flatten(), y=predict(cweights, xrange).flatten(), line=dict(color='black'))\n\n\nPlotlyReactive(scatterfig, [ batchdata, pfunction], {'title': 'Prediction function: y = %.2f x + %.2f' % (inweights[0], inweights[1]), 'showlegend': False, 'xaxis': {'range': [-2, 3], 'title': {'text': 'x (weight)'}}, 'yaxis': {'range': [-2, 3], 'title': {'text': 'y (MPG)'} }})\n\nhistdata = dict(x=errors, type='histogram', xbins= dict(start=-3, end=3, size=0.15))\n\nnx = tf.linspace(-3, 3, 100)\nny = tf.exp(-nx ** 2)\nnormdata = dict(x=nx, y=ny, line=dict(color='red'), yaxis='y2',)\n\nPlotlyReactive(histfig, [ histdata, normdata], {'showlegend': False, 'title': 'Distribution of residuals', 'yaxis': {'title': {'text': 'Frequency'}},  'yaxis2': {'overlaying': 'y', 'range': [0, 1], 'visible': False}, 'xaxis': {'range': [-3, 3], 'title': {'text': 'Error (residual)'} }})\nlosses.mean()\n`\n\nbatch = py`\n# ${data}\nbatchsize = 0\nbatches = [get_batch(batchsize, x, y) for i in range(max(1, int(${steps})))]\nxbatch, ybatch = batches[0]\n`\n"},{"methodName":"interpret","cellName":"ojs-cell-4","inline":false,"source":"scatter = py`\n# Scatterplot figure\nscatterfig = PlotlyFigure(width=500, height=500)\nscatterfig\n`\n"},{"methodName":"interpret","cellName":"ojs-cell-5","inline":false,"source":"//viewof learningrate = Inputs.range([0, 3], {value: 1, step: 0.01, label: \" Learning rate\"})\nlearningrate = 0\n"},{"methodName":"interpret","cellName":"ojs-cell-6","inline":false,"source":"\nplots = py`\nlossplot = PlotlyInput(width=500, height=500)\n`\n\nviewof weights = py`\n# ${plots}\nlossplot\n`\n"},{"methodName":"interpret","cellName":"ojs-cell-7","inline":false,"source":"//viewof steps = Inputs.range([0, 10], {value: 0, step: 1, label: \"  Steps\"})\nsteps = 0\n"},{"methodName":"interpret","cellName":"ojs-cell-8","inline":false,"source":"hist = py`\n# Scatterplot figure\nhistfig = PlotlyFigure(width=500, height=500)\nhistfig\n`\n"},{"methodName":"interpretQuiet","source":"shinyInput('weights')"}]}
+eyJjb250ZW50cyI6W3sibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6Ik1hdGhKYXggPSB7XG4gIGNvbnN0IE1hdGhKYXggPSBhd2FpdCByZXF1aXJlKCdtYXRoamF4QDIuNy41L01hdGhKYXguanM/Y29uZmlnPVRlWC1NTUwtQU1fQ0hUTUwnKVxuICAgIC5jYXRjaCgoKSA9PiB3aW5kb3cuTWF0aEpheClcbiAgXG4gIC8vIGNvbmZpZ3VyZSBNYXRoSmF4XG4gIE1hdGhKYXguSHViLkNvbmZpZyh7XG4gICAgdGV4MmpheDoge2lubGluZU1hdGg6IFtbJyQnLCckJ10sIFsnXFxcXCgnLCdcXFxcKSddXX0sXG4gICAgZGlzcGxheU1hdGg6IFsgWyckJCcsJyQkJ10sIFtcIlxcXFxbXCIsXCJcXFxcXVwiXSBdLFxuICAgIHByb2Nlc3NFc2NhcGVzOiB0cnVlXG4gIH0pICBcbiAgcmV0dXJuIE1hdGhKYXhcbn1cblxuUGxvdGx5ID0gcmVxdWlyZShcImh0dHBzOi8vY2RuLnBsb3QubHkvcGxvdGx5LWxhdGVzdC5taW4uanNcIik7XG50ZmJhc2UgPSByZXF1aXJlKCdAdGVuc29yZmxvdy90ZmpzQDQuMTEuMCcpXG5weW9kaWRlID0ge1xuICBjb25zdCBwID1cbiAgICBhd2FpdCByZXF1aXJlKFwiaHR0cHM6Ly9jZG4uanNkZWxpdnIubmV0L3B5b2RpZGUvdjAuMjIuMS9mdWxsL3B5b2RpZGUuanNcIik7XG4gIGNvbnNvbGUubG9nKHApO1xuICByZXR1cm4gcC5sb2FkUHlvZGlkZSgpO1xufVxuXG5QeVNjb3BlID0gZnVuY3Rpb24oKSB7XG4gIGxldCBzY29wZSA9IHB5b2RpZGUudG9QeSh7fSk7XG4gIFxuICBsZXQgcHkgPSBhc3luYyAoc3RyaW5ncywgLi4uZXhwcmVzc2lvbnMpID0+IHtcbiAgICBsZXQgZ2xvYmFscyA9IHt9O1xuICAgIGNvbnN0IGNvZGUgPSBzdHJpbmdzLnJlZHVjZSgocmVzdWx0LCBzdHJpbmcsIGluZGV4KSA9PiB7XG4gICAgICBpZiAoZXhwcmVzc2lvbnNbaW5kZXhdKSB7XG4gICAgICAgIGNvbnN0IG5hbWUgPSBgeCR7aW5kZXh9YDtcbiAgICAgICAgZ2xvYmFsc1tuYW1lXSA9IGV4cHJlc3Npb25zW2luZGV4XTtcbiAgICAgICAgcmV0dXJuIHJlc3VsdCArIHN0cmluZyArIG5hbWU7XG4gICAgICB9XG4gICAgICByZXR1cm4gcmVzdWx0ICsgc3RyaW5nO1xuICAgIH0sICcnKTtcbiAgICBhd2FpdCBweW9kaWRlLmxvYWRQYWNrYWdlc0Zyb21JbXBvcnRzKGNvZGUpO1xuICAgIHNjb3BlLnVwZGF0ZShweW9kaWRlLmdsb2JhbHMpO1xuICAgIGNvbnN0IHJlc3VsdCA9IGF3YWl0IHB5b2RpZGUucnVuUHl0aG9uQXN5bmMoXG4gICAgICBjb2RlLFxuICAgICAge1xuICAgICAgICBnbG9iYWxzOiBzY29wZVxuICAgICAgfVxuICAgICk7XG4gICAgaWYgKHJlc3VsdD8udDJKcykgcmV0dXJuIHJlc3VsdC50MkpzKCk7XG4gICAgaWYgKHJlc3VsdD8udG9KcykgcmV0dXJuIHJlc3VsdC50b0pzKCk7XG4gICAgcmV0dXJuIHJlc3VsdDtcbiAgfTtcbiAgXG4gIHJldHVybiBweTtcbn1cblxucHkgPSB7XG4gIGxldCB0ZXN0c2NvcGUgPSBQeVNjb3BlKCk7XG4gIGxldCBweSA9IGFzeW5jIChzdHJpbmdzLCAuLi5leHByZXNzaW9ucykgPT4ge1xuICAgIGxldCBnbG9iYWxzID0ge307XG4gICAgY29uc3QgY29kZSA9IHN0cmluZ3MucmVkdWNlKChyZXN1bHQsIHN0cmluZywgaW5kZXgpID0+IHtcbiAgICAgIGlmIChleHByZXNzaW9uc1tpbmRleF0pIHtcbiAgICAgICAgY29uc3QgbmFtZSA9IGB4JHtpbmRleH1gO1xuICAgICAgICBnbG9iYWxzW25hbWVdID0gZXhwcmVzc2lvbnNbaW5kZXhdO1xuICAgICAgICByZXR1cm4gcmVzdWx0ICsgc3RyaW5nICsgbmFtZTtcbiAgICAgIH1cbiAgICAgIHJldHVybiByZXN1bHQgKyBzdHJpbmc7XG4gICAgfSwgJycpO1xuICAgIGF3YWl0IHB5b2RpZGUubG9hZFBhY2thZ2VzRnJvbUltcG9ydHMoY29kZSk7XG4gICAgcHlvZGlkZS5nbG9iYWxzLnVwZGF0ZShweW9kaWRlLnRvUHkoZ2xvYmFscykpXG4gICAgY29uc3QgcmVzdWx0ID0gYXdhaXQgcHlvZGlkZS5ydW5QeXRob25Bc3luYyhcbiAgICAgIGNvZGUsXG4gICAgICB7Z2xvYmFsczogcHlvZGlkZS5nbG9iYWxzfVxuICAgICk7XG4gICAgaWYgKHJlc3VsdD8udDJKcykgcmV0dXJuIHJlc3VsdC50MkpzKCk7XG4gICAgaWYgKHJlc3VsdD8udG9KcykgcmV0dXJuIHJlc3VsdC50b0pzKCk7XG4gICAgcmV0dXJuIHJlc3VsdDtcbiAgfTtcblxuICBjb25zdCBzaWdtb2lkR3JhZENvbmZpZyAgPSB7XG4gICAga2VybmVsTmFtZTogdGZiYXNlLlNpZ21vaWQsXG4gICAgaW5wdXRzVG9TYXZlOiBbJ3gnXSxcbiAgICBncmFkRnVuYzogKGR5LCBzYXZlZCkgPT4ge1xuICAgICAgY29uc3QgW3hdID0gc2F2ZWQ7XG4gICAgICBjb25zdCB5ID0gdGZiYXNlLnNpZ21vaWQoeCk7XG4gICAgICByZXR1cm4ge3g6ICgpID0+IHRmYmFzZS5tdWwoZHksIHRmYmFzZS5tdWwoeSwgdGZiYXNlLnN1Yih0ZmJhc2Uuc2NhbGFyKDEpLCB5KSkpfTtcbiAgICB9XG4gIH07XG4gIHRmYmFzZS5yZWdpc3RlckdyYWRpZW50KHNpZ21vaWRHcmFkQ29uZmlnKTtcblxuICBjb25zdCB0YW5oR3JhZENvbmZpZyA9IHtcbiAgICBrZXJuZWxOYW1lOiB0ZmJhc2UuVGFuaCxcbiAgICBpbnB1dHNUb1NhdmU6IFsneCddLFxuICAgIGdyYWRGdW5jOiAoZHksIHNhdmVkKSA9PiB7XG4gICAgICBjb25zdCBbeF0gPSBzYXZlZDtcbiAgICAgIGNvbnN0IHkgPSB0ZmJhc2UudGFuaCh4KTtcbiAgICAgIHJldHVybiB7eDogKCkgPT4gdGZiYXNlLm11bCh0ZmJhc2Uuc3ViKHRmYmFzZS5zY2FsYXIoMSksIHRmYmFzZS5zcXVhcmUoeSkpLCBkeSl9O1xuICAgIH1cbiAgfTtcbiAgdGZiYXNlLnJlZ2lzdGVyR3JhZGllbnQodGFuaEdyYWRDb25maWcpO1xuICAgY29uc3QgZXhwR3JhZENvbmZpZyA9IHtcbiAgICBrZXJuZWxOYW1lOiB0ZmJhc2UuRXhwLFxuICAgIGlucHV0c1RvU2F2ZTogWyd4J10sXG4gICAgZ3JhZEZ1bmM6IChkeSwgc2F2ZWQpID0+IHtcbiAgICAgIGNvbnN0IFt4XSA9IHNhdmVkO1xuICAgICAgY29uc3QgeSA9IHRmYmFzZS5leHAoeCk7XG4gICAgICByZXR1cm4ge3g6ICgpID0+IHRmYmFzZS5tdWwoZHksIHkpfTtcbiAgICB9XG4gIH07IFxuICB0ZmJhc2UucmVnaXN0ZXJHcmFkaWVudChleHBHcmFkQ29uZmlnKTtcblxuICBmdW5jdGlvbiBkaXNwYXRjaEV2ZW50KGVsZW1lbnQpe1xuICAgIGVsZW1lbnQuZGlzcGF0Y2hFdmVudChuZXcgRXZlbnQoXCJpbnB1dFwiLCB7YnViYmxlczogdHJ1ZX0pKTtcbiAgfVxuICBweW9kaWRlLmdsb2JhbHMudXBkYXRlKHB5b2RpZGUudG9QeSh7UGxvdGJhc2U6IFBsb3QsIHRmYmFzZTogdGZiYXNlLCBQbG90bHliYXNlOiBQbG90bHksIGRpc3BhdGNoRXZlbnQ6IGRpc3BhdGNoRXZlbnQsIGQzYmFzZTogZDN9KSlcbiAgXG5hd2FpdCBweWBcbmZyb20gcHlvZGlkZS5mZmkgaW1wb3J0IGNyZWF0ZV9vbmNlX2NhbGxhYmxlXG5mcm9tIHR5cGVzIGltcG9ydCBTaW1wbGVOYW1lc3BhY2VcbmZyb20gcHlvZGlkZS5mZmkgaW1wb3J0IHRvX2pzXG5mcm9tIGpzIGltcG9ydCBPYmplY3QsIGRvY3VtZW50XG5pbXBvcnQgcGFuZGFzXG5pbXBvcnQgbnVtcHkgYXMgbnBcblxudGZiYXNlID0gU2ltcGxlTmFtZXNwYWNlKCoqdGZiYXNlKVxuXG5kZWYgY29udmVydF90ZW5zb3IoYSwgKmFyZ3MpOlxuICBpZiBpc2luc3RhbmNlKGEsIFBhcmFtZXRlcik6XG4gICAgYSA9IGEudmFsdWUudmFsdWVcbiAgaWYgaXNpbnN0YW5jZShhLCBUZW5zb3IpOlxuICAgIGEgPSBhLnZhbHVlXG4gIGlmIGlzaW5zdGFuY2UoYSwgbnAubmRhcnJheSk6XG4gICAgYSA9IGEudG9saXN0KClcbiAgcmV0dXJuIHRvX2pzKGEpXG5cbmRlZiBjb252ZXJ0KGEpOlxuICBpZiBpc2luc3RhbmNlKGEsIFBhcmFtZXRlcik6XG4gICAgYSA9IGEudmFsdWUudmFsdWVcbiAgaWYgaXNpbnN0YW5jZShhLCBUZW5zb3IpOlxuICAgIGEgPSBhLnZhbHVlXG4gIGlmIGlzaW5zdGFuY2UoYSwgbnAubmRhcnJheSk6XG4gICAgYSA9IGEudG9saXN0KClcbiAgcmV0dXJuIHRvX2pzKGEsIGRpY3RfY29udmVydGVyPU9iamVjdC5mcm9tRW50cmllcywgZGVmYXVsdF9jb252ZXJ0ZXI9Y29udmVydF90ZW5zb3IpXG5cbmRlZiBjb252ZXJ0X3N0YXJ0KHNoYXBlLCBzdGFydCk6XG4gIHN0YXJ0ID0gc3RhcnQgb3IgMFxuICBpZiBzdGFydCA8IDA6XG4gICAgc3RhcnQgPSBzaGFwZSArIHN0YXJ0XG4gIHN0YXJ0ID0gbWluKHN0YXJ0LCBzaGFwZSAtIDEpXG4gIHJldHVybiBzdGFydFxuXG5kZWYgY29udmVydF9lbmQoc2hhcGUsIHN0YXJ0LCBlbmQpOiBcbiAgc3RhcnQgPSBjb252ZXJ0X3N0YXJ0KHNoYXBlLCBzdGFydClcbiAgaWYgZW5kIGlzIE5vbmU6XG4gICAgZW5kID0gc2hhcGVcbiAgZWxzZTpcbiAgICBlbmQgPSBjb252ZXJ0X3N0YXJ0KHNoYXBlLCBlbmQpXG4gIHJldHVybiBlbmQgLSBzdGFydFxuXG5jbGFzcyBUZW5zb3I6XG4gIGtlZXBhbGwgPSBGYWxzZVxuXG4gIGNsYXNzIEtlZXA6XG4gICAgZGVmIF9fZW50ZXJfXyhzZWxmKTpcbiAgICAgICAgc2VsZi52YWx1ZSA9IFRlbnNvci5rZWVwYWxsXG4gICAgICAgIFRlbnNvci5rZWVwYWxsID0gVHJ1ZVxuICAgIFxuICAgIGRlZiBfX2V4aXRfXyhzZWxmLCAqYXJncyk6XG4gICAgICAgIFRlbnNvci5rZWVwYWxsID0gc2VsZi52YWx1ZVxuXG4gIGRlZiBfX2luaXRfXyhzZWxmLCAqYXJncywgdmFsdWU9Tm9uZSwga2VlcD1Ob25lLCAqKmt3YXJncyk6XG4gICAgaWYga2VlcCBpcyBOb25lOlxuICAgICAgc2VsZi5rZWVwID0gVGVuc29yLmtlZXBhbGxcbiAgICBlbHNlOlxuICAgICAgc2VsZi5rZWVwID0ga2VlcFxuXG4gICAgaWYgbm90ICh2YWx1ZSBpcyBOb25lKTpcbiAgICAgIHNlbGYudmFsdWUgPSB2YWx1ZVxuICAgIGVsaWYgbGVuKGFyZ3MpIGFuZCBpc2luc3RhbmNlKGFyZ3NbMF0sIFRlbnNvcik6XG4gICAgICBzZWxmLnZhbHVlID0gdGZiYXNlLmFkZChhcmdzWzBdLnZhbHVlLCAwKVxuICAgIGVsaWYgbGVuKGFyZ3MpIGFuZCBhcmdzWzBdIGlzIE5vbmU6XG4gICAgICBzZWxmLnZhbHVlID0gdGZiYXNlLnRlbnNvcigwLilcbiAgICBlbHNlOlxuICAgICAgYXJncyA9IFtjb252ZXJ0KGEpIGZvciBhIGluIGFyZ3NdXG4gICAgICBrd2FyZ3MgPSB7azogY29udmVydChhKSBmb3IgKGssIGEpIGluIGt3YXJncy5pdGVtcygpfVxuICAgICAgc2VsZi52YWx1ZSA9IHRmYmFzZS50ZW5zb3IoKmFyZ3MsICoqa3dhcmdzKVxuXG4gIGRlZiBfX2dldGF0dHJfXyhzZWxmLCBuYW1lKTpcbiAgICBpZiBuYW1lID09ICdUJzpcbiAgICAgIHJldHVybiBzZWxmLnRyYW5zcG9zZSgpXG4gICAgYXR0ciA9IGdldGF0dHIoc2VsZi52YWx1ZSwgbmFtZSlcbiAgICBpZiBjYWxsYWJsZShhdHRyKTpcbiAgICAgIGRlZiBydW4oKmFyZ3MsICoqa3dhcmdzKTpcbiAgICAgICAgYXJncyA9IFtjb252ZXJ0KGEpIGZvciBhIGluIGFyZ3NdXG4gICAgICAgIGt3YXJncyA9IHtrOiBjb252ZXJ0KGEpIGZvciAoaywgYSkgaW4ga3dhcmdzLml0ZW1zKCl9XG4gICAgICAgIG91dHB1dCA9IGF0dHIoKmFyZ3MsICoqa3dhcmdzKVxuICAgICAgICByZXR1cm4gVGVuc29yKHZhbHVlPW91dHB1dClcbiAgICAgICMgUHJldmVudCBwcmVtYXR1cmUgZ2FyYmFnZSBjb2xsZWN0aW9uXG4gICAgICBydW4uX3JlZiA9IHNlbGZcbiAgICAgIHJldHVybiBydW5cbiAgICByZXR1cm4gYXR0clxuXG4gIGRlZiBfX2FkZF9fKGEsIGIpOlxuICAgIHJldHVybiBUZW5zb3IodmFsdWU9dGZiYXNlLmFkZChjb252ZXJ0KGEpLCBjb252ZXJ0KGIpKSlcbiAgZGVmIF9fcmFkZF9fKGEsIGIpOlxuICAgIHJldHVybiBUZW5zb3IodmFsdWU9dGZiYXNlLmFkZChjb252ZXJ0KGIpLCBjb252ZXJ0KGEpKSlcbiAgZGVmIF9fc3ViX18oYSwgYik6XG4gICAgcmV0dXJuIFRlbnNvcih2YWx1ZT10ZmJhc2Uuc3ViKGNvbnZlcnQoYSksIGNvbnZlcnQoYikpKVxuICBkZWYgX19yc3ViX18oYSwgYik6XG4gICAgcmV0dXJuIFRlbnNvcih2YWx1ZT10ZmJhc2Uuc3ViKGNvbnZlcnQoYiksIGNvbnZlcnQoYSkpKVxuICBkZWYgX19tdWxfXyhhLCBiKTpcbiAgICByZXR1cm4gVGVuc29yKHZhbHVlPXRmYmFzZS5tdWwoY29udmVydChhKSwgY29udmVydChiKSkpXG4gIGRlZiBfX3JtdWxfXyhhLCBiKTpcbiAgICByZXR1cm4gVGVuc29yKHZhbHVlPXRmYmFzZS5tdWwoY29udmVydChiKSwgY29udmVydChhKSkpXG4gIGRlZiBfX3RydWVkaXZfXyhhLCBiKTpcbiAgICByZXR1cm4gVGVuc29yKHZhbHVlPXRmYmFzZS5kaXYoY29udmVydChhKSwgY29udmVydChiKSkpXG4gIGRlZiBfX3J0cnVlZGl2X18oYSwgYik6XG4gICAgcmV0dXJuIFRlbnNvcih2YWx1ZT10ZmJhc2UuZGl2KGNvbnZlcnQoYiksIGNvbnZlcnQoYSkpKVxuICBkZWYgX19mbG9vcmRpdl9fKGEsIGIpOlxuICAgIHJldHVybiBUZW5zb3IodmFsdWU9dGZiYXNlLmZsb29yRGl2KGNvbnZlcnQoYSksIGNvbnZlcnQoYikpKVxuICBkZWYgX19yZmxvb3JkaXZfXyhhLCBiKTpcbiAgICByZXR1cm4gVGVuc29yKHZhbHVlPXRmYmFzZS5mbG9vckRpdihjb252ZXJ0KGIpLCBjb252ZXJ0KGEpKSlcbiAgZGVmIF9fcG93X18oYSwgYik6XG4gICAgcmV0dXJuIFRlbnNvcih2YWx1ZT10ZmJhc2UucG93KGNvbnZlcnQoYSksIGNvbnZlcnQoYikpKVxuICBkZWYgX19ycG93X18oYSwgYik6XG4gICAgcmV0dXJuIFRlbnNvcih2YWx1ZT10ZmJhc2UucG93KGNvbnZlcnQoYiksIGNvbnZlcnQoYSkpKVxuICBkZWYgX19uZWdfXyhhKTpcbiAgICByZXR1cm4gVGVuc29yKHZhbHVlPXRmYmFzZS5uZWcoY29udmVydChhKSkpXG4gIGRlZiBfX2VxX18oYSwgYik6XG4gICAgcmV0dXJuIFRlbnNvcih2YWx1ZT10ZmJhc2UuZXF1YWwoY29udmVydChhKSwgY29udmVydChiKSkpXG4gIGRlZiBfX25lcV9fKGEsIGIpOlxuICAgIHJldHVybiBUZW5zb3IodmFsdWU9dGZiYXNlLm5vdEVxdWFsKGNvbnZlcnQoYSksIGNvbnZlcnQoYikpKVxuICBkZWYgX19sdF9fKGEsIGIpOlxuICAgIHJldHVybiBUZW5zb3IodmFsdWU9dGZiYXNlLmxlc3MoY29udmVydChhKSwgY29udmVydChiKSkpXG4gIGRlZiBfX2d0X18oYSwgYik6XG4gICAgcmV0dXJuIFRlbnNvcih2YWx1ZT10ZmJhc2UuZ3JlYXRlcihjb252ZXJ0KGEpLCBjb252ZXJ0KGIpKSlcbiAgZGVmIF9fbGVxX18oYSwgYik6XG4gICAgcmV0dXJuIFRlbnNvcih2YWx1ZT10ZmJhc2UubGVzc0VxdWFsKGNvbnZlcnQoYSksIGNvbnZlcnQoYikpKVxuICBkZWYgX19nZXFfXyhhLCBiKTpcbiAgICByZXR1cm4gVGVuc29yKHZhbHVlPXRmYmFzZS5ncmVhdGVyRXF1YWwoY29udmVydChhKSwgY29udmVydChiKSkpXG5cbiAgZGVmIF9fZGVsX18oc2VsZik6XG4gICAgaWYgaGFzYXR0cihzZWxmLnZhbHVlLCAnZGlzcG9zZScpIGFuZCBub3Qgc2VsZi5rZWVwOlxuICAgICAgc2VsZi52YWx1ZS5kaXNwb3NlKClcblxuICBkZWYgX19pdGVyX18oc2VsZik6XG4gICAgZm9yIHggaW4gc2VsZi52YWx1ZS5hcnJheVN5bmMoKTpcbiAgICAgICAgeWllbGQgVGVuc29yKHgpXG5cbiAgZGVmIF9fZ2V0aXRlbV9fKHNlbGYsIGFyZ3MpOlxuICAgIHRvc3F1ZWV6ZSA9IFtdXG4gICAgc3RhcnRzLCBlbmRzLCBzdGVwcyA9IFtdLCBbXSwgW11cbiAgICB2YWx1ZSA9IHNlbGZcbiAgICBcbiAgICBpZiBub3QgKHR5cGUoYXJncykgaXMgdHVwbGUpOlxuICAgICAgYXJncyA9IChhcmdzLClcbiAgICBcbiAgICBmb3IgaW5kIGluIHJhbmdlKGxlbihhcmdzKSk6XG4gICAgICBpZiBhcmdzW2luZF0gaXMgRWxsaXBzaXM6XG4gICAgICAgIHN0YXJ0ID0gYXJnc1s6aW5kXVxuICAgICAgICByZXN0ID0gYXJnc1soaW5kICsgMSk6XVxuICAgICAgICBhcmdzID0gc3RhcnQgKyB0dXBsZShbc2xpY2UoTm9uZSldICogKGxlbihzZWxmLnZhbHVlLnNoYXBlKSAtIChsZW4oc3RhcnQpICsgbGVuKHJlc3QpKSkpICsgcmVzdFxuICAgICAgICBicmVha1xuICAgIFxuICAgIGZvciBpLCAoc2hhcGUsIGRpbSkgaW4gZW51bWVyYXRlKHppcChzZWxmLnZhbHVlLnNoYXBlLCBhcmdzKSk6XG4gICAgICBpZiBpc2luc3RhbmNlKGRpbSwgc2xpY2UpOlxuICAgICAgICBzdGFydHMuYXBwZW5kKGRpbS5zdGFydCBvciAwKVxuICAgICAgICBlbmRzLmFwcGVuZChkaW0uc3RvcCBvciBzaGFwZSlcbiAgICAgICAgc3RlcHMuYXBwZW5kKGRpbS5zdGVwIG9yIDEpXG4gICAgICBlbGlmIFRlbnNvcihkaW0pLnNoYXBlOlxuICAgICAgICB0ID0gVGVuc29yKGRpbSlcbiAgICAgICAgaWYgdC52YWx1ZS5kdHlwZSA9PSAnYm9vbCc6XG4gICAgICAgICAgaW5kcyA9IFtpbmQgZm9yIChpbmQsIGUpIGluIGVudW1lcmF0ZSh0LnZhbHVlLmFycmF5U3luYygpKSBpZiBlXVxuICAgICAgICAgIGluZHMgPSB0Zi5jYXN0KHRmLnJlc2hhcGUoVGVuc29yKGluZHMpLCBbLTFdKSwgJ2ludDMyJylcbiAgICAgICAgICB2YWx1ZSA9IHRmLmdhdGhlcih2YWx1ZSwgaW5kcywgaSlcbiAgICAgICAgZWxzZTpcbiAgICAgICAgICBpbmRzID0gdGYuY2FzdCh0Zi5yZXNoYXBlKHQsIFstMV0pLCAnaW50MzInKVxuICAgICAgICAgIHZhbHVlID0gdGYuZ2F0aGVyKHZhbHVlLCBpbmRzLCBpKVxuICAgICAgZWxzZTpcbiAgICAgICAgc3RhcnRzLmFwcGVuZChkaW0pXG4gICAgICAgIGVuZHMuYXBwZW5kKGRpbSArIDEpXG4gICAgICAgIHN0ZXBzLmFwcGVuZCgxKVxuICAgICAgICB0b3NxdWVlemUuYXBwZW5kKGkpXG4gICAgdmFsdWUgPSB0Zi5zdHJpZGVkU2xpY2UodmFsdWUsIGNvbnZlcnQoc3RhcnRzKSwgY29udmVydChlbmRzKSwgY29udmVydChzdGVwcykpXG4gICAgaWYgbGVuKHRvc3F1ZWV6ZSkgPiAwOlxuICAgICAgdmFsdWUgPSB0Zi5zcXVlZXplKHZhbHVlLCB0b3NxdWVlemUpXG4gICAgcmV0dXJuIHZhbHVlXG5cbiAgZGVmIHQySnMoc2VsZik6XG4gICAgcmV0dXJuIHRvX2pzKHNlbGYudmFsdWUuYXJyYXlTeW5jKCkpXG5cbmNsYXNzIHdyYXBwZXI6XG4gIGRlZiBfX2luaXRfXyhzZWxmLCBmKTpcbiAgICBzZWxmLmYgPSBmXG5cbiAgZGVmIF9fY2FsbF9fKHNlbGYsIHgsICphcmdzLCAqKmt3YXJncyk6XG4gICAgd2l0aCBUZW5zb3IuS2VlcCgpOlxuICAgICAgcmV0dXJuIGNvbnZlcnQoc2VsZi5mKFRlbnNvcih2YWx1ZT14KSwgKmFyZ3MsICoqa3dhcmdzKSlcblxuY2xhc3MgZ3JhZDpcbiAgZGVmIF9faW5pdF9fKHNlbGYsIGYpOlxuICAgIHNlbGYuZiA9IGZcbiAgICBzZWxmLndyYXBwZXIgPSB3cmFwcGVyKGYpXG5cbiAgZGVmIF9fY2FsbF9fKHNlbGYsIHgsICphcmdzLCAqKmt3YXJncyk6XG4gICAgb3V0cHV0ID0gdGZiYXNlLmdyYWQoY3JlYXRlX29uY2VfY2FsbGFibGUoc2VsZi53cmFwcGVyKSkoeC52YWx1ZSwgKmFyZ3MsICoqa3dhcmdzKVxuICAgIHJldHVybiBUZW5zb3IodmFsdWU9b3V0cHV0KVxuXG5jbGFzcyB3cmFwcGVyczpcbiAgZGVmIF9faW5pdF9fKHNlbGYsIGYpOlxuICAgIHNlbGYuZiA9IGZcblxuICBkZWYgX19jYWxsX18oc2VsZiwgKmFyZ3MpOlxuICAgIHdpdGggVGVuc29yLktlZXAoKTpcbiAgICAgIHdyYXBwZWRfYXJncyA9IFtUZW5zb3IodmFsdWU9eCkgZm9yIHggaW4gYXJnc11cbiAgICAgIHJldHVybiBjb252ZXJ0KHNlbGYuZigqd3JhcHBlZF9hcmdzKSlcblxuY2xhc3MgZ3JhZHM6XG4gIGRlZiBfX2luaXRfXyhzZWxmLCBmKTpcbiAgICBzZWxmLmYgPSBmXG4gICAgc2VsZi53cmFwcGVyID0gd3JhcHBlcnMoZilcblxuICBkZWYgX19jYWxsX18oc2VsZiwgKmFyZ3MpOlxuICAgIG91dHB1dCA9IHRmYmFzZS5ncmFkcyhjcmVhdGVfb25jZV9jYWxsYWJsZShzZWxmLndyYXBwZXIpKSh0b19qcyhbYXJnLnZhbHVlIGZvciBhcmcgaW4gYXJnc10pKVxuICAgIHJldHVybiBbVGVuc29yKHZhbHVlPXgpIGZvciB4IGluIG91dHB1dF1cblxudGYgPSBUZW5zb3IodmFsdWU9dGZiYXNlKVxuUGxvdGJhc2UgPSBTaW1wbGVOYW1lc3BhY2UoKipQbG90YmFzZSlcblBsb3RseWJhc2UgPSBTaW1wbGVOYW1lc3BhY2UoKipQbG90bHliYXNlKVxuZDNiYXNlID0gU2ltcGxlTmFtZXNwYWNlKCoqZDNiYXNlKVxuXG5kZWYgbWVzaGdyaWQoKmFyZ3MpOlxuICByZXR1cm4gdHVwbGUoW1RlbnNvcih2YWx1ZT1hKSBmb3IgYSBpbiB0ZmJhc2UubWVzaGdyaWQoKltjb252ZXJ0KGFyZykgZm9yIGFyZyBpbiBhcmdzXSldKVxudGYubWVzaGdyaWQgPSBtZXNoZ3JpZFxuXG5kZWYgZGVmYXVsdF9jb252ZXJ0KG9iaiwgZGVmYXVsdF9mLCBvdGhlcik6XG4gIGlmIGlzaW5zdGFuY2Uob2JqLCBUZW5zb3IpOlxuICAgIG9iaiA9IG9iai50MkpzKClcbiAgaWYgaXNpbnN0YW5jZShvYmosIHBhbmRhcy5EYXRhRnJhbWUpOlxuICAgIG9iaiA9IG9iai50b19kaWN0KCdyZWNvcmRzJykgXG4gIHJldHVybiBkZWZhdWx0X2Yob2JqKVxuXG5kZWYgcGxvdGNvbnZlcnQoYSk6XG4gIHJldHVybiB0b19qcyhhLCBkaWN0X2NvbnZlcnRlcj1PYmplY3QuZnJvbUVudHJpZXMsIGRlZmF1bHRfY29udmVydGVyPWRlZmF1bHRfY29udmVydClcblxuY2xhc3MgUGxvdFdyYXBwZXI6XG4gIGRlZiBfX2luaXRfXyhzZWxmLCBiYXNlPU5vbmUpOlxuICAgIHNlbGYuYmFzZSA9IGJhc2VcbiAgICBcbiAgZGVmIF9fZ2V0YXR0cl9fKHNlbGYsIG5hbWUpOlxuICAgIGF0dHIgPSBnZXRhdHRyKHNlbGYuYmFzZSwgbmFtZSlcbiAgICBpZiBjYWxsYWJsZShhdHRyKTpcbiAgICAgIGRlZiBydW4oKmFyZ3MsICoqa3dhcmdzKTpcbiAgICAgICAgYXJncyA9IFtwbG90Y29udmVydChhKSBmb3IgYSBpbiBhcmdzXVxuICAgICAgICBrd2FyZ3MgPSB7azogcGxvdGNvbnZlcnQoYSkgZm9yIChrLCBhKSBpbiBrd2FyZ3MuaXRlbXMoKX1cbiAgICAgICAgcmV0dXJuIGF0dHIoKmFyZ3MsICoqa3dhcmdzKVxuICAgICAgcmV0dXJuIHJ1blxuICAgIHJldHVybiBhdHRyXG5cblBsb3QgPSBQbG90V3JhcHBlcihQbG90YmFzZSlcblBsb3RseSA9IFBsb3RXcmFwcGVyKFBsb3RseWJhc2UpXG5kMyA9IFBsb3RXcmFwcGVyKGQzYmFzZSlcblxuZGVmIFBsb3RseUZpZ3VyZSh3aWR0aD04MDAsIGhlaWdodD1Ob25lLCBoaWRlX3Rvb2xiYXI9VHJ1ZSwgb3ZlcmxheT1UcnVlKTpcbiAgaWYgaGVpZ2h0IGlzIE5vbmU6XG4gICAgaGVpZ2h0ID0gMC43NSAqIHdpZHRoXG5cbiAgd2lkdGgsIGhlaWdodCA9IGludCh3aWR0aCksIGludChoZWlnaHQpXG4gIGNvbnRhaW5lciA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpXG4gIGNvbnRhaW5lci5zdHlsZS53aWR0aCA9IHN0cih3aWR0aCkgKyAncHgnXG4gIGNvbnRhaW5lci5zdHlsZS5oZWlnaHQgPSBzdHIoaGVpZ2h0KSArICdweCdcbiAgXG4gIGxpbmVwbG90ID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2JylcbiAgbGluZXBsb3QuY2xhc3NMaXN0LmFkZChcInBsb3RseWRpdlwiKVxuXG4gIGlmIGhpZGVfdG9vbGJhcjpcbiAgICBjb250YWluZXIuY2xhc3NMaXN0LmFkZChcImhpZGV0b29sYmFyXCIpXG5cbiAgY29udGFpbmVyLmFwcGVuZChsaW5lcGxvdClcbiAgaWYgb3ZlcmxheTpcbiAgICBvdmVybGF5ID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2JylcbiAgICBvdmVybGF5LmNsYXNzTGlzdC5hZGQoXCJwbG90bHlvdmVybGF5XCIpXG4gICAgXG4gICAgY29udGFpbmVyLmFwcGVuZChvdmVybGF5KVxuICAgIFxuICAgIGNvbnRhaW5lci5zdHlsZS5wb3NpdGlvbiA9ICdyZWxhdGl2ZSdcbiAgICBvdmVybGF5LnN0eWxlLnRvcCA9ICcwJ1xuICAgIG92ZXJsYXkuc3R5bGUuYm90dG9tID0gJzAnXG4gICAgb3ZlcmxheS5zdHlsZS53aWR0aCA9ICcxMDAlJ1xuICAgIG92ZXJsYXkuc3R5bGUucG9zaXRpb24gPSAnYWJzb2x1dGUnXG4gIHJldHVybiBjb250YWluZXJcbiAgXG5kZWYgUGxvdGx5SW5wdXQod2lkdGg9ODAwLCBoZWlnaHQ9Tm9uZSwgaGlkZV90b29sYmFyPVRydWUsIHN5bmM9Tm9uZSk6XG4gIGNvbnRhaW5lciA9IFBsb3RseUZpZ3VyZSh3aWR0aCwgaGVpZ2h0LCBoaWRlX3Rvb2xiYXIpXG4gIGxpbmVwbG90LCBvdmVybGF5ID0gY29udGFpbmVyLmNoaWxkTm9kZXNbMF0sIGNvbnRhaW5lci5jaGlsZE5vZGVzWzFdXG4gIGlmIHN5bmMgaXMgTm9uZTpcbiAgICBzeW5jID0gY29udGFpbmVyXG5cbiAgY2xhc3MgbW92ZXI6XG4gICAgZGVmIF9faW5pdF9fKHNlbGYpOlxuICAgICAgc2VsZi5tb3VzZWRvd24gPSBGYWxzZVxuICAgIFxuICAgIGRlZiBfX2NhbGxfXyhzZWxmLCBldmVudCk6XG4gICAgICBpZiBldmVudC50eXBlID09ICdtb3VzZWRvd24nOlxuICAgICAgICBzZWxmLm1vdXNlZG93biA9IFRydWVcbiAgICAgIGlmIGV2ZW50LnR5cGUgPT0gJ21vdXNlbGVhdmUnOlxuICAgICAgICBzZWxmLm1vdXNlZG93biA9IEZhbHNlXG4gICAgICBpZiBldmVudC50eXBlID09ICdtb3VzZXVwJzpcbiAgICAgICAgc2VsZi5tb3VzZWRvd24gPSBGYWxzZVxuICBcbiAgICAgIGlmIHNlbGYubW91c2Vkb3duOlxuICAgICAgICB4ID0gZmxvYXQobGluZXBsb3QuX2Z1bGxMYXlvdXQueGF4aXMucDJjKGV2ZW50LmxheWVyWCAtIGxpbmVwbG90Ll9mdWxsTGF5b3V0Lm1hcmdpbi5sKSlcbiAgICAgICAgeSA9IGZsb2F0KGxpbmVwbG90Ll9mdWxsTGF5b3V0LnlheGlzLnAyYyhldmVudC5sYXllclkgLSBsaW5lcGxvdC5fZnVsbExheW91dC5tYXJnaW4udCkpXG4gICAgICAgIHN5bmMudmFsdWUgPSB0b19qcyhbeCwgeV0pXG4gICAgICAgIGRpc3BhdGNoRXZlbnQoc3luYylcbiAgICAgICAgXG4gIFxuICBlID0gbW92ZXIoKVxuICBvdmVybGF5LmFkZEV2ZW50TGlzdGVuZXIoJ21vdXNlbW92ZScsIHRvX2pzKGUpKVxuICBvdmVybGF5LmFkZEV2ZW50TGlzdGVuZXIoJ21vdXNlZG93bicsIHRvX2pzKGUpKVxuICBvdmVybGF5LmFkZEV2ZW50TGlzdGVuZXIoJ21vdXNldXAnLCB0b19qcyhlKSlcbiAgb3ZlcmxheS5hZGRFdmVudExpc3RlbmVyKCdtb3VzZWxlYXZlJywgdG9fanMoZSkpXG4gIGNvbnRhaW5lci52YWx1ZSA9IHRvX2pzKFswLiwgMC5dKVxuICByZXR1cm4gY29udGFpbmVyXG5cbmRlZiBQbG90bHlSZWFjdGl2ZShjb250YWluZXIsIHRyYWNlcz1bXSwgbGF5b3V0PXt9LCBvcHRpb25zPXt9KTpcbiAgZnVsbF9sYXlvdXQgPSBkaWN0KHdpZHRoPWludChjb250YWluZXIuc3R5bGUud2lkdGgucmVwbGFjZSgncHgnLCAnJykpLCBoZWlnaHQ9aW50KGNvbnRhaW5lci5zdHlsZS5oZWlnaHQucmVwbGFjZSgncHgnLCAnJykpKVxuICBmdWxsX2xheW91dC51cGRhdGUobGF5b3V0KVxuICBmdWxsX29wdGlvbnMgPSB7J2Rpc3BsYXlNb2RlQmFyJyA6IG5vdCBjb250YWluZXIuY2xhc3NMaXN0LmNvbnRhaW5zKCdoaWRldG9vbGJhcicpfVxuICBmdWxsX29wdGlvbnMudXBkYXRlKG9wdGlvbnMpXG4gIHBsb3QgPSBjb250YWluZXIuY2hpbGROb2Rlc1swXVxuICBQbG90bHkucmVhY3QocGxvdCwgdHJhY2VzLCBmdWxsX2xheW91dCwgZnVsbF9vcHRpb25zKVxuXG5kZWYgY29sb3JNYXAodCwgY21hcD0naW5mZXJubycsIGNtaW49Tm9uZSwgY21heD1Ob25lLCBzY2FsZT0nbGluZWFyJywgcmVzPTEwMCk6XG4gIGltcG9ydCBtYXRwbG90bGliLmNtIGFzIGNtXG4gIGlmIGNtaW4gaXMgTm9uZTpcbiAgICBjbWluID0gdGYubWluKHQpXG4gIGlmIGNtYXggaXMgTm9uZTpcbiAgICBjbWF4ID0gdGYubWF4KHQpXG4gIFxuICB0ID0gKHQgLSBjbWluKSAvIChjbWF4IC0gY21pbilcbiAgaWYgc2NhbGUgPT0gJ2xvZyc6XG4gICAgZSA9IHRmLmV4cCgxKVxuICAgIHQgPSB0ICogKGUgLSAxKSArIDFcbiAgICB0ID0gdGYubG9nKHQpXG4gIGNtYXAgPSBUZW5zb3IoY20uZ2V0X2NtYXAoY21hcCwgcmVzICsgMSkocmFuZ2UocmVzICsgMSkpKVxuICB0ID0gdCAqIHJlc1xuICBzaGFwZSA9IHQuc2hhcGVcbiAgdGZsYXQgPSB0Zi5yZXNoYXBlKHQsIFstMV0pXG4gIHRmbG9vciA9IHRmLmdhdGhlcihjbWFwLCB0Zi5mbG9vcih0ZmxhdCkuY2FzdCgnaW50MzInKSlcbiAgdGNlaWwgPSB0Zi5nYXRoZXIoY21hcCwgdGYuY2VpbCh0ZmxhdCkuY2FzdCgnaW50MzInKSlcbiAgdGZyYWMgPSB0Zi5yZXNoYXBlKHRmbGF0IC0gdGYuZmxvb3IodGZsYXQpLCBbLTEsIDFdKVxuICB0ZmxhdCA9IHRmcmFjICogdGNlaWwgKyAoMS4gLSB0ZnJhYykgKiB0Zmxvb3JcbiAgdCA9IHRmLnJlc2hhcGUodGZsYXQsIGxpc3Qoc2hhcGUpICsgWzRdKVxuICByZXR1cm4gdFxuXG5kZWYgcGxvdFRlbnNvcih0LCBjYW52YXMsIHNpemU9Tm9uZSwgY21hcD1Ob25lLCBpbnRlcnBvbGF0aW9uPSduZWFyZXN0JywgKiprd2FyZ3MpOlxuICBpZiBub3QgKGNtYXAgaXMgTm9uZSk6XG4gICAgdCA9IGNvbG9yTWFwKHQsIGNtYXAsICoqa3dhcmdzKVxuICBpZiBzaXplIGlzIE5vbmU6XG4gICAgc2l6ZSA9IChjYW52YXMuaGVpZ2h0LCBjYW52YXMud2lkdGgpXG4gIGlmIGludGVycG9sYXRpb24gPT0gJ2JpbGluZWFyJzpcbiAgICB0ID0gdGZiYXNlLmltYWdlWydyZXNpemVCaWxpbmVhciddKHQudmFsdWUsIGxpc3Qoc2l6ZSkpXG4gIGVsc2U6XG4gICAgdCA9IHRmYmFzZS5pbWFnZVsncmVzaXplTmVhcmVzdE5laWdoYm9yJ10odC52YWx1ZSwgbGlzdChzaXplKSlcbiAgdGZiYXNlLmJyb3dzZXJbJ3RvUGl4ZWxzJ10odCwgY2FudmFzKVxuXG5mcm9tIGl0ZXJ0b29scyBpbXBvcnQgY2hhaW5cbmltcG9ydCBtYXRoXG5cbmNsYXNzIE1vZHVsZTpcbiAgICBkZWYgX19pbml0X18oc2VsZik6XG4gICAgICAgIHNlbGYuX3N1Ym1vZHVsZXMgPSBkaWN0KClcbiAgICAgICAgc2VsZi5ldmFsID0gRmFsc2VcbiAgICAgICAgc2VsZi5fc3RvcmUgPSBGYWxzZVxuXG4gICAgZGVmIHBhcmFtZXRlcnMoc2VsZik6XG4gICAgICAgIHJldHVybiBjaGFpbi5mcm9tX2l0ZXJhYmxlKG1hcChsYW1iZGEgeDogeC5wYXJhbWV0ZXJzKCksIHNlbGYuX3N1Ym1vZHVsZXMudmFsdWVzKCkpKVxuICAgIFxuICAgIGRlZiBfX3NldGF0dHJfXyhzZWxmLCBuYW1lLCB2YWx1ZSk6XG4gICAgICAgIGlmIGlzaW5zdGFuY2UodmFsdWUsIE1vZHVsZSk6XG4gICAgICAgICAgICBzZWxmLl9zdWJtb2R1bGVzW25hbWVdID0gdmFsdWVcbiAgICAgICAgc3VwZXIoKS5fX3NldGF0dHJfXyhuYW1lLCB2YWx1ZSlcblxuICAgIGRlZiBfX2NhbGxfXyhzZWxmLCAqYXJncywgKiprd2FyZ3MpOlxuICAgICAgICB2YWx1ZSA9IHNlbGYuZm9yd2FyZCgqYXJncywgKiprd2FyZ3MpXG4gICAgICAgIHNlbGYuX3N0b3JlID0gRmFsc2VcbiAgICAgICAgcmV0dXJuIHZhbHVlXG4gICAgXG4gICAgZGVmIGZvcndhcmQoc2VsZik6XG4gICAgICAgIHJhaXNlIE5vdEltcGxlbWVudGVkRXJyb3IoKVxuICAgIFxuICAgIGRlZiB0cmFpbihzZWxmKTpcbiAgICAgICAgc2VsZi5ldmFsID0gRmFsc2VcbiAgICAgICAgZm9yIHNtIGluIHNlbGYuX3N1Ym1vZHVsZXMudmFsdWVzKCk6XG4gICAgICAgICAgICBzbS50cmFpbigpXG4gICAgXG4gICAgZGVmIGV2YWwoc2VsZik6XG4gICAgICAgIHNlbGYuZXZhbCA9IFRydWVcbiAgICAgICAgZm9yIHNtIGluIHNlbGYuX3N1Ym1vZHVsZXMudmFsdWVzKCk6XG4gICAgICAgICAgICBzbS5ldmFsKClcblxuICAgIGRlZiBzdG9yZShzZWxmKTpcbiAgICAgICAgc2VsZi5zdG9yZSA9IFRydWVcbiAgICAgICAgZm9yIHNtIGluIHNlbGYuX3N1Ym1vZHVsZXMudmFsdWVzKCk6XG4gICAgICAgICAgICBzbS5ldmFsKClcblxuY2xhc3MgUGFyYW1ldGVyKE1vZHVsZSk6XG4gICAgZGVmIF9faW5pdF9fKHNlbGYsIHZhbHVlKTpcbiAgICAgICAgc3VwZXIoKS5fX2luaXRfXygpXG4gICAgICAgIHNlbGYudmFsdWUgPSB2YWx1ZVxuICAgICAgICBzZWxmLnRlbXAgPSBOb25lXG4gICAgICAgIHNlbGYuZ3JhZCA9IE5vbmVcblxuICAgIGRlZiBwYXJhbWV0ZXJzKHNlbGYpOlxuICAgICAgICByZXR1cm4gW3NlbGZdXG4gICAgXG5jbGFzcyBTZXF1ZW50aWFsKE1vZHVsZSk6XG4gICAgZGVmIF9faW5pdF9fKHNlbGYsICphcmdzKTpcbiAgICAgICAgc3VwZXIoKS5fX2luaXRfXygpXG4gICAgICAgIHNlbGYuc2VxdWVuY2UgPSBbXVxuICAgICAgICBmb3IgYXJnIGluIGFyZ3M6XG4gICAgICAgICAgICBpZiBpc2luc3RhbmNlKGFyZywgTW9kdWxlKTpcbiAgICAgICAgICAgICAgICBzZWxmLnNlcXVlbmNlLmFwcGVuZChhcmcpXG4gICAgICAgICAgICBlbHNlOlxuICAgICAgICAgICAgICAgIHNlbGYuc2VxdWVuY2UuZXh0ZW5kKGFyZylcbiAgICAgICAgXG4gICAgICAgIHNlbGYuX3N1Ym1vZHVsZXMgPSB7azogdiBmb3IgKGssdikgaW4gZW51bWVyYXRlKHNlbGYuc2VxdWVuY2UpfVxuXG4gICAgZGVmIF9fZ2V0aXRlbV9fKHNlbGYsIGluZGV4KTpcbiAgICAgICAgcmV0dXJuIHNlbGYuc2VxdWVuY2VbaW5kZXhdXG5cbiAgICBkZWYgZm9yd2FyZChzZWxmLCBYKTpcbiAgICAgICAgZm9yIG0gaW4gc2VsZi5zZXF1ZW5jZTpcbiAgICAgICAgICAgIFggPSBtKFgpXG4gICAgICAgIHJldHVybiBYXG4gICAgXG5Nb2R1bGVMaXN0ID0gU2VxdWVudGlhbFxuXG5jbGFzcyBTaWdtb2lkKE1vZHVsZSk6XG4gICAgZGVmIGZvcndhcmQoc2VsZiwgWCk6XG4gICAgICAgIHJldHVybiB0Zi5zaWdtb2lkKFgpXG4gICAgXG5jbGFzcyBSZUxVKE1vZHVsZSk6XG4gICAgZGVmIGZvcndhcmQoc2VsZiwgWCk6XG4gICAgICAgIHJldHVybiB0Zi5yZWx1KFgpXG4gICAgXG5jbGFzcyBUYW5oKE1vZHVsZSk6XG4gICAgZGVmIGZvcndhcmQoc2VsZiwgWCk6XG4gICAgICAgIHJldHVybiB0Zi50YW5oKFgpXG4gICAgXG5jbGFzcyBMaW5lYXIoTW9kdWxlKTpcbiAgICBkZWYgX19pbml0X18oc2VsZiwgaW5fZmVhdHVyZXMsIG91dF9mZWF0dXJlcyk6XG4gICAgICAgIHN1cGVyKCkuX19pbml0X18oKVxuICAgICAgICAjIEthaW1pbmcgSGUgaW5pdGlhbGl6YXRpb25cbiAgICAgICAgc2VsZi5XID0gUGFyYW1ldGVyKHRmLnJhbmRvbU5vcm1hbChbaW5fZmVhdHVyZXMsIG91dF9mZWF0dXJlc10pICogbWF0aC5zcXJ0KCgyIC8gb3V0X2ZlYXR1cmVzKSAvIDMpKVxuICAgICAgICBzZWxmLmIgPSBQYXJhbWV0ZXIodGYucmFuZG9tTm9ybWFsKFtvdXRfZmVhdHVyZXNdKSAqIG1hdGguc3FydCgoMiAvIG91dF9mZWF0dXJlcykgLyAzKSlcbiAgICAgICAgc2VsZi5pbnB1dCA9IE5vbmVcblxuICAgIGRlZiBmb3J3YXJkKHNlbGYsIHgpOlxuICAgICAgICAjIFJldHVybnMgYSBuZXcgTWF0cml4XG4gICAgICAgIHNlbGYuaW5wdXQgPSBOb25lXG4gICAgICAgIHJldHVybiB0Zi5kb3QoeCwgc2VsZi5XKSArIHNlbGYuYlxuXG5cblxuICAgICAgICBcbmNsYXNzIE9wdGltaXplcjpcbiAgICBkZWYgX19pbml0X18oc2VsZiwgbW9kZWwsIGxvc3M9Tm9uZSwgc3RvcmU9RmFsc2UpOlxuICAgICAgICBzZWxmLnBhcmFtZXRlcnMgPSBsaXN0KG1vZGVsLnBhcmFtZXRlcnMoKSlcbiAgICAgICAgc2VsZi5tb2RlbCA9IG1vZGVsXG4gICAgICAgIHNlbGYubG9zcyA9IGxvc3NcbiAgICAgICAgc2VsZi5zdG9yZSA9IHN0b3JlXG5cbiAgICBkZWYgX2dyYWRzKHNlbGYsIGxvc3MsICphcmdzLCAqKmt3YXJncyk6XG4gICAgICAgIGRlZiBsb3NzX2ludGVybmFsKCpwYXJhbXMpOlxuICAgICAgICAgICAgZm9yIHZhbCwgcGFyYW0gaW4gemlwKHBhcmFtcywgc2VsZi5wYXJhbWV0ZXJzKTpcbiAgICAgICAgICAgICAgICBwYXJhbS50ZW1wID0gcGFyYW0udmFsdWVcbiAgICAgICAgICAgICAgICBwYXJhbS52YWx1ZSA9IHZhbFxuICAgICAgICAgICAgdHJ5OlxuICAgICAgICAgICAgICAgIGwgPSBsb3NzKHNlbGYubW9kZWwsICphcmdzLCAqKmt3YXJncylcbiAgICAgICAgICAgIGZpbmFsbHk6XG4gICAgICAgICAgICAgICAgZm9yIHBhcmFtIGluIHNlbGYucGFyYW1ldGVyczpcbiAgICAgICAgICAgICAgICAgICAgcGFyYW0udmFsdWUgPSBwYXJhbS50ZW1wXG4gICAgICAgICAgICAgICAgICAgIHBhcmFtLnRlbXAgPSBOb25lXG4gICAgICAgICAgICByZXR1cm4gbFxuICAgICAgICBcbiAgICAgICAgcmV0dXJuIGdyYWRzKGxvc3NfaW50ZXJuYWwpKCptYXAobGFtYmRhIHA6IHAudmFsdWUsIHNlbGYucGFyYW1ldGVycykpXG4gICAgXG4gICAgZGVmIF9zdGVwKHNlbGYsIGdyYWRzKTpcbiAgICAgICAgcmFpc2UgTm90SW1wbGVtZW50ZWRFcnJvcigpXG4gICAgXG4gICAgZGVmIHN0ZXAoc2VsZiwgKmFyZ3MsICoqa3dhcmdzKTpcbiAgICAgICAgZ3JhZHMgPSBzZWxmLl9ncmFkcyhzZWxmLmxvc3MsICphcmdzLCAqKmt3YXJncylcbiAgICAgICAgaWYgc2VsZi5zdG9yZTpcbiAgICAgICAgICBmb3IgZ3JhZCwgcGFyYW0gaW4gemlwKGdyYWRzLCBzZWxmLnBhcmFtZXRlcnMpOlxuICAgICAgICAgICAgcGFyYW0uZ3JhZCA9IGdyYWRcbiAgICAgICAgcmV0dXJuIHNlbGYuX3N0ZXAoZ3JhZHMpXG4gICAgXG4gICAgZGVmIHN0ZXBXaXRoTG9zcyhzZWxmLCBsb3NzLCAqYXJncywgKiprd2FyZ3MpOlxuICAgICAgICBncmFkcyA9IHNlbGYuX2dyYWRzKGxvc3MsICphcmdzLCAqKmt3YXJncylcbiAgICAgICAgcmV0dXJuIHNlbGYuX3N0ZXAoZ3JhZHMpXG4gICAgXG5jbGFzcyBTR0QoT3B0aW1pemVyKTpcbiAgICBkZWYgX19pbml0X18oc2VsZiwgbW9kZWwsIGxvc3MsIGxyPTAuMDAxLCBzdG9yZT1GYWxzZSk6XG4gICAgICAgIHN1cGVyKCkuX19pbml0X18obW9kZWwsIGxvc3MsIHN0b3JlKVxuICAgICAgICBzZWxmLmxyID0gbHJcblxuICAgIGRlZiBfc3RlcChzZWxmLCBncmFkcyk6XG4gICAgICAgIGZvciBncmFkLCBwYXJhbSBpbiB6aXAoZ3JhZHMsIHNlbGYucGFyYW1ldGVycyk6XG4gICAgICAgICAgICBwYXJhbS52YWx1ZSA9IHBhcmFtLnZhbHVlIC0gc2VsZi5sciAqIGdyYWRcbmBcbiAgXG4gIHJldHVybiBweTtcbn1cbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMiIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6Im1wZyA9IEZpbGVBdHRhY2htZW50KFwiYXV0by1tcGcuY3N2XCIpLmNzdigpXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTMiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJkYXRhID0gcHlgXG4jICR7cGxvdHN9XG4jIFNldHVwIHRoZSBkYXRhIGFuZCBwcmVkaWN0aW9uIGZ1bmN0aW9uc1xuaW1wb3J0IHBhbmRhcyBhcyBwZFxuZGYgPSBwZC5EYXRhRnJhbWUoJHttcGd9KVtbJ3dlaWdodCcsICdtcGcnXV1cbmRmID0gZGYuYXN0eXBlKGZsb2F0KS5kcm9wbmEoKS52YWx1ZXNcblxueCwgeSA9IGRmWzosIDoxXSwgZGZbOiwgMTpdXG54ID0gVGVuc29yKCh4IC0geC5tZWFuKCkpIC8geC5zdGQoKSlcbnkgPSBUZW5zb3IoKHkgLSB5Lm1lYW4oKSkgLyB5LnN0ZCgpKVxuXG5kZWYgZ2V0X2JhdGNoKGJhdGNoc2l6ZSwgeCwgeSk6XG4gIHJldHVybiB4LCB5XG5cbnNjYWxlID0gVGVuc29yKFtbMS4sIDEuXV0pXG5cbmRlZiBwcmVkaWN0KHcsIHgpOlxuICB3ID0gdy5yZXNoYXBlKCgtMSwgMikpICogc2NhbGVcbiAgeCA9IHgucmVzaGFwZSgoLTEsIDEpKVxuICB4ID0gdGYuY29uY2F0KFt4LCB0Zi5vbmVzTGlrZSh4KV0sIDEpXG4gIHJldHVybiB0Zi5kb3QoeCwgdy5UKVxuXG53cmFuZ2UgPSB0Zi5saW5zcGFjZSgtMywgMywgMjUpXG5icmFuZ2UgPSB0Zi5saW5zcGFjZSgtMywgMywgMjUpXG53dywgYmIgPSB0Zi5tZXNoZ3JpZCh3cmFuZ2UsIGJyYW5nZSlcbnBhcmFtZ3JpZCA9IHRmLnN0YWNrKFt3dy5mbGF0dGVuKCksIGJiLmZsYXR0ZW4oKV0pLlRcbmV5ZXRoZXRhID0gMFxuXG4oeCwgeSlcbmBcblxuc3VyZmFjZXMgPSBweWBcbiMgJHtiYXRjaH0gJHtwbG90c31cbiMgUGxvdCB0aGUgbG9zcyBzdXJmYWNlXG5cblxubDF3ZWlnaHQgPSAwLlxubDJ3ZWlnaHQgPSAwLlxuXG5cbmRlZiBsb3NzKHcsIHgsIHkpOlxuICB3ID0gdy5yZXNoYXBlKCgtMSwgMikpXG4gIHJldHVybiAodGYubWVhbigocHJlZGljdCh3LCB4KSAtIHkpICoqIDIsIDApKSArIGwxd2VpZ2h0ICogdGYuYWJzKHcpLnN1bSgxKSArIGwyd2VpZ2h0ICogKHcgKiogMikuc3VtKDEpIFxuXG5sb3NzZ3JpZCA9IGxvc3MocGFyYW1ncmlkLCB4LCB5KS5yZXNoYXBlKHd3LnNoYXBlKVxubG9zc2NvbnRvdXIgPSBwbG90Y29udmVydChkaWN0KHg9d3JhbmdlLCB5PWJyYW5nZSwgej1sb3NzZ3JpZCwgdHlwZT0nY29udG91cicsIG5jb250b3Vycz0yNSwgc2hvd3NjYWxlPUZhbHNlLCApKVxubG9zc3N1cmZhY2UgPSBwbG90Y29udmVydChkaWN0KHg9d3JhbmdlLCB5PWJyYW5nZSwgej1sb3NzZ3JpZCwgdHlwZT0nc3VyZmFjZScsIHNob3dsZWdlbmQ9RmFsc2UsIHNob3dzY2FsZT1GYWxzZSwgb3BhY2l0eT0wLjgsICBjb250b3Vycz1kaWN0KHg9ZGljdChzaG93PVRydWUpLCB5PWRpY3Qoc2hvdz1UcnVlKSkpKVxuYFxuXG5weWBcbiMgJHtzdXJmYWNlc31cblxuY3dlaWdodHMgPSAke3dlaWdodHN9XG5zdGFydHBvaW50ID0gZGljdCh4PVtjd2VpZ2h0c1swXV0sIHk9W2N3ZWlnaHRzWzFdXSwgbW9kZT0nbWFya2VycycsIHNob3dsZWdlbmQ9RmFsc2UsIG1hcmtlcj1kaWN0KGNvbG9yPSdmaXJlYnJpY2snLCBzaXplPTEwLCBsaW5lPSB7J2NvbG9yJzogJ2JsYWNrJywgJ3dpZHRoJzogM30pKVxuXG5cbmZ1bGx3ZWlnaHRsaXN0ID0gW1RlbnNvcihjd2VpZ2h0cyldXG5iYXRjaHdlaWdodGxpc3QgPSBbVGVuc29yKGN3ZWlnaHRzKV1cbnN0ZXBzID0gaW50KCR7c3RlcHN9KVxubHIgPSBmbG9hdCgke2xlYXJuaW5ncmF0ZX0pIGlmIHN0ZXBzID4gMCBlbHNlIDAuXG5cbm1vbWVudHVtID0gMC5cbm54YmF0Y2gsIG55YmF0Y2ggPSBiYXRjaGVzWzBdXG5iYXRjaGdyYWQgPSBncmFkKGxhbWJkYSB0OiBsb3NzKHQsIG54YmF0Y2gsIG55YmF0Y2gpKShiYXRjaHdlaWdodGxpc3RbLTFdKVxuYmV0YSA9IDAuXG52ZWxvY2l0eSA9IGJhdGNoZ3JhZFxubWFnbml0dWRlID0gYmF0Y2hncmFkICoqIDJcbmlmIGJldGEgPiAwOlxuICBiYXRjaGdyYWQgPSBiYXRjaGdyYWQgLyB0Zi5zcXJ0KG1hZ25pdHVkZSArIDFlLTgpXG5cbmZvciBpLCAobnhiYXRjaCwgbnliYXRjaCkgaW4gemlwKHJhbmdlKG1heCgxLCBzdGVwcykpLCBiYXRjaGVzKTpcbiAgZnVsbGdyYWQgPSBsciAqIGdyYWQobGFtYmRhIHQ6IGxvc3ModCwgeCwgeSkpKGZ1bGx3ZWlnaHRsaXN0Wy0xXSlcblxuICBiZ3JhZCA9IGdyYWQobGFtYmRhIHQ6IGxvc3ModCwgbnhiYXRjaCwgbnliYXRjaCkpKGJhdGNod2VpZ2h0bGlzdFstMV0pXG4gIHZlbG9jaXR5ID0gbW9tZW50dW0gKiB2ZWxvY2l0eSArICgxIC0gbW9tZW50dW0pICogYmdyYWRcbiAgbWFnbml0dWRlID0gYmV0YSAqIG1hZ25pdHVkZSArICgxLiAtIGJldGEpICogKGJncmFkICoqIDIpXG4gIGJhdGNoZ3JhZCA9IHZlbG9jaXR5XG4gIGlmIGJldGEgPiAwOlxuICAgIGJhdGNoZ3JhZCA9IHZlbG9jaXR5IC8gdGYuc3FydChtYWduaXR1ZGUgKyAxZS04KVxuICBcbiAgZnVsbHdlaWdodGxpc3QuYXBwZW5kKChmdWxsd2VpZ2h0bGlzdFstMV0gLSBmdWxsZ3JhZCkuZmxhdHRlbigpKVxuICBiYXRjaHdlaWdodGxpc3QuYXBwZW5kKChiYXRjaHdlaWdodGxpc3RbLTFdIC0gbHIgKiBiYXRjaGdyYWQpLmZsYXR0ZW4oKSlcbiAgXG5cbmZ1bGx3ZWlnaHRzID0gdGYuc3RhY2soZnVsbHdlaWdodGxpc3QpXG5iYXRjaHdlaWdodHMgPSB0Zi5zdGFjayhiYXRjaHdlaWdodGxpc3QpXG5cbmdyYWRwbG90ID0gZGljdCh4PWZ1bGx3ZWlnaHRzWzosIDBdLCB5PWZ1bGx3ZWlnaHRzWzosIDFdLCBzaG93bGVnZW5kPUZhbHNlLCBsaW5lPWRpY3QoY29sb3I9J2JsYWNrJykpXG5iYXRjaGdyYWRwbG90ID0gZGljdCh4PWJhdGNod2VpZ2h0c1s6LCAwXSwgeT1iYXRjaHdlaWdodHNbOiwgMV0sIHNob3dsZWdlbmQ9RmFsc2UsIGxpbmU9ZGljdChjb2xvcj0nb3JhbmdlJykpXG5cblxuemxvc3MgPSBsb3NzKGZ1bGx3ZWlnaHRzLCB4LCB5KVxuYmF0Y2h6bG9zcyA9IGxvc3MoYmF0Y2h3ZWlnaHRzLCB4LCB5KVxudGhyZWVkZ3JhZHBsb3QgPSBkaWN0KHg9ZnVsbHdlaWdodHNbOiwgMF0sIHk9ZnVsbHdlaWdodHNbOiwgMV0sIHo9emxvc3MsIHNob3dsZWdlbmQ9RmFsc2UsIG1hcmtlcj1kaWN0KHNpemU9NCksIGxpbmU9ZGljdChjb2xvcj0nYmxhY2snLCB3aWR0aD00KSwgdHlwZT0nc2NhdHRlcjNkJylcbnRocmVlZGJhdGNoZ3JhZHBsb3QgPSBkaWN0KHg9YmF0Y2h3ZWlnaHRzWzosIDBdLCB5PWJhdGNod2VpZ2h0c1s6LCAxXSwgej1iYXRjaHpsb3NzLCBzaG93bGVnZW5kPUZhbHNlLCBtYXJrZXI9ZGljdChzaXplPTQpLCBsaW5lPWRpY3QoY29sb3I9J29yYW5nZScsIHdpZHRoPTQpLCB0eXBlPSdzY2F0dGVyM2QnKVxuXG5maW5hbGxvc3MgPSB6bG9zc1swXS50MkpzKClcblxuUGxvdGx5UmVhY3RpdmUobG9zc3Bsb3QsIFtsb3NzY29udG91ciwgc3RhcnRwb2ludCwgZ3JhZHBsb3QsIGJhdGNoZ3JhZHBsb3RdLCB7J3RpdGxlJzogJ0xvc3MgPSAlLjNmJyAlIGZpbmFsbG9zcywgJ3Nob3dsZWdlbmQnOiBGYWxzZSwgJ3hheGlzJzogeydyYW5nZSc6IFstMywgM10sICd0aXRsZSc6ICdTbG9wZSAodyknfSwgJ3lheGlzJzogeydyYW5nZSc6IFstMywgM10sICd0aXRsZSc6IHtcbiAgICAgICd0ZXh0JzogJ0JpYXMgKGIpJ1xuICAgIH19fSlcbmBcblxubG9zcyA9IHB5YFxuIyAke2JhdGNofVxuIyBQbG90IHRoZSBkYXRhIHNjYXR0ZXJwbG90IGFuZCBwcmVkaWN0aW9uIGZ1bmN0aW9uXG5cbmlud2VpZ2h0cyA9ICR7d2VpZ2h0c31cbmN3ZWlnaHRzID0gVGVuc29yKGlud2VpZ2h0cylcbmVycm9ycyA9IHliYXRjaC5yZXNoYXBlKCgtMSwpKSAtIHByZWRpY3QoY3dlaWdodHMsIHhiYXRjaC5yZXNoYXBlKCgtMSwpKSwpLmZsYXR0ZW4oKVxubG9zc2VzID0gKGVycm9ycykgKiogMlxuYmF0Y2hkYXRhID0gZGljdCh4PXhiYXRjaC5yZXNoYXBlKCgtMSwpKSwgeT15YmF0Y2gucmVzaGFwZSgoLTEsKSksIG1vZGU9J21hcmtlcnMnLCBtYXJrZXI9ZGljdChjb2xvcj10Zi5zcXJ0KGxvc3NlcyksIGNvbG9yc2NhbGU9J1JkQnUnLCBjbWluPTAsIGNtYXg9MikpXG5cbnhyYW5nZSA9IHRmLmxpbnNwYWNlKC0yLCAzLCA1MClcbnBmdW5jdGlvbiA9IGRpY3QoeD14cmFuZ2UuZmxhdHRlbigpLCB5PXByZWRpY3QoY3dlaWdodHMsIHhyYW5nZSkuZmxhdHRlbigpLCBsaW5lPWRpY3QoY29sb3I9J2JsYWNrJykpXG5cblxuUGxvdGx5UmVhY3RpdmUoc2NhdHRlcmZpZywgWyBiYXRjaGRhdGEsIHBmdW5jdGlvbl0sIHsndGl0bGUnOiAnUHJlZGljdGlvbiBmdW5jdGlvbjogeSA9ICUuMmYgeCArICUuMmYnICUgKGlud2VpZ2h0c1swXSwgaW53ZWlnaHRzWzFdKSwgJ3Nob3dsZWdlbmQnOiBGYWxzZSwgJ3hheGlzJzogeydyYW5nZSc6IFstMiwgM10sICd0aXRsZSc6IHsndGV4dCc6ICd4ICh3ZWlnaHQpJ319LCAneWF4aXMnOiB7J3JhbmdlJzogWy0yLCAzXSwgJ3RpdGxlJzogeyd0ZXh0JzogJ3kgKE1QRyknfSB9fSlcblxuaGlzdGRhdGEgPSBkaWN0KHg9ZXJyb3JzLCB0eXBlPSdoaXN0b2dyYW0nLCB4Ymlucz0gZGljdChzdGFydD0tMywgZW5kPTMsIHNpemU9MC4xNSkpXG5cbm54ID0gdGYubGluc3BhY2UoLTMsIDMsIDEwMClcbm55ID0gdGYuZXhwKC1ueCAqKiAyKVxubm9ybWRhdGEgPSBkaWN0KHg9bngsIHk9bnksIGxpbmU9ZGljdChjb2xvcj0ncmVkJyksIHlheGlzPSd5MicsKVxuXG5QbG90bHlSZWFjdGl2ZShoaXN0ZmlnLCBbIGhpc3RkYXRhLCBub3JtZGF0YV0sIHsnc2hvd2xlZ2VuZCc6IEZhbHNlLCAndGl0bGUnOiAnRGlzdHJpYnV0aW9uIG9mIHJlc2lkdWFscycsICd5YXhpcyc6IHsndGl0bGUnOiB7J3RleHQnOiAnRnJlcXVlbmN5J319LCAgJ3lheGlzMic6IHsnb3ZlcmxheWluZyc6ICd5JywgJ3JhbmdlJzogWzAsIDFdLCAndmlzaWJsZSc6IEZhbHNlfSwgJ3hheGlzJzogeydyYW5nZSc6IFstMywgM10sICd0aXRsZSc6IHsndGV4dCc6ICdFcnJvciAocmVzaWR1YWwpJ30gfX0pXG5sb3NzZXMubWVhbigpXG5gXG5cbmJhdGNoID0gcHlgXG4jICR7ZGF0YX1cbmJhdGNoc2l6ZSA9IDBcbmJhdGNoZXMgPSBbZ2V0X2JhdGNoKGJhdGNoc2l6ZSwgeCwgeSkgZm9yIGkgaW4gcmFuZ2UobWF4KDEsIGludCgke3N0ZXBzfSkpKV1cbnhiYXRjaCwgeWJhdGNoID0gYmF0Y2hlc1swXVxuYFxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC00IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoic2NhdHRlciA9IHB5YFxuIyBTY2F0dGVycGxvdCBmaWd1cmVcbnNjYXR0ZXJmaWcgPSBQbG90bHlGaWd1cmUod2lkdGg9NTAwLCBoZWlnaHQ9NTAwKVxuc2NhdHRlcmZpZ1xuYFxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC01IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoiLy92aWV3b2YgbGVhcm5pbmdyYXRlID0gSW5wdXRzLnJhbmdlKFswLCAzXSwge3ZhbHVlOiAxLCBzdGVwOiAwLjAxLCBsYWJlbDogXCIgTGVhcm5pbmcgcmF0ZVwifSlcbmxlYXJuaW5ncmF0ZSA9IDBcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtNiIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IlxucGxvdHMgPSBweWBcbmxvc3NwbG90ID0gUGxvdGx5SW5wdXQod2lkdGg9NTAwLCBoZWlnaHQ9NTAwKVxuYFxuXG52aWV3b2Ygd2VpZ2h0cyA9IHB5YFxuIyAke3Bsb3RzfVxubG9zc3Bsb3RcbmBcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtNyIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6Ii8vdmlld29mIHN0ZXBzID0gSW5wdXRzLnJhbmdlKFswLCAxMF0sIHt2YWx1ZTogMCwgc3RlcDogMSwgbGFiZWw6IFwiICBTdGVwc1wifSlcbnN0ZXBzID0gMFxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC04IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoiaGlzdCA9IHB5YFxuIyBTY2F0dGVycGxvdCBmaWd1cmVcbmhpc3RmaWcgPSBQbG90bHlGaWd1cmUod2lkdGg9NTAwLCBoZWlnaHQ9NTAwKVxuaGlzdGZpZ1xuYFxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJzaGlueUlucHV0KCd3ZWlnaHRzJykifV19
 </script>
 <script type="module">
 if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
@@ -1113,18 +1122,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -1156,11 +1154,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1170,8 +1207,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1183,7 +1229,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1227,6 +1396,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1252,6 +1422,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1312,6 +1508,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+
 
 
 

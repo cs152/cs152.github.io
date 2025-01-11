@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.319">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>CS 152: Neural Networks - Lecture 5: Neural networks</title>
+<title>Lecture 5: Neural networks – CS 152: Neural Networks</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,7 +22,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +33,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -57,7 +57,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -79,7 +79,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -88,18 +94,47 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 <script type="module" src="../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
 <link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -107,47 +142,47 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">CS 152: Neural Networks</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html" rel="" target="">
- <span class="menu-text">Home</span></a>
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../calendar/calendar.html" rel="" target="">
- <span class="menu-text">Calendar</span></a>
+    <a class="nav-link" href="../calendar/calendar.html"> 
+<span class="menu-text">Calendar</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://drive.google.com/drive/folders/1JFhwmcFBTHiRbfhQ0VRDj9xIPxFpHuWj?usp=drive_link" rel="" target="">
- <span class="menu-text">Homeworks</span></a>
+    <a class="nav-link" href="https://drive.google.com/drive/folders/1JFhwmcFBTHiRbfhQ0VRDj9xIPxFpHuWj?usp=drive_link"> 
+<span class="menu-text">Homeworks</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../assignments/final-project/outline.html" rel="" target="">
- <span class="menu-text">Project</span></a>
+    <a class="nav-link" href="../assignments/final-project/outline.html"> 
+<span class="menu-text">Project</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://github.com/orgs/CS152/" rel="" target="">
- <span class="menu-text">Github</span></a>
+    <a class="nav-link" href="https://github.com/orgs/CS152/"> 
+<span class="menu-text">Github</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://www.gradescope.com/courses/710173" rel="" target="">
- <span class="menu-text">Gradescope</span></a>
+    <a class="nav-link" href="https://www.gradescope.com/courses/710173"> 
+<span class="menu-text">Gradescope</span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools ms-auto">
-</div>
           </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -194,7 +229,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
+
 </header>
+
 
 <div class="cell">
 <div class="sourceCode cell-code hidden" id="cb1" data-startfrom="19" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 18;"><span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>Plot <span class="op">=</span> <span class="im">import</span>(<span class="st">"https://esm.sh/@observablehq/plot"</span>) </span>
@@ -731,7 +768,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div class="cell" data-execution_count="1">
+<div id="43bb1d44" class="cell" data-execution_count="1">
 <div class="cell-output cell-output-display">
 <script type="ojs-define">{"contents": [{"name": "data_raw", "value": {"mpg": [18.0, 15.0, 18.0, 16.0, 17.0, 15.0, 14.0, 14.0, 14.0, 15.0, 15.0, 14.0, 15.0, 14.0, 24.0, 22.0, 18.0, 21.0, 27.0, 26.0, 25.0, 24.0, 25.0, 26.0, 21.0, 10.0, 10.0, 11.0, 9.0, 27.0, 28.0, 25.0, 25.0, 19.0, 16.0, 17.0, 19.0, 18.0, 14.0, 14.0, 14.0, 14.0, 12.0, 13.0, 13.0, 18.0, 22.0, 19.0, 18.0, 23.0, 28.0, 30.0, 30.0, 31.0, 35.0, 27.0, 26.0, 24.0, 25.0, 23.0, 20.0, 21.0, 13.0, 14.0, 15.0, 14.0, 17.0, 11.0, 13.0, 12.0, 13.0, 19.0, 15.0, 13.0, 13.0, 14.0, 18.0, 22.0, 21.0, 26.0, 22.0, 28.0, 23.0, 28.0, 27.0, 13.0, 14.0, 13.0, 14.0, 15.0, 12.0, 13.0, 13.0, 14.0, 13.0, 12.0, 13.0, 18.0, 16.0, 18.0, 18.0, 23.0, 26.0, 11.0, 12.0, 13.0, 12.0, 18.0, 20.0, 21.0, 22.0, 18.0, 19.0, 21.0, 26.0, 15.0, 16.0, 29.0, 24.0, 20.0, 19.0, 15.0, 24.0, 20.0, 11.0, 20.0, 21.0, 19.0, 15.0, 31.0, 26.0, 32.0, 25.0, 16.0, 16.0, 18.0, 16.0, 13.0, 14.0, 14.0, 14.0, 29.0, 26.0, 26.0, 31.0, 32.0, 28.0, 24.0, 26.0, 24.0, 26.0, 31.0, 19.0, 18.0, 15.0, 15.0, 16.0, 15.0, 16.0, 14.0, 17.0, 16.0, 15.0, 18.0, 21.0, 20.0, 13.0, 29.0, 23.0, 20.0, 23.0, 24.0, 25.0, 24.0, 18.0, 29.0, 19.0, 23.0, 23.0, 22.0, 25.0, 33.0, 28.0, 25.0, 25.0, 26.0, 27.0, 17.5, 16.0, 15.5, 14.5, 22.0, 22.0, 24.0, 22.5, 29.0, 24.5, 29.0, 33.0, 20.0, 18.0, 18.5, 17.5, 29.5, 32.0, 28.0, 26.5, 20.0, 13.0, 19.0, 19.0, 16.5, 16.5, 13.0, 13.0, 13.0, 31.5, 30.0, 36.0, 25.5, 33.5, 17.5, 17.0, 15.5, 15.0, 17.5, 20.5, 19.0, 18.5, 16.0, 15.5, 15.5, 16.0, 29.0, 24.5, 26.0, 25.5, 30.5, 33.5, 30.0, 30.5, 22.0, 21.5, 21.5, 43.1, 36.1, 32.8, 39.4, 36.1, 19.9, 19.4, 20.2, 19.2, 20.5, 20.2, 25.1, 20.5, 19.4, 20.6, 20.8, 18.6, 18.1, 19.2, 17.7, 18.1, 17.5, 30.0, 27.5, 27.2, 30.9, 21.1, 23.2, 23.8, 23.9, 20.3, 17.0, 21.6, 16.2, 31.5, 29.5, 21.5, 19.8, 22.3, 20.2, 20.6, 17.0, 17.6, 16.5, 18.2, 16.9, 15.5, 19.2, 18.5, 31.9, 34.1, 35.7, 27.4, 25.4, 23.0, 27.2, 23.9, 34.2, 34.5, 31.8, 37.3, 28.4, 28.8, 26.8, 33.5, 41.5, 38.1, 32.1, 37.2, 28.0, 26.4, 24.3, 19.1, 34.3, 29.8, 31.3, 37.0, 32.2, 46.6, 27.9, 40.8, 44.3, 43.4, 36.4, 30.0, 44.6, 40.9, 33.8, 29.8, 32.7, 23.7, 35.0, 23.6, 32.4, 27.2, 26.6, 25.8, 23.5, 30.0, 39.1, 39.0, 35.1, 32.3, 37.0, 37.7, 34.1, 34.7, 34.4, 29.9, 33.0, 34.5, 33.7, 32.4, 32.9, 31.6, 28.1, 30.7, 25.4, 24.2, 22.4, 26.6, 20.2, 17.6, 28.0, 27.0, 34.0, 31.0, 29.0, 27.0, 24.0, 23.0, 36.0, 37.0, 31.0, 38.0, 36.0, 36.0, 36.0, 34.0, 38.0, 32.0, 38.0, 25.0, 38.0, 26.0, 22.0, 32.0, 36.0, 27.0, 27.0, 44.0, 32.0, 28.0, 31.0], "cylinders": [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 4, 6, 6, 6, 4, 4, 4, 4, 4, 4, 6, 8, 8, 8, 8, 4, 4, 4, 4, 6, 6, 6, 6, 6, 8, 8, 8, 8, 8, 8, 8, 6, 4, 6, 6, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 8, 8, 8, 8, 8, 8, 8, 8, 8, 3, 8, 8, 8, 8, 4, 4, 4, 4, 4, 4, 4, 4, 4, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 6, 6, 6, 6, 6, 4, 8, 8, 8, 8, 6, 4, 4, 4, 3, 4, 6, 4, 8, 8, 4, 4, 4, 4, 8, 4, 6, 8, 6, 6, 6, 6, 4, 4, 4, 4, 6, 6, 6, 8, 8, 8, 8, 8, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 6, 6, 6, 6, 8, 8, 8, 8, 6, 6, 6, 6, 6, 8, 8, 4, 4, 6, 4, 4, 4, 4, 6, 4, 6, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 8, 8, 8, 8, 6, 6, 6, 6, 4, 4, 4, 4, 6, 6, 6, 6, 4, 4, 4, 4, 4, 8, 4, 6, 6, 8, 8, 8, 8, 4, 4, 4, 4, 4, 8, 8, 8, 8, 6, 6, 6, 6, 8, 8, 8, 8, 4, 4, 4, 4, 4, 4, 4, 4, 6, 4, 3, 4, 4, 4, 4, 4, 8, 8, 8, 6, 6, 6, 4, 6, 6, 6, 6, 6, 6, 8, 6, 8, 8, 4, 4, 4, 4, 4, 4, 4, 4, 5, 6, 4, 6, 4, 4, 6, 6, 4, 6, 6, 8, 8, 8, 8, 8, 8, 8, 8, 4, 4, 4, 4, 5, 8, 4, 8, 4, 4, 4, 4, 4, 6, 6, 4, 4, 4, 4, 4, 4, 4, 4, 6, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 4, 4, 4, 4, 4, 6, 3, 4, 4, 4, 4, 4, 4, 6, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 6, 6, 6, 6, 8, 6, 6, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 6, 6, 4, 6, 4, 4, 4, 4, 4, 4, 4, 4], "displacement": [307.0, 350.0, 318.0, 304.0, 302.0, 429.0, 454.0, 440.0, 455.0, 390.0, 383.0, 340.0, 400.0, 455.0, 113.0, 198.0, 199.0, 200.0, 97.0, 97.0, 110.0, 107.0, 104.0, 121.0, 199.0, 360.0, 307.0, 318.0, 304.0, 97.0, 140.0, 113.0, 98.0, 232.0, 225.0, 250.0, 250.0, 232.0, 350.0, 400.0, 351.0, 318.0, 383.0, 400.0, 400.0, 258.0, 140.0, 250.0, 250.0, 122.0, 116.0, 79.0, 88.0, 71.0, 72.0, 97.0, 91.0, 113.0, 97.5, 97.0, 140.0, 122.0, 350.0, 400.0, 318.0, 351.0, 304.0, 429.0, 350.0, 350.0, 400.0, 70.0, 304.0, 307.0, 302.0, 318.0, 121.0, 121.0, 120.0, 96.0, 122.0, 97.0, 120.0, 98.0, 97.0, 350.0, 304.0, 350.0, 302.0, 318.0, 429.0, 400.0, 351.0, 318.0, 440.0, 455.0, 360.0, 225.0, 250.0, 232.0, 250.0, 198.0, 97.0, 400.0, 400.0, 360.0, 350.0, 232.0, 97.0, 140.0, 108.0, 70.0, 122.0, 155.0, 98.0, 350.0, 400.0, 68.0, 116.0, 114.0, 121.0, 318.0, 121.0, 156.0, 350.0, 198.0, 200.0, 232.0, 250.0, 79.0, 122.0, 71.0, 140.0, 250.0, 258.0, 225.0, 302.0, 350.0, 318.0, 302.0, 304.0, 98.0, 79.0, 97.0, 76.0, 83.0, 90.0, 90.0, 116.0, 120.0, 108.0, 79.0, 225.0, 250.0, 250.0, 250.0, 400.0, 350.0, 318.0, 351.0, 231.0, 250.0, 258.0, 225.0, 231.0, 262.0, 302.0, 97.0, 140.0, 232.0, 140.0, 134.0, 90.0, 119.0, 171.0, 90.0, 232.0, 115.0, 120.0, 121.0, 121.0, 91.0, 107.0, 116.0, 140.0, 98.0, 101.0, 305.0, 318.0, 304.0, 351.0, 225.0, 250.0, 200.0, 232.0, 85.0, 98.0, 90.0, 91.0, 225.0, 250.0, 250.0, 258.0, 97.0, 85.0, 97.0, 140.0, 130.0, 318.0, 120.0, 156.0, 168.0, 350.0, 350.0, 302.0, 318.0, 98.0, 111.0, 79.0, 122.0, 85.0, 305.0, 260.0, 318.0, 302.0, 250.0, 231.0, 225.0, 250.0, 400.0, 350.0, 400.0, 351.0, 97.0, 151.0, 97.0, 140.0, 98.0, 98.0, 97.0, 97.0, 146.0, 121.0, 80.0, 90.0, 98.0, 78.0, 85.0, 91.0, 260.0, 318.0, 302.0, 231.0, 200.0, 200.0, 140.0, 225.0, 232.0, 231.0, 200.0, 225.0, 258.0, 305.0, 231.0, 302.0, 318.0, 98.0, 134.0, 119.0, 105.0, 134.0, 156.0, 151.0, 119.0, 131.0, 163.0, 121.0, 163.0, 89.0, 98.0, 231.0, 200.0, 140.0, 232.0, 225.0, 305.0, 302.0, 351.0, 318.0, 350.0, 351.0, 267.0, 360.0, 89.0, 86.0, 98.0, 121.0, 183.0, 350.0, 141.0, 260.0, 105.0, 105.0, 85.0, 91.0, 151.0, 173.0, 173.0, 151.0, 98.0, 89.0, 98.0, 86.0, 151.0, 140.0, 151.0, 225.0, 97.0, 134.0, 120.0, 119.0, 108.0, 86.0, 156.0, 85.0, 90.0, 90.0, 121.0, 146.0, 91.0, 85.0, 97.0, 89.0, 168.0, 70.0, 122.0, 140.0, 107.0, 135.0, 151.0, 156.0, 173.0, 135.0, 79.0, 86.0, 81.0, 97.0, 85.0, 89.0, 91.0, 105.0, 98.0, 98.0, 105.0, 100.0, 107.0, 108.0, 119.0, 120.0, 141.0, 145.0, 168.0, 146.0, 231.0, 350.0, 200.0, 225.0, 112.0, 112.0, 112.0, 112.0, 135.0, 151.0, 140.0, 151.0, 105.0, 91.0, 91.0, 105.0, 98.0, 120.0, 107.0, 108.0, 91.0, 91.0, 91.0, 181.0, 262.0, 156.0, 232.0, 144.0, 135.0, 151.0, 140.0, 97.0, 135.0, 120.0, 119.0], "horsepower": ["130", "165", "150", "150", "140", "198", "220", "215", "225", "190", "170", "160", "150", "225", "95", "95", "97", "85", "88", "46", "87", "90", "95", "113", "90", "215", "200", "210", "193", "88", "90", "95", "?", "100", "105", "100", "88", "100", "165", "175", "153", "150", "180", "170", "175", "110", "72", "100", "88", "86", "90", "70", "76", "65", "69", "60", "70", "95", "80", "54", "90", "86", "165", "175", "150", "153", "150", "208", "155", "160", "190", "97", "150", "130", "140", "150", "112", "76", "87", "69", "86", "92", "97", "80", "88", "175", "150", "145", "137", "150", "198", "150", "158", "150", "215", "225", "175", "105", "100", "100", "88", "95", "46", "150", "167", "170", "180", "100", "88", "72", "94", "90", "85", "107", "90", "145", "230", "49", "75", "91", "112", "150", "110", "122", "180", "95", "?", "100", "100", "67", "80", "65", "75", "100", "110", "105", "140", "150", "150", "140", "150", "83", "67", "78", "52", "61", "75", "75", "75", "97", "93", "67", "95", "105", "72", "72", "170", "145", "150", "148", "110", "105", "110", "95", "110", "110", "129", "75", "83", "100", "78", "96", "71", "97", "97", "70", "90", "95", "88", "98", "115", "53", "86", "81", "92", "79", "83", "140", "150", "120", "152", "100", "105", "81", "90", "52", "60", "70", "53", "100", "78", "110", "95", "71", "70", "75", "72", "102", "150", "88", "108", "120", "180", "145", "130", "150", "68", "80", "58", "96", "70", "145", "110", "145", "130", "110", "105", "100", "98", "180", "170", "190", "149", "78", "88", "75", "89", "63", "83", "67", "78", "97", "110", "110", "48", "66", "52", "70", "60", "110", "140", "139", "105", "95", "85", "88", "100", "90", "105", "85", "110", "120", "145", "165", "139", "140", "68", "95", "97", "75", "95", "105", "85", "97", "103", "125", "115", "133", "71", "68", "115", "85", "88", "90", "110", "130", "129", "138", "135", "155", "142", "125", "150", "71", "65", "80", "80", "77", "125", "71", "90", "70", "70", "65", "69", "90", "115", "115", "90", "76", "60", "70", "65", "90", "88", "90", "90", "78", "90", "75", "92", "75", "65", "105", "65", "48", "48", "67", "67", "67", "?", "67", "62", "132", "100", "88", "?", "72", "84", "84", "92", "110", "84", "58", "64", "60", "67", "65", "62", "68", "63", "65", "65", "74", "?", "75", "75", "100", "74", "80", "76", "116", "120", "110", "105", "88", "85", "88", "88", "88", "85", "84", "90", "92", "?", "74", "68", "68", "63", "70", "88", "75", "70", "67", "67", "67", "110", "85", "92", "112", "96", "84", "90", "86", "52", "84", "79", "82"], "weight": [3504, 3693, 3436, 3433, 3449, 4341, 4354, 4312, 4425, 3850, 3563, 3609, 3761, 3086, 2372, 2833, 2774, 2587, 2130, 1835, 2672, 2430, 2375, 2234, 2648, 4615, 4376, 4382, 4732, 2130, 2264, 2228, 2046, 2634, 3439, 3329, 3302, 3288, 4209, 4464, 4154, 4096, 4955, 4746, 5140, 2962, 2408, 3282, 3139, 2220, 2123, 2074, 2065, 1773, 1613, 1834, 1955, 2278, 2126, 2254, 2408, 2226, 4274, 4385, 4135, 4129, 3672, 4633, 4502, 4456, 4422, 2330, 3892, 4098, 4294, 4077, 2933, 2511, 2979, 2189, 2395, 2288, 2506, 2164, 2100, 4100, 3672, 3988, 4042, 3777, 4952, 4464, 4363, 4237, 4735, 4951, 3821, 3121, 3278, 2945, 3021, 2904, 1950, 4997, 4906, 4654, 4499, 2789, 2279, 2401, 2379, 2124, 2310, 2472, 2265, 4082, 4278, 1867, 2158, 2582, 2868, 3399, 2660, 2807, 3664, 3102, 2875, 2901, 3336, 1950, 2451, 1836, 2542, 3781, 3632, 3613, 4141, 4699, 4457, 4638, 4257, 2219, 1963, 2300, 1649, 2003, 2125, 2108, 2246, 2489, 2391, 2000, 3264, 3459, 3432, 3158, 4668, 4440, 4498, 4657, 3907, 3897, 3730, 3785, 3039, 3221, 3169, 2171, 2639, 2914, 2592, 2702, 2223, 2545, 2984, 1937, 3211, 2694, 2957, 2945, 2671, 1795, 2464, 2220, 2572, 2255, 2202, 4215, 4190, 3962, 4215, 3233, 3353, 3012, 3085, 2035, 2164, 1937, 1795, 3651, 3574, 3645, 3193, 1825, 1990, 2155, 2565, 3150, 3940, 3270, 2930, 3820, 4380, 4055, 3870, 3755, 2045, 2155, 1825, 2300, 1945, 3880, 4060, 4140, 4295, 3520, 3425, 3630, 3525, 4220, 4165, 4325, 4335, 1940, 2740, 2265, 2755, 2051, 2075, 1985, 2190, 2815, 2600, 2720, 1985, 1800, 1985, 2070, 1800, 3365, 3735, 3570, 3535, 3155, 2965, 2720, 3430, 3210, 3380, 3070, 3620, 3410, 3425, 3445, 3205, 4080, 2155, 2560, 2300, 2230, 2515, 2745, 2855, 2405, 2830, 3140, 2795, 3410, 1990, 2135, 3245, 2990, 2890, 3265, 3360, 3840, 3725, 3955, 3830, 4360, 4054, 3605, 3940, 1925, 1975, 1915, 2670, 3530, 3900, 3190, 3420, 2200, 2150, 2020, 2130, 2670, 2595, 2700, 2556, 2144, 1968, 2120, 2019, 2678, 2870, 3003, 3381, 2188, 2711, 2542, 2434, 2265, 2110, 2800, 2110, 2085, 2335, 2950, 3250, 1850, 1835, 2145, 1845, 2910, 2420, 2500, 2905, 2290, 2490, 2635, 2620, 2725, 2385, 1755, 1875, 1760, 2065, 1975, 2050, 1985, 2215, 2045, 2380, 2190, 2320, 2210, 2350, 2615, 2635, 3230, 3160, 2900, 2930, 3415, 3725, 3060, 3465, 2605, 2640, 2395, 2575, 2525, 2735, 2865, 3035, 1980, 2025, 1970, 2125, 2125, 2160, 2205, 2245, 1965, 1965, 1995, 2945, 3015, 2585, 2835, 2665, 2370, 2950, 2790, 2130, 2295, 2625, 2720], "acceleration": [12.0, 11.5, 11.0, 12.0, 10.5, 10.0, 9.0, 8.5, 10.0, 8.5, 10.0, 8.0, 9.5, 10.0, 15.0, 15.5, 15.5, 16.0, 14.5, 20.5, 17.5, 14.5, 17.5, 12.5, 15.0, 14.0, 15.0, 13.5, 18.5, 14.5, 15.5, 14.0, 19.0, 13.0, 15.5, 15.5, 15.5, 15.5, 12.0, 11.5, 13.5, 13.0, 11.5, 12.0, 12.0, 13.5, 19.0, 15.0, 14.5, 14.0, 14.0, 19.5, 14.5, 19.0, 18.0, 19.0, 20.5, 15.5, 17.0, 23.5, 19.5, 16.5, 12.0, 12.0, 13.5, 13.0, 11.5, 11.0, 13.5, 13.5, 12.5, 13.5, 12.5, 14.0, 16.0, 14.0, 14.5, 18.0, 19.5, 18.0, 16.0, 17.0, 14.5, 15.0, 16.5, 13.0, 11.5, 13.0, 14.5, 12.5, 11.5, 12.0, 13.0, 14.5, 11.0, 11.0, 11.0, 16.5, 18.0, 16.0, 16.5, 16.0, 21.0, 14.0, 12.5, 13.0, 12.5, 15.0, 19.0, 19.5, 16.5, 13.5, 18.5, 14.0, 15.5, 13.0, 9.5, 19.5, 15.5, 14.0, 15.5, 11.0, 14.0, 13.5, 11.0, 16.5, 17.0, 16.0, 17.0, 19.0, 16.5, 21.0, 17.0, 17.0, 18.0, 16.5, 14.0, 14.5, 13.5, 16.0, 15.5, 16.5, 15.5, 14.5, 16.5, 19.0, 14.5, 15.5, 14.0, 15.0, 15.5, 16.0, 16.0, 16.0, 21.0, 19.5, 11.5, 14.0, 14.5, 13.5, 21.0, 18.5, 19.0, 19.0, 15.0, 13.5, 12.0, 16.0, 17.0, 16.0, 18.5, 13.5, 16.5, 17.0, 14.5, 14.0, 17.0, 15.0, 17.0, 14.5, 13.5, 17.5, 15.5, 16.9, 14.9, 17.7, 15.3, 13.0, 13.0, 13.9, 12.8, 15.4, 14.5, 17.6, 17.6, 22.2, 22.1, 14.2, 17.4, 17.7, 21.0, 16.2, 17.8, 12.2, 17.0, 16.4, 13.6, 15.7, 13.2, 21.9, 15.5, 16.7, 12.1, 12.0, 15.0, 14.0, 18.5, 14.8, 18.6, 15.5, 16.8, 12.5, 19.0, 13.7, 14.9, 16.4, 16.9, 17.7, 19.0, 11.1, 11.4, 12.2, 14.5, 14.5, 16.0, 18.2, 15.8, 17.0, 15.9, 16.4, 14.1, 14.5, 12.8, 13.5, 21.5, 14.4, 19.4, 18.6, 16.4, 15.5, 13.2, 12.8, 19.2, 18.2, 15.8, 15.4, 17.2, 17.2, 15.8, 16.7, 18.7, 15.1, 13.2, 13.4, 11.2, 13.7, 16.5, 14.2, 14.7, 14.5, 14.8, 16.7, 17.6, 14.9, 15.9, 13.6, 15.7, 15.8, 14.9, 16.6, 15.4, 18.2, 17.3, 18.2, 16.6, 15.4, 13.4, 13.2, 15.2, 14.9, 14.3, 15.0, 13.0, 14.0, 15.2, 14.4, 15.0, 20.1, 17.4, 24.8, 22.2, 13.2, 14.9, 19.2, 14.7, 16.0, 11.3, 12.9, 13.2, 14.7, 18.8, 15.5, 16.4, 16.5, 18.1, 20.1, 18.7, 15.8, 15.5, 17.5, 15.0, 15.2, 17.9, 14.4, 19.2, 21.7, 23.7, 19.9, 21.8, 13.8, 17.3, 18.0, 15.3, 11.4, 12.5, 15.1, 14.3, 17.0, 15.7, 16.4, 14.4, 12.6, 12.9, 16.9, 16.4, 16.1, 17.8, 19.4, 17.3, 16.0, 14.9, 16.2, 20.7, 14.2, 15.8, 14.4, 16.8, 14.8, 18.3, 20.4, 19.6, 12.6, 13.8, 15.8, 19.0, 17.1, 16.6, 19.6, 18.6, 18.0, 16.2, 16.0, 18.0, 16.4, 20.5, 15.3, 18.2, 17.6, 14.7, 17.3, 14.5, 14.5, 16.9, 15.0, 15.7, 16.2, 16.4, 17.0, 14.5, 14.7, 13.9, 13.0, 17.3, 15.6, 24.6, 11.6, 18.6, 19.4], "model year": [70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 76, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 81, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82], "origin": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 3, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 3, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 2, 1, 3, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 2, 2, 2, 2, 1, 3, 3, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 3, 1, 3, 3, 1, 1, 2, 1, 1, 2, 2, 2, 2, 1, 2, 3, 1, 1, 1, 1, 1, 3, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 1, 2, 2, 3, 3, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 3, 2, 3, 1, 2, 1, 2, 2, 2, 2, 3, 2, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 3, 1, 1, 1, 1, 2, 3, 3, 1, 2, 1, 2, 3, 2, 1, 1, 1, 1, 3, 1, 2, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 3, 1, 1, 1, 3, 2, 3, 2, 3, 2, 1, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 1, 3, 1, 1, 3, 2, 2, 2, 2, 2, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 3, 1, 1, 2, 1, 2, 1, 1, 1, 3, 2, 1, 1, 1, 1, 2, 3, 1, 3, 1, 1, 1, 1, 2, 3, 3, 3, 3, 3, 1, 3, 2, 2, 2, 2, 3, 2, 3, 2, 3, 3, 2, 1, 3, 1, 1, 1, 1, 1, 3, 1, 3, 3, 3, 3, 3, 1, 1, 1, 2, 2, 3, 3, 3, 3, 2, 2, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 3, 3, 1, 1, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 3, 1, 1, 1, 2, 1, 1, 1], "car name": ["chevrolet chevelle malibu", "buick skylark 320", "plymouth satellite", "amc rebel sst", "ford torino", "ford galaxie 500", "chevrolet impala", "plymouth fury iii", "pontiac catalina", "amc ambassador dpl", "dodge challenger se", "plymouth 'cuda 340", "chevrolet monte carlo", "buick estate wagon (sw)", "toyota corona mark ii", "plymouth duster", "amc hornet", "ford maverick", "datsun pl510", "volkswagen 1131 deluxe sedan", "peugeot 504", "audi 100 ls", "saab 99e", "bmw 2002", "amc gremlin", "ford f250", "chevy c20", "dodge d200", "hi 1200d", "datsun pl510", "chevrolet vega 2300", "toyota corona", "ford pinto", "amc gremlin", "plymouth satellite custom", "chevrolet chevelle malibu", "ford torino 500", "amc matador", "chevrolet impala", "pontiac catalina brougham", "ford galaxie 500", "plymouth fury iii", "dodge monaco (sw)", "ford country squire (sw)", "pontiac safari (sw)", "amc hornet sportabout (sw)", "chevrolet vega (sw)", "pontiac firebird", "ford mustang", "mercury capri 2000", "opel 1900", "peugeot 304", "fiat 124b", "toyota corolla 1200", "datsun 1200", "volkswagen model 111", "plymouth cricket", "toyota corona hardtop", "dodge colt hardtop", "volkswagen type 3", "chevrolet vega", "ford pinto runabout", "chevrolet impala", "pontiac catalina", "plymouth fury iii", "ford galaxie 500", "amc ambassador sst", "mercury marquis", "buick lesabre custom", "oldsmobile delta 88 royale", "chrysler newport royal", "mazda rx2 coupe", "amc matador (sw)", "chevrolet chevelle concours (sw)", "ford gran torino (sw)", "plymouth satellite custom (sw)", "volvo 145e (sw)", "volkswagen 411 (sw)", "peugeot 504 (sw)", "renault 12 (sw)", "ford pinto (sw)", "datsun 510 (sw)", "toyouta corona mark ii (sw)", "dodge colt (sw)", "toyota corolla 1600 (sw)", "buick century 350", "amc matador", "chevrolet malibu", "ford gran torino", "dodge coronet custom", "mercury marquis brougham", "chevrolet caprice classic", "ford ltd", "plymouth fury gran sedan", "chrysler new yorker brougham", "buick electra 225 custom", "amc ambassador brougham", "plymouth valiant", "chevrolet nova custom", "amc hornet", "ford maverick", "plymouth duster", "volkswagen super beetle", "chevrolet impala", "ford country", "plymouth custom suburb", "oldsmobile vista cruiser", "amc gremlin", "toyota carina", "chevrolet vega", "datsun 610", "maxda rx3", "ford pinto", "mercury capri v6", "fiat 124 sport coupe", "chevrolet monte carlo s", "pontiac grand prix", "fiat 128", "opel manta", "audi 100ls", "volvo 144ea", "dodge dart custom", "saab 99le", "toyota mark ii", "oldsmobile omega", "plymouth duster", "ford maverick", "amc hornet", "chevrolet nova", "datsun b210", "ford pinto", "toyota corolla 1200", "chevrolet vega", "chevrolet chevelle malibu classic", "amc matador", "plymouth satellite sebring", "ford gran torino", "buick century luxus (sw)", "dodge coronet custom (sw)", "ford gran torino (sw)", "amc matador (sw)", "audi fox", "volkswagen dasher", "opel manta", "toyota corona", "datsun 710", "dodge colt", "fiat 128", "fiat 124 tc", "honda civic", "subaru", "fiat x1.9", "plymouth valiant custom", "chevrolet nova", "mercury monarch", "ford maverick", "pontiac catalina", "chevrolet bel air", "plymouth grand fury", "ford ltd", "buick century", "chevroelt chevelle malibu", "amc matador", "plymouth fury", "buick skyhawk", "chevrolet monza 2+2", "ford mustang ii", "toyota corolla", "ford pinto", "amc gremlin", "pontiac astro", "toyota corona", "volkswagen dasher", "datsun 710", "ford pinto", "volkswagen rabbit", "amc pacer", "audi 100ls", "peugeot 504", "volvo 244dl", "saab 99le", "honda civic cvcc", "fiat 131", "opel 1900", "capri ii", "dodge colt", "renault 12tl", "chevrolet chevelle malibu classic", "dodge coronet brougham", "amc matador", "ford gran torino", "plymouth valiant", "chevrolet nova", "ford maverick", "amc hornet", "chevrolet chevette", "chevrolet woody", "vw rabbit", "honda civic", "dodge aspen se", "ford granada ghia", "pontiac ventura sj", "amc pacer d/l", "volkswagen rabbit", "datsun b-210", "toyota corolla", "ford pinto", "volvo 245", "plymouth volare premier v8", "peugeot 504", "toyota mark ii", "mercedes-benz 280s", "cadillac seville", "chevy c10", "ford f108", "dodge d100", "honda accord cvcc", "buick opel isuzu deluxe", "renault 5 gtl", "plymouth arrow gs", "datsun f-10 hatchback", "chevrolet caprice classic", "oldsmobile cutlass supreme", "dodge monaco brougham", "mercury cougar brougham", "chevrolet concours", "buick skylark", "plymouth volare custom", "ford granada", "pontiac grand prix lj", "chevrolet monte carlo landau", "chrysler cordoba", "ford thunderbird", "volkswagen rabbit custom", "pontiac sunbird coupe", "toyota corolla liftback", "ford mustang ii 2+2", "chevrolet chevette", "dodge colt m/m", "subaru dl", "volkswagen dasher", "datsun 810", "bmw 320i", "mazda rx-4", "volkswagen rabbit custom diesel", "ford fiesta", "mazda glc deluxe", "datsun b210 gx", "honda civic cvcc", "oldsmobile cutlass salon brougham", "dodge diplomat", "mercury monarch ghia", "pontiac phoenix lj", "chevrolet malibu", "ford fairmont (auto)", "ford fairmont (man)", "plymouth volare", "amc concord", "buick century special", "mercury zephyr", "dodge aspen", "amc concord d/l", "chevrolet monte carlo landau", "buick regal sport coupe (turbo)", "ford futura", "dodge magnum xe", "chevrolet chevette", "toyota corona", "datsun 510", "dodge omni", "toyota celica gt liftback", "plymouth sapporo", "oldsmobile starfire sx", "datsun 200-sx", "audi 5000", "volvo 264gl", "saab 99gle", "peugeot 604sl", "volkswagen scirocco", "honda accord lx", "pontiac lemans v6", "mercury zephyr 6", "ford fairmont 4", "amc concord dl 6", "dodge aspen 6", "chevrolet caprice classic", "ford ltd landau", "mercury grand marquis", "dodge st. regis", "buick estate wagon (sw)", "ford country squire (sw)", "chevrolet malibu classic (sw)", "chrysler lebaron town @ country (sw)", "vw rabbit custom", "maxda glc deluxe", "dodge colt hatchback custom", "amc spirit dl", "mercedes benz 300d", "cadillac eldorado", "peugeot 504", "oldsmobile cutlass salon brougham", "plymouth horizon", "plymouth horizon tc3", "datsun 210", "fiat strada custom", "buick skylark limited", "chevrolet citation", "oldsmobile omega brougham", "pontiac phoenix", "vw rabbit", "toyota corolla tercel", "chevrolet chevette", "datsun 310", "chevrolet citation", "ford fairmont", "amc concord", "dodge aspen", "audi 4000", "toyota corona liftback", "mazda 626", "datsun 510 hatchback", "toyota corolla", "mazda glc", "dodge colt", "datsun 210", "vw rabbit c (diesel)", "vw dasher (diesel)", "audi 5000s (diesel)", "mercedes-benz 240d", "honda civic 1500 gl", "renault lecar deluxe", "subaru dl", "vokswagen rabbit", "datsun 280-zx", "mazda rx-7 gs", "triumph tr7 coupe", "ford mustang cobra", "honda accord", "plymouth reliant", "buick skylark", "dodge aries wagon (sw)", "chevrolet citation", "plymouth reliant", "toyota starlet", "plymouth champ", "honda civic 1300", "subaru", "datsun 210 mpg", "toyota tercel", "mazda glc 4", "plymouth horizon 4", "ford escort 4w", "ford escort 2h", "volkswagen jetta", "renault 18i", "honda prelude", "toyota corolla", "datsun 200sx", "mazda 626", "peugeot 505s turbo diesel", "volvo diesel", "toyota cressida", "datsun 810 maxima", "buick century", "oldsmobile cutlass ls", "ford granada gl", "chrysler lebaron salon", "chevrolet cavalier", "chevrolet cavalier wagon", "chevrolet cavalier 2-door", "pontiac j2000 se hatchback", "dodge aries se", "pontiac phoenix", "ford fairmont futura", "amc concord dl", "volkswagen rabbit l", "mazda glc custom l", "mazda glc custom", "plymouth horizon miser", "mercury lynx l", "nissan stanza xe", "honda accord", "toyota corolla", "honda civic", "honda civic (auto)", "datsun 310 gx", "buick century limited", "oldsmobile cutlass ciera (diesel)", "chrysler lebaron medallion", "ford granada l", "toyota celica gt", "dodge charger 2.2", "chevrolet camaro", "ford mustang gl", "vw pickup", "dodge rampage", "ford ranger", "chevy s-10"]}}]}</script>
 </div>
@@ -742,13 +779,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="ojs-cell-2" data-nodetype="declaration">
 
 </div>
-</div>
-</div>
-<div class="cell" data-execution_count="2">
-<div class="cell-output cell-output-display">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.0</span>
-
-</pre>
 </div>
 </div>
 <section id="neural-networks" class="level1">
@@ -771,9 +801,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 \\ p(y=c \mid \mathbf{x}, \mathbf{w}) = \text{softmax}(\mathbf{x}^T\mathbf{W})_c \quad (\text{probabilistic view})  \end{cases}
 \]</span></p>
 <p>In each of these cases, the core of our prediction is a linear function <span class="math inline">\((\mathbf{x}^T\mathbf{w})\)</span> <em>parameterized</em> by a set of weights <span class="math inline">\(\mathbf{w}\)</span>, with possibly some nonlinear function (e.g.&nbsp;<span class="math inline">\(\sigma(\cdot)\)</span>), applied to the result. This type of function is commonly depicted using a diagram like the one shown below.</p>
-<div class="cell" data-execution_count="3">
+<div id="b4266958" class="cell" data-execution_count="3">
 <div class="cell-output cell-output-display">
-<p><img src="notes_files/figure-html/cell-4-output-1.png" class="img-fluid"></p>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.1</span>
+
+</pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="notes_files/figure-html/cell-4-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Each node corresponds to a scalar value: the nodes on the left correspond to each input dimension and the node on the right corresponds to the prediction. Each edge represents multiplying the value on the left with a corresponding weight.</p>
@@ -788,13 +827,13 @@ f(\mathbf{x})=\phi(\mathbf{x})^T \mathbf{w} ,\quad \phi(\mathbf{x})  = \begin{bm
 <p><span class="math display">\[
 f(\mathbf{x}) = w_1 x_1 + w_2 x_2 + w_3 x_1^2 + w_4 x_2^2 + w_5 x_1 x_2 + w_6 \sin(x_1) + w_7 \sin(x_2)
 \]</span></p>
-<div class="cell" data-execution_count="4">
+<div id="fe30aa60" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-display">
-<script type="ojs-define">{"contents": [{"name": "quadratic_data", "value": [[-1.3973502374140927, 1.2741253484425863], [-0.8284075952708934, 0.19900323558239302], [-1.7683487650749965, 2.7053509319570717], [-0.42263001873471406, 0.6895305056539379], [-0.3597819557055928, 0.2823894474945738], [0.9503704140490195, 1.0613581902010765], [1.909369161444829, 2.828402111522769], [-2.2313538403028295, 5.026814284179125], [1.7571273486127792, 3.691192244764065], [-1.3459648747518556, 1.6765098594338401], [2.557285068868995, 6.081175887720934], [-0.620276386739544, -0.41672399040565405], [-0.8057142239726729, 0.47351317778290103], [-0.7749590606549761, 0.0069572382182429005], [0.745272429120595, 0.7627021319242334], [0.301319849984385, 0.5631031533759694], [2.6528093476303987, 6.676767598371664], [-1.3680709794024322, 1.9944087995201725], [2.2166698105521787, 5.561050573026295], [-1.135404072088027, 0.9658716127128474], [2.534769946946536, 5.854611710245905], [-0.04548798735157167, 0.15594307527758763], [0.25797817773216813, 0.44534216854495257], [-1.5150052711287405, 2.6875790548979555], [-2.68843208520177, 6.660805194278179], [-2.7172166590137126, 7.443124167980674], [0.42318254885649154, 0.13890260209620497], [2.758458714435859, 6.835384796781152], [0.8427307081230215, 1.0629635289223989], [-0.4138216226262612, -0.1278488817283776], [0.20202850540570028, 0.3602073583502314], [-0.6128364221868443, 0.9989329845482788], [-1.7257901344188638, 2.8710534495792763], [1.6247373219850205, 1.4823149397148379], [2.782131624988332, 7.817990221253009], [2.2669007711142104, 4.898710769249567], [-0.9114234511678934, 0.7143910951012962], [-2.59699354104355, 6.9209910532511385], [0.14691638596590018, 0.2568269561553057], [-1.3777244272770872, 2.731090091905296], [-1.6167536683875918, 2.8481382992609134], [1.944267046325149, 3.2026885200714736], [-0.28204688471114014, -0.23458808764164035], [0.5535764136710664, 0.19512186590690417], [2.007399324863573, 3.9594917148676134], [0.7035171111738716, 0.10161583418021014], [-0.4750747144155407, 0.09559403480100787], [-2.291182521877211, 5.507206732905531], [-2.1810743105146146, 5.197898610531596], [-1.572664913759164, 2.1452636033671566], [1.1232258392007415, 0.8889861731785622], [-1.3991466943332138, 0.8810094121309473], [1.0858235061529502, 0.8956894581789507], [2.3697857351471567, 5.801178771766467], [1.7601948229212248, 3.248535234788824], [-2.753808227756756, 7.969501216111209], [1.798902115052753, 3.360713704149812], [-2.5077147605434624, 5.80148350696735], [-1.4631019595597792, 2.0773763072511806], [1.1248245798562113, 1.4972201396132103], [1.0520891429755954, 1.0255999414005674], [-0.6497293478426034, 0.6015496374450355], [-1.9663031476299613, 3.602234376555451], [0.6371315085035154, 0.6704515650325986], [-1.285584095960062, 0.7589713403245241], [-2.130295970096803, 4.254644063874955], [0.8882039245416493, 0.5091313283046102], [1.816889693360534, 3.1379733214033885], [-0.9304359722518454, 1.4684555503463521], [2.6536627527458583, 6.961214588010846], [2.6928739021144503, 7.53362042167486], [0.10123779735928995, -0.31321664100849195], [-0.4995279818820739, 1.1505456560245664], [2.882819052869179, 8.751630021765228], [-1.661202908387056, 3.3602699873318906], [2.2648915172550907, 4.404474724408605], [-0.04397906269995877, 0.036192422089510345], [-0.2224392764355727, -0.646900340559816], [0.8791414768683583, 0.41007292120993605], [2.4626041444617197, 5.88304223308799], [2.3600363614515576, 5.37154424815276], [-0.2246299479199214, -0.3806079360274427], [-2.3925402908378635, 6.0656400815325435], [-2.252051886745827, 5.6350556944375665], [-2.8378243210322944, 6.702858273708149], [-0.3419959831219215, 0.42507212917896636], [0.5409143746959373, 0.5022518108731904], [-1.9279947045299624, 4.196608842725134], [-2.023659638610792, 3.0217624833239984], [0.48132198380833024, 0.1171969705487476], [-1.4464334974356432, 0.944872625405816], [-1.0652257271043029, 1.5746883228033854], [-1.9755716783701276, 3.16831696938151], [1.4157419755788654, 2.1474297052899898], [-0.057406490335638605, 0.1040560698248135], [-0.6147303816478757, 0.5826042821541546], [-1.3221879336769855, 1.9344821906534293], [-0.4223330609817837, 0.3067526813022586], [0.3056557618680191, -0.34286845398768695], [-1.7306435469198853, 2.992898809927087]]}]}</script>
+<script type="ojs-define">{"contents": [{"name": "quadratic_data", "value": [[2.314736078266164, 5.228481497523207], [0.9113962790830135, 1.108803353867248], [-2.549568172725363, 6.02133416444256], [1.7666197918314017, 3.794480442250981], [2.9545607823584374, 9.443962120007482], [1.0607331182624753, 0.6020336449962419], [1.384159593906002, 1.8073300320424717], [-2.3107583129104183, 5.308021953463415], [2.6923062595464415, 7.423911893457112], [2.1876893298597766, 5.459706366081655], [2.4438708086438545, 6.065122411744452], [0.8546650250615526, 1.1603856407311337], [-0.4542808189166889, 0.004095739202641613], [2.1705882973358746, 4.507701457705717], [-2.2677686769661634, 4.570735452454491], [-2.6718391844788325, 5.819359656021696], [2.930238813635553, 9.100866262344276], [2.4706201015183424, 6.065110534546302], [1.0914569466811095, 0.4747466274516703], [1.8625826951884061, 3.0805884523847906], [2.7261896634949974, 7.853647382797403], [-2.3777539072674685, 5.455672322155413], [1.525151182948429, 2.672707015144739], [1.0543536698890676, 1.0702156510592424], [-2.3536058493946865, 5.274454528148305], [0.03205811651301582, -1.3306138938028647], [0.7923163106603672, 0.576343785766139], [-2.045487894404612, 3.848775951007834], [0.9449895458320299, 1.2578194545727417], [-1.4353633827249317, 1.9840827646816668], [1.045568511944504, -0.04246064298670338], [0.493917367192505, -0.14205105540201213], [-0.3284959548946871, 0.5897705615222313], [-0.9467492627424057, 0.5554683858897885], [-0.28862100256249335, -0.24104986450921206], [-2.587843466539332, 7.172036161134241], [-1.4999235000661084, 2.1681633053445024], [-0.45331614860426317, -0.14366325088426288], [-2.7272732691168953, 6.422608422664975], [1.9196826721730398, 2.496278810034531], [2.3818488873044155, 5.833136507422326], [-0.976080755767287, 0.23822845148973826], [2.8665576243499977, 8.205615277848755], [-1.0962043551446734, 0.2803508374447792], [0.06481023054646506, 0.20396770160428934], [-2.9334595988325995, 9.244626558569365], [0.5784706298135163, 0.7355423915447639], [1.502910235159395, 1.8610404084694465], [0.3868607715095882, 0.07246479438797447], [-1.9104245200433712, 4.657920471140715], [-0.806831351460247, 1.1312332594129566], [-0.2837375582831436, 0.7838313379799436], [-1.784381384523168, 4.002006670521119], [-1.5050011721461283, 3.461147339902861], [0.7251278259736433, 0.7735013321071615], [2.373814127568137, 6.1232610017005396], [2.528076843027052, 5.977326140784763], [-0.9607335464194975, 1.2294489937908661], [2.947465928935232, 9.449422081799908], [2.746832660980779, 8.23972113890033], [-1.9779888262249534, 4.214466638465057], [0.4158035372913256, 1.316090138557963], [-1.6263028469945222, 2.3740996681407665], [2.4688661386586963, 6.184612671946028], [-2.1986139123760964, 4.176045565643763], [-1.0130749066315332, 1.7498644122429323], [0.44372357823202613, 0.47054158789922024], [0.2087812898585022, -0.5432609809836776], [1.3268622734111792, 2.492367844878417], [0.30741738347493897, 0.03075664142655872], [1.6987433186478595, 2.591577695784825], [2.1712486810920506, 4.865100761318529], [1.381654631000778, 2.4154540276697647], [2.3062219080175037, 5.725384233690701], [-1.778866479384528, 3.764338230381634], [2.831845864895419, 8.524595976966548], [-1.7600270722704927, 3.701896402615196], [0.5020228367037083, 0.3721268298914412], [-2.9506907679563152, 9.189894980101244], [-2.486071118411748, 6.390106018367885], [1.3188715579330115, 1.3926671069138186], [-0.8155183483413624, 1.030452722891776], [1.969384404250225, 4.538807735432719], [1.3573522891270358, 1.428604808542376], [-0.25082368396457655, 0.5053489468068987], [-2.520806678742537, 6.9830638590321295], [-2.635275627785929, 7.539592759303421], [-2.506473284320596, 5.560338107562948], [0.6121371304105128, 1.043109970403742], [2.368922192224227, 4.707303815532696], [-1.8701461883340067, 3.7185176023416657], [-1.2334654849001865, 1.4193638907669048], [-2.6463576319460964, 7.672740509714651], [1.3789222164612358, 1.76568988774647], [0.7067975816833325, 0.8905559075105429], [2.726405965506217, 7.888578966498827], [2.6822313955050765, 7.593923411083467], [-2.3724627736531527, 5.735647959790552], [-1.6744084969272026, 3.092760021198292], [-0.08264938670525623, -1.2194634134845883]]}]}</script>
 </div>
 </div>
 <p>In code, we could consider transforming an entire dataset as follows:</p>
-<div class="cell" data-execution_count="5">
+<div id="f8035de3" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>squared_X <span class="op">=</span> X <span class="op">**</span> <span class="dv">2</span>              <span class="co"># x^2</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>cross_X <span class="op">=</span> X[:, :<span class="dv">1</span>] <span class="op">*</span> X[:, <span class="dv">1</span>:<span class="dv">2</span>]  <span class="co"># x_1 * x_2</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>sin_X <span class="op">=</span> np.sin(X)               <span class="co"># sin(x)</span></span>
@@ -809,9 +848,18 @@ f(\mathbf{x}) = w_1 x_1 + w_2 x_2 + w_3 x_1^2 + w_4 x_2^2 + w_5 x_1 x_2 + w_6 \s
 p(y=1\mid \mathbf{x}, \mathbf{w}) = \sigma\big( \phi(\mathbf{x})^T\mathbf{w} \big)
 \]</span></p>
 <p>Pictorally, we can represent this using the diagram we just introduced as:</p>
-<div class="cell" data-execution_count="6">
+<div id="0f6d8e56" class="cell" data-execution_count="6">
 <div class="cell-output cell-output-display">
-<p><img src="notes_files/figure-html/cell-7-output-1.png" class="img-fluid"></p>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.1</span>
+
+</pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="notes_files/figure-html/cell-7-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p><a href="https://playground.tensorflow.org/#activation=tanh&amp;batchSize=12&amp;dataset=spiral&amp;regDataset=reg-plane&amp;learningRate=0.003&amp;regularizationRate=0&amp;noise=0&amp;networkShape=&amp;seed=0.35411&amp;showTestData=false&amp;discretize=false&amp;percTrainData=50&amp;x=true&amp;y=true&amp;xTimesY=true&amp;xSquared=true&amp;ySquared=true&amp;cosX=false&amp;sinX=true&amp;cosY=false&amp;sinY=true&amp;collectStats=false&amp;problem=classification&amp;initZero=false&amp;hideText=false&amp;showTestData_hide=true&amp;stepButton_hide=true&amp;activation_hide=true&amp;noise_hide=true&amp;discretize_hide=false&amp;regularization_hide=true&amp;batchSize_hide=true&amp;learningRate_hide=false&amp;regularizationRate_hide=true&amp;percTrainData_hide=true&amp;numHiddenLayers_hide=true&amp;resetButton_hide=false">This</a> demo application allows us to learn logistic regression models with different feature transforms. Hit the play button to start gradient descent!</p>
@@ -835,9 +883,18 @@ f(\mathbf{x})=\phi(\mathbf{x})^T \mathbf{w}_0,\quad \phi(\mathbf{x}) = \begin{bm
 \]</span></p>
 <p>In this case, we can write out our prediction function explicitly as: <span class="math display">\[f(\mathbf{x}) = w_{01} \cdot\sigma(x_1 w_{11} + x_2 w_{12}) + w_{02} \cdot\sigma(x_1 w_{21} + x_2 w_{22})+ w_{03} \cdot\sigma(x_1 w_{31} + x_2 w_{32}) \]</span></p>
 <p>We can represent this pictorially again as a node-link diagram:</p>
-<div class="cell" data-execution_count="7">
+<div id="a0299a26" class="cell" data-execution_count="7">
 <div class="cell-output cell-output-display">
-<p><img src="notes_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.1</span>
+
+</pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="notes_files/figure-html/cell-8-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>We often omit the labels for compactness, which make it easy to draw larger models:<img src="nn_2.svg" class="img-fluid"></p>
@@ -907,9 +964,18 @@ f(\mathbf{x})= w_{01} (\mathbf{x}^T \mathbf{w}_1) +  w_{02} (\mathbf{x}^T \mathb
 <p><span class="math display">\[
 \textbf{Rectifed linear:}\quad \text{ReLU}(x) = \max(x,\ 0)
 \]</span></p>
-<div class="cell" data-execution_count="8">
+<div id="d4f027c3" class="cell" data-execution_count="8">
 <div class="cell-output cell-output-display">
-<p><img src="notes_files/figure-html/cell-9-output-1.png" class="img-fluid"></p>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.1</span>
+
+</pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="notes_files/figure-html/cell-9-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>We call these non-linear functions <strong>activation functions</strong> when used in neural networks. We’ll see other examples over the course of this class</p>
@@ -925,7 +991,7 @@ f(\mathbf{x})= w_{01} (\mathbf{x}^T \mathbf{w}_1) +  w_{02} (\mathbf{x}^T \mathb
 
 </main> <!-- /main -->
 <script type="ojs-module-contents">
-{"contents":[{"methodName":"interpret","cellName":"ojs-cell-1","inline":false,"source":"Plot = import(\"https://esm.sh/@observablehq/plot\") \nd3 = require(\"d3@7\")\ntopojson = require(\"topojson\")\nMathJax = require(\"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js\").catch(() => window.MathJax)\ntf = require(\"https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js\").catch(() => window.tf)\n\nTHREE = {\n  const THREE = window.THREE = await require(\"three@0.130.0/build/three.min.js\");\n  await require(\"three@0.130.0/examples/js/controls/OrbitControls.js\").catch(() => {});\n  await require(\"three@0.130.0/examples/js/loaders/SVGLoader.js\").catch(() => {});\n  return THREE;\n}\n\nfunction sample(f, start, end, nsamples=100) {\n  let arr = [...Array(nsamples).keys()]\n  let dist = end - start\n  function arrmap(ind) {\n    const x = (ind * dist) / nsamples + start;\n    return [x, f(x)];\n  }\n  return arr.map(arrmap)\n}\n\nfunction sigmoid(x){\n  return 1 / (1 + Math.exp(-x));\n}\n\nfunction sum(x) {\n  let s = 0;\n  for (let i = 0; i < x.length; i++ ) {\n    s += x[i];\n  }\n  return s;\n}\n\nfunction mean(x) {\n  let s = 0;\n  for (let i = 0; i < x.length; i++ ) {\n    s += x[i];\n  }\n  return s / x.length;\n}\n\nfunction cross_ent(x, y) {\n  return y ? -Math.log(sigmoid(x)) : -Math.log(sigmoid(-x));\n}\n\nfunction se(x, y) {\n  return (x - y) * (x - y);\n}\n\nfunction shuffle(array) {\n  let currentIndex = array.length,  randomIndex;\n\n  // While there remain elements to shuffle.\n  while (currentIndex > 0) {\n\n    // Pick a remaining element.\n    randomIndex = Math.floor(Math.random() * currentIndex);\n    currentIndex--;\n\n    // And swap it with the current element.\n    [array[currentIndex], array[randomIndex]] = [\n      array[randomIndex], array[currentIndex]];\n  }\n\n  return array;\n}\n\nfunction acc(x, y) {\n  return Number(y == (x  > 0));\n}\n\nfunction grid_func(f, width, height, x1, y1, x2, y2) {\n  let values = new Array(width * height);\n  const xstride = (x2 - x1) / width;\n  const ystride = (y2 - y1) / height;\n\n  \n  let y = 0;\n  let x = 0;\n  let ind = 0;\n  for (let i = 0; i < height; i++ ) {\n    for (let j = 0; j < width; j++, ind++) {\n      x = x1 + j * xstride;\n      y = y1 + i * ystride;\n      values[ind] = f(x, y);\n    }\n  }\n  return {width: width, height: height, x1: x1, y1: y1, x2: x2, y2: y2, values: values};\n}\n\nfunction get_accessors(keys, byindex=false) {\n  let isString = value => typeof value === 'string';\n  \n  let index = 0;\n  let indexmap = {};\n  let accessors = [];\n  for (let i = 0; i < keys.length; i++){\n    let k = keys[i];\n    if (Array.isArray(k)) {\n      let access = isString(k[0]) ? (x => x[k[0]]) : k[0];\n      \n      if (byindex) {\n        if (isString(k[0]) && !(k[0] in indexmap)) {\n          indexmap[k[0]] = index;\n          index++;\n        }\n        let accessindex = indexmap[k[0]];\n        access = x => x[accessindex];\n        let process = k[1];\n        let final_access = x => process(access(x));\n        accessors.push(final_access);\n      }\n      else {\n        let process = k[1];\n        let final_access = x => process(access(x));\n        accessors.push(final_access);\n      }\n      \n    }\n    else {\n      let access = isString(k) ? (x => x[k]) : k;\n      if (byindex) { \n        if (isString(k) && !(k in indexmap)) {\n          indexmap[k] = index;\n          index++;\n        }\n        let accessindex = indexmap[k];\n        access = x => x[accessindex];\n      }\n      accessors.push(access); \n    }\n  }\n  return accessors;\n}\n\nfunction predict(obs, weights, keys=[\"0\", \"1\", \"2\", \"3\"], byindex=false) {\n  let isString = value => typeof value === 'string';\n  let accessors = get_accessors(keys, byindex);\n  \n  let output = weights[0];\n  let wi = 1;\n  for (let i = 0; (i < keys.length) && (wi < weights.length); i++, wi++){\n    output += weights[wi] * accessors[i](obs);\n  }\n  return output;\n}\n\nfunction mean_loss(f, data, weights, keys, label, l2=0) {\n  let reg = 0;\n  if (l2 > 0){\n    for (let i = 1; i < weights.length; i++) {\n      reg += weights[i] * weights[i];\n    }\n  }\n  \n  const isString = value => typeof value === 'string';\n  const get_label = isString(label) ? (x => x[label]) : label;\n  return mean(data.map(x => f(predict(x, weights, keys), get_label(x)))) + l2 * reg;\n}\n\nfunction get_domains(data, accessors, margin=0.1) {\n  let domains = [];\n  for (let i = 0; i < accessors.length; i++){\n    let xdomain = d3.extent(data, accessors[i]);\n    let xdsize = (xdomain[1] - xdomain[0]);\n    let xmin = xdomain[0] - xdsize * margin;\n    let xmax = xdomain[1] + xdsize * margin;\n    domains.push([xmin, xmax]);\n  }\n  return domains;\n}\n\nfunction logisticPlot2d(data, weights, keys, label, interval=0.05) {\n  const accuracy = mean_loss(acc, data, weights, keys, label);\n  \n  let isString = value => typeof value === 'string';\n  let accessors = get_accessors(keys);\n  let index_accessors = get_accessors(keys, true);\n  let domains = get_domains(data, accessors);\n  const get_label = isString(label) ? (x => x[label]) : label;\n  \n  return Plot.plot({\n    x: {tickSpacing: 80, label: \"x\"},\n    y: {tickSpacing: 80, label: \"y\"},\n    title: \"Accuracy: \" + accuracy.toFixed(3),\n    color: {type: \"linear\", legend: true, scheme: \"BuRd\", domain: [-0.5, 1.5]},\n    marks: [\n      Plot.contour({\n        fill: (x, y) => sigmoid(predict([x, y], weights, index_accessors)),\n        x1: domains[0][0], y1: domains[1][0], x2: domains[0][1], y2: domains[1][1], interval: interval,\n      }),\n      Plot.dot(data, {x: accessors[0], y: accessors[1], stroke: x=> (get_label(x) ? 1.35 : -0.35)})\n    ]\n  });\n}\n\nfunction logisticLossPlot2d(data, weights, keys, label) {\n  const loss = mean_loss(cross_ent, data, weights, keys, label);\n  \n  let isString = value => typeof value === 'string';\n  let accessors = get_accessors(keys);\n  let index_accessors = get_accessors(keys, true);\n  let domains = get_domains(data, accessors);\n  const get_label = isString(label) ? (x => x[label]) : label;\n  \n  return Plot.plot({\n    x: {tickSpacing: 80, label: \"x\"},\n    y: {tickSpacing: 80, label: \"y\"},\n    title: \"Loss: \" + loss.toFixed(3),\n    color: {type: \"linear\", legend: true, scheme: \"BuRd\", domain: [0, 5]},\n    marks: [\n      Plot.contour({\n        value: (x, y) => predict([x, y], weights, index_accessors),\n        fillOpacity: 0.2,\n        stroke: \"black\", x1: domains[0][0], y1: domains[1][0], x2: domains[0][1], y2: domains[1][1],\n        thresholds: [-1e6,  0, 0.00001]\n      }),\n      Plot.dot(data, {x: accessors[0], y: accessors[1], stroke: x=> cross_ent(predict(x, weights, keys), get_label(x)), \n                      strokeOpacity: 0.5 })\n    ]\n  });\n}\n\nfunction lossPlot2d(f, data, keys, label, l2=0, res=100, x1=-40, y1=-0.015, x2=40,  y2=0.015, vmax=50, nlines=25, ctype=\"sqrt\", scale=(x => x)) {\n  let grid = 0;\n  function lossFunc(w, b) {\n    return scale(mean_loss(f, data, [w, b], keys, label, l2));\n  }\n\n  grid = grid_func(lossFunc,\n                 res, res, x1, y1, x2, y2\n                );\n\n  function plot2d(weights) {\n    let w = weights;\n    if (!(Array.isArray(w[0]))){\n      w = [w];\n    }\n\n    var arrows = w.slice(0, w.length - 1).map(function(e, i) {\n      return e.concat(w[i+1]);\n    });\n\n    let interval= vmax / nlines; \n    let thresholds = [];\n    for (let i = 0; i < nlines; i++) {\n      thresholds.push(i * interval);\n    }\n    let loss = mean_loss(f, data, w[w.length - 1], keys, label, l2)\n    return Plot.plot({\n      title: \"Loss: \" + loss.toFixed(3),\n      color: {type: \"linear\", legend: true, label: \"Loss\", scheme: \"BuRd\", domain: [0, vmax], type: ctype},\n      marks: [\n        Plot.contour(grid.values, {width: grid.width, height: grid.height, x1: grid.x1, x2:grid.x2, y1: grid.y1, y2: grid.y2,\n          stroke: Plot.identity, thresholds: thresholds}),\n        Plot.dot(w),\n        Plot.arrow(arrows, {x1: \"0\", y1: \"1\", x2: \"2\", y2: \"3\", stroke: \"black\"})\n      ]\n    })\n  }\n  return plot2d;\n}\n\n\n\nfunction regressionPlot(data, weights, keys, label, l2, f=se, stroke=\"\") {\n  let loss = mean_loss(f, data, weights, keys, label, l2);\n  let isString = value => typeof value === 'string';\n  \n  let accessors = get_accessors(keys);\n  let index_accessors = get_accessors(keys, true);\n  let domains = get_domains(data, get_accessors([label].concat(keys)));\n  const get_label = isString(label) ? (x => x[label]) : label;\n\n  let stroke_shade = stroke;\n  if (stroke == \"\") {\n    stroke_shade = (x => f(predict(x, weights, keys), get_label(x)))\n  }\n  \n  return Plot.plot({\n    y: {domain: domains[0]},\n    title: \"Loss: \" + loss.toFixed(3),\n    color: {type: \"linear\", legend: true, label: \"Loss\", scheme: \"BuRd\", domain: [0, 100]},\n    marks: [\n      Plot.line(sample((x) => predict([x], weights, index_accessors), domains[1][0], domains[1][1]), {stroke: 'black'}),\n      Plot.dot(data, {x: accessors[0], y: get_label, stroke: stroke_shade })\n    ]\n  })\n}\n\nfunction errorPlot(data, weights, keys, label, f, options={}) {\n  const isString = value => typeof value === 'string';\n  const get_label = isString(label) ? (x => x[label]) : label;\n  let errors = data.map(x => [predict(x, weights, keys) - get_label(x), f(predict(x, weights, keys), get_label(x))]);\n\n  \n  let sigma = (options['sigma'] || 1);\n  let plots = [];\n  const xdomain = (options['xdomain'] || [-30, 30]);\n  const ydomain = (options['ydomain'] || [0, 0.1]);\n  \n\n  if (options['plotnormal']){\n    let pdf = x => Math.exp(-0.5 * x * x / sigma) * ydomain[1];\n    let normal = Plot.line(sample(pdf, xdomain[0], xdomain[1]), {stroke: 'crimson'});    \n    plots.push(normal);\n  }\n  if (options['plotlaplace']){\n    let pdf = x => Math.exp(-0.5 * Math.abs(x) / sigma) * ydomain[1];\n    let normal = Plot.line(sample(pdf, xdomain[0], xdomain[1]), {stroke: 'green'});    \n    plots.push(normal);\n  }\n  \n  return Plot.plot({\n    y: {grid: true, domain: ydomain},\n    x: {domain: xdomain},\n    color: {type: \"linear\", legend: true, label: \"Loss\", scheme: \"BuRd\", domain: [0, 100]},\n    marks: [\n      //Plot.rectY(errors, Plot.binX({y: \"count\", fill: x => mean(x.map(v => v[1]))}, {x: \"0\"})),\n      \n      Plot.rectY(errors, Plot.binX({y: \"proportion\"}, {x: \"0\", fill: 'steelblue', interval: 1})),\n      Plot.ruleY([0])\n    ].concat(plots)\n  })\n}\n\nfunction nnPlot(data, weights, keys, label, l2, f=se, stroke=\"\", options=[]) {\n  let loss = mean_loss(f, data, weights, keys, label, l2);\n  let isString = value => typeof value === 'string';\n  \n  let accessors = get_accessors(keys);\n  let index_accessors = get_accessors(keys, true);\n  let domains = get_domains(data, get_accessors([label].concat(keys)));\n  const get_label = isString(label) ? (x => x[label]) : label;\n\n  let stroke_shade = stroke;\n  if (stroke == \"\") {\n    stroke_shade = (x => f(predict(x, weights, keys), get_label(x)))\n  }\n\n  let a = []\n  if (options.indexOf(\"Show feature transforms\") >= 0){\n    a = [Plot.line(sample((x) =>  keys[1][1](x), domains[1][0], domains[1][1]), {stroke: 'red'}),\n      Plot.line(sample((x) => keys[2][1](x), domains[1][0], domains[1][1]), {stroke: 'blue'})]\n  }\n  \n  return Plot.plot({\n    y: {domain: domains[0]},\n    title: \"Loss: \" + loss.toFixed(3),\n    color: {type: \"linear\", legend: true, label: \"Loss\", scheme: \"BuRd\", domain: [0, 100]},\n    marks: [\n      Plot.line(sample((x) => predict([x], weights, index_accessors), domains[1][0], domains[1][1]), {stroke: 'black'}),\n      Plot.dot(data, {x: accessors[0], y: get_label, stroke: stroke_shade })\n    ].concat(a)\n  })\n}\n"},{"methodName":"interpret","cellName":"ojs-cell-2","inline":false,"source":"data = transpose(data_raw)\n"}]}
+eyJjb250ZW50cyI6W3sibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IlBsb3QgPSBpbXBvcnQoXCJodHRwczovL2VzbS5zaC9Ab2JzZXJ2YWJsZWhxL3Bsb3RcIikgXG5kMyA9IHJlcXVpcmUoXCJkM0A3XCIpXG50b3BvanNvbiA9IHJlcXVpcmUoXCJ0b3BvanNvblwiKVxuTWF0aEpheCA9IHJlcXVpcmUoXCJodHRwczovL2NkbmpzLmNsb3VkZmxhcmUuY29tL2FqYXgvbGlicy9tYXRoamF4LzMuMi4yL2VzNS90ZXgtc3ZnLm1pbi5qc1wiKS5jYXRjaCgoKSA9PiB3aW5kb3cuTWF0aEpheClcbnRmID0gcmVxdWlyZShcImh0dHBzOi8vY2RuLmpzZGVsaXZyLm5ldC9ucG0vQHRlbnNvcmZsb3cvdGZqc0BsYXRlc3QvZGlzdC90Zi5taW4uanNcIikuY2F0Y2goKCkgPT4gd2luZG93LnRmKVxuXG5USFJFRSA9IHtcbiAgY29uc3QgVEhSRUUgPSB3aW5kb3cuVEhSRUUgPSBhd2FpdCByZXF1aXJlKFwidGhyZWVAMC4xMzAuMC9idWlsZC90aHJlZS5taW4uanNcIik7XG4gIGF3YWl0IHJlcXVpcmUoXCJ0aHJlZUAwLjEzMC4wL2V4YW1wbGVzL2pzL2NvbnRyb2xzL09yYml0Q29udHJvbHMuanNcIikuY2F0Y2goKCkgPT4ge30pO1xuICBhd2FpdCByZXF1aXJlKFwidGhyZWVAMC4xMzAuMC9leGFtcGxlcy9qcy9sb2FkZXJzL1NWR0xvYWRlci5qc1wiKS5jYXRjaCgoKSA9PiB7fSk7XG4gIHJldHVybiBUSFJFRTtcbn1cblxuZnVuY3Rpb24gc2FtcGxlKGYsIHN0YXJ0LCBlbmQsIG5zYW1wbGVzPTEwMCkge1xuICBsZXQgYXJyID0gWy4uLkFycmF5KG5zYW1wbGVzKS5rZXlzKCldXG4gIGxldCBkaXN0ID0gZW5kIC0gc3RhcnRcbiAgZnVuY3Rpb24gYXJybWFwKGluZCkge1xuICAgIGNvbnN0IHggPSAoaW5kICogZGlzdCkgLyBuc2FtcGxlcyArIHN0YXJ0O1xuICAgIHJldHVybiBbeCwgZih4KV07XG4gIH1cbiAgcmV0dXJuIGFyci5tYXAoYXJybWFwKVxufVxuXG5mdW5jdGlvbiBzaWdtb2lkKHgpe1xuICByZXR1cm4gMSAvICgxICsgTWF0aC5leHAoLXgpKTtcbn1cblxuZnVuY3Rpb24gc3VtKHgpIHtcbiAgbGV0IHMgPSAwO1xuICBmb3IgKGxldCBpID0gMDsgaSA8IHgubGVuZ3RoOyBpKysgKSB7XG4gICAgcyArPSB4W2ldO1xuICB9XG4gIHJldHVybiBzO1xufVxuXG5mdW5jdGlvbiBtZWFuKHgpIHtcbiAgbGV0IHMgPSAwO1xuICBmb3IgKGxldCBpID0gMDsgaSA8IHgubGVuZ3RoOyBpKysgKSB7XG4gICAgcyArPSB4W2ldO1xuICB9XG4gIHJldHVybiBzIC8geC5sZW5ndGg7XG59XG5cbmZ1bmN0aW9uIGNyb3NzX2VudCh4LCB5KSB7XG4gIHJldHVybiB5ID8gLU1hdGgubG9nKHNpZ21vaWQoeCkpIDogLU1hdGgubG9nKHNpZ21vaWQoLXgpKTtcbn1cblxuZnVuY3Rpb24gc2UoeCwgeSkge1xuICByZXR1cm4gKHggLSB5KSAqICh4IC0geSk7XG59XG5cbmZ1bmN0aW9uIHNodWZmbGUoYXJyYXkpIHtcbiAgbGV0IGN1cnJlbnRJbmRleCA9IGFycmF5Lmxlbmd0aCwgIHJhbmRvbUluZGV4O1xuXG4gIC8vIFdoaWxlIHRoZXJlIHJlbWFpbiBlbGVtZW50cyB0byBzaHVmZmxlLlxuICB3aGlsZSAoY3VycmVudEluZGV4ID4gMCkge1xuXG4gICAgLy8gUGljayBhIHJlbWFpbmluZyBlbGVtZW50LlxuICAgIHJhbmRvbUluZGV4ID0gTWF0aC5mbG9vcihNYXRoLnJhbmRvbSgpICogY3VycmVudEluZGV4KTtcbiAgICBjdXJyZW50SW5kZXgtLTtcblxuICAgIC8vIEFuZCBzd2FwIGl0IHdpdGggdGhlIGN1cnJlbnQgZWxlbWVudC5cbiAgICBbYXJyYXlbY3VycmVudEluZGV4XSwgYXJyYXlbcmFuZG9tSW5kZXhdXSA9IFtcbiAgICAgIGFycmF5W3JhbmRvbUluZGV4XSwgYXJyYXlbY3VycmVudEluZGV4XV07XG4gIH1cblxuICByZXR1cm4gYXJyYXk7XG59XG5cbmZ1bmN0aW9uIGFjYyh4LCB5KSB7XG4gIHJldHVybiBOdW1iZXIoeSA9PSAoeCAgPiAwKSk7XG59XG5cbmZ1bmN0aW9uIGdyaWRfZnVuYyhmLCB3aWR0aCwgaGVpZ2h0LCB4MSwgeTEsIHgyLCB5Mikge1xuICBsZXQgdmFsdWVzID0gbmV3IEFycmF5KHdpZHRoICogaGVpZ2h0KTtcbiAgY29uc3QgeHN0cmlkZSA9ICh4MiAtIHgxKSAvIHdpZHRoO1xuICBjb25zdCB5c3RyaWRlID0gKHkyIC0geTEpIC8gaGVpZ2h0O1xuXG4gIFxuICBsZXQgeSA9IDA7XG4gIGxldCB4ID0gMDtcbiAgbGV0IGluZCA9IDA7XG4gIGZvciAobGV0IGkgPSAwOyBpIDwgaGVpZ2h0OyBpKysgKSB7XG4gICAgZm9yIChsZXQgaiA9IDA7IGogPCB3aWR0aDsgaisrLCBpbmQrKykge1xuICAgICAgeCA9IHgxICsgaiAqIHhzdHJpZGU7XG4gICAgICB5ID0geTEgKyBpICogeXN0cmlkZTtcbiAgICAgIHZhbHVlc1tpbmRdID0gZih4LCB5KTtcbiAgICB9XG4gIH1cbiAgcmV0dXJuIHt3aWR0aDogd2lkdGgsIGhlaWdodDogaGVpZ2h0LCB4MTogeDEsIHkxOiB5MSwgeDI6IHgyLCB5MjogeTIsIHZhbHVlczogdmFsdWVzfTtcbn1cblxuZnVuY3Rpb24gZ2V0X2FjY2Vzc29ycyhrZXlzLCBieWluZGV4PWZhbHNlKSB7XG4gIGxldCBpc1N0cmluZyA9IHZhbHVlID0+IHR5cGVvZiB2YWx1ZSA9PT0gJ3N0cmluZyc7XG4gIFxuICBsZXQgaW5kZXggPSAwO1xuICBsZXQgaW5kZXhtYXAgPSB7fTtcbiAgbGV0IGFjY2Vzc29ycyA9IFtdO1xuICBmb3IgKGxldCBpID0gMDsgaSA8IGtleXMubGVuZ3RoOyBpKyspe1xuICAgIGxldCBrID0ga2V5c1tpXTtcbiAgICBpZiAoQXJyYXkuaXNBcnJheShrKSkge1xuICAgICAgbGV0IGFjY2VzcyA9IGlzU3RyaW5nKGtbMF0pID8gKHggPT4geFtrWzBdXSkgOiBrWzBdO1xuICAgICAgXG4gICAgICBpZiAoYnlpbmRleCkge1xuICAgICAgICBpZiAoaXNTdHJpbmcoa1swXSkgJiYgIShrWzBdIGluIGluZGV4bWFwKSkge1xuICAgICAgICAgIGluZGV4bWFwW2tbMF1dID0gaW5kZXg7XG4gICAgICAgICAgaW5kZXgrKztcbiAgICAgICAgfVxuICAgICAgICBsZXQgYWNjZXNzaW5kZXggPSBpbmRleG1hcFtrWzBdXTtcbiAgICAgICAgYWNjZXNzID0geCA9PiB4W2FjY2Vzc2luZGV4XTtcbiAgICAgICAgbGV0IHByb2Nlc3MgPSBrWzFdO1xuICAgICAgICBsZXQgZmluYWxfYWNjZXNzID0geCA9PiBwcm9jZXNzKGFjY2Vzcyh4KSk7XG4gICAgICAgIGFjY2Vzc29ycy5wdXNoKGZpbmFsX2FjY2Vzcyk7XG4gICAgICB9XG4gICAgICBlbHNlIHtcbiAgICAgICAgbGV0IHByb2Nlc3MgPSBrWzFdO1xuICAgICAgICBsZXQgZmluYWxfYWNjZXNzID0geCA9PiBwcm9jZXNzKGFjY2Vzcyh4KSk7XG4gICAgICAgIGFjY2Vzc29ycy5wdXNoKGZpbmFsX2FjY2Vzcyk7XG4gICAgICB9XG4gICAgICBcbiAgICB9XG4gICAgZWxzZSB7XG4gICAgICBsZXQgYWNjZXNzID0gaXNTdHJpbmcoaykgPyAoeCA9PiB4W2tdKSA6IGs7XG4gICAgICBpZiAoYnlpbmRleCkgeyBcbiAgICAgICAgaWYgKGlzU3RyaW5nKGspICYmICEoayBpbiBpbmRleG1hcCkpIHtcbiAgICAgICAgICBpbmRleG1hcFtrXSA9IGluZGV4O1xuICAgICAgICAgIGluZGV4Kys7XG4gICAgICAgIH1cbiAgICAgICAgbGV0IGFjY2Vzc2luZGV4ID0gaW5kZXhtYXBba107XG4gICAgICAgIGFjY2VzcyA9IHggPT4geFthY2Nlc3NpbmRleF07XG4gICAgICB9XG4gICAgICBhY2Nlc3NvcnMucHVzaChhY2Nlc3MpOyBcbiAgICB9XG4gIH1cbiAgcmV0dXJuIGFjY2Vzc29ycztcbn1cblxuZnVuY3Rpb24gcHJlZGljdChvYnMsIHdlaWdodHMsIGtleXM9W1wiMFwiLCBcIjFcIiwgXCIyXCIsIFwiM1wiXSwgYnlpbmRleD1mYWxzZSkge1xuICBsZXQgaXNTdHJpbmcgPSB2YWx1ZSA9PiB0eXBlb2YgdmFsdWUgPT09ICdzdHJpbmcnO1xuICBsZXQgYWNjZXNzb3JzID0gZ2V0X2FjY2Vzc29ycyhrZXlzLCBieWluZGV4KTtcbiAgXG4gIGxldCBvdXRwdXQgPSB3ZWlnaHRzWzBdO1xuICBsZXQgd2kgPSAxO1xuICBmb3IgKGxldCBpID0gMDsgKGkgPCBrZXlzLmxlbmd0aCkgJiYgKHdpIDwgd2VpZ2h0cy5sZW5ndGgpOyBpKyssIHdpKyspe1xuICAgIG91dHB1dCArPSB3ZWlnaHRzW3dpXSAqIGFjY2Vzc29yc1tpXShvYnMpO1xuICB9XG4gIHJldHVybiBvdXRwdXQ7XG59XG5cbmZ1bmN0aW9uIG1lYW5fbG9zcyhmLCBkYXRhLCB3ZWlnaHRzLCBrZXlzLCBsYWJlbCwgbDI9MCkge1xuICBsZXQgcmVnID0gMDtcbiAgaWYgKGwyID4gMCl7XG4gICAgZm9yIChsZXQgaSA9IDE7IGkgPCB3ZWlnaHRzLmxlbmd0aDsgaSsrKSB7XG4gICAgICByZWcgKz0gd2VpZ2h0c1tpXSAqIHdlaWdodHNbaV07XG4gICAgfVxuICB9XG4gIFxuICBjb25zdCBpc1N0cmluZyA9IHZhbHVlID0+IHR5cGVvZiB2YWx1ZSA9PT0gJ3N0cmluZyc7XG4gIGNvbnN0IGdldF9sYWJlbCA9IGlzU3RyaW5nKGxhYmVsKSA/ICh4ID0+IHhbbGFiZWxdKSA6IGxhYmVsO1xuICByZXR1cm4gbWVhbihkYXRhLm1hcCh4ID0+IGYocHJlZGljdCh4LCB3ZWlnaHRzLCBrZXlzKSwgZ2V0X2xhYmVsKHgpKSkpICsgbDIgKiByZWc7XG59XG5cbmZ1bmN0aW9uIGdldF9kb21haW5zKGRhdGEsIGFjY2Vzc29ycywgbWFyZ2luPTAuMSkge1xuICBsZXQgZG9tYWlucyA9IFtdO1xuICBmb3IgKGxldCBpID0gMDsgaSA8IGFjY2Vzc29ycy5sZW5ndGg7IGkrKyl7XG4gICAgbGV0IHhkb21haW4gPSBkMy5leHRlbnQoZGF0YSwgYWNjZXNzb3JzW2ldKTtcbiAgICBsZXQgeGRzaXplID0gKHhkb21haW5bMV0gLSB4ZG9tYWluWzBdKTtcbiAgICBsZXQgeG1pbiA9IHhkb21haW5bMF0gLSB4ZHNpemUgKiBtYXJnaW47XG4gICAgbGV0IHhtYXggPSB4ZG9tYWluWzFdICsgeGRzaXplICogbWFyZ2luO1xuICAgIGRvbWFpbnMucHVzaChbeG1pbiwgeG1heF0pO1xuICB9XG4gIHJldHVybiBkb21haW5zO1xufVxuXG5mdW5jdGlvbiBsb2dpc3RpY1Bsb3QyZChkYXRhLCB3ZWlnaHRzLCBrZXlzLCBsYWJlbCwgaW50ZXJ2YWw9MC4wNSkge1xuICBjb25zdCBhY2N1cmFjeSA9IG1lYW5fbG9zcyhhY2MsIGRhdGEsIHdlaWdodHMsIGtleXMsIGxhYmVsKTtcbiAgXG4gIGxldCBpc1N0cmluZyA9IHZhbHVlID0+IHR5cGVvZiB2YWx1ZSA9PT0gJ3N0cmluZyc7XG4gIGxldCBhY2Nlc3NvcnMgPSBnZXRfYWNjZXNzb3JzKGtleXMpO1xuICBsZXQgaW5kZXhfYWNjZXNzb3JzID0gZ2V0X2FjY2Vzc29ycyhrZXlzLCB0cnVlKTtcbiAgbGV0IGRvbWFpbnMgPSBnZXRfZG9tYWlucyhkYXRhLCBhY2Nlc3NvcnMpO1xuICBjb25zdCBnZXRfbGFiZWwgPSBpc1N0cmluZyhsYWJlbCkgPyAoeCA9PiB4W2xhYmVsXSkgOiBsYWJlbDtcbiAgXG4gIHJldHVybiBQbG90LnBsb3Qoe1xuICAgIHg6IHt0aWNrU3BhY2luZzogODAsIGxhYmVsOiBcInhcIn0sXG4gICAgeToge3RpY2tTcGFjaW5nOiA4MCwgbGFiZWw6IFwieVwifSxcbiAgICB0aXRsZTogXCJBY2N1cmFjeTogXCIgKyBhY2N1cmFjeS50b0ZpeGVkKDMpLFxuICAgIGNvbG9yOiB7dHlwZTogXCJsaW5lYXJcIiwgbGVnZW5kOiB0cnVlLCBzY2hlbWU6IFwiQnVSZFwiLCBkb21haW46IFstMC41LCAxLjVdfSxcbiAgICBtYXJrczogW1xuICAgICAgUGxvdC5jb250b3VyKHtcbiAgICAgICAgZmlsbDogKHgsIHkpID0+IHNpZ21vaWQocHJlZGljdChbeCwgeV0sIHdlaWdodHMsIGluZGV4X2FjY2Vzc29ycykpLFxuICAgICAgICB4MTogZG9tYWluc1swXVswXSwgeTE6IGRvbWFpbnNbMV1bMF0sIHgyOiBkb21haW5zWzBdWzFdLCB5MjogZG9tYWluc1sxXVsxXSwgaW50ZXJ2YWw6IGludGVydmFsLFxuICAgICAgfSksXG4gICAgICBQbG90LmRvdChkYXRhLCB7eDogYWNjZXNzb3JzWzBdLCB5OiBhY2Nlc3NvcnNbMV0sIHN0cm9rZTogeD0+IChnZXRfbGFiZWwoeCkgPyAxLjM1IDogLTAuMzUpfSlcbiAgICBdXG4gIH0pO1xufVxuXG5mdW5jdGlvbiBsb2dpc3RpY0xvc3NQbG90MmQoZGF0YSwgd2VpZ2h0cywga2V5cywgbGFiZWwpIHtcbiAgY29uc3QgbG9zcyA9IG1lYW5fbG9zcyhjcm9zc19lbnQsIGRhdGEsIHdlaWdodHMsIGtleXMsIGxhYmVsKTtcbiAgXG4gIGxldCBpc1N0cmluZyA9IHZhbHVlID0+IHR5cGVvZiB2YWx1ZSA9PT0gJ3N0cmluZyc7XG4gIGxldCBhY2Nlc3NvcnMgPSBnZXRfYWNjZXNzb3JzKGtleXMpO1xuICBsZXQgaW5kZXhfYWNjZXNzb3JzID0gZ2V0X2FjY2Vzc29ycyhrZXlzLCB0cnVlKTtcbiAgbGV0IGRvbWFpbnMgPSBnZXRfZG9tYWlucyhkYXRhLCBhY2Nlc3NvcnMpO1xuICBjb25zdCBnZXRfbGFiZWwgPSBpc1N0cmluZyhsYWJlbCkgPyAoeCA9PiB4W2xhYmVsXSkgOiBsYWJlbDtcbiAgXG4gIHJldHVybiBQbG90LnBsb3Qoe1xuICAgIHg6IHt0aWNrU3BhY2luZzogODAsIGxhYmVsOiBcInhcIn0sXG4gICAgeToge3RpY2tTcGFjaW5nOiA4MCwgbGFiZWw6IFwieVwifSxcbiAgICB0aXRsZTogXCJMb3NzOiBcIiArIGxvc3MudG9GaXhlZCgzKSxcbiAgICBjb2xvcjoge3R5cGU6IFwibGluZWFyXCIsIGxlZ2VuZDogdHJ1ZSwgc2NoZW1lOiBcIkJ1UmRcIiwgZG9tYWluOiBbMCwgNV19LFxuICAgIG1hcmtzOiBbXG4gICAgICBQbG90LmNvbnRvdXIoe1xuICAgICAgICB2YWx1ZTogKHgsIHkpID0+IHByZWRpY3QoW3gsIHldLCB3ZWlnaHRzLCBpbmRleF9hY2Nlc3NvcnMpLFxuICAgICAgICBmaWxsT3BhY2l0eTogMC4yLFxuICAgICAgICBzdHJva2U6IFwiYmxhY2tcIiwgeDE6IGRvbWFpbnNbMF1bMF0sIHkxOiBkb21haW5zWzFdWzBdLCB4MjogZG9tYWluc1swXVsxXSwgeTI6IGRvbWFpbnNbMV1bMV0sXG4gICAgICAgIHRocmVzaG9sZHM6IFstMWU2LCAgMCwgMC4wMDAwMV1cbiAgICAgIH0pLFxuICAgICAgUGxvdC5kb3QoZGF0YSwge3g6IGFjY2Vzc29yc1swXSwgeTogYWNjZXNzb3JzWzFdLCBzdHJva2U6IHg9PiBjcm9zc19lbnQocHJlZGljdCh4LCB3ZWlnaHRzLCBrZXlzKSwgZ2V0X2xhYmVsKHgpKSwgXG4gICAgICAgICAgICAgICAgICAgICAgc3Ryb2tlT3BhY2l0eTogMC41IH0pXG4gICAgXVxuICB9KTtcbn1cblxuZnVuY3Rpb24gbG9zc1Bsb3QyZChmLCBkYXRhLCBrZXlzLCBsYWJlbCwgbDI9MCwgcmVzPTEwMCwgeDE9LTQwLCB5MT0tMC4wMTUsIHgyPTQwLCAgeTI9MC4wMTUsIHZtYXg9NTAsIG5saW5lcz0yNSwgY3R5cGU9XCJzcXJ0XCIsIHNjYWxlPSh4ID0+IHgpKSB7XG4gIGxldCBncmlkID0gMDtcbiAgZnVuY3Rpb24gbG9zc0Z1bmModywgYikge1xuICAgIHJldHVybiBzY2FsZShtZWFuX2xvc3MoZiwgZGF0YSwgW3csIGJdLCBrZXlzLCBsYWJlbCwgbDIpKTtcbiAgfVxuXG4gIGdyaWQgPSBncmlkX2Z1bmMobG9zc0Z1bmMsXG4gICAgICAgICAgICAgICAgIHJlcywgcmVzLCB4MSwgeTEsIHgyLCB5MlxuICAgICAgICAgICAgICAgICk7XG5cbiAgZnVuY3Rpb24gcGxvdDJkKHdlaWdodHMpIHtcbiAgICBsZXQgdyA9IHdlaWdodHM7XG4gICAgaWYgKCEoQXJyYXkuaXNBcnJheSh3WzBdKSkpe1xuICAgICAgdyA9IFt3XTtcbiAgICB9XG5cbiAgICB2YXIgYXJyb3dzID0gdy5zbGljZSgwLCB3Lmxlbmd0aCAtIDEpLm1hcChmdW5jdGlvbihlLCBpKSB7XG4gICAgICByZXR1cm4gZS5jb25jYXQod1tpKzFdKTtcbiAgICB9KTtcblxuICAgIGxldCBpbnRlcnZhbD0gdm1heCAvIG5saW5lczsgXG4gICAgbGV0IHRocmVzaG9sZHMgPSBbXTtcbiAgICBmb3IgKGxldCBpID0gMDsgaSA8IG5saW5lczsgaSsrKSB7XG4gICAgICB0aHJlc2hvbGRzLnB1c2goaSAqIGludGVydmFsKTtcbiAgICB9XG4gICAgbGV0IGxvc3MgPSBtZWFuX2xvc3MoZiwgZGF0YSwgd1t3Lmxlbmd0aCAtIDFdLCBrZXlzLCBsYWJlbCwgbDIpXG4gICAgcmV0dXJuIFBsb3QucGxvdCh7XG4gICAgICB0aXRsZTogXCJMb3NzOiBcIiArIGxvc3MudG9GaXhlZCgzKSxcbiAgICAgIGNvbG9yOiB7dHlwZTogXCJsaW5lYXJcIiwgbGVnZW5kOiB0cnVlLCBsYWJlbDogXCJMb3NzXCIsIHNjaGVtZTogXCJCdVJkXCIsIGRvbWFpbjogWzAsIHZtYXhdLCB0eXBlOiBjdHlwZX0sXG4gICAgICBtYXJrczogW1xuICAgICAgICBQbG90LmNvbnRvdXIoZ3JpZC52YWx1ZXMsIHt3aWR0aDogZ3JpZC53aWR0aCwgaGVpZ2h0OiBncmlkLmhlaWdodCwgeDE6IGdyaWQueDEsIHgyOmdyaWQueDIsIHkxOiBncmlkLnkxLCB5MjogZ3JpZC55MixcbiAgICAgICAgICBzdHJva2U6IFBsb3QuaWRlbnRpdHksIHRocmVzaG9sZHM6IHRocmVzaG9sZHN9KSxcbiAgICAgICAgUGxvdC5kb3QodyksXG4gICAgICAgIFBsb3QuYXJyb3coYXJyb3dzLCB7eDE6IFwiMFwiLCB5MTogXCIxXCIsIHgyOiBcIjJcIiwgeTI6IFwiM1wiLCBzdHJva2U6IFwiYmxhY2tcIn0pXG4gICAgICBdXG4gICAgfSlcbiAgfVxuICByZXR1cm4gcGxvdDJkO1xufVxuXG5cblxuZnVuY3Rpb24gcmVncmVzc2lvblBsb3QoZGF0YSwgd2VpZ2h0cywga2V5cywgbGFiZWwsIGwyLCBmPXNlLCBzdHJva2U9XCJcIikge1xuICBsZXQgbG9zcyA9IG1lYW5fbG9zcyhmLCBkYXRhLCB3ZWlnaHRzLCBrZXlzLCBsYWJlbCwgbDIpO1xuICBsZXQgaXNTdHJpbmcgPSB2YWx1ZSA9PiB0eXBlb2YgdmFsdWUgPT09ICdzdHJpbmcnO1xuICBcbiAgbGV0IGFjY2Vzc29ycyA9IGdldF9hY2Nlc3NvcnMoa2V5cyk7XG4gIGxldCBpbmRleF9hY2Nlc3NvcnMgPSBnZXRfYWNjZXNzb3JzKGtleXMsIHRydWUpO1xuICBsZXQgZG9tYWlucyA9IGdldF9kb21haW5zKGRhdGEsIGdldF9hY2Nlc3NvcnMoW2xhYmVsXS5jb25jYXQoa2V5cykpKTtcbiAgY29uc3QgZ2V0X2xhYmVsID0gaXNTdHJpbmcobGFiZWwpID8gKHggPT4geFtsYWJlbF0pIDogbGFiZWw7XG5cbiAgbGV0IHN0cm9rZV9zaGFkZSA9IHN0cm9rZTtcbiAgaWYgKHN0cm9rZSA9PSBcIlwiKSB7XG4gICAgc3Ryb2tlX3NoYWRlID0gKHggPT4gZihwcmVkaWN0KHgsIHdlaWdodHMsIGtleXMpLCBnZXRfbGFiZWwoeCkpKVxuICB9XG4gIFxuICByZXR1cm4gUGxvdC5wbG90KHtcbiAgICB5OiB7ZG9tYWluOiBkb21haW5zWzBdfSxcbiAgICB0aXRsZTogXCJMb3NzOiBcIiArIGxvc3MudG9GaXhlZCgzKSxcbiAgICBjb2xvcjoge3R5cGU6IFwibGluZWFyXCIsIGxlZ2VuZDogdHJ1ZSwgbGFiZWw6IFwiTG9zc1wiLCBzY2hlbWU6IFwiQnVSZFwiLCBkb21haW46IFswLCAxMDBdfSxcbiAgICBtYXJrczogW1xuICAgICAgUGxvdC5saW5lKHNhbXBsZSgoeCkgPT4gcHJlZGljdChbeF0sIHdlaWdodHMsIGluZGV4X2FjY2Vzc29ycyksIGRvbWFpbnNbMV1bMF0sIGRvbWFpbnNbMV1bMV0pLCB7c3Ryb2tlOiAnYmxhY2snfSksXG4gICAgICBQbG90LmRvdChkYXRhLCB7eDogYWNjZXNzb3JzWzBdLCB5OiBnZXRfbGFiZWwsIHN0cm9rZTogc3Ryb2tlX3NoYWRlIH0pXG4gICAgXVxuICB9KVxufVxuXG5mdW5jdGlvbiBlcnJvclBsb3QoZGF0YSwgd2VpZ2h0cywga2V5cywgbGFiZWwsIGYsIG9wdGlvbnM9e30pIHtcbiAgY29uc3QgaXNTdHJpbmcgPSB2YWx1ZSA9PiB0eXBlb2YgdmFsdWUgPT09ICdzdHJpbmcnO1xuICBjb25zdCBnZXRfbGFiZWwgPSBpc1N0cmluZyhsYWJlbCkgPyAoeCA9PiB4W2xhYmVsXSkgOiBsYWJlbDtcbiAgbGV0IGVycm9ycyA9IGRhdGEubWFwKHggPT4gW3ByZWRpY3QoeCwgd2VpZ2h0cywga2V5cykgLSBnZXRfbGFiZWwoeCksIGYocHJlZGljdCh4LCB3ZWlnaHRzLCBrZXlzKSwgZ2V0X2xhYmVsKHgpKV0pO1xuXG4gIFxuICBsZXQgc2lnbWEgPSAob3B0aW9uc1snc2lnbWEnXSB8fCAxKTtcbiAgbGV0IHBsb3RzID0gW107XG4gIGNvbnN0IHhkb21haW4gPSAob3B0aW9uc1sneGRvbWFpbiddIHx8IFstMzAsIDMwXSk7XG4gIGNvbnN0IHlkb21haW4gPSAob3B0aW9uc1sneWRvbWFpbiddIHx8IFswLCAwLjFdKTtcbiAgXG5cbiAgaWYgKG9wdGlvbnNbJ3Bsb3Rub3JtYWwnXSl7XG4gICAgbGV0IHBkZiA9IHggPT4gTWF0aC5leHAoLTAuNSAqIHggKiB4IC8gc2lnbWEpICogeWRvbWFpblsxXTtcbiAgICBsZXQgbm9ybWFsID0gUGxvdC5saW5lKHNhbXBsZShwZGYsIHhkb21haW5bMF0sIHhkb21haW5bMV0pLCB7c3Ryb2tlOiAnY3JpbXNvbid9KTsgICAgXG4gICAgcGxvdHMucHVzaChub3JtYWwpO1xuICB9XG4gIGlmIChvcHRpb25zWydwbG90bGFwbGFjZSddKXtcbiAgICBsZXQgcGRmID0geCA9PiBNYXRoLmV4cCgtMC41ICogTWF0aC5hYnMoeCkgLyBzaWdtYSkgKiB5ZG9tYWluWzFdO1xuICAgIGxldCBub3JtYWwgPSBQbG90LmxpbmUoc2FtcGxlKHBkZiwgeGRvbWFpblswXSwgeGRvbWFpblsxXSksIHtzdHJva2U6ICdncmVlbid9KTsgICAgXG4gICAgcGxvdHMucHVzaChub3JtYWwpO1xuICB9XG4gIFxuICByZXR1cm4gUGxvdC5wbG90KHtcbiAgICB5OiB7Z3JpZDogdHJ1ZSwgZG9tYWluOiB5ZG9tYWlufSxcbiAgICB4OiB7ZG9tYWluOiB4ZG9tYWlufSxcbiAgICBjb2xvcjoge3R5cGU6IFwibGluZWFyXCIsIGxlZ2VuZDogdHJ1ZSwgbGFiZWw6IFwiTG9zc1wiLCBzY2hlbWU6IFwiQnVSZFwiLCBkb21haW46IFswLCAxMDBdfSxcbiAgICBtYXJrczogW1xuICAgICAgLy9QbG90LnJlY3RZKGVycm9ycywgUGxvdC5iaW5YKHt5OiBcImNvdW50XCIsIGZpbGw6IHggPT4gbWVhbih4Lm1hcCh2ID0+IHZbMV0pKX0sIHt4OiBcIjBcIn0pKSxcbiAgICAgIFxuICAgICAgUGxvdC5yZWN0WShlcnJvcnMsIFBsb3QuYmluWCh7eTogXCJwcm9wb3J0aW9uXCJ9LCB7eDogXCIwXCIsIGZpbGw6ICdzdGVlbGJsdWUnLCBpbnRlcnZhbDogMX0pKSxcbiAgICAgIFBsb3QucnVsZVkoWzBdKVxuICAgIF0uY29uY2F0KHBsb3RzKVxuICB9KVxufVxuXG5mdW5jdGlvbiBublBsb3QoZGF0YSwgd2VpZ2h0cywga2V5cywgbGFiZWwsIGwyLCBmPXNlLCBzdHJva2U9XCJcIiwgb3B0aW9ucz1bXSkge1xuICBsZXQgbG9zcyA9IG1lYW5fbG9zcyhmLCBkYXRhLCB3ZWlnaHRzLCBrZXlzLCBsYWJlbCwgbDIpO1xuICBsZXQgaXNTdHJpbmcgPSB2YWx1ZSA9PiB0eXBlb2YgdmFsdWUgPT09ICdzdHJpbmcnO1xuICBcbiAgbGV0IGFjY2Vzc29ycyA9IGdldF9hY2Nlc3NvcnMoa2V5cyk7XG4gIGxldCBpbmRleF9hY2Nlc3NvcnMgPSBnZXRfYWNjZXNzb3JzKGtleXMsIHRydWUpO1xuICBsZXQgZG9tYWlucyA9IGdldF9kb21haW5zKGRhdGEsIGdldF9hY2Nlc3NvcnMoW2xhYmVsXS5jb25jYXQoa2V5cykpKTtcbiAgY29uc3QgZ2V0X2xhYmVsID0gaXNTdHJpbmcobGFiZWwpID8gKHggPT4geFtsYWJlbF0pIDogbGFiZWw7XG5cbiAgbGV0IHN0cm9rZV9zaGFkZSA9IHN0cm9rZTtcbiAgaWYgKHN0cm9rZSA9PSBcIlwiKSB7XG4gICAgc3Ryb2tlX3NoYWRlID0gKHggPT4gZihwcmVkaWN0KHgsIHdlaWdodHMsIGtleXMpLCBnZXRfbGFiZWwoeCkpKVxuICB9XG5cbiAgbGV0IGEgPSBbXVxuICBpZiAob3B0aW9ucy5pbmRleE9mKFwiU2hvdyBmZWF0dXJlIHRyYW5zZm9ybXNcIikgPj0gMCl7XG4gICAgYSA9IFtQbG90LmxpbmUoc2FtcGxlKCh4KSA9PiAga2V5c1sxXVsxXSh4KSwgZG9tYWluc1sxXVswXSwgZG9tYWluc1sxXVsxXSksIHtzdHJva2U6ICdyZWQnfSksXG4gICAgICBQbG90LmxpbmUoc2FtcGxlKCh4KSA9PiBrZXlzWzJdWzFdKHgpLCBkb21haW5zWzFdWzBdLCBkb21haW5zWzFdWzFdKSwge3N0cm9rZTogJ2JsdWUnfSldXG4gIH1cbiAgXG4gIHJldHVybiBQbG90LnBsb3Qoe1xuICAgIHk6IHtkb21haW46IGRvbWFpbnNbMF19LFxuICAgIHRpdGxlOiBcIkxvc3M6IFwiICsgbG9zcy50b0ZpeGVkKDMpLFxuICAgIGNvbG9yOiB7dHlwZTogXCJsaW5lYXJcIiwgbGVnZW5kOiB0cnVlLCBsYWJlbDogXCJMb3NzXCIsIHNjaGVtZTogXCJCdVJkXCIsIGRvbWFpbjogWzAsIDEwMF19LFxuICAgIG1hcmtzOiBbXG4gICAgICBQbG90LmxpbmUoc2FtcGxlKCh4KSA9PiBwcmVkaWN0KFt4XSwgd2VpZ2h0cywgaW5kZXhfYWNjZXNzb3JzKSwgZG9tYWluc1sxXVswXSwgZG9tYWluc1sxXVsxXSksIHtzdHJva2U6ICdibGFjayd9KSxcbiAgICAgIFBsb3QuZG90KGRhdGEsIHt4OiBhY2Nlc3NvcnNbMF0sIHk6IGdldF9sYWJlbCwgc3Ryb2tlOiBzdHJva2Vfc2hhZGUgfSlcbiAgICBdLmNvbmNhdChhKVxuICB9KVxufVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0yIiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoiZGF0YSA9IHRyYW5zcG9zZShkYXRhX3JhdylcbiJ9XX0=
 </script>
 <script type="module">
 if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
@@ -970,18 +1036,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -1013,11 +1068,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1027,8 +1121,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1040,7 +1143,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1084,6 +1310,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1109,6 +1336,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1169,6 +1422,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+
 
 
 

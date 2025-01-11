@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.319">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>CS 152: Neural Networks - Lecture 6: Deep neural networks and backpropagation</title>
+<title>Lecture 6: Deep neural networks and backpropagation – CS 152: Neural Networks</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,7 +22,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +33,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -57,7 +57,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -79,7 +79,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -88,18 +94,47 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 <script type="module" src="../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
 <link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -107,47 +142,47 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">CS 152: Neural Networks</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html" rel="" target="">
- <span class="menu-text">Home</span></a>
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../calendar/calendar.html" rel="" target="">
- <span class="menu-text">Calendar</span></a>
+    <a class="nav-link" href="../calendar/calendar.html"> 
+<span class="menu-text">Calendar</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://drive.google.com/drive/folders/1JFhwmcFBTHiRbfhQ0VRDj9xIPxFpHuWj?usp=drive_link" rel="" target="">
- <span class="menu-text">Homeworks</span></a>
+    <a class="nav-link" href="https://drive.google.com/drive/folders/1JFhwmcFBTHiRbfhQ0VRDj9xIPxFpHuWj?usp=drive_link"> 
+<span class="menu-text">Homeworks</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../assignments/final-project/outline.html" rel="" target="">
- <span class="menu-text">Project</span></a>
+    <a class="nav-link" href="../assignments/final-project/outline.html"> 
+<span class="menu-text">Project</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://github.com/orgs/CS152/" rel="" target="">
- <span class="menu-text">Github</span></a>
+    <a class="nav-link" href="https://github.com/orgs/CS152/"> 
+<span class="menu-text">Github</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://www.gradescope.com/courses/710173" rel="" target="">
- <span class="menu-text">Gradescope</span></a>
+    <a class="nav-link" href="https://www.gradescope.com/courses/710173"> 
+<span class="menu-text">Gradescope</span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools ms-auto">
-</div>
           </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -207,7 +242,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
+
 </header>
+
 
 <div class="cell">
 <div class="sourceCode cell-code hidden" id="cb1" data-startfrom="1" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>Plot <span class="op">=</span> <span class="im">import</span>(<span class="st">"https://esm.sh/@observablehq/plot"</span>) </span>
@@ -744,13 +781,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div class="cell" data-execution_count="2">
-<div class="cell-output cell-output-display">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.0</span>
-
-</pre>
-</div>
-</div>
 <section id="neural-networks" class="level1">
 <h1>Neural networks</h1>
 <section id="neural-networks-with-matrices" class="level2">
@@ -760,9 +790,18 @@ f(\mathbf{x})=\phi(\mathbf{x})^T \mathbf{w}_0,\quad \phi(\mathbf{x}) = \begin{bm
 \begin{bmatrix}  \sigma(x_1 w_{11} + x_2 w_{12}) \\ \sigma(x_1 w_{21} + x_2 w_{22}) \\ \sigma(x_1 w_{31} + x_2 w_{32}) \end{bmatrix}
 \]</span></p>
 <p>Again, we can represent this pictorially again as a node-link diagram:</p>
-<div class="cell" data-execution_count="3">
+<div id="871f7134" class="cell" data-execution_count="3">
 <div class="cell-output cell-output-display">
-<p><img src="notes_files/figure-html/cell-4-output-1.png" class="img-fluid"></p>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.1</span>
+
+</pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="notes_files/figure-html/cell-4-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Let’s look at a more compact way to write this, using a weight <em>matrix</em> for the neural network layer. Let’s look at the transform before we apply the sigmoid function:</p>
@@ -844,9 +883,18 @@ No matter what we set <span class="math inline">\(\mathbf{w}_i\)</span> this tra
 f(\mathbf{X}) = \sigma(\sigma(\mathbf{X}\mathbf{W}_1^T)\mathbf{W}_2^T)\mathbf{w}_0
 \]</span></p>
 <p>We’ve now defined a set of weight parameters for each of our 2 <em>hidden layers</em> <span class="math inline">\(\mathbf{W}_1\)</span> and <span class="math inline">\(\mathbf{W}_2\)</span>. It’s a little easier to see what’s happening here if we look a our diagram for this case:</p>
-<div class="cell" data-execution_count="4">
+<div id="5d785487" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-display">
-<p><img src="notes_files/figure-html/cell-5-output-1.png" class="img-fluid"></p>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.1</span>
+
+</pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="notes_files/figure-html/cell-5-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>We can see that stacking these transforms allows us to fit even more complicated functions <a href="https://playground.tensorflow.org/#activation=tanh&amp;batchSize=10&amp;dataset=spiral&amp;regDataset=reg-plane&amp;learningRate=0.03&amp;regularizationRate=0&amp;noise=0&amp;networkShape=4,4,4,4&amp;seed=0.88060&amp;showTestData=false&amp;discretize=false&amp;percTrainData=50&amp;x=true&amp;y=true&amp;xTimesY=false&amp;xSquared=false&amp;ySquared=false&amp;cosX=false&amp;sinX=false&amp;cosY=false&amp;sinY=false&amp;collectStats=false&amp;problem=classification&amp;initZero=false&amp;hideText=false">here</a>. Note that we are still not limited to doing this twice! We can fit many layers of transforms:</p>
@@ -920,7 +968,7 @@ a = f(b)
 \frac{da}{dx} = \frac{da}{db}\frac{db}{dx}
 \]</span></p>
 <p>This corresponds with how we might think about this in code. For example we might have the code:</p>
-<div class="cell" data-execution_count="5">
+<div id="35329d09" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> x <span class="op">**</span> <span class="dv">2</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> log(b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -964,9 +1012,18 @@ The chain rule tells us that:</p>
 \]</span><br>
 Since each step is a single operation with a known derivative, we can easily compute every term above! Thus, we begin to see a recipe for computing derivatives programatically. Every time we perform some operation, we will also compute the derivative with respect to the input (we can’t just compute the derivatives because each derivative needs the preceding value, e.g.&nbsp;<span class="math inline">\(\frac{dg}{dc}=\frac{1}{c}\)</span>, so we need to first compute <span class="math inline">\(c\)</span>).</p>
 <p>We can visually look at the chain of computation that we’re performing as a diagram that shows each step and the result.</p>
-<div class="cell" data-execution_count="6">
+<div id="7116abde" class="cell" data-execution_count="6">
 <div class="cell-output cell-output-display">
-<p><img src="notes_files/figure-html/cell-7-output-1.png" class="img-fluid"></p>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.1</span>
+
+</pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="notes_files/figure-html/cell-7-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>We call this structure the <strong>computational graph</strong>.</p>
@@ -984,9 +1041,18 @@ c \leftarrow \sigma(b), \quad \frac{dc}{dx} \leftarrow \frac{dc}{db}\cdot\frac{d
 c \leftarrow \sigma(b), \quad \frac{dL}{db} \leftarrow \frac{dc}{db}\cdot\frac{dL}{dc}
 \]</span></p>
 <p>This means we need to do our computation in 2 passes. First we need to go through the chain of operations to compute <span class="math inline">\(L\)</span>, then we need to go backwards through the chain to compute <span class="math inline">\(\frac{dL}{dx}\)</span>. Note that computing each intermediate derivative requires the a corresponding intermediate value (e.g.&nbsp;<span class="math inline">\(\frac{dc}{db}\)</span> requires <span class="math inline">\(b\)</span> to compute). So we need to store all the intermediate values as we go. The approach is called <strong>reverse-mode automatic differentiation</strong> or more commonly: <strong>backpropagation</strong>. We can summarize both approaches below:</p>
-<div class="cell" data-execution_count="7">
+<div id="cd15387b" class="cell" data-execution_count="7">
 <div class="cell-output cell-output-display">
-<p><img src="notes_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.1</span>
+
+</pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="notes_files/figure-html/cell-8-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -1001,22 +1067,40 @@ c \leftarrow \sigma(b), \quad \frac{dL}{db} \leftarrow \frac{dc}{db}\cdot\frac{d
 \frac{dL}{d\mathbf{x}} = \begin{bmatrix}\frac{dL}{dx_1} \\ \frac{dL}{dx_2} \\ \frac{dL}{dx_3} \end{bmatrix}
 \]</span></p>
 <p>We see that in forward mode, we now need to keep a vector of gradients at many steps if we want to compute the derivative with respect to every input!</p>
-<div class="cell" data-execution_count="8">
+<div id="a9aed6ce" class="cell" data-execution_count="8">
 <div class="cell-output cell-output-display">
-<p><img src="notes_files/figure-html/cell-9-output-1.png" class="img-fluid"></p>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.1</span>
+
+</pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="notes_files/figure-html/cell-9-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>In reverse mode, however we only ever need to keep the derivative of the <em>loss</em> with respect to the current value. If we assume that the loss is always a single value, this is much more efficient!</p>
-<div class="cell" data-execution_count="9">
+<div id="0fa5be43" class="cell" data-execution_count="9">
 <div class="cell-output cell-output-display">
-<p><img src="notes_files/figure-html/cell-10-output-1.png" class="img-fluid"></p>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.1</span>
+
+</pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="notes_files/figure-html/cell-10-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
 <section id="reusing-values" class="level2">
 <h2 class="anchored" data-anchor-id="reusing-values">Reusing values</h2>
 <p>One thing we need to consider is the fact that values can be used in multiple different operations. For example, consider the code below.</p>
-<div class="cell" data-execution_count="10">
+<div id="82047487" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> loss(x):</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    a <span class="op">=</span> x <span class="op">**</span> <span class="dv">2</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    b <span class="op">=</span> <span class="dv">5</span> <span class="op">*</span> a</span>
@@ -1042,21 +1126,48 @@ g = bc
 L=-b
 \]</span></p>
 <p>We see that both <span class="math inline">\(b\)</span> <em>and</em> <span class="math inline">\(c\)</span> depend on <span class="math inline">\(a\)</span>. Leading to the following computational graph:</p>
-<div class="cell" data-execution_count="11">
+<div id="45320103" class="cell" data-execution_count="11">
 <div class="cell-output cell-output-display">
-<p><img src="notes_files/figure-html/cell-12-output-1.png" class="img-fluid"></p>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.1</span>
+
+</pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="notes_files/figure-html/cell-12-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>In forward mode this means that we compute 2 different values for <span class="math inline">\(\frac{dg}{dx}\)</span>, one from <span class="math inline">\(b\)</span> <span class="math inline">\((\frac{dg}{db}\cdot\frac{db}{dx})\)</span> and one from <span class="math inline">\(c\)</span> <span class="math inline">\((\frac{dg}{dc}\cdot\frac{dc}{dx})\)</span>.</p>
-<div class="cell" data-execution_count="12">
+<div id="8dd5f122" class="cell" data-execution_count="12">
 <div class="cell-output cell-output-display">
-<p><img src="notes_files/figure-html/cell-13-output-1.png" class="img-fluid"></p>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.1</span>
+
+</pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="notes_files/figure-html/cell-13-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>In reverse mode this means that we compute 2 different values for <span class="math inline">\(\frac{dL}{da}\)</span>, one from <span class="math inline">\(b\)</span> <span class="math inline">\((\frac{dL}{db}\cdot\frac{db}{da})\)</span> and one from <span class="math inline">\(c\)</span> <span class="math inline">\((\frac{dL}{dc}\cdot\frac{dc}{da})\)</span>.</p>
-<div class="cell" data-execution_count="13">
+<div id="396efd2f" class="cell" data-execution_count="13">
 <div class="cell-output cell-output-display">
-<p><img src="notes_files/figure-html/cell-14-output-1.png" class="img-fluid"></p>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.1</span>
+
+</pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="notes_files/figure-html/cell-14-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The resolution in both cases is simple! Just add the two terms. So in forward mode:</p>
@@ -1116,9 +1227,18 @@ c = a b
 <p><span class="math display">\[
 L=-c
 \]</span></p>
-<div class="cell" data-execution_count="14">
+<div id="b3f919a9" class="cell" data-execution_count="14">
 <div class="cell-output cell-output-display">
-<p><img src="notes_files/figure-html/cell-15-output-1.png" class="img-fluid"></p>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.1</span>
+
+</pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="notes_files/figure-html/cell-15-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Saying that <span class="math inline">\(\frac{dc}{da}=b\)</span> isn’t quite correct, because <span class="math inline">\(b\)</span> <em>also</em> depends on <span class="math inline">\(a\)</span>, really <span class="math inline">\(\frac{dc}{da} =\frac{dc}{da}+\frac{dc}{db}\frac{db}{da}\)</span>. We already account for this in our automatic differentiation though, so we want a way to talk about the derivative of an operation with respect to it’s inputs <em>ignoring how the inputs may depend on each other</em>.</p>
@@ -1132,14 +1252,32 @@ L=-c
 \]</span><br>
 In our earlier examples, we typically had partial derivatives equal to total derivatives, so the distinction wasn’t really important. This example shows why it is.</p>
 <p>Let’s see our earlier example, but this time we’ll make the distinction between partial and total derivatives explicit</p>
-<div class="cell" data-execution_count="15">
+<div id="197fe62a" class="cell" data-execution_count="15">
 <div class="cell-output cell-output-display">
-<p><img src="notes_files/figure-html/cell-16-output-1.png" class="img-fluid"></p>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.1</span>
+
+</pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="notes_files/figure-html/cell-16-output-2.png" class="img-fluid figure-img"></p>
+</figure>
 </div>
 </div>
-<div class="cell" data-execution_count="16">
+</div>
+<div id="64fb4eba" class="cell" data-execution_count="16">
 <div class="cell-output cell-output-display">
-<p><img src="notes_files/figure-html/cell-17-output-1.png" class="img-fluid"></p>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.1</span>
+
+</pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="notes_files/figure-html/cell-17-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>This is also why we specify gradients in terms of partial derivatives! If we’re taking the gradient of a function with respect to multiple inputs, we don’t know where these inputs come from. They might depend on each other! By specifying gradients at partial derivatives, we make it clear that we’re not accounting for that.</p>
@@ -1158,30 +1296,30 @@ In our earlier examples, we typically had partial derivatives equal to total der
 </ul>
 <p>For this example, we’ll call our class <code>AutogradValue</code>. This will be the base class for all of our possible operations and represents declaring a variable with a value (<code>a = 5</code>). This is useful because it lets us define values that we might want to find derivatives with respect to.</p>
 <p>Let’s see how this will work in practice. If we want to take derivatives we will first define the inputs using <code>AutogradValue</code>.</p>
-<div class="cell" data-execution_count="17">
+<div id="7826228e" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> AutogradValue(<span class="dv">5</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> AutogradValue(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then we can perform whatever operations we want on these inputs:</p>
-<div class="cell" data-execution_count="18">
+<div id="121082f8" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> a <span class="op">+</span> b</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> log(c)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Each of these operations will produce a new <code>AutogradValue</code> object representing the result of that operation.</p>
 <p>Finally we can run the backward pass by running a method <code>backward()</code> (that we will write) on the outout <code>L</code>. This will compute the gradients of <code>L</code> with respect to each input that we defined (<span class="math inline">\(\frac{dL}{da}\)</span> and <span class="math inline">\(\frac{dL}{db}\)</span>). Rather than returning these derivatives, the <code>backward()</code> method will <em>update</em> the <code>grad</code> property of <code>a</code> and <code>b</code>, making it easy to access the correct derivative.</p>
-<div class="cell" data-execution_count="19">
+<div id="4aab574d" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>L.backward()</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>dL_da <span class="op">=</span> a.grad</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We’ll also be able to compute operations with non-AutogradValue numbers, but obviously won’t be able to compute derivaitives with respect to these values.</p>
-<div class="cell" data-execution_count="20">
+<div id="b804bde5" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="dv">4</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> s <span class="op">*</span> a</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>dL_da <span class="op">=</span> a.grad <span class="co"># Will work because a is an AutogradValue</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>dL_ds <span class="op">=</span> s.grad <span class="co"># Will give an error because s is not an AutogradValue</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s look at one possible implementation for <code>AutogradValue</code>:</p>
-<div class="cell" data-execution_count="21">
+<div id="ca3da47b" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> AutogradValue:</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Base class for automatic differentiation operations. </span></span>
@@ -1212,7 +1350,7 @@ In our earlier examples, we typically had partial derivatives equal to total der
 </div>
 <p>For convenience, in this implementation we’ve also defined a property <code>args</code> which simply stores the <code>value</code> of each parent. Note that we can also allow parents to be either be <code>AutogradValue</code> or a primitive data type like <code>float</code>. This will allow us to do things like multiply an <code>AutogradValue</code> variable with a <code>float</code>, e.g.&nbsp;<code>a * 5</code>.</p>
 <p>The <code>forward_pass</code> function computes the actual value of the node given it’s parents. This will depend on what kind of operation we’re doing (addition, subtraction, multiplication, etc.), so we’ll define a <code>func</code> method that we can override that does the actual calculation. In the base case we’ll just directly assign the value:</p>
-<div class="cell" data-execution_count="22">
+<div id="80776183" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> AutogradValue:</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> func(<span class="va">self</span>, <span class="bu">input</span>):</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>        <span class="co">'''</span></span>
@@ -1228,7 +1366,7 @@ In our earlier examples, we typically had partial derivatives equal to total der
 <span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">input</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>In subclasses we’ll override <code>func</code>:</p>
-<div class="cell" data-execution_count="23">
+<div id="8d0a5260" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> _square(AutogradValue):</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Square operator (a ** 2)</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> func(<span class="va">self</span>, a):</span>
@@ -1240,7 +1378,7 @@ In our earlier examples, we typically had partial derivatives equal to total der
 <span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> a <span class="op">*</span> b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s consider what the computational graph will look like for the following code:</p>
-<div class="cell" data-execution_count="24">
+<div id="47cb2960" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> AutogradValue(<span class="dv">2</span>)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> x <span class="op">**</span> <span class="dv">2</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> <span class="dv">5</span> <span class="op">*</span> a</span>
@@ -1249,7 +1387,7 @@ In our earlier examples, we typically had partial derivatives equal to total der
 </div>
 <p><img src="images/paste-1.png" class="img-fluid"></p>
 <p>Here the blue nodes represent constants (of type <code>float</code>), while the black nodes are <code>AutogradValue</code> objects. We see that every <code>AutogradValue</code> is populated with the value, parents and args, but that after this first pass <code>grad</code> is still <code>0</code> for each object, so we have not computed <span class="math inline">\(\frac{dL}{dx}\)</span>. To do so, we need to run the backward pass by calling <code>L.backward()</code>.</p>
-<div class="cell" data-execution_count="25">
+<div id="7cfce001" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>L.backward()</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'dL_dx'</span>, x.grad)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -1258,7 +1396,7 @@ In our earlier examples, we typically had partial derivatives equal to total der
 <p>So first <span class="math inline">\(L\)</span> needs to update the <code>grad</code> property for <span class="math inline">\(c\)</span>, which represents <span class="math inline">\(\frac{dL}{dc}\)</span>. Then <span class="math inline">\(c\)</span> is able to update the <code>grad</code> property of <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> (<span class="math inline">\(\frac{dL}{da}\)</span> and <span class="math inline">\(\frac{dL}{db}\)</span>).</p>
 <p><strong>Note that the order we perform these updates matters!</strong> <span class="math inline">\(\frac{dL}{da}\)</span> will not be correct until both <span class="math inline">\(b\)</span> <em>and</em> <span class="math inline">\(c\)</span> have updated <span class="math inline">\(a\)</span>, thus <span class="math inline">\(a\)</span> cannot perform the update to <span class="math inline">\(\frac{dL}{dx}\)</span> until both <span class="math inline">\(b\)</span> and <span class="math inline">\(c\)</span> have updated <span class="math inline">\(a\)</span>.</p>
 <p>For each operation, we see that we also need to be able to compute the appropriate local derivatives of the value with respect to each input. For instance <span class="math inline">\(a\)</span> needs to be able to compute <span class="math inline">\(\frac{da}{dx}\)</span> , <span class="math inline">\(c\)</span> needs to be able to compute <span class="math inline">\(\frac{dc}{da}\)</span> and <span class="math inline">\(\frac{dc}{db}\)</span>. We will definite another method <code>grads</code> that can compute these values for a given operation and override it for each subclass. Since <code>grads</code> might need to compute multiple derivatives (as for multiplication or addition) we’ll have it return a <code>tuple</code>.</p>
-<div class="cell" data-execution_count="26">
+<div id="1beff349" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> AutogradValue:</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>        <span class="kw">def</span> grads(<span class="va">self</span>, <span class="op">*</span>args):</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>        <span class="co">'''</span></span>
@@ -1288,20 +1426,20 @@ In our earlier examples, we typically had partial derivatives equal to total der
 <section id="computational-graphs-of-vectors" class="level2">
 <h2 class="anchored" data-anchor-id="computational-graphs-of-vectors">Computational graphs of vectors</h2>
 <p>As we’ve seen, in the context of neural networks we typically perform operations on large collections of values such as vectors. For example, we might perform an element-wise square on a large vector:</p>
-<div class="cell" data-execution_count="27">
+<div id="fad642ab" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.ones((<span class="dv">500</span>,))</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> x <span class="op">**</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>In this case we are performing 500 individual square operations, so our computational graph would look like:</p>
 <p><img src="images/paste-3.png" class="img-fluid" width="300"></p>
 <p>Remember for our automatic differentiation implementation we would need an object for each of these values.</p>
-<div class="cell" data-execution_count="28">
+<div id="26963ac1" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.array([AutogradValue(<span class="dv">1</span>), AutogradValue(<span class="dv">1</span>), ...])</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> x <span class="op">**</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Each of these object introduces some overhead as each object needs to be constructed individually and needs to store not just the value and gradients, but also the parents. Furthermore our backward pass needs to determine the order of nodes to visit. For a large neural network, having a node for every single value would be computationally very complex.</p>
 <p>Since we’re performing the same operation on each entry of the vector, there’s really no need to have a separate node for each entry. Therefore we might instead prefer each node in our computational graph to represent a <strong>vector</strong> or <strong>matrix</strong> and for our operations to correspond to vector or matrix operations:</p>
-<div class="cell" data-execution_count="29">
+<div id="854e9944" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> AutogradValue(np.ones((<span class="dv">500</span>,)))</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> x <span class="op">**</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -1313,7 +1451,7 @@ In our earlier examples, we typically had partial derivatives equal to total der
 \begin{bmatrix} 2x_1 \\ 2x_2 \\ \vdots \\ 2x_{500} \end{bmatrix} = 2\mathbf{x}
 \]</span></p>
 <p>So in fact, for this case, we don’t actually need to change our <code>AutogradValue</code> implementation for square at all!</p>
-<div class="cell" data-execution_count="30">
+<div id="12d14ca8" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> _square(AutogradValue):</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Square operator (a ** 2)</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> func(<span class="va">self</span>, a):</span>
@@ -1331,7 +1469,7 @@ In our earlier examples, we typically had partial derivatives equal to total der
 L = \frac{1}{N}\sum_{i=1}^N (y_i - \mathbf{x}_i^T\mathbf{w})^2 = \frac{1}{N}\sum_{i=1}^N (\mathbf{y} - \mathbf{X}\mathbf{w})_i^2
 \]</span></p>
 <p>Here the right-hand side of the expression corresponds to how we might write this formula using numpy:</p>
-<div class="cell" data-execution_count="31">
+<div id="d2cfefbb" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>se <span class="op">=</span> (y <span class="op">-</span> np.dot(X, w)) <span class="op">**</span> <span class="dv">2</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>mse <span class="op">=</span> np.<span class="bu">sum</span>(se) <span class="op">/</span> X.shape[<span class="dv">0</span>] </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -1352,9 +1490,18 @@ g = \sum_{i=1}^N c_i
 L = \frac{1}{N}g
 \]</span></p>
 <p>We can setup our computational graph and reverse mode algorithm exactly as we did before, only in this case some of the operations will be on vectors! (<span class="math inline">\(g\)</span> and <span class="math inline">\(L\)</span> are still scalars, but <span class="math inline">\(\mathbf{w}\)</span>, <span class="math inline">\(\mathbf{a}\)</span>, <span class="math inline">\(\mathbf{b}\)</span> and <span class="math inline">\(\mathbf{c}\)</span> are vectors)</p>
-<div class="cell" data-execution_count="32">
+<div id="7dc73d7e" class="cell" data-execution_count="32">
 <div class="cell-output cell-output-display">
-<p><img src="notes_files/figure-html/cell-33-output-1.png" class="img-fluid"></p>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.1</span>
+
+</pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="notes_files/figure-html/cell-33-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Let’s walk through the computation of <span class="math inline">\(\frac{dL}{d\mathbf{w}}\)</span>.</p>
@@ -1435,9 +1582,18 @@ a_i =\sum_{j=1}^d X_{ij}w_j, \quad \frac{\partial a_i}{\partial w_j}=X_{ij}
 <section id="vector-jacobian-products" class="level2">
 <h2 class="anchored" data-anchor-id="vector-jacobian-products">Vector-Jacobian products</h2>
 <p>Let’s return to our linear regression example:</p>
-<div class="cell" data-execution_count="33">
+<div id="6d341698" class="cell" data-execution_count="33">
 <div class="cell-output cell-output-display">
-<p><img src="notes_files/figure-html/cell-34-output-1.png" class="img-fluid"></p>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.1</span>
+
+</pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="notes_files/figure-html/cell-34-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>We see that <span class="math inline">\(\frac{d\mathbf{a}}{d\mathbf{w}}\)</span> is actually a Jacobian that we now know how to compute, so the remaining question is how to combine it with <span class="math inline">\(\frac{dL}{d\mathbf{a}}\)</span> in order to get the gradient we’re looking for <span class="math inline">\(\frac{dL}{d\mathbf{w}}\)</span>? The answer turns out to be simple: use the vector-matrix product:</p>
@@ -1502,7 +1658,7 @@ a_i =\sum_{j=1}^d X_{ij}w_j, \quad \frac{\partial a_i}{\partial w_j}=X_{ij}
 \]</span></p>
 <p>This suggests that we can compute the VJP by <em>flattening</em> the Jacobian from an <span class="math inline">\(N\times N \times d\)</span> structure into a <span class="math inline">\(N \times Nd\)</span> matrix. Therefore performing the vector-matrix product will give us a length <span class="math inline">\(Nd\)</span> vector with the appropriate values for us to reshape into our <span class="math inline">\(N \times d\)</span> Jacobian <span class="math inline">\(\frac{dL}{d\mathbf{X}}\)</span>.</p>
 <p>In code this could look like:</p>
-<div class="cell" data-execution_count="34">
+<div id="fd14af4d" class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>dL_da, da_dx  <span class="co"># The computed gradients/jacobians</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>da_dx <span class="op">=</span> da_dx.reshape((da_dx.shape[<span class="dv">0</span>], <span class="op">-</span><span class="dv">1</span>))</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>dL_dx <span class="op">=</span> np.dot(dL_da, da_dx)</span>
@@ -1523,7 +1679,7 @@ a_i = \sum_{k=1}^d X_{ik}w_k
 \frac{\partial L}{\partial X_{ik}}=\frac{\partial L}{\partial a_i}\frac{\partial a_i}{\partial X_{ik}} = \frac{\partial L}{\partial a_i}w_k
 \]</span></p>
 <p>In code we could write this as:</p>
-<div class="cell" data-execution_count="35">
+<div id="deebe21f" class="cell" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>w_mat <span class="op">=</span> w.reshape((<span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>)) <span class="co"># reshape w to 1 x d</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>dL_da_mat <span class="op">=</span> dL_da.reshape((<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)) <span class="co"># reshape dL_da to N x 1</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>dL_dx <span class="op">=</span> w_mat <span class="op">*</span> dL_da_mat <span class="co"># dL_dx becomes N x d, entry ik = dL_da_i * w_k</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1547,9 +1703,18 @@ g = \sum_{i=1}^N c_i
 <p><span class="math display">\[
 L = \frac{1}{N}g
 \]</span></p>
-<div class="cell" data-execution_count="36">
+<div id="a7bf3fbf" class="cell" data-execution_count="36">
 <div class="cell-output cell-output-display">
-<p><img src="notes_files/figure-html/cell-37-output-1.png" class="img-fluid"></p>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.1</span>
+
+</pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="notes_files/figure-html/cell-37-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>As we’ve seen <span class="math inline">\(\frac{d\mathbf{a}}{d\mathbf{w}}\)</span> is an <span class="math inline">\(N\times d\)</span> Jacobian matrix. After computing this, the next step will be to compute:</p>
@@ -1566,7 +1731,7 @@ L = \frac{1}{N}g
 
 </main> <!-- /main -->
 <script type="ojs-module-contents">
-{"contents":[{"methodName":"interpret","cellName":"ojs-cell-1","inline":false,"source":"Plot = import(\"https://esm.sh/@observablehq/plot\") \nd3 = require(\"d3@7\")\ntopojson = require(\"topojson\")\nMathJax = require(\"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js\").catch(() => window.MathJax)\ntf = require(\"https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js\").catch(() => window.tf)\n\nTHREE = {\n  const THREE = window.THREE = await require(\"three@0.130.0/build/three.min.js\");\n  await require(\"three@0.130.0/examples/js/controls/OrbitControls.js\").catch(() => {});\n  await require(\"three@0.130.0/examples/js/loaders/SVGLoader.js\").catch(() => {});\n  return THREE;\n}\n\nfunction sample(f, start, end, nsamples=100) {\n  let arr = [...Array(nsamples).keys()]\n  let dist = end - start\n  function arrmap(ind) {\n    const x = (ind * dist) / nsamples + start;\n    return [x, f(x)];\n  }\n  return arr.map(arrmap)\n}\n\nfunction sigmoid(x){\n  return 1 / (1 + Math.exp(-x));\n}\n\nfunction sum(x) {\n  let s = 0;\n  for (let i = 0; i < x.length; i++ ) {\n    s += x[i];\n  }\n  return s;\n}\n\nfunction mean(x) {\n  let s = 0;\n  for (let i = 0; i < x.length; i++ ) {\n    s += x[i];\n  }\n  return s / x.length;\n}\n\nfunction cross_ent(x, y) {\n  return y ? -Math.log(sigmoid(x)) : -Math.log(sigmoid(-x));\n}\n\nfunction se(x, y) {\n  return (x - y) * (x - y);\n}\n\nfunction shuffle(array) {\n  let currentIndex = array.length,  randomIndex;\n\n  // While there remain elements to shuffle.\n  while (currentIndex > 0) {\n\n    // Pick a remaining element.\n    randomIndex = Math.floor(Math.random() * currentIndex);\n    currentIndex--;\n\n    // And swap it with the current element.\n    [array[currentIndex], array[randomIndex]] = [\n      array[randomIndex], array[currentIndex]];\n  }\n\n  return array;\n}\n\nfunction acc(x, y) {\n  return Number(y == (x  > 0));\n}\n\nfunction grid_func(f, width, height, x1, y1, x2, y2) {\n  let values = new Array(width * height);\n  const xstride = (x2 - x1) / width;\n  const ystride = (y2 - y1) / height;\n\n  \n  let y = 0;\n  let x = 0;\n  let ind = 0;\n  for (let i = 0; i < height; i++ ) {\n    for (let j = 0; j < width; j++, ind++) {\n      x = x1 + j * xstride;\n      y = y1 + i * ystride;\n      values[ind] = f(x, y);\n    }\n  }\n  return {width: width, height: height, x1: x1, y1: y1, x2: x2, y2: y2, values: values};\n}\n\nfunction get_accessors(keys, byindex=false) {\n  let isString = value => typeof value === 'string';\n  \n  let index = 0;\n  let indexmap = {};\n  let accessors = [];\n  for (let i = 0; i < keys.length; i++){\n    let k = keys[i];\n    if (Array.isArray(k)) {\n      let access = isString(k[0]) ? (x => x[k[0]]) : k[0];\n      \n      if (byindex) {\n        if (isString(k[0]) && !(k[0] in indexmap)) {\n          indexmap[k[0]] = index;\n          index++;\n        }\n        let accessindex = indexmap[k[0]];\n        access = x => x[accessindex];\n        let process = k[1];\n        let final_access = x => process(access(x));\n        accessors.push(final_access);\n      }\n      else {\n        let process = k[1];\n        let final_access = x => process(access(x));\n        accessors.push(final_access);\n      }\n      \n    }\n    else {\n      let access = isString(k) ? (x => x[k]) : k;\n      if (byindex) { \n        if (isString(k) && !(k in indexmap)) {\n          indexmap[k] = index;\n          index++;\n        }\n        let accessindex = indexmap[k];\n        access = x => x[accessindex];\n      }\n      accessors.push(access); \n    }\n  }\n  return accessors;\n}\n\nfunction predict(obs, weights, keys=[\"0\", \"1\", \"2\", \"3\"], byindex=false) {\n  let isString = value => typeof value === 'string';\n  let accessors = get_accessors(keys, byindex);\n  \n  let output = weights[0];\n  let wi = 1;\n  for (let i = 0; (i < keys.length) && (wi < weights.length); i++, wi++){\n    output += weights[wi] * accessors[i](obs);\n  }\n  return output;\n}\n\nfunction mean_loss(f, data, weights, keys, label, l2=0) {\n  let reg = 0;\n  if (l2 > 0){\n    for (let i = 1; i < weights.length; i++) {\n      reg += weights[i] * weights[i];\n    }\n  }\n  \n  const isString = value => typeof value === 'string';\n  const get_label = isString(label) ? (x => x[label]) : label;\n  return mean(data.map(x => f(predict(x, weights, keys), get_label(x)))) + l2 * reg;\n}\n\nfunction get_domains(data, accessors, margin=0.1) {\n  let domains = [];\n  for (let i = 0; i < accessors.length; i++){\n    let xdomain = d3.extent(data, accessors[i]);\n    let xdsize = (xdomain[1] - xdomain[0]);\n    let xmin = xdomain[0] - xdsize * margin;\n    let xmax = xdomain[1] + xdsize * margin;\n    domains.push([xmin, xmax]);\n  }\n  return domains;\n}\n\nfunction logisticPlot2d(data, weights, keys, label, interval=0.05) {\n  const accuracy = mean_loss(acc, data, weights, keys, label);\n  \n  let isString = value => typeof value === 'string';\n  let accessors = get_accessors(keys);\n  let index_accessors = get_accessors(keys, true);\n  let domains = get_domains(data, accessors);\n  const get_label = isString(label) ? (x => x[label]) : label;\n  \n  return Plot.plot({\n    x: {tickSpacing: 80, label: \"x\"},\n    y: {tickSpacing: 80, label: \"y\"},\n    title: \"Accuracy: \" + accuracy.toFixed(3),\n    color: {type: \"linear\", legend: true, scheme: \"BuRd\", domain: [-0.5, 1.5]},\n    marks: [\n      Plot.contour({\n        fill: (x, y) => sigmoid(predict([x, y], weights, index_accessors)),\n        x1: domains[0][0], y1: domains[1][0], x2: domains[0][1], y2: domains[1][1], interval: interval,\n      }),\n      Plot.dot(data, {x: accessors[0], y: accessors[1], stroke: x=> (get_label(x) ? 1.35 : -0.35)})\n    ]\n  });\n}\n\nfunction logisticLossPlot2d(data, weights, keys, label) {\n  const loss = mean_loss(cross_ent, data, weights, keys, label);\n  \n  let isString = value => typeof value === 'string';\n  let accessors = get_accessors(keys);\n  let index_accessors = get_accessors(keys, true);\n  let domains = get_domains(data, accessors);\n  const get_label = isString(label) ? (x => x[label]) : label;\n  \n  return Plot.plot({\n    x: {tickSpacing: 80, label: \"x\"},\n    y: {tickSpacing: 80, label: \"y\"},\n    title: \"Loss: \" + loss.toFixed(3),\n    color: {type: \"linear\", legend: true, scheme: \"BuRd\", domain: [0, 5]},\n    marks: [\n      Plot.contour({\n        value: (x, y) => predict([x, y], weights, index_accessors),\n        fillOpacity: 0.2,\n        stroke: \"black\", x1: domains[0][0], y1: domains[1][0], x2: domains[0][1], y2: domains[1][1],\n        thresholds: [-1e6,  0, 0.00001]\n      }),\n      Plot.dot(data, {x: accessors[0], y: accessors[1], stroke: x=> cross_ent(predict(x, weights, keys), get_label(x)), \n                      strokeOpacity: 0.5 })\n    ]\n  });\n}\n\nfunction lossPlot2d(f, data, keys, label, l2=0, res=100, x1=-40, y1=-0.015, x2=40,  y2=0.015, vmax=50, nlines=25, ctype=\"sqrt\", scale=(x => x)) {\n  let grid = 0;\n  function lossFunc(w, b) {\n    return scale(mean_loss(f, data, [w, b], keys, label, l2));\n  }\n\n  grid = grid_func(lossFunc,\n                 res, res, x1, y1, x2, y2\n                );\n\n  function plot2d(weights) {\n    let w = weights;\n    if (!(Array.isArray(w[0]))){\n      w = [w];\n    }\n\n    var arrows = w.slice(0, w.length - 1).map(function(e, i) {\n      return e.concat(w[i+1]);\n    });\n\n    let interval= vmax / nlines; \n    let thresholds = [];\n    for (let i = 0; i < nlines; i++) {\n      thresholds.push(i * interval);\n    }\n    let loss = mean_loss(f, data, w[w.length - 1], keys, label, l2)\n    return Plot.plot({\n      title: \"Loss: \" + loss.toFixed(3),\n      color: {type: \"linear\", legend: true, label: \"Loss\", scheme: \"BuRd\", domain: [0, vmax], type: ctype},\n      marks: [\n        Plot.contour(grid.values, {width: grid.width, height: grid.height, x1: grid.x1, x2:grid.x2, y1: grid.y1, y2: grid.y2,\n          stroke: Plot.identity, thresholds: thresholds}),\n        Plot.dot(w),\n        Plot.arrow(arrows, {x1: \"0\", y1: \"1\", x2: \"2\", y2: \"3\", stroke: \"black\"})\n      ]\n    })\n  }\n  return plot2d;\n}\n\n\n\nfunction regressionPlot(data, weights, keys, label, l2, f=se, stroke=\"\") {\n  let loss = mean_loss(f, data, weights, keys, label, l2);\n  let isString = value => typeof value === 'string';\n  \n  let accessors = get_accessors(keys);\n  let index_accessors = get_accessors(keys, true);\n  let domains = get_domains(data, get_accessors([label].concat(keys)));\n  const get_label = isString(label) ? (x => x[label]) : label;\n\n  let stroke_shade = stroke;\n  if (stroke == \"\") {\n    stroke_shade = (x => f(predict(x, weights, keys), get_label(x)))\n  }\n  \n  return Plot.plot({\n    y: {domain: domains[0]},\n    title: \"Loss: \" + loss.toFixed(3),\n    color: {type: \"linear\", legend: true, label: \"Loss\", scheme: \"BuRd\", domain: [0, 100]},\n    marks: [\n      Plot.line(sample((x) => predict([x], weights, index_accessors), domains[1][0], domains[1][1]), {stroke: 'black'}),\n      Plot.dot(data, {x: accessors[0], y: get_label, stroke: stroke_shade })\n    ]\n  })\n}\n\nfunction errorPlot(data, weights, keys, label, f, options={}) {\n  const isString = value => typeof value === 'string';\n  const get_label = isString(label) ? (x => x[label]) : label;\n  let errors = data.map(x => [predict(x, weights, keys) - get_label(x), f(predict(x, weights, keys), get_label(x))]);\n\n  \n  let sigma = (options['sigma'] || 1);\n  let plots = [];\n  const xdomain = (options['xdomain'] || [-30, 30]);\n  const ydomain = (options['ydomain'] || [0, 0.1]);\n  \n\n  if (options['plotnormal']){\n    let pdf = x => Math.exp(-0.5 * x * x / sigma) * ydomain[1];\n    let normal = Plot.line(sample(pdf, xdomain[0], xdomain[1]), {stroke: 'crimson'});    \n    plots.push(normal);\n  }\n  if (options['plotlaplace']){\n    let pdf = x => Math.exp(-0.5 * Math.abs(x) / sigma) * ydomain[1];\n    let normal = Plot.line(sample(pdf, xdomain[0], xdomain[1]), {stroke: 'green'});    \n    plots.push(normal);\n  }\n  \n  return Plot.plot({\n    y: {grid: true, domain: ydomain},\n    x: {domain: xdomain},\n    color: {type: \"linear\", legend: true, label: \"Loss\", scheme: \"BuRd\", domain: [0, 100]},\n    marks: [\n      //Plot.rectY(errors, Plot.binX({y: \"count\", fill: x => mean(x.map(v => v[1]))}, {x: \"0\"})),\n      \n      Plot.rectY(errors, Plot.binX({y: \"proportion\"}, {x: \"0\", fill: 'steelblue', interval: 1})),\n      Plot.ruleY([0])\n    ].concat(plots)\n  })\n}\n\nfunction nnPlot(data, weights, keys, label, l2, f=se, stroke=\"\", options=[]) {\n  let loss = mean_loss(f, data, weights, keys, label, l2);\n  let isString = value => typeof value === 'string';\n  \n  let accessors = get_accessors(keys);\n  let index_accessors = get_accessors(keys, true);\n  let domains = get_domains(data, get_accessors([label].concat(keys)));\n  const get_label = isString(label) ? (x => x[label]) : label;\n\n  let stroke_shade = stroke;\n  if (stroke == \"\") {\n    stroke_shade = (x => f(predict(x, weights, keys), get_label(x)))\n  }\n\n  let a = []\n  if (options.indexOf(\"Show feature transforms\") >= 0){\n    a = [Plot.line(sample((x) =>  keys[1][1](x), domains[1][0], domains[1][1]), {stroke: 'red'}),\n      Plot.line(sample((x) => keys[2][1](x), domains[1][0], domains[1][1]), {stroke: 'blue'})]\n  }\n  \n  return Plot.plot({\n    y: {domain: domains[0]},\n    title: \"Loss: \" + loss.toFixed(3),\n    color: {type: \"linear\", legend: true, label: \"Loss\", scheme: \"BuRd\", domain: [0, 100]},\n    marks: [\n      Plot.line(sample((x) => predict([x], weights, index_accessors), domains[1][0], domains[1][1]), {stroke: 'black'}),\n      Plot.dot(data, {x: accessors[0], y: get_label, stroke: stroke_shade })\n    ].concat(a)\n  })\n}\n"}]}
+eyJjb250ZW50cyI6W3sibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IlBsb3QgPSBpbXBvcnQoXCJodHRwczovL2VzbS5zaC9Ab2JzZXJ2YWJsZWhxL3Bsb3RcIikgXG5kMyA9IHJlcXVpcmUoXCJkM0A3XCIpXG50b3BvanNvbiA9IHJlcXVpcmUoXCJ0b3BvanNvblwiKVxuTWF0aEpheCA9IHJlcXVpcmUoXCJodHRwczovL2NkbmpzLmNsb3VkZmxhcmUuY29tL2FqYXgvbGlicy9tYXRoamF4LzMuMi4yL2VzNS90ZXgtc3ZnLm1pbi5qc1wiKS5jYXRjaCgoKSA9PiB3aW5kb3cuTWF0aEpheClcbnRmID0gcmVxdWlyZShcImh0dHBzOi8vY2RuLmpzZGVsaXZyLm5ldC9ucG0vQHRlbnNvcmZsb3cvdGZqc0BsYXRlc3QvZGlzdC90Zi5taW4uanNcIikuY2F0Y2goKCkgPT4gd2luZG93LnRmKVxuXG5USFJFRSA9IHtcbiAgY29uc3QgVEhSRUUgPSB3aW5kb3cuVEhSRUUgPSBhd2FpdCByZXF1aXJlKFwidGhyZWVAMC4xMzAuMC9idWlsZC90aHJlZS5taW4uanNcIik7XG4gIGF3YWl0IHJlcXVpcmUoXCJ0aHJlZUAwLjEzMC4wL2V4YW1wbGVzL2pzL2NvbnRyb2xzL09yYml0Q29udHJvbHMuanNcIikuY2F0Y2goKCkgPT4ge30pO1xuICBhd2FpdCByZXF1aXJlKFwidGhyZWVAMC4xMzAuMC9leGFtcGxlcy9qcy9sb2FkZXJzL1NWR0xvYWRlci5qc1wiKS5jYXRjaCgoKSA9PiB7fSk7XG4gIHJldHVybiBUSFJFRTtcbn1cblxuZnVuY3Rpb24gc2FtcGxlKGYsIHN0YXJ0LCBlbmQsIG5zYW1wbGVzPTEwMCkge1xuICBsZXQgYXJyID0gWy4uLkFycmF5KG5zYW1wbGVzKS5rZXlzKCldXG4gIGxldCBkaXN0ID0gZW5kIC0gc3RhcnRcbiAgZnVuY3Rpb24gYXJybWFwKGluZCkge1xuICAgIGNvbnN0IHggPSAoaW5kICogZGlzdCkgLyBuc2FtcGxlcyArIHN0YXJ0O1xuICAgIHJldHVybiBbeCwgZih4KV07XG4gIH1cbiAgcmV0dXJuIGFyci5tYXAoYXJybWFwKVxufVxuXG5mdW5jdGlvbiBzaWdtb2lkKHgpe1xuICByZXR1cm4gMSAvICgxICsgTWF0aC5leHAoLXgpKTtcbn1cblxuZnVuY3Rpb24gc3VtKHgpIHtcbiAgbGV0IHMgPSAwO1xuICBmb3IgKGxldCBpID0gMDsgaSA8IHgubGVuZ3RoOyBpKysgKSB7XG4gICAgcyArPSB4W2ldO1xuICB9XG4gIHJldHVybiBzO1xufVxuXG5mdW5jdGlvbiBtZWFuKHgpIHtcbiAgbGV0IHMgPSAwO1xuICBmb3IgKGxldCBpID0gMDsgaSA8IHgubGVuZ3RoOyBpKysgKSB7XG4gICAgcyArPSB4W2ldO1xuICB9XG4gIHJldHVybiBzIC8geC5sZW5ndGg7XG59XG5cbmZ1bmN0aW9uIGNyb3NzX2VudCh4LCB5KSB7XG4gIHJldHVybiB5ID8gLU1hdGgubG9nKHNpZ21vaWQoeCkpIDogLU1hdGgubG9nKHNpZ21vaWQoLXgpKTtcbn1cblxuZnVuY3Rpb24gc2UoeCwgeSkge1xuICByZXR1cm4gKHggLSB5KSAqICh4IC0geSk7XG59XG5cbmZ1bmN0aW9uIHNodWZmbGUoYXJyYXkpIHtcbiAgbGV0IGN1cnJlbnRJbmRleCA9IGFycmF5Lmxlbmd0aCwgIHJhbmRvbUluZGV4O1xuXG4gIC8vIFdoaWxlIHRoZXJlIHJlbWFpbiBlbGVtZW50cyB0byBzaHVmZmxlLlxuICB3aGlsZSAoY3VycmVudEluZGV4ID4gMCkge1xuXG4gICAgLy8gUGljayBhIHJlbWFpbmluZyBlbGVtZW50LlxuICAgIHJhbmRvbUluZGV4ID0gTWF0aC5mbG9vcihNYXRoLnJhbmRvbSgpICogY3VycmVudEluZGV4KTtcbiAgICBjdXJyZW50SW5kZXgtLTtcblxuICAgIC8vIEFuZCBzd2FwIGl0IHdpdGggdGhlIGN1cnJlbnQgZWxlbWVudC5cbiAgICBbYXJyYXlbY3VycmVudEluZGV4XSwgYXJyYXlbcmFuZG9tSW5kZXhdXSA9IFtcbiAgICAgIGFycmF5W3JhbmRvbUluZGV4XSwgYXJyYXlbY3VycmVudEluZGV4XV07XG4gIH1cblxuICByZXR1cm4gYXJyYXk7XG59XG5cbmZ1bmN0aW9uIGFjYyh4LCB5KSB7XG4gIHJldHVybiBOdW1iZXIoeSA9PSAoeCAgPiAwKSk7XG59XG5cbmZ1bmN0aW9uIGdyaWRfZnVuYyhmLCB3aWR0aCwgaGVpZ2h0LCB4MSwgeTEsIHgyLCB5Mikge1xuICBsZXQgdmFsdWVzID0gbmV3IEFycmF5KHdpZHRoICogaGVpZ2h0KTtcbiAgY29uc3QgeHN0cmlkZSA9ICh4MiAtIHgxKSAvIHdpZHRoO1xuICBjb25zdCB5c3RyaWRlID0gKHkyIC0geTEpIC8gaGVpZ2h0O1xuXG4gIFxuICBsZXQgeSA9IDA7XG4gIGxldCB4ID0gMDtcbiAgbGV0IGluZCA9IDA7XG4gIGZvciAobGV0IGkgPSAwOyBpIDwgaGVpZ2h0OyBpKysgKSB7XG4gICAgZm9yIChsZXQgaiA9IDA7IGogPCB3aWR0aDsgaisrLCBpbmQrKykge1xuICAgICAgeCA9IHgxICsgaiAqIHhzdHJpZGU7XG4gICAgICB5ID0geTEgKyBpICogeXN0cmlkZTtcbiAgICAgIHZhbHVlc1tpbmRdID0gZih4LCB5KTtcbiAgICB9XG4gIH1cbiAgcmV0dXJuIHt3aWR0aDogd2lkdGgsIGhlaWdodDogaGVpZ2h0LCB4MTogeDEsIHkxOiB5MSwgeDI6IHgyLCB5MjogeTIsIHZhbHVlczogdmFsdWVzfTtcbn1cblxuZnVuY3Rpb24gZ2V0X2FjY2Vzc29ycyhrZXlzLCBieWluZGV4PWZhbHNlKSB7XG4gIGxldCBpc1N0cmluZyA9IHZhbHVlID0+IHR5cGVvZiB2YWx1ZSA9PT0gJ3N0cmluZyc7XG4gIFxuICBsZXQgaW5kZXggPSAwO1xuICBsZXQgaW5kZXhtYXAgPSB7fTtcbiAgbGV0IGFjY2Vzc29ycyA9IFtdO1xuICBmb3IgKGxldCBpID0gMDsgaSA8IGtleXMubGVuZ3RoOyBpKyspe1xuICAgIGxldCBrID0ga2V5c1tpXTtcbiAgICBpZiAoQXJyYXkuaXNBcnJheShrKSkge1xuICAgICAgbGV0IGFjY2VzcyA9IGlzU3RyaW5nKGtbMF0pID8gKHggPT4geFtrWzBdXSkgOiBrWzBdO1xuICAgICAgXG4gICAgICBpZiAoYnlpbmRleCkge1xuICAgICAgICBpZiAoaXNTdHJpbmcoa1swXSkgJiYgIShrWzBdIGluIGluZGV4bWFwKSkge1xuICAgICAgICAgIGluZGV4bWFwW2tbMF1dID0gaW5kZXg7XG4gICAgICAgICAgaW5kZXgrKztcbiAgICAgICAgfVxuICAgICAgICBsZXQgYWNjZXNzaW5kZXggPSBpbmRleG1hcFtrWzBdXTtcbiAgICAgICAgYWNjZXNzID0geCA9PiB4W2FjY2Vzc2luZGV4XTtcbiAgICAgICAgbGV0IHByb2Nlc3MgPSBrWzFdO1xuICAgICAgICBsZXQgZmluYWxfYWNjZXNzID0geCA9PiBwcm9jZXNzKGFjY2Vzcyh4KSk7XG4gICAgICAgIGFjY2Vzc29ycy5wdXNoKGZpbmFsX2FjY2Vzcyk7XG4gICAgICB9XG4gICAgICBlbHNlIHtcbiAgICAgICAgbGV0IHByb2Nlc3MgPSBrWzFdO1xuICAgICAgICBsZXQgZmluYWxfYWNjZXNzID0geCA9PiBwcm9jZXNzKGFjY2Vzcyh4KSk7XG4gICAgICAgIGFjY2Vzc29ycy5wdXNoKGZpbmFsX2FjY2Vzcyk7XG4gICAgICB9XG4gICAgICBcbiAgICB9XG4gICAgZWxzZSB7XG4gICAgICBsZXQgYWNjZXNzID0gaXNTdHJpbmcoaykgPyAoeCA9PiB4W2tdKSA6IGs7XG4gICAgICBpZiAoYnlpbmRleCkgeyBcbiAgICAgICAgaWYgKGlzU3RyaW5nKGspICYmICEoayBpbiBpbmRleG1hcCkpIHtcbiAgICAgICAgICBpbmRleG1hcFtrXSA9IGluZGV4O1xuICAgICAgICAgIGluZGV4Kys7XG4gICAgICAgIH1cbiAgICAgICAgbGV0IGFjY2Vzc2luZGV4ID0gaW5kZXhtYXBba107XG4gICAgICAgIGFjY2VzcyA9IHggPT4geFthY2Nlc3NpbmRleF07XG4gICAgICB9XG4gICAgICBhY2Nlc3NvcnMucHVzaChhY2Nlc3MpOyBcbiAgICB9XG4gIH1cbiAgcmV0dXJuIGFjY2Vzc29ycztcbn1cblxuZnVuY3Rpb24gcHJlZGljdChvYnMsIHdlaWdodHMsIGtleXM9W1wiMFwiLCBcIjFcIiwgXCIyXCIsIFwiM1wiXSwgYnlpbmRleD1mYWxzZSkge1xuICBsZXQgaXNTdHJpbmcgPSB2YWx1ZSA9PiB0eXBlb2YgdmFsdWUgPT09ICdzdHJpbmcnO1xuICBsZXQgYWNjZXNzb3JzID0gZ2V0X2FjY2Vzc29ycyhrZXlzLCBieWluZGV4KTtcbiAgXG4gIGxldCBvdXRwdXQgPSB3ZWlnaHRzWzBdO1xuICBsZXQgd2kgPSAxO1xuICBmb3IgKGxldCBpID0gMDsgKGkgPCBrZXlzLmxlbmd0aCkgJiYgKHdpIDwgd2VpZ2h0cy5sZW5ndGgpOyBpKyssIHdpKyspe1xuICAgIG91dHB1dCArPSB3ZWlnaHRzW3dpXSAqIGFjY2Vzc29yc1tpXShvYnMpO1xuICB9XG4gIHJldHVybiBvdXRwdXQ7XG59XG5cbmZ1bmN0aW9uIG1lYW5fbG9zcyhmLCBkYXRhLCB3ZWlnaHRzLCBrZXlzLCBsYWJlbCwgbDI9MCkge1xuICBsZXQgcmVnID0gMDtcbiAgaWYgKGwyID4gMCl7XG4gICAgZm9yIChsZXQgaSA9IDE7IGkgPCB3ZWlnaHRzLmxlbmd0aDsgaSsrKSB7XG4gICAgICByZWcgKz0gd2VpZ2h0c1tpXSAqIHdlaWdodHNbaV07XG4gICAgfVxuICB9XG4gIFxuICBjb25zdCBpc1N0cmluZyA9IHZhbHVlID0+IHR5cGVvZiB2YWx1ZSA9PT0gJ3N0cmluZyc7XG4gIGNvbnN0IGdldF9sYWJlbCA9IGlzU3RyaW5nKGxhYmVsKSA/ICh4ID0+IHhbbGFiZWxdKSA6IGxhYmVsO1xuICByZXR1cm4gbWVhbihkYXRhLm1hcCh4ID0+IGYocHJlZGljdCh4LCB3ZWlnaHRzLCBrZXlzKSwgZ2V0X2xhYmVsKHgpKSkpICsgbDIgKiByZWc7XG59XG5cbmZ1bmN0aW9uIGdldF9kb21haW5zKGRhdGEsIGFjY2Vzc29ycywgbWFyZ2luPTAuMSkge1xuICBsZXQgZG9tYWlucyA9IFtdO1xuICBmb3IgKGxldCBpID0gMDsgaSA8IGFjY2Vzc29ycy5sZW5ndGg7IGkrKyl7XG4gICAgbGV0IHhkb21haW4gPSBkMy5leHRlbnQoZGF0YSwgYWNjZXNzb3JzW2ldKTtcbiAgICBsZXQgeGRzaXplID0gKHhkb21haW5bMV0gLSB4ZG9tYWluWzBdKTtcbiAgICBsZXQgeG1pbiA9IHhkb21haW5bMF0gLSB4ZHNpemUgKiBtYXJnaW47XG4gICAgbGV0IHhtYXggPSB4ZG9tYWluWzFdICsgeGRzaXplICogbWFyZ2luO1xuICAgIGRvbWFpbnMucHVzaChbeG1pbiwgeG1heF0pO1xuICB9XG4gIHJldHVybiBkb21haW5zO1xufVxuXG5mdW5jdGlvbiBsb2dpc3RpY1Bsb3QyZChkYXRhLCB3ZWlnaHRzLCBrZXlzLCBsYWJlbCwgaW50ZXJ2YWw9MC4wNSkge1xuICBjb25zdCBhY2N1cmFjeSA9IG1lYW5fbG9zcyhhY2MsIGRhdGEsIHdlaWdodHMsIGtleXMsIGxhYmVsKTtcbiAgXG4gIGxldCBpc1N0cmluZyA9IHZhbHVlID0+IHR5cGVvZiB2YWx1ZSA9PT0gJ3N0cmluZyc7XG4gIGxldCBhY2Nlc3NvcnMgPSBnZXRfYWNjZXNzb3JzKGtleXMpO1xuICBsZXQgaW5kZXhfYWNjZXNzb3JzID0gZ2V0X2FjY2Vzc29ycyhrZXlzLCB0cnVlKTtcbiAgbGV0IGRvbWFpbnMgPSBnZXRfZG9tYWlucyhkYXRhLCBhY2Nlc3NvcnMpO1xuICBjb25zdCBnZXRfbGFiZWwgPSBpc1N0cmluZyhsYWJlbCkgPyAoeCA9PiB4W2xhYmVsXSkgOiBsYWJlbDtcbiAgXG4gIHJldHVybiBQbG90LnBsb3Qoe1xuICAgIHg6IHt0aWNrU3BhY2luZzogODAsIGxhYmVsOiBcInhcIn0sXG4gICAgeToge3RpY2tTcGFjaW5nOiA4MCwgbGFiZWw6IFwieVwifSxcbiAgICB0aXRsZTogXCJBY2N1cmFjeTogXCIgKyBhY2N1cmFjeS50b0ZpeGVkKDMpLFxuICAgIGNvbG9yOiB7dHlwZTogXCJsaW5lYXJcIiwgbGVnZW5kOiB0cnVlLCBzY2hlbWU6IFwiQnVSZFwiLCBkb21haW46IFstMC41LCAxLjVdfSxcbiAgICBtYXJrczogW1xuICAgICAgUGxvdC5jb250b3VyKHtcbiAgICAgICAgZmlsbDogKHgsIHkpID0+IHNpZ21vaWQocHJlZGljdChbeCwgeV0sIHdlaWdodHMsIGluZGV4X2FjY2Vzc29ycykpLFxuICAgICAgICB4MTogZG9tYWluc1swXVswXSwgeTE6IGRvbWFpbnNbMV1bMF0sIHgyOiBkb21haW5zWzBdWzFdLCB5MjogZG9tYWluc1sxXVsxXSwgaW50ZXJ2YWw6IGludGVydmFsLFxuICAgICAgfSksXG4gICAgICBQbG90LmRvdChkYXRhLCB7eDogYWNjZXNzb3JzWzBdLCB5OiBhY2Nlc3NvcnNbMV0sIHN0cm9rZTogeD0+IChnZXRfbGFiZWwoeCkgPyAxLjM1IDogLTAuMzUpfSlcbiAgICBdXG4gIH0pO1xufVxuXG5mdW5jdGlvbiBsb2dpc3RpY0xvc3NQbG90MmQoZGF0YSwgd2VpZ2h0cywga2V5cywgbGFiZWwpIHtcbiAgY29uc3QgbG9zcyA9IG1lYW5fbG9zcyhjcm9zc19lbnQsIGRhdGEsIHdlaWdodHMsIGtleXMsIGxhYmVsKTtcbiAgXG4gIGxldCBpc1N0cmluZyA9IHZhbHVlID0+IHR5cGVvZiB2YWx1ZSA9PT0gJ3N0cmluZyc7XG4gIGxldCBhY2Nlc3NvcnMgPSBnZXRfYWNjZXNzb3JzKGtleXMpO1xuICBsZXQgaW5kZXhfYWNjZXNzb3JzID0gZ2V0X2FjY2Vzc29ycyhrZXlzLCB0cnVlKTtcbiAgbGV0IGRvbWFpbnMgPSBnZXRfZG9tYWlucyhkYXRhLCBhY2Nlc3NvcnMpO1xuICBjb25zdCBnZXRfbGFiZWwgPSBpc1N0cmluZyhsYWJlbCkgPyAoeCA9PiB4W2xhYmVsXSkgOiBsYWJlbDtcbiAgXG4gIHJldHVybiBQbG90LnBsb3Qoe1xuICAgIHg6IHt0aWNrU3BhY2luZzogODAsIGxhYmVsOiBcInhcIn0sXG4gICAgeToge3RpY2tTcGFjaW5nOiA4MCwgbGFiZWw6IFwieVwifSxcbiAgICB0aXRsZTogXCJMb3NzOiBcIiArIGxvc3MudG9GaXhlZCgzKSxcbiAgICBjb2xvcjoge3R5cGU6IFwibGluZWFyXCIsIGxlZ2VuZDogdHJ1ZSwgc2NoZW1lOiBcIkJ1UmRcIiwgZG9tYWluOiBbMCwgNV19LFxuICAgIG1hcmtzOiBbXG4gICAgICBQbG90LmNvbnRvdXIoe1xuICAgICAgICB2YWx1ZTogKHgsIHkpID0+IHByZWRpY3QoW3gsIHldLCB3ZWlnaHRzLCBpbmRleF9hY2Nlc3NvcnMpLFxuICAgICAgICBmaWxsT3BhY2l0eTogMC4yLFxuICAgICAgICBzdHJva2U6IFwiYmxhY2tcIiwgeDE6IGRvbWFpbnNbMF1bMF0sIHkxOiBkb21haW5zWzFdWzBdLCB4MjogZG9tYWluc1swXVsxXSwgeTI6IGRvbWFpbnNbMV1bMV0sXG4gICAgICAgIHRocmVzaG9sZHM6IFstMWU2LCAgMCwgMC4wMDAwMV1cbiAgICAgIH0pLFxuICAgICAgUGxvdC5kb3QoZGF0YSwge3g6IGFjY2Vzc29yc1swXSwgeTogYWNjZXNzb3JzWzFdLCBzdHJva2U6IHg9PiBjcm9zc19lbnQocHJlZGljdCh4LCB3ZWlnaHRzLCBrZXlzKSwgZ2V0X2xhYmVsKHgpKSwgXG4gICAgICAgICAgICAgICAgICAgICAgc3Ryb2tlT3BhY2l0eTogMC41IH0pXG4gICAgXVxuICB9KTtcbn1cblxuZnVuY3Rpb24gbG9zc1Bsb3QyZChmLCBkYXRhLCBrZXlzLCBsYWJlbCwgbDI9MCwgcmVzPTEwMCwgeDE9LTQwLCB5MT0tMC4wMTUsIHgyPTQwLCAgeTI9MC4wMTUsIHZtYXg9NTAsIG5saW5lcz0yNSwgY3R5cGU9XCJzcXJ0XCIsIHNjYWxlPSh4ID0+IHgpKSB7XG4gIGxldCBncmlkID0gMDtcbiAgZnVuY3Rpb24gbG9zc0Z1bmModywgYikge1xuICAgIHJldHVybiBzY2FsZShtZWFuX2xvc3MoZiwgZGF0YSwgW3csIGJdLCBrZXlzLCBsYWJlbCwgbDIpKTtcbiAgfVxuXG4gIGdyaWQgPSBncmlkX2Z1bmMobG9zc0Z1bmMsXG4gICAgICAgICAgICAgICAgIHJlcywgcmVzLCB4MSwgeTEsIHgyLCB5MlxuICAgICAgICAgICAgICAgICk7XG5cbiAgZnVuY3Rpb24gcGxvdDJkKHdlaWdodHMpIHtcbiAgICBsZXQgdyA9IHdlaWdodHM7XG4gICAgaWYgKCEoQXJyYXkuaXNBcnJheSh3WzBdKSkpe1xuICAgICAgdyA9IFt3XTtcbiAgICB9XG5cbiAgICB2YXIgYXJyb3dzID0gdy5zbGljZSgwLCB3Lmxlbmd0aCAtIDEpLm1hcChmdW5jdGlvbihlLCBpKSB7XG4gICAgICByZXR1cm4gZS5jb25jYXQod1tpKzFdKTtcbiAgICB9KTtcblxuICAgIGxldCBpbnRlcnZhbD0gdm1heCAvIG5saW5lczsgXG4gICAgbGV0IHRocmVzaG9sZHMgPSBbXTtcbiAgICBmb3IgKGxldCBpID0gMDsgaSA8IG5saW5lczsgaSsrKSB7XG4gICAgICB0aHJlc2hvbGRzLnB1c2goaSAqIGludGVydmFsKTtcbiAgICB9XG4gICAgbGV0IGxvc3MgPSBtZWFuX2xvc3MoZiwgZGF0YSwgd1t3Lmxlbmd0aCAtIDFdLCBrZXlzLCBsYWJlbCwgbDIpXG4gICAgcmV0dXJuIFBsb3QucGxvdCh7XG4gICAgICB0aXRsZTogXCJMb3NzOiBcIiArIGxvc3MudG9GaXhlZCgzKSxcbiAgICAgIGNvbG9yOiB7dHlwZTogXCJsaW5lYXJcIiwgbGVnZW5kOiB0cnVlLCBsYWJlbDogXCJMb3NzXCIsIHNjaGVtZTogXCJCdVJkXCIsIGRvbWFpbjogWzAsIHZtYXhdLCB0eXBlOiBjdHlwZX0sXG4gICAgICBtYXJrczogW1xuICAgICAgICBQbG90LmNvbnRvdXIoZ3JpZC52YWx1ZXMsIHt3aWR0aDogZ3JpZC53aWR0aCwgaGVpZ2h0OiBncmlkLmhlaWdodCwgeDE6IGdyaWQueDEsIHgyOmdyaWQueDIsIHkxOiBncmlkLnkxLCB5MjogZ3JpZC55MixcbiAgICAgICAgICBzdHJva2U6IFBsb3QuaWRlbnRpdHksIHRocmVzaG9sZHM6IHRocmVzaG9sZHN9KSxcbiAgICAgICAgUGxvdC5kb3QodyksXG4gICAgICAgIFBsb3QuYXJyb3coYXJyb3dzLCB7eDE6IFwiMFwiLCB5MTogXCIxXCIsIHgyOiBcIjJcIiwgeTI6IFwiM1wiLCBzdHJva2U6IFwiYmxhY2tcIn0pXG4gICAgICBdXG4gICAgfSlcbiAgfVxuICByZXR1cm4gcGxvdDJkO1xufVxuXG5cblxuZnVuY3Rpb24gcmVncmVzc2lvblBsb3QoZGF0YSwgd2VpZ2h0cywga2V5cywgbGFiZWwsIGwyLCBmPXNlLCBzdHJva2U9XCJcIikge1xuICBsZXQgbG9zcyA9IG1lYW5fbG9zcyhmLCBkYXRhLCB3ZWlnaHRzLCBrZXlzLCBsYWJlbCwgbDIpO1xuICBsZXQgaXNTdHJpbmcgPSB2YWx1ZSA9PiB0eXBlb2YgdmFsdWUgPT09ICdzdHJpbmcnO1xuICBcbiAgbGV0IGFjY2Vzc29ycyA9IGdldF9hY2Nlc3NvcnMoa2V5cyk7XG4gIGxldCBpbmRleF9hY2Nlc3NvcnMgPSBnZXRfYWNjZXNzb3JzKGtleXMsIHRydWUpO1xuICBsZXQgZG9tYWlucyA9IGdldF9kb21haW5zKGRhdGEsIGdldF9hY2Nlc3NvcnMoW2xhYmVsXS5jb25jYXQoa2V5cykpKTtcbiAgY29uc3QgZ2V0X2xhYmVsID0gaXNTdHJpbmcobGFiZWwpID8gKHggPT4geFtsYWJlbF0pIDogbGFiZWw7XG5cbiAgbGV0IHN0cm9rZV9zaGFkZSA9IHN0cm9rZTtcbiAgaWYgKHN0cm9rZSA9PSBcIlwiKSB7XG4gICAgc3Ryb2tlX3NoYWRlID0gKHggPT4gZihwcmVkaWN0KHgsIHdlaWdodHMsIGtleXMpLCBnZXRfbGFiZWwoeCkpKVxuICB9XG4gIFxuICByZXR1cm4gUGxvdC5wbG90KHtcbiAgICB5OiB7ZG9tYWluOiBkb21haW5zWzBdfSxcbiAgICB0aXRsZTogXCJMb3NzOiBcIiArIGxvc3MudG9GaXhlZCgzKSxcbiAgICBjb2xvcjoge3R5cGU6IFwibGluZWFyXCIsIGxlZ2VuZDogdHJ1ZSwgbGFiZWw6IFwiTG9zc1wiLCBzY2hlbWU6IFwiQnVSZFwiLCBkb21haW46IFswLCAxMDBdfSxcbiAgICBtYXJrczogW1xuICAgICAgUGxvdC5saW5lKHNhbXBsZSgoeCkgPT4gcHJlZGljdChbeF0sIHdlaWdodHMsIGluZGV4X2FjY2Vzc29ycyksIGRvbWFpbnNbMV1bMF0sIGRvbWFpbnNbMV1bMV0pLCB7c3Ryb2tlOiAnYmxhY2snfSksXG4gICAgICBQbG90LmRvdChkYXRhLCB7eDogYWNjZXNzb3JzWzBdLCB5OiBnZXRfbGFiZWwsIHN0cm9rZTogc3Ryb2tlX3NoYWRlIH0pXG4gICAgXVxuICB9KVxufVxuXG5mdW5jdGlvbiBlcnJvclBsb3QoZGF0YSwgd2VpZ2h0cywga2V5cywgbGFiZWwsIGYsIG9wdGlvbnM9e30pIHtcbiAgY29uc3QgaXNTdHJpbmcgPSB2YWx1ZSA9PiB0eXBlb2YgdmFsdWUgPT09ICdzdHJpbmcnO1xuICBjb25zdCBnZXRfbGFiZWwgPSBpc1N0cmluZyhsYWJlbCkgPyAoeCA9PiB4W2xhYmVsXSkgOiBsYWJlbDtcbiAgbGV0IGVycm9ycyA9IGRhdGEubWFwKHggPT4gW3ByZWRpY3QoeCwgd2VpZ2h0cywga2V5cykgLSBnZXRfbGFiZWwoeCksIGYocHJlZGljdCh4LCB3ZWlnaHRzLCBrZXlzKSwgZ2V0X2xhYmVsKHgpKV0pO1xuXG4gIFxuICBsZXQgc2lnbWEgPSAob3B0aW9uc1snc2lnbWEnXSB8fCAxKTtcbiAgbGV0IHBsb3RzID0gW107XG4gIGNvbnN0IHhkb21haW4gPSAob3B0aW9uc1sneGRvbWFpbiddIHx8IFstMzAsIDMwXSk7XG4gIGNvbnN0IHlkb21haW4gPSAob3B0aW9uc1sneWRvbWFpbiddIHx8IFswLCAwLjFdKTtcbiAgXG5cbiAgaWYgKG9wdGlvbnNbJ3Bsb3Rub3JtYWwnXSl7XG4gICAgbGV0IHBkZiA9IHggPT4gTWF0aC5leHAoLTAuNSAqIHggKiB4IC8gc2lnbWEpICogeWRvbWFpblsxXTtcbiAgICBsZXQgbm9ybWFsID0gUGxvdC5saW5lKHNhbXBsZShwZGYsIHhkb21haW5bMF0sIHhkb21haW5bMV0pLCB7c3Ryb2tlOiAnY3JpbXNvbid9KTsgICAgXG4gICAgcGxvdHMucHVzaChub3JtYWwpO1xuICB9XG4gIGlmIChvcHRpb25zWydwbG90bGFwbGFjZSddKXtcbiAgICBsZXQgcGRmID0geCA9PiBNYXRoLmV4cCgtMC41ICogTWF0aC5hYnMoeCkgLyBzaWdtYSkgKiB5ZG9tYWluWzFdO1xuICAgIGxldCBub3JtYWwgPSBQbG90LmxpbmUoc2FtcGxlKHBkZiwgeGRvbWFpblswXSwgeGRvbWFpblsxXSksIHtzdHJva2U6ICdncmVlbid9KTsgICAgXG4gICAgcGxvdHMucHVzaChub3JtYWwpO1xuICB9XG4gIFxuICByZXR1cm4gUGxvdC5wbG90KHtcbiAgICB5OiB7Z3JpZDogdHJ1ZSwgZG9tYWluOiB5ZG9tYWlufSxcbiAgICB4OiB7ZG9tYWluOiB4ZG9tYWlufSxcbiAgICBjb2xvcjoge3R5cGU6IFwibGluZWFyXCIsIGxlZ2VuZDogdHJ1ZSwgbGFiZWw6IFwiTG9zc1wiLCBzY2hlbWU6IFwiQnVSZFwiLCBkb21haW46IFswLCAxMDBdfSxcbiAgICBtYXJrczogW1xuICAgICAgLy9QbG90LnJlY3RZKGVycm9ycywgUGxvdC5iaW5YKHt5OiBcImNvdW50XCIsIGZpbGw6IHggPT4gbWVhbih4Lm1hcCh2ID0+IHZbMV0pKX0sIHt4OiBcIjBcIn0pKSxcbiAgICAgIFxuICAgICAgUGxvdC5yZWN0WShlcnJvcnMsIFBsb3QuYmluWCh7eTogXCJwcm9wb3J0aW9uXCJ9LCB7eDogXCIwXCIsIGZpbGw6ICdzdGVlbGJsdWUnLCBpbnRlcnZhbDogMX0pKSxcbiAgICAgIFBsb3QucnVsZVkoWzBdKVxuICAgIF0uY29uY2F0KHBsb3RzKVxuICB9KVxufVxuXG5mdW5jdGlvbiBublBsb3QoZGF0YSwgd2VpZ2h0cywga2V5cywgbGFiZWwsIGwyLCBmPXNlLCBzdHJva2U9XCJcIiwgb3B0aW9ucz1bXSkge1xuICBsZXQgbG9zcyA9IG1lYW5fbG9zcyhmLCBkYXRhLCB3ZWlnaHRzLCBrZXlzLCBsYWJlbCwgbDIpO1xuICBsZXQgaXNTdHJpbmcgPSB2YWx1ZSA9PiB0eXBlb2YgdmFsdWUgPT09ICdzdHJpbmcnO1xuICBcbiAgbGV0IGFjY2Vzc29ycyA9IGdldF9hY2Nlc3NvcnMoa2V5cyk7XG4gIGxldCBpbmRleF9hY2Nlc3NvcnMgPSBnZXRfYWNjZXNzb3JzKGtleXMsIHRydWUpO1xuICBsZXQgZG9tYWlucyA9IGdldF9kb21haW5zKGRhdGEsIGdldF9hY2Nlc3NvcnMoW2xhYmVsXS5jb25jYXQoa2V5cykpKTtcbiAgY29uc3QgZ2V0X2xhYmVsID0gaXNTdHJpbmcobGFiZWwpID8gKHggPT4geFtsYWJlbF0pIDogbGFiZWw7XG5cbiAgbGV0IHN0cm9rZV9zaGFkZSA9IHN0cm9rZTtcbiAgaWYgKHN0cm9rZSA9PSBcIlwiKSB7XG4gICAgc3Ryb2tlX3NoYWRlID0gKHggPT4gZihwcmVkaWN0KHgsIHdlaWdodHMsIGtleXMpLCBnZXRfbGFiZWwoeCkpKVxuICB9XG5cbiAgbGV0IGEgPSBbXVxuICBpZiAob3B0aW9ucy5pbmRleE9mKFwiU2hvdyBmZWF0dXJlIHRyYW5zZm9ybXNcIikgPj0gMCl7XG4gICAgYSA9IFtQbG90LmxpbmUoc2FtcGxlKCh4KSA9PiAga2V5c1sxXVsxXSh4KSwgZG9tYWluc1sxXVswXSwgZG9tYWluc1sxXVsxXSksIHtzdHJva2U6ICdyZWQnfSksXG4gICAgICBQbG90LmxpbmUoc2FtcGxlKCh4KSA9PiBrZXlzWzJdWzFdKHgpLCBkb21haW5zWzFdWzBdLCBkb21haW5zWzFdWzFdKSwge3N0cm9rZTogJ2JsdWUnfSldXG4gIH1cbiAgXG4gIHJldHVybiBQbG90LnBsb3Qoe1xuICAgIHk6IHtkb21haW46IGRvbWFpbnNbMF19LFxuICAgIHRpdGxlOiBcIkxvc3M6IFwiICsgbG9zcy50b0ZpeGVkKDMpLFxuICAgIGNvbG9yOiB7dHlwZTogXCJsaW5lYXJcIiwgbGVnZW5kOiB0cnVlLCBsYWJlbDogXCJMb3NzXCIsIHNjaGVtZTogXCJCdVJkXCIsIGRvbWFpbjogWzAsIDEwMF19LFxuICAgIG1hcmtzOiBbXG4gICAgICBQbG90LmxpbmUoc2FtcGxlKCh4KSA9PiBwcmVkaWN0KFt4XSwgd2VpZ2h0cywgaW5kZXhfYWNjZXNzb3JzKSwgZG9tYWluc1sxXVswXSwgZG9tYWluc1sxXVsxXSksIHtzdHJva2U6ICdibGFjayd9KSxcbiAgICAgIFBsb3QuZG90KGRhdGEsIHt4OiBhY2Nlc3NvcnNbMF0sIHk6IGdldF9sYWJlbCwgc3Ryb2tlOiBzdHJva2Vfc2hhZGUgfSlcbiAgICBdLmNvbmNhdChhKVxuICB9KVxufVxuIn1dfQ==
 </script>
 <script type="module">
 if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
@@ -1611,18 +1776,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -1654,11 +1808,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1668,8 +1861,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1681,7 +1883,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1725,6 +2050,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1750,6 +2076,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1810,6 +2162,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+
 
 
 

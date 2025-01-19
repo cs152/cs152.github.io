@@ -166,14 +166,42 @@ window.Quarto = {
     <a class="nav-link" href="../../../assignments/final-project/outline.html"> 
 <span class="menu-text">Project</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="https://github.com/orgs/CS152/"> 
-<span class="menu-text">Github</span></a>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-resources" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Resources</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-resources">    
+        <li>
+    <a class="dropdown-item" href="https://probml.github.io/pml-book/book1.html">
+ <span class="dropdown-text">Textbook</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="https://www.gradescope.com/courses/710173"> 
-<span class="menu-text">Gradescope</span></a>
+        <li>
+    <a class="dropdown-item" href="https://blank-app-ufu2uvdeosc.streamlit.app/">
+ <span class="dropdown-text">Notebook conversion</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="https://www.gradescope.com/courses/710173">
+ <span class="dropdown-text">Gradescope</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-solutions" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Solutions</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-solutions">    
+        <li class="dropdown-header">Homework 1 Solutions</li>
+        <li class="dropdown-header">Homework 2 Solutions</li>
+        <li class="dropdown-header">Homework 3 Solutions</li>
+        <li class="dropdown-header">Homework 4 Solutions</li>
+        <li class="dropdown-header">Homework 5 Solutions</li>
+        <li class="dropdown-header">Homework 6 Solutions</li>
+        <li class="dropdown-header">Homework 7 Solutions</li>
+        <li class="dropdown-header">Homework 8 Solutions</li>
+        <li class="dropdown-header">Homework 9 Solutions</li>
+        <li class="dropdown-header">Homework 10 Solutions</li>
+    </ul>
+  </li>
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -190,9 +218,7 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#collaborators" id="toc-collaborators" class="nav-link active" data-scroll-target="#collaborators">Collaborators</a></li>
-  <li><a href="#course-feedback" id="toc-course-feedback" class="nav-link" data-scroll-target="#course-feedback">Course feedback</a></li>
-  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
   <li><a href="#part-1-autograd" id="toc-part-1-autograd" class="nav-link" data-scroll-target="#part-1-autograd">Part 1: Autograd</a></li>
   <li><a href="#part-2-implementing-a-neural-network" id="toc-part-2-implementing-a-neural-network" class="nav-link" data-scroll-target="#part-2-implementing-a-neural-network">Part 2: Implementing a neural network</a></li>
   </ul>
@@ -220,19 +246,10 @@ window.Quarto = {
 </header>
 
 
-<section id="collaborators" class="level3">
-<h3 class="anchored" data-anchor-id="collaborators">Collaborators</h3>
-<p>Please list anyone you discussed or collaborated on this assignment with below.</p>
-<p>LIST COLLABORATORS HERE</p>
-</section>
-<section id="course-feedback" class="level3">
-<h3 class="anchored" data-anchor-id="course-feedback">Course feedback</h3>
-<p>Please submit this week’s course survey here: https://forms.gle/PJjGy8wrhhQnAhbb6</p>
-</section>
 <section id="overview" class="level2">
 <h2 class="anchored" data-anchor-id="overview">Overview</h2>
 <p>In this homework we will build a tiny neural network libarary from scratch and start on an implementation of automatic differentiation!</p>
-<div id="cell-6" class="cell">
+<div id="cell-3" class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Uncomment and run if using Colab!</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#import urllib.request</span></span>
@@ -240,7 +257,7 @@ window.Quarto = {
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#with urllib.request.urlopen(remote_url) as remote, open('hw4_support.py', 'w') as local:</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  [local.write(str(line, encoding='utf-8')) for line in remote]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-7" class="cell">
+<div id="cell-4" class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run me first!</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hw4_support <span class="im">import</span> <span class="op">*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -252,11 +269,11 @@ window.Quarto = {
 <section id="part-1-autograd" class="level2">
 <h2 class="anchored" data-anchor-id="part-1-autograd">Part 1: Autograd</h2>
 <p>In this homework we will be using a special version of Numpy from a package called <code>Autograd</code>. Assuming it is installed (<code>pip install autograd</code>), we can import it as follows:</p>
-<div id="cell-10" class="cell">
+<div id="cell-7" class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> autograd.numpy <span class="im">as</span> np</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This special version of Numpy behaives exactly like normal numpy. We can create and do calculations with arrays just like we would before:</p>
-<div id="cell-12" class="cell">
+<div id="cell-9" class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.array([<span class="fl">3.</span>, <span class="fl">2.</span>, <span class="dv">1</span>])</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'x:</span><span class="ch">\t</span><span class="st">'</span>, x)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'x^2:</span><span class="ch">\t</span><span class="st">'</span>, x <span class="op">**</span> <span class="dv">2</span>)</span>
@@ -265,7 +282,7 @@ window.Quarto = {
 <p>However, Autograd also has a very important trick up its sleeve: it can take derivatives (and gradients) for us! This functionality can be accessed through the <code>grad</code> function. Let’s start by seeing it in action with a very simple example, where we know the correct answer. The square function and its derivative can be written as:</p>
 <p><span class="math inline">\(f(x) = x^2, \quad f'(x) = 2x\)</span></p>
 <p>The following code uses Autograd to compute this derivative automatically:</p>
-<div id="cell-14" class="cell">
+<div id="cell-11" class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> autograd <span class="im">import</span> grad</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a function</span></span>
@@ -288,7 +305,7 @@ window.Quarto = {
 <p>Define the following function in python:</p>
 <p><span class="math inline">\(f(x) = \log(\sin(x^3) + 3 x)\)</span></p>
 <p>Use <code>grad</code> to compute the derivative of <span class="math inline">\(f\)</span> at <span class="math inline">\(1.5\)</span> (i.e.&nbsp;compute <span class="math inline">\(f'(1.5)\)</span>)</p>
-<div id="cell-17" class="cell">
+<div id="cell-14" class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">## YOUR CODE HERE</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -301,7 +318,7 @@ window.Quarto = {
 <p>As we’ve seen, the gradient of this function can be written as:</p>
 <p><span class="math inline">\(\nabla f(\mathbf{x}) = 2\mathbf{x} = \begin{bmatrix}2x_1 \\ 2x_2 \\ \vdots \\ 2x_d \end{bmatrix}\)</span></p>
 <p>Let’s see what Autograd gives us in this case:</p>
-<div id="cell-19" class="cell">
+<div id="cell-16" class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a function</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> f(x):</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.<span class="bu">sum</span>(x <span class="op">**</span> <span class="dv">2</span>)</span>
@@ -324,7 +341,7 @@ window.Quarto = {
 <p><span class="math inline">\(f([\mathbf{a}, \mathbf{b}, \mathbf{c}...]) = ||\mathbf{a}||^2 + ||\mathbf{b}||^2 + ||\mathbf{c}||^2+...\)</span></p>
 <p><em>Recall from above how we can compute each term in this sum!</em></p>
 <p>Then use <code>grad</code> to compute the gradient of this function with respect to the given input.</p>
-<div id="cell-22" class="cell">
+<div id="cell-19" class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a function</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> f(x):</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
@@ -354,7 +371,7 @@ window.Quarto = {
 <p><span class="math inline">\(f(x, y) = x^2y\)</span></p>
 <p>Then:</p>
 <p><span class="math inline">\(f'_x(x,y)=2xy, \quad f'_y(x, y)=x^2\)</span></p>
-<div id="cell-24" class="cell">
+<div id="cell-21" class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> f(x, y):</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x <span class="op">**</span> <span class="dv">2</span> <span class="op">*</span> y</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -372,7 +389,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="part-2-implementing-a-neural-network">Part 2: Implementing a neural network</h2>
 <p>Now that we have everything we need to apply automatic differentiation to train a neural network!</p>
 <p>Before we do that though, let’s try out our automatic differentiation for logistic regression. Below is a slight modification of LogisticRegression implementation we saw in the last homework.</p>
-<div id="cell-27" class="cell">
+<div id="cell-24" class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sigmoid(x):</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Computes the sigmoid function</span></span>
@@ -477,7 +494,7 @@ window.Quarto = {
 <h4 class="anchored" data-anchor-id="q3">Q3</h4>
 <p>Write the method <code>nll_and_grad</code> for the LogisticRegression class using the <code>grad</code> function from Autograd. Verify that it gives a similar answer to <code>nll_and_grad_no_autodiff</code>.</p>
 <p><em><strong>Hint:</strong> Note that the <code>nll</code> function can optionally take in the parameters. You can use this functionality and the <code>argnum</code> argument of <code>grad</code> in your answer. You can assume that <code>self</code> refers to the model object, so you can access the weights via <code>self.weights</code></em></p>
-<div id="cell-29" class="cell">
+<div id="cell-26" class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> nll_and_grad(<span class="va">self</span>, X, y):</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">## YOUR CODE HERE</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">=</span></span>
@@ -487,7 +504,7 @@ window.Quarto = {
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>LogisticRegression.nll_and_grad <span class="op">=</span> nll_and_grad</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This implementation quite inefficient (we’ll fix this in the future!), so we’ll test our model on a very small dataset.</p>
-<div id="cell-31" class="cell">
+<div id="cell-28" class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> make_moons(<span class="dv">100</span>, noise<span class="op">=</span><span class="fl">0.1</span>)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> LogisticRegression(<span class="dv">2</span>)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>gradient_descent(model, X, y, lr<span class="op">=</span><span class="fl">3e-2</span>, steps<span class="op">=</span><span class="dv">250</span>)</span>
@@ -508,7 +525,7 @@ window.Quarto = {
 <p>If you find it easier you could also define the weights in terms of <span class="math inline">\(W^T\)</span> instead, in which case the shapes would be: <code>[(2x4), (4x4), (4x1)]</code>. You could also consider how to add a bias term at each layer as in logistic regression (but this isn’t nessecary for full credit).</p>
 <p>The values in each array should be drawn from a normal distribution with standard deviation 1. You can create such a matrix in numpy using:</p>
 <pre><code>np.random.normal(scale=1., size=shape)</code></pre>
-<div id="cell-35" class="cell">
+<div id="cell-32" class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> NeuralNetwork(LogisticRegression):</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, dims, hidden_sizes<span class="op">=</span>[]):</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>        <span class="co">## YOUR CODE HERE</span></span>
@@ -524,7 +541,7 @@ window.Quarto = {
 <h4 class="anchored" data-anchor-id="q5">Q5</h4>
 <p>Implement the prediction function as described above. Note that the prediction function should use the weights passed into the <code>w</code> argument rather than <code>self.weights</code>, this will make it easier to implement the next question.</p>
 <p><em><strong>Hint:</strong> Note that this function should <strong>not</strong> apply a final sigmoid or thresholding, instead it should be the equivalent of <code>linear_function</code> from the previous homework</em></p>
-<div id="cell-37" class="cell">
+<div id="cell-34" class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prediction_function(<span class="va">self</span>, X, w):</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Get the result of our base function for prediction (i.e. x^t w)</span></span>
@@ -547,7 +564,7 @@ window.Quarto = {
 <h4 class="anchored" data-anchor-id="q6">Q6</h4>
 <p>Implement an <code>nll_and_grad</code> method for the <code>NeuralNetwork</code> class using Autograd to compute the gradient with respect to each weight matrix.</p>
 <p><em><strong>Hint:</strong> If you use <code>np.pad</code> anywhere in your implementation, Autograd may complain if you don’t include the keyword argument <code>mode='constant'</code></em></p>
-<div id="cell-39" class="cell">
+<div id="cell-36" class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> nll_and_grad(<span class="va">self</span>, X, y):</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Get the negative log-likelihood loss and its gradient</span></span>
@@ -569,7 +586,7 @@ window.Quarto = {
 </div>
 <p>We now have everything in place to train a neural network from scratch! Let’s try it on our tiny dataset. Feel free to change the inputs.</p>
 <p><em><strong>Hint</strong>: If this give very poor results and/or runs very slowly, make sure to carefully check the shape of each operation in your code to make sure it matches your expectation.</em></p>
-<div id="cell-41" class="cell">
+<div id="cell-38" class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> make_moons(<span class="dv">100</span>, noise<span class="op">=</span><span class="fl">0.1</span>)</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> NeuralNetwork(<span class="dv">2</span>, [<span class="dv">5</span>, <span class="dv">5</span>])</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>gradient_descent(model, X, y, lr<span class="op">=</span><span class="fl">3e-2</span>, steps<span class="op">=</span><span class="dv">250</span>)</span>
@@ -600,7 +617,7 @@ L = s * a
 dL_da = L.forward_grads[a] # Will work because a is an ForwardValue
 dL_ds = L.forward_grads[s] # Will give an error because s is not an ForwardValue</code></pre>
 <p>Now that we’ve seen what our final product will look like, let’s define our <code>ForwardValue</code> class.</p>
-<div id="cell-45" class="cell">
+<div id="cell-42" class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ForwardValue:</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Base class for automatic differentiation operations. Represents variable delcaration.</span></span>
@@ -663,7 +680,7 @@ dL_ds = L.forward_grads[s] # Will give an error because s is not an ForwardValue
 <h4 class="anchored" data-anchor-id="q7">Q7</h4>
 <p>Fill out the <code>func</code> and <code>grads</code> methods of each subclass below. Recall that <code>func</code> should always return the result of the operation and <code>grads</code> should always return a <code>tuple</code> of the derivative with respect to each input.</p>
 <p><em><strong>Hint:</strong> Look at the <code>_add</code> and <code>_neg</code> examples as a template!</em></p>
-<div id="cell-49" class="cell">
+<div id="cell-46" class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> _add(ForwardValue):</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Addition operator (a + b)</span></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> func(<span class="va">self</span>, a, b):</span>
@@ -721,7 +738,7 @@ dL_ds = L.forward_grads[s] # Will give an error because s is not an ForwardValue
 <span id="cb24-55"><a href="#cb24-55" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Below, we’ll define our basic functions and operators in terms of the operator classes we just wrote.</p>
-<div id="cell-51" class="cell">
+<div id="cell-48" class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> exp(a):</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> _exp(a) <span class="cf">if</span> <span class="bu">isinstance</span>(a, ForwardValue) <span class="cf">else</span> math.exp(a)</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> log(a):</span>
@@ -745,7 +762,7 @@ dL_ds = L.forward_grads[s] # Will give an error because s is not an ForwardValue
 <span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>ForwardValue.<span class="fu">__rtruediv__</span> <span class="op">=</span> <span class="kw">lambda</span> a, b: _div(b, a)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We should now be able to use our <code>AutogradValue</code> objects as if they are numbers!</p>
-<div id="cell-53" class="cell">
+<div id="cell-50" class="cell">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> ForwardValue(<span class="dv">5</span>)</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> ForwardValue(<span class="dv">2</span>)</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -760,7 +777,7 @@ dL_ds = L.forward_grads[s] # Will give an error because s is not an ForwardValue
 <h4 class="anchored" data-anchor-id="q8">Q8</h4>
 <p>Update the <code>forward_pass</code> method below for forward-mode automatic differentiation. This method should update the <code>foward_grads</code> property of the operation such that: - <code>foward_grads</code> has an entry for every input that appears in <code>foward_grads</code> of <em>any</em> parent operation. - If an input appears in more than 1 parent, make sure to <em>add</em> the gradients appropritately (if <code>g</code> has parents <code>b</code> and <code>c</code> then <span class="math inline">\(\frac{dg}{da} = \frac{dg}{db}\frac{db}{da} + \frac{dg}{dc}\frac{dc}{da}\)</span> ) - Parents that are not <code>AutogradValue</code> objects are ignored</p>
 <p>If our <code>forward_pass</code> method is working correctly, we should have the following behaivior:</p>
-<div id="cell-57" class="cell">
+<div id="cell-54" class="cell">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define our inputs as ForwardValue objects</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> ForwardValue(<span class="dv">5</span>)</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> ForwardValue(<span class="dv">2</span>)</span>
@@ -775,7 +792,7 @@ dL_ds = L.forward_grads[s] # Will give an error because s is not an ForwardValue
 <span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>g.forward_grads <span class="op">=</span> {a: <span class="dv">3</span> <span class="op">*</span> <span class="dv">2</span> <span class="op">+</span> <span class="dv">1</span>, b: <span class="dv">3</span> <span class="op">*</span> <span class="dv">5</span>} <span class="co"># dg/da = dg/dc dc/da + dg/da, dg/db = dg/dc dc/db</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Implement the method below</p>
-<div id="cell-59" class="cell">
+<div id="cell-56" class="cell">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> forward_pass(<span class="va">self</span>, args):</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Clear forward_grads if it exists</span></span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.forward_grads <span class="op">=</span> {} </span>
@@ -790,7 +807,7 @@ dL_ds = L.forward_grads[s] # Will give an error because s is not an ForwardValue
 <span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>test_forward_mode(ForwardValue)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can now take derivates of functions!</p>
-<div id="cell-61" class="cell">
+<div id="cell-58" class="cell">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> ForwardValue(<span class="dv">5</span>)</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> ForwardValue(<span class="dv">2</span>)</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> <span class="op">-</span>log(<span class="dv">5</span> <span class="op">*</span>b <span class="op">+</span> a)</span>
@@ -800,7 +817,7 @@ dL_ds = L.forward_grads[s] # Will give an error because s is not an ForwardValue
 <span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'dL/da = </span><span class="sc">%.3f</span><span class="st">, dL/db = </span><span class="sc">%.3f</span><span class="st">'</span> <span class="op">%</span> (dL_da, dL_db))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We could also implement our own very simple version of Autograd’s <code>grad</code>.</p>
-<div id="cell-63" class="cell">
+<div id="cell-60" class="cell">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> grad(f):</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> ad_function(x, <span class="op">*</span>args):</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> ForwardValue(x)</span>

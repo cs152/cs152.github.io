@@ -260,7 +260,9 @@ Each homework will have space for you to indicate who you discussed the assignme
 
 ## AI Policy
 
-In this course we will be learning the fundamental tools for building large language models and chat AIs, such as ChatGPT. Therefore I encourage you to experiment with ChatGPT and it's competitors during this course. However, I consider these models to be covered by the above collaboration policy. That means you may interact with them to discuss course materials, but you may not share assignment problems with them, nor may you copy/paste answers from them. If you have any questions about what is appropriate, please reach out to me.
+In this course we will be learning the fundamental tools for building large language models and chat AIs, such as ChatGPT. Therefore I encourage you to experiment with ChatGPT and it's competitors during this course, **but only for learning about concepts**. You **may not** share any assignment materials with large language models including assignment questions, support code and your own answers. **This includes AI-assisted code-helpers such as Github co-pilot and Google Gemini in Colab.** Please disable these tools when working on class assignments.
+
+Homeworks in this class are highly structured, in order to guide you through the often complex tools at the heart of deep learning. While I believe this structure is helpful for learning This makes the assignments particularly susceptible to AI-assisted academic dishonesty. 
 
 ## COVID Safety
 

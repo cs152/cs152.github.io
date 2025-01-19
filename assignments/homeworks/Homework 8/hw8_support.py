@@ -1,26 +1,19 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
+import numpy as np
 
 from torchsummary import summary
 
-from torchvision.datasets import FashionMNIST, MNIST
+from torchvision.datasets import FashionMNIST
 from torchvision.transforms import Compose, Normalize, ToTensor
 
 from fastprogress.fastprogress import master_bar, progress_bar
 
 import matplotlib.pyplot as plt
-
-# Use the GPUs if they are available
-device = "cuda" if torch.cuda.is_available() else "cpu"
-print(f"Using '{device}' device.")
-
-# Mini-Batch SGD hyperparameters
-batch_size = 256
-num_epochs = 10
-learning_rate = 0.001
-
-criterion = nn.CrossEntropyLoss()
 
 def get_fmnist_data_loaders(path, batch_size, valid_batch_size=0):
     # Computing normalization constants for Fashion-MNIST (commented out since we only need to do this once)
@@ -50,21 +43,84 @@ def get_fmnist_data_loaders(path, batch_size, valid_batch_size=0):
 
     return train_loader, valid_loader
 
-from torch.optim import Adam
+class Layer(nn.Module):
+    # This class will represent a basic neural network layer with a linear function
+    # and an activation (in this case ReLU)
+    def __init__(self, in_dimensions, out_dimensions):
+        super().__init__()
+        self.linear = nn.Linear(in_dimensions, out_dimensions)
+        self.activation = nn.ReLU()
+
+    def forward(self, x):
+        x = self.linear(x)
+        x = self.activation(x)
+        return x
+
+class NeuralNetwork(nn.Module):
+    def __init__(self, layer_sizes, layer_class=Layer):
+        super(NeuralNetwork, self).__init__()
+
+        # The first "layer" just rearranges the Nx28x28 input into Nx784
+        first_layer = nn.Flatten()
+
+        # The hidden layers include:
+        # 1. a linear component (computing Z) and
+        # 2. a non-linear comonent (computing A)
+        hidden_layers = [
+            (layer_class(nlminus1, nl) if nlminus1 == nl else Layer(nlminus1, nl))
+            for nl, nlminus1 in zip(layer_sizes[1:-1], layer_sizes)
+        ]
+
+        # The output layer must be Linear without an activation. See:
+        #   https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html
+        output_layer = nn.Linear(layer_sizes[-2], layer_sizes[-1])
+
+        # Group all layers into the sequential container
+        all_layers = [first_layer] + hidden_layers + [output_layer]
+        self.layers = nn.Sequential(*all_layers)
+
+    def forward(self, X):
+        return self.layers(X)
+    
+class SGDOptimizer:
+    def __init__(self, parameters, lr=0.01):
+        # Set the learning rate
+        self.lr = lr
+        # Store the set of parameters that we'll be optimizing
+        self.parameters = list(parameters)
+
+    def step(self):
+        # Take a step of gradient descent
+        for ind, parameter in enumerate(self.parameters):
+            # Compute the update to the parameter
+            update = self.lr * parameter.grad
+
+            # Update the parameter: w <- w - lr * grad
+            parameter -= update
+
 
 # Here we'll define a function to train and evaluate a neural network with a specified architecture
 # using a specified optimizer.
-def run_model(data_path, model, optimizer=Adam, 
+def run_model(optimizer=SGDOptimizer,
+              layer_type=Layer,
+              number_of_hidden_layers=2,
+              neurons_per_hidden_layer=20,
               learning_rate=0.001):
-    
+
     # Get the dataset
     train_loader, valid_loader = get_fmnist_data_loaders(data_path, batch_size)
-    return gradient_descent(model, train_loader, valid_loader, optimizer, learning_rate)
 
-def gradient_descent(model, train_loader, valid_loader, optimizer=Adam, learning_rate=0.001):
+    # The input layer size depends on the dataset
+    nx = train_loader.dataset.data.shape[1:].numel()
+
+    # The output layer size depends on the dataset
+    ny = len(train_loader.dataset.classes)
+
+    # Preprend the input and append the output layer sizes
+    layer_sizes = [nx] + [neurons_per_hidden_layer] * number_of_hidden_layers + [ny]
 
     # Do model creation here so that the model is recreated each time the cell is run
-    model = model.to(device)
+    model = NeuralNetwork(layer_sizes, layer_type).to(device)
 
     t = 0
     # Create the optimizer, just like we have with the built-in optimizer
@@ -111,7 +167,7 @@ def gradient_descent(model, train_loader, valid_loader, optimizer=Adam, learning
             # Compute gradient
             model.zero_grad()
             train_loss.backward()
-            
+
             # Take a step of gradient descent
             t += 1
             with torch.no_grad():
@@ -175,3 +231,4 @@ def gradient_descent(model, train_loader, valid_loader, optimizer=Adam, learning
         mb.update_graph(graph_data, x_bounds, y_bounds)
 
     print(f"[{epoch+1:>2}/{num_epochs}] {tloss}; {vloss}; {vaccu}")
+

@@ -166,14 +166,42 @@ window.Quarto = {
     <a class="nav-link" href="../../../assignments/final-project/outline.html"> 
 <span class="menu-text">Project</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="https://github.com/orgs/CS152/"> 
-<span class="menu-text">Github</span></a>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-resources" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Resources</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-resources">    
+        <li>
+    <a class="dropdown-item" href="https://probml.github.io/pml-book/book1.html">
+ <span class="dropdown-text">Textbook</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="https://www.gradescope.com/courses/710173"> 
-<span class="menu-text">Gradescope</span></a>
+        <li>
+    <a class="dropdown-item" href="https://blank-app-ufu2uvdeosc.streamlit.app/">
+ <span class="dropdown-text">Notebook conversion</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="https://www.gradescope.com/courses/710173">
+ <span class="dropdown-text">Gradescope</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-solutions" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Solutions</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-solutions">    
+        <li class="dropdown-header">Homework 1 Solutions</li>
+        <li class="dropdown-header">Homework 2 Solutions</li>
+        <li class="dropdown-header">Homework 3 Solutions</li>
+        <li class="dropdown-header">Homework 4 Solutions</li>
+        <li class="dropdown-header">Homework 5 Solutions</li>
+        <li class="dropdown-header">Homework 6 Solutions</li>
+        <li class="dropdown-header">Homework 7 Solutions</li>
+        <li class="dropdown-header">Homework 8 Solutions</li>
+        <li class="dropdown-header">Homework 9 Solutions</li>
+        <li class="dropdown-header">Homework 10 Solutions</li>
+    </ul>
+  </li>
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -250,7 +278,9 @@ window.Quarto = {
 <p><span class="math display">\[f(\mathbf{x})=\mathbf{x}^T\mathbf{w} + b\]</span></p>
 <p>Or if we consdier the augmented representation:</p>
 <p><span class="math display">\[\mathbf{x} \rightarrow \begin{bmatrix}\mathbf{x} \\ 1 \end{bmatrix} = \begin{bmatrix}x_1 \\ x_2 \\ \vdots \\ x_d \\ 1 \end{bmatrix},\quad \mathbf{w} \rightarrow \begin{bmatrix}\mathbf{w} \\ b \end{bmatrix} = \begin{bmatrix}w_1 \\ w_2 \\ \vdots \\ w_d \\ b \end{bmatrix}\]</span> Then we can use the more convenient linear form: <span class="math display">\[f(\mathbf{x}) = \mathbf{x}^T\mathbf{w}\]</span></p>
-<p><strong>Q1:</strong> Write a function that takes in an input <span class="math inline">\((\mathbf{x})\)</span> and a set of weights <span class="math inline">\((\mathbf{w})\)</span> and makes a prediction using the function above. <strong>Your implementation should assume that the bias <span class="math inline">\((b)\)</span> is included in the weights <span class="math inline">\((\mathbf{w})\)</span> and thus should <em>augment</em> the input to account for this (or separate <span class="math inline">\(b\)</span> from <span class="math inline">\(\mathbf{w}\)</span>)</strong>.</p>
+<section id="q1-5-points" class="level4">
+<h4 class="anchored" data-anchor-id="q1-5-points"><strong>Q1</strong> (5 points)</h4>
+<p>Write a function that takes in an input <span class="math inline">\((\mathbf{x})\)</span> and a set of weights <span class="math inline">\((\mathbf{w})\)</span> and makes a prediction using the function above. <strong>Your implementation should assume that the bias <span class="math inline">\((b)\)</span> is included in the weights <span class="math inline">\((\mathbf{w})\)</span> and thus should <em>augment</em> the input to account for this (or separate <span class="math inline">\(b\)</span> from <span class="math inline">\(\mathbf{w}\)</span>)</strong>.</p>
 <div id="cell-8" class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test inputs</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="op">-</span><span class="dv">3</span>, <span class="dv">5</span>])</span>
@@ -274,7 +304,10 @@ window.Quarto = {
                 \mathbf{y} = \begin{bmatrix} y_1 \\ y_2 \\ \vdots \\ y_N \end{bmatrix}
 \]</span></p>
 <p>With this notation, we can make predictions for an entire set of inputs as: <span class="math display">\[f(\mathbf{X}) = \mathbf{X}\mathbf{w}\]</span> Where the output is now a <em>vector</em> of predictions. We see that each entry corresponds to the prediction for input <span class="math inline">\(\mathbf{x}_i\)</span>: <span class="math display">\[f(\mathbf{X})_i = \mathbf{x}_i^T\mathbf{w} = f(\mathbf{x}_i)\]</span></p>
-<p><strong>Q2:</strong> Modify (if needed) your linear regression prediction function to accept a set of inputs <em>as a matrix</em> as described above and return a vector of predictions. Once again you should <em>not</em> assume the data includes the extra bias dimension. Then plot the prediction function given by the provided weights on the range <span class="math inline">\([0, 5]\)</span>. <em>Recall that <code>np.linspace(a, b, n)</code> produces a vector of <code>n</code> equally spaced numbers between <code>a</code> and <code>b</code>.</em></p>
+</section>
+<section id="q2-10-points" class="level4">
+<h4 class="anchored" data-anchor-id="q2-10-points"><strong>Q2</strong> (10 points)</h4>
+<p>Modify (if needed) your linear regression prediction function to accept a set of inputs <em>as a matrix</em> as described above and return a vector of predictions. Once again you should <em>not</em> assume the data includes the extra bias dimension. Then plot the prediction function given by the provided weights on the range <span class="math inline">\([0, 5]\)</span>. <em>Recall that <code>np.linspace(a, b, n)</code> produces a vector of <code>n</code> equally spaced numbers between <code>a</code> and <code>b</code>.</em></p>
 <div id="cell-10" class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test inputs</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> np.array([<span class="fl">0.5</span>, <span class="dv">2</span>])</span>
@@ -291,7 +324,10 @@ window.Quarto = {
 <p>Recall that <em>ordinary least squares</em> finds the parameter <span class="math inline">\(\mathbf{w}\)</span> that minimizes the <em>mean of squared error</em> between the true outputs <span class="math inline">\(\mathbf{y}\)</span> and predictions. <span class="math display">\[\underset{\mathbf{w}}{\text{argmin}} \frac{1}{N} \sum_{i=1}^N \left(\mathbf{x}_i^T\mathbf{w} - y_i\right)^2\]</span></p>
 <p>Observe that this is the same formula as the error we used for evaluating Richardson iteration in the last homework, we’ve simply renamed the variables from <span class="math inline">\((\mathbf{A}, \mathbf{x}, \mathbf{b})\)</span> to <span class="math inline">\((\mathbf{X}, \mathbf{w}, \mathbf{y})\)</span>! <em>(We’ve also added the constant <span class="math inline">\(\frac{1}{N}\)</span>, but this doesn’t change the optimal <span class="math inline">\(\mathbf{w}\)</span>)</em></p>
 <p>We’ve now seen 3 equivalent ways to write the same formula. From most compact to least compact these are: <span class="math display">\[\textbf{1: } \frac{1}{N} \|\mathbf{X}\mathbf{w} - \mathbf{y}\|_2^2 \quad \textbf{2: } \frac{1}{N} \sum_{i=1}^N \left(\mathbf{x}_i^T\mathbf{w} - y_i\right)^2 \quad \textbf{3: } \frac{1}{N} \sum_{i=1}^n \left(\sum_{j=1}^n X_{ij}w_j - y_i\right)^2\]</span></p>
-<p><strong>Q3:</strong> Using the gradient formula we derived in class, write a function that returns both the mean squared error <em>and</em> the gradient of the error with respect to <span class="math inline">\(\mathbf{w}\)</span>, given <span class="math inline">\(\mathbf{w}\)</span>, <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{y}\)</span>. <em>Hint: don’t forget to augment X when computing the gradient!</em></p>
+</section>
+<section id="q3-10-points" class="level4">
+<h4 class="anchored" data-anchor-id="q3-10-points"><strong>Q3</strong> (10 points)</h4>
+<p>Using the gradient formula we derived in class, write a function that returns both the mean squared error <em>and</em> the gradient of the error with respect to <span class="math inline">\(\mathbf{w}\)</span>, given <span class="math inline">\(\mathbf{w}\)</span>, <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{y}\)</span>. <em>Hint: don’t forget to augment X when computing the gradient!</em></p>
 <div id="cell-12" class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mse_and_grad(w, X, y):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">### YOUR CODE HERE</span></span>
@@ -299,7 +335,10 @@ window.Quarto = {
 </div>
 <p>Recall that we can use the <em>gradient descent</em> algorithm to find the input that minimizes a function, using the corresponding gradient function.</p>
 <p>Given an initial guess of the optimal input, <span class="math inline">\(\mathbf{w}^{(0)}\)</span>, gradient descent uses the following update to improve the guess: <span class="math display">\[\mathbf{w}^{(i+1)} \longleftarrow \mathbf{w}^{(i)} - \alpha \nabla f(\mathbf{w}),\]</span> where <span class="math inline">\(\alpha\)</span> is the <em>learning rate</em> or <em>step size</em>.</p>
-<p><strong>Q4:</strong> Write a function to perform gradient descent. The function should take as input: - <code>value_and_grad</code>: A function that produces the output and gradient of the function to optimize (e.g.&nbsp;the <code>mse_and_grad</code>) - <code>w0</code>: An inital guess <span class="math inline">\(\mathbf{w}^{(0)}\)</span> - <code>lr</code>: The learning rate <span class="math inline">\((\alpha)\)</span> - <code>niter</code>: The number of updates to perform - <code>*args</code>: Any additional argumets to pass to <code>value_and_grad</code> (e.g.&nbsp;<code>X</code> and <code>y</code>)</p>
+</section>
+<section id="q4-10-points" class="level4">
+<h4 class="anchored" data-anchor-id="q4-10-points"><strong>Q4</strong> (10 points)</h4>
+<p>Write a function to perform gradient descent. The function should take as input: - <code>value_and_grad</code>: A function that produces the output and gradient of the function to optimize (e.g.&nbsp;the <code>mse_and_grad</code>) - <code>w0</code>: An inital guess <span class="math inline">\(\mathbf{w}^{(0)}\)</span> - <code>lr</code>: The learning rate <span class="math inline">\((\alpha)\)</span> - <code>niter</code>: The number of updates to perform - <code>*args</code>: Any additional argumets to pass to <code>value_and_grad</code> (e.g.&nbsp;<code>X</code> and <code>y</code>)</p>
 <p>The function should return: - <code>w</code>: The final guess - <code>losses</code>: A list (or array) that tracks the value of the function at each update</p>
 <div id="cell-14" class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gradient_descent(value_and_grad, w0, lr, niter, <span class="op">*</span>args):</span>
@@ -311,6 +350,7 @@ window.Quarto = {
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> w, losses</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
 </section>
 <section id="part-2-applications-to-real-data" class="level2">
 <h2 class="anchored" data-anchor-id="part-2-applications-to-real-data">Part 2: Applications to real data</h2>
@@ -332,7 +372,9 @@ window.Quarto = {
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> (X <span class="op">-</span> X.mean(axis<span class="op">=</span><span class="dv">0</span>)) <span class="op">/</span> X.std(axis<span class="op">=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s start by fitting a model that just uses the feature <code>weight</code>.</p>
-<p><strong>Q5:</strong> Use the <code>gradient_descent</code> and <code>mse_and_grad</code> functions you wrote above to fit a linear regression model that takes in a car’s weight and predicts its MPG rating. Start with the weights equal to <code>0</code> and perform <code>100</code> updates of gradient descent with a learning rate of <code>0.1</code>. Plot the loss (MSE) as a function of the number of updates.</p>
+<section id="q5-5-points" class="level4">
+<h4 class="anchored" data-anchor-id="q5-5-points"><strong>Q5</strong> (5 points)</h4>
+<p>Use the <code>gradient_descent</code> and <code>mse_and_grad</code> functions you wrote above to fit a linear regression model that takes in a car’s weight and predicts its MPG rating. Start with the weights equal to <code>0</code> and perform <code>100</code> updates of gradient descent with a learning rate of <code>0.1</code>. Plot the loss (MSE) as a function of the number of updates.</p>
 <div id="cell-18" class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>Xweight <span class="op">=</span> X[:, <span class="dv">1</span>:<span class="dv">2</span>]</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>w0 <span class="op">=</span> np.zeros((<span class="dv">2</span>,))</span>
@@ -343,12 +385,18 @@ window.Quarto = {
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">### PLOTTING CODE HERE</span></span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Q6:</strong> Plot a scatterplot of weight vs.&nbsp;MPG. Then on the same plot, plot the prediction function for the linear regression model you just fit on the input range <span class="math inline">\([-3, 3]\)</span>.</p>
+</section>
+<section id="q6-5-points" class="level4">
+<h4 class="anchored" data-anchor-id="q6-5-points"><strong>Q6</strong> (5 points)</h4>
+<p>Plot a scatterplot of weight vs.&nbsp;MPG. Then on the same plot, plot the prediction function for the linear regression model you just fit on the input range <span class="math inline">\([-3, 3]\)</span>.</p>
 <div id="cell-20" class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">### PLOTTING CODE HERE</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Q7:</strong> Repeat <strong>Q5</strong> using all 4 features and compare the final loss to the final loss using only <code>weight</code> as an input. Describe any differences you observe.</p>
+</section>
+<section id="q7-5-points" class="level4">
+<h4 class="anchored" data-anchor-id="q7-5-points"><strong>Q7</strong> (5 points)</h4>
+<p>Repeat <strong>Q5</strong> using all 4 features and compare the final loss to the final loss using only <code>weight</code> as an input. Describe any differences you observe.</p>
 <div id="cell-22" class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>w0 <span class="op">=</span> np.zeros((<span class="dv">5</span>,))</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -364,7 +412,10 @@ window.Quarto = {
 \mathcal{D}_{train} = \{ (\mathbf{x}_1, y_1),\ (\mathbf{x}_2, y_2),\ ... \,(\mathbf{x}_{Ntrain}, y_{Ntrain}) \},\  
 \mathcal{D}_{test} = \{ (\mathbf{x}_1, y_1),\ (\mathbf{x}_2, y_2),\ ... \,(\mathbf{x}_{Ntest}, y_{Ntest}) \}
 \]</span></p>
-<p><strong>Q8:</strong> Split the MPG dataset into <em>training</em> and <em>test</em> datasets. Use 70% of the observations for training and 30% for test. Then repeat <strong>Q5</strong> to fit a linear regression model on <em>just the training dataset</em> using only the <code>weight</code> feature (you don’t need to plot the loss for this question). Report the final loss (MSE) on the training dataset and on the test dataset.</p>
+</section>
+<section id="q8-5-points" class="level4">
+<h4 class="anchored" data-anchor-id="q8-5-points"><strong>Q8</strong> (5 points)</h4>
+<p>Split the MPG dataset into <em>training</em> and <em>test</em> datasets. Use 70% of the observations for training and 30% for test. Then repeat <strong>Q5</strong> to fit a linear regression model on <em>just the training dataset</em> using only the <code>weight</code> feature (you don’t need to plot the loss for this question). Report the final loss (MSE) on the training dataset and on the test dataset.</p>
 <div id="cell-25" class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">### CODE TO SPLIT DATASET HERE</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>Xweight_train <span class="op">=</span></span>
@@ -383,7 +434,10 @@ window.Quarto = {
 <span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Loss on training data: </span><span class="sc">%.4f</span><span class="st">, loss on test data: </span><span class="sc">%.4f</span><span class="st">'</span> <span class="op">%</span> (mse_train, mse_test))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Q9:</strong> Repeat <strong>Q8</strong> using the all 4 features. Compare the results to the model using only <code>weight</code>.</p>
+</section>
+<section id="q9-5-points" class="level4">
+<h4 class="anchored" data-anchor-id="q9-5-points"><strong>Q9</strong> (5 points)</h4>
+<p>Repeat <strong>Q8</strong> using the all 4 features. Compare the results to the model using only <code>weight</code>.</p>
 <div id="cell-27" class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">### CODE TO SPLIT DATASET HERE</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>X_train <span class="op">=</span></span>
@@ -404,6 +458,7 @@ window.Quarto = {
 </div>
 <p><strong>DESCRIBE RESULTS HERE</strong></p>
 </section>
+</section>
 <section id="part-3-maximum-likelihood-training" class="level2">
 <h2 class="anchored" data-anchor-id="part-3-maximum-likelihood-training">Part 3: Maximum Likelihood Training</h2>
 <section id="background" class="level3">
@@ -422,14 +477,14 @@ p(y\mid \mu, \sigma) = \frac{1}{\sigma \sqrt{2 \pi}} \text{exp}\bigg(-\frac{1}{2
 <p><span class="math display">\[p(y\mid \mu, a) = \frac{1}{2a} \exp\bigg(- \frac{|y-\mu|}{a} \bigg) \]</span></p>
 <p>As for the normal distribution <span class="math inline">\(\mu\)</span> is the mean, while <span class="math inline">\(a\)</span> defines the “width” of the distribution (analogous to variance for the Normal). We can compare the two distributions visually:</p>
 <div id="cell-31" class="cell" data-outputid="85da6454-19e7-44c1-c048-745dec06a0ba">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">200</span>)</span>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>ylp <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">200</span>)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>mu, sigma2_or_a <span class="op">=</span> <span class="dv">0</span>, <span class="dv">1</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>p_y_normal <span class="op">=</span> (<span class="dv">1</span> <span class="op">/</span> np.sqrt(sigma2_or_a <span class="op">*</span> <span class="dv">2</span> <span class="op">*</span> np.pi)) <span class="op">*</span> np.exp(<span class="op">-</span> (<span class="fl">0.5</span> <span class="op">/</span> sigma2_or_a) <span class="op">*</span> (y <span class="op">-</span> mu) <span class="op">**</span> <span class="dv">2</span>)</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>p_y_laplace <span class="op">=</span> (<span class="dv">1</span> <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> sigma2_or_a)) <span class="op">*</span> np.exp(<span class="op">-</span> (<span class="dv">1</span> <span class="op">/</span> sigma2_or_a) <span class="op">*</span> np.<span class="bu">abs</span>(y <span class="op">-</span> mu))</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>p_y_normal <span class="op">=</span> (<span class="dv">1</span> <span class="op">/</span> np.sqrt(sigma2_or_a <span class="op">*</span> <span class="dv">2</span> <span class="op">*</span> np.pi)) <span class="op">*</span> np.exp(<span class="op">-</span> (<span class="fl">0.5</span> <span class="op">/</span> sigma2_or_a) <span class="op">*</span> (ylp <span class="op">-</span> mu) <span class="op">**</span> <span class="dv">2</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>p_y_laplace <span class="op">=</span> (<span class="dv">1</span> <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> sigma2_or_a)) <span class="op">*</span> np.exp(<span class="op">-</span> (<span class="dv">1</span> <span class="op">/</span> sigma2_or_a) <span class="op">*</span> np.<span class="bu">abs</span>(ylp <span class="op">-</span> mu))</span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">4</span>,<span class="dv">3</span>))</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>plt.plot(y, p_y_normal, label<span class="op">=</span><span class="vs">r"Normal PDF"</span>)</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>plt.plot(y, p_y_laplace, label<span class="op">=</span><span class="vs">r"Laplace PDF"</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>plt.plot(ylp, p_y_normal, label<span class="op">=</span><span class="vs">r"Normal PDF"</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>plt.plot(ylp, p_y_laplace, label<span class="op">=</span><span class="vs">r"Laplace PDF"</span>)</span>
 <span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'$y$'</span>)</span>
 <span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'$p(y)$'</span>)</span>
 <span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
@@ -445,13 +500,21 @@ p(y\mid \mu, \sigma) = \frac{1}{\sigma \sqrt{2 \pi}} \text{exp}\bigg(-\frac{1}{2
 <p>Let’s now consider the Laplace version of our probabilistic linear model: <span class="math display">\[
 y_i \sim L\big(\mathbf{x}_i^T \mathbf{w},\ a\big)
 \]</span> Recall that the negative log-likelihood is defined as: <span class="math display">\[\mathbf{NLL}(\mathbf{w}, a, \mathbf{X}, \mathbf{y}) = -\sum_{i=1}^N \log p(y_i\mid \mathbf{x}_i, \mathbf{w}, a)\]</span></p>
-<p><strong>Q10:</strong> Write out the negative log-likelihood for this model in terms of <span class="math inline">\(\mathbf{w}, a, \mathbf{X}, y\)</span> using the Laplace PDF shown above.</p>
+<section id="q10-5-points" class="level4">
+<h4 class="anchored" data-anchor-id="q10-5-points"><strong>Q10</strong> (5 points)</h4>
+<p>Write out the negative log-likelihood for this model in terms of <span class="math inline">\(\mathbf{w}, a, \mathbf{X}, y\)</span> using the Laplace PDF shown above.</p>
 <p><strong>YOUR ANSWER HERE</strong> <span class="math display">\[\mathbf{NLL}(\mathbf{w}, a, \mathbf{X}, \mathbf{y}) = \]</span></p>
 <p>Note that if we drop the constants, we would call this loss the <em>sum absolute error</em>.</p>
-<p><strong>Q11:</strong> Find the gradient with respect to <span class="math inline">\(\mathbf{w}\)</span> of the negative log-likelihood for this model. <em>Hint: remember that the gradient is the vector of partial derivatives!</em></p>
+</section>
+<section id="q11-10-points" class="level4">
+<h4 class="anchored" data-anchor-id="q11-10-points"><strong>Q11</strong> (10 points)</h4>
+<p>Find the gradient with respect to <span class="math inline">\(\mathbf{w}\)</span> of the negative log-likelihood for this model. <em>Hint: remember that the gradient is the vector of partial derivatives!</em></p>
 <p>You should use the following definition of the derivative of the absolute value <span class="math inline">\(|\cdot |\)</span> operator: <span class="math display">\[\frac{d}{dx}|x| = sign(x), \quad sign(x) = \begin{cases} +1 \quad \text{ if  } x &gt; 0 \\ -1 \quad \text{ if  } x &lt; 0 \\ \ \ \ 0 \quad \text{ if  } x = 0 \end{cases}\]</span> (Technically <span class="math inline">\(\frac{d}{dx}|x|\)</span> is undefined at <span class="math inline">\(x=0\)</span>, but it is convinient to assume <span class="math inline">\(\frac{d}{dx}|0|=0\)</span> in practice.)</p>
 <p><strong>YOUR ANSWER HERE</strong> <span class="math display">\[\nabla_{\mathbf{w}}\mathbf{NLL}(\mathbf{w}, b, \mathbf{X}, \mathbf{y}) = \]</span></p>
-<p><strong>Q12:</strong> Using the formula you just derived, write a function that returns both the negative log-likelihood <em>and</em> the gradient of the negative log-likelihood with respect to <span class="math inline">\(\mathbf{w}\)</span>, given <span class="math inline">\(\mathbf{w}\)</span>, <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{y}\)</span> (assume that <span class="math inline">\(a=1\)</span>). We’ll divide both outputs by <span class="math inline">\(N\)</span> to make our results more comparable to MSE. <em>Hint: <code>np.sign</code> will compute the sign function descibed above.</em></p>
+</section>
+<section id="q12-5-points" class="level4">
+<h4 class="anchored" data-anchor-id="q12-5-points"><strong>Q12</strong> (5 points)</h4>
+<p>Using the formula you just derived, write a function that returns both the negative log-likelihood <em>and</em> the gradient of the negative log-likelihood with respect to <span class="math inline">\(\mathbf{w}\)</span>, given <span class="math inline">\(\mathbf{w}\)</span>, <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{y}\)</span> (assume that <span class="math inline">\(a=1\)</span>). We’ll divide both outputs by <span class="math inline">\(N\)</span> to make our results more comparable to MSE. <em>Hint: <code>np.sign</code> will compute the sign function descibed above.</em></p>
 <div id="cell-38" class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> nll_and_grad(w, X, y):</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    N <span class="op">=</span> X.shape[<span class="dv">0</span>]</span>
@@ -460,7 +523,10 @@ y_i \sim L\big(\mathbf{x}_i^T \mathbf{w},\ a\big)
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> nll <span class="op">/</span> N, grad_w <span class="op">/</span> N</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Q13:</strong> Use the <code>gradient_descent</code> and <code>nll_and_grad</code> functions you wrote above to fit a linear regression model that takes in a car’s weight and predicts its MPG rating. Start with the weights equal to <code>0</code> and perform <code>100</code> updates of gradient descent with a learning rate of <code>1.0</code>. Plot the loss (NLL) as a function of the number of updates. <em>Use the full dataset as in <strong>Q5</strong> and note the change in learning rate!</em></p>
+</section>
+<section id="q13-5-points" class="level4">
+<h4 class="anchored" data-anchor-id="q13-5-points"><strong>Q13</strong> (5 points)</h4>
+<p>Use the <code>gradient_descent</code> and <code>nll_and_grad</code> functions you wrote above to fit a linear regression model that takes in a car’s weight and predicts its MPG rating. Start with the weights equal to <code>0</code> and perform <code>100</code> updates of gradient descent with a learning rate of <code>1.0</code>. Plot the loss (NLL) as a function of the number of updates. <em>Use the full dataset as in <strong>Q5</strong> and note the change in learning rate!</em></p>
 <div id="cell-40" class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>Xweight <span class="op">=</span> X[:, <span class="dv">1</span>:<span class="dv">2</span>]</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>w0 <span class="op">=</span> np.zeros((<span class="dv">2</span>,))</span>
@@ -471,7 +537,10 @@ y_i \sim L\big(\mathbf{x}_i^T \mathbf{w},\ a\big)
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">### PLOTTING CODE HERE</span></span>
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Q14:</strong> Plot a scatterplot of weight vs.&nbsp;MPG. Then on the same plot, plot the prediction function for the linear regression model you just fit on the input range <span class="math inline">\([-3, 3]\)</span>. Finally, copy your code from <strong>Q5</strong> to once again find the optimal <span class="math inline">\(\mathbf{w}\)</span> using the MSE loss and plot this function on the same plot in a different color. Describe any differences you see between the two models</p>
+</section>
+<section id="q14-5-points" class="level4">
+<h4 class="anchored" data-anchor-id="q14-5-points"><strong>Q14</strong> (5 points)</h4>
+<p>Plot a scatterplot of weight vs.&nbsp;MPG. Then on the same plot, plot the prediction function for the linear regression model you just fit on the input range <span class="math inline">\([-3, 3]\)</span>. Finally, copy your code from <strong>Q5</strong> to once again find the optimal <span class="math inline">\(\mathbf{w}\)</span> using the MSE loss and plot this function on the same plot in a different color. Describe any differences you see between the two models</p>
 <div id="cell-42" class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">### CODE FROM Q5 HERE</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>w_mse, losses_mse <span class="op">=</span></span>
@@ -480,7 +549,10 @@ y_i \sim L\big(\mathbf{x}_i^T \mathbf{w},\ a\big)
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>WRITTEN ANSWER HERE</strong></p>
-<p><strong>Q15:</strong> Using the parameters that you just found, plot the Laplace NLL loss as a function of the first entry in <code>w</code> (<code>w1</code> below), holding the other (the bias) constant. Plot this loss on the range <span class="math inline">\([-10, 0]\)</span>. Then, in a separate cell, plot the MSE loss as a function of the first entry in <code>w</code> on the same range.</p>
+</section>
+<section id="q15-10-points" class="level4">
+<h4 class="anchored" data-anchor-id="q15-10-points"><strong>Q15</strong> (10 points)</h4>
+<p>Using the parameters that you just found, plot the Laplace NLL loss as a function of the first entry in <code>w</code> (<code>w1</code> below), holding the other (the bias) constant. Plot this loss on the range <span class="math inline">\([-10, 0]\)</span>. Then, in a separate cell, plot the MSE loss as a function of the first entry in <code>w</code> on the same range.</p>
 <div id="cell-45" class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example of deconstructing and reconstructing the parameter vector.</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>w1, b <span class="op">=</span> w</span>
@@ -500,10 +572,11 @@ y_i \sim L\big(\mathbf{x}_i^T \mathbf{w},\ a\big)
 <div id="cell-49" class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">### COPY Q13 CODE HERE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Q16:</strong> Based on what you’ve obsevered above and in the previous questions, why might you choose the Normal distribution or the Laplace distribution for linear regression? What effect does the learning rate have (what happens if it’s set too high or too low)?</p>
+<p>Based on what you’ve obsevered above and in the previous questions, why might you choose the Normal distribution or the Laplace distribution for linear regression? What effect does the learning rate have (what happens if it’s set too high or too low)?</p>
 <p><strong>YOUR ANSWER HERE</strong></p>
 
 
+</section>
 </section>
 </section>
 

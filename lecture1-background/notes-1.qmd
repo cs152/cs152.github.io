@@ -1,0 +1,114 @@
+---
+title: "Lecture 1: Introduction to Neural Networks"
+format:
+    html:
+        toc: true
+        toc-depth: 3
+---
+
+# Goals of neural networks
+
+The goal of this course is to learn to build neural neural networks, but first we should make sure that we understand what neural networks do and why we'd be interested in learning about them in the first place. You're probably already familar with a lot of the real-world applications of neural networks, as in the past few years they've changed the way we use technology. Systems for everything from voice recognition, to photo-editing, to text and image generation and more now are largely built on the foundation of neural networks. Let's start by introducing a few broad categories of neural network applications along with some specific examples that you may or may not have seen.
+
+
+### Prediction
+
+- Image classification
+- Sentiment analysis
+- Timeseries forecasting
+- Diagnosis
+
+### Detection
+
+- Voice recognition
+- Object detection
+
+### Generation
+
+- Large language models
+- Image generation
+- Imputation
+
+### Transformation
+
+- Colorization & photo editing
+- Grammar checking
+- Translation
+
+### Approximation
+
+- DFT approximation (physics)
+- NERFs
+
+# Types of data
+
+Fundamentally all of these need to 
+
+## Tabluar data
+
+
+
+## Image data
+
+## Text data
+
+## Multimodal data
+
+## Graph data
+
+## 
+
+### What is tabular data?
+
+If you've worked with Excel, SQL or even many physical records, you're likely familiar with the concept of **tabular data**. Tabular data essentially refers to any data that we can easily represent in a table format, but, as this could mean a few different things, when we talk about tabular data in this class, we'll specifically be refering to data in what is often called the **tidy data** format. 
+
+### Tidy data
+
+We'll say that data is in in the "tidy" format if each **observation** is represented with a single row of our table and each **feature** is represented with a single column. An observation is an entity, such as a patient in a hospital, that we may want to make preditions about. A **feature** (or variable) represents some measureable property that every observation has. For the patients in our example the set of features might correspond to measurements like the heart rate, blood pressure or oxygen level of each patient, as well as properties like the patient's name, age and gender. This organizaton makes it easy to find any given measurement for any given patient (just use the row and column coordinates in the table). For tabular data we'll assume that the ordering of both rows and columns in our table has no special significance, so could change the ordering of either without altering what our table represents.
+
+Note that how we organize a set of measurements into obsrevations and features isn't nessecarily fixed, and might change depending on our goals. For example, if our goal is to predict whether a patient has some given underlying condition, we might have one observation per patient. Alternatively, if a given patient visits the hospital several times and our goal is to predict whether a patient will be admitted overnight for a given visit, we might have one observation per visit. 
+
+### Variable types
+
+The idea of tidy data should also be intuitive to programmers familiar with the object-oriented programming paradigm. There we organize our data in objects (observations) where each object has a common set of properies (features). Just as in object oriented programming, its important to consider the **type** of each feature, which defines what values it can take and what operations we can perform on it. We'll consider a few useful general feature types and how we might map them to concrete types in code.
+
+#### Quantitative features
+
+**Quantitative features** are simply numbers like our patient's blood pressure, heart rate etc. We can further subdivide this category into integer features, that we'd encode as integer types (e.g. `int`, `uint`) and real-valued features that we'd encode as floating point values (e.g. `float`).
+
+#### Categorical features
+
+**Categorical features** are features that can only take a few distinct, non-numerical values. For example this could be the department that a patient was admitted to ({ER, Neurology, Obstetrics, Dermatology, etc.}) or the patient's gender identity ({female, male, non-binary, etc.}). These values might be best encoded through an `enum` type, but are typically encoded as either a `string` or `int` in practice. 
+
+**Boolean features** are a special case of categorical features with only two possible values. They could be encoded as an `bool` or `int` type.
+
+#### Ordinal features
+
+**Ordinal features** are something of a middle-ground between quantitative and categorical features. They represent features where the possible values have a well-definded ordering (like numbers), but no concept of distance (like categorical values). For example our patients might be assigned a priority level that takes the values `low`, `medium` or `high`. In this case it's well-defined to say that `low` < `medium` < `high`, but asking for the result of `high - low` is not defined. We might encode these features as `int` types as well.
+
+#### General "nomial" features
+
+Non-numerical features that don't have a fixed set of possible values is what we'd call **nominal** or unstructured data. While it's common in many contexts to see such values within tabluar data, for neural networks we'll generally treat them as their own data type, outside of the tidy, tablular data paradigm.
+
+### Matrix data
+
+While tables are useful for reading and understanding datasets, neural networks are fundamentally mathamatical *functions* of our data, so in order to work with them we'll usually need to abstract away from the specifics of our data into a more convenient mathamatical form. In particular, as tablular data has 2 dimensions (observation rows and feature columns), the natural way to think about a dataset mathamatically is as a *matrix*. By convention, we'll usually think about our data as an $N \times d$ matrix, where we have $N$ observations and $d$ features and we'll typically call this matrix $\mathbf{X}$. 
+
+Under this convention, the first index into our matrix will denote the row or observation and the second, the column or feature. In code, we'll use `numpy` arrays to represent matrices, which work similarly. 
+
+We can also think about each row as being a *vector* of length $d$ representing a single observation. 
+
+
+Here it's worth pointing out a bit of a notational quirk that can get a little confusing. A vector is a 1-dimensional object; we can think of it as a 1-d array in code. However, when we do mathamatical operations involving both matrices and vectors, it's often convenient to treat a vector as either a $d \times 1$ matrix, also known as a *column vector*, or as a $1 \times d$ matrix (*row vector*). By convention, in mathamatical expressions we'll assume that by default, any vector we refer to will be treated as a column vector, *even if the vector was a row in a matrix*.
+
+If we want to treat a vector as a row vector, we will explicitly transpose it. This can get confusing so it's worth keeping this in your head as we move forward.
+
+### Encoding categorical variables
+You might be wondering at this point: if we're treating everything as matrices and vectors, how do deal with features that aren't real valued numbers?
+
+Integer values are straightforward; we can easily treat them as real numbers already and in code we can simply cast them.
+
+We'll talk (a lot) about unstructured text later in this course, so for now will just worry about categorical/ordinal features. 
+
+### Data 
+

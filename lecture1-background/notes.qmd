@@ -1,5 +1,5 @@
 ---
-title: "Lecture 1: Introduction to Neural Networks"
+title: "Prerequisites for neural networks"
 format:
     html:
         toc: true
@@ -1133,6 +1133,32 @@ $$
 $$
 
 Note that the gradient function is a mapping from $\mathbb{R}^n\rightarrow\mathbb{R}^n$, meaning that it returns a vector with the same size as the input.
+
+# Probability and statistics prerequisites
+
+## Random variables
+
+A **random variable** represents an unknown or random value. This could be the outcome of a unpredictable event such as a coin flip, a dice roll, or the weather, but could also represent our beliefs about something we simply haven't directly observed, such as a patient's diagnosis.
+
+We'll typically denote a random variable with an upper-case letter and it's instantiation with the same letter in lower-case 
+
+## Distributions
+
+## Uniform distribution
+
+## Bernoulli distribution
+
+## Categorical distribution
+
+## Normal distribution
+
+## Expectation
+
+## Variance
+
+## Standard deviation
+
+ 
 
 # Visualization with NumPy and Matplotlib
 

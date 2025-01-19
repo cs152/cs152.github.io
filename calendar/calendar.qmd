@@ -16,7 +16,7 @@ cal = pl.read_excel('Calendar.xlsx').select(pl.col('Date'), pl.col('Event'), pl.
  GT(cal).tab_stubhead(label=md("*Date*"))
     .tab_stub(rowname_col="Date", groupname_col="Week")
     .cols_hide(['Type']).fmt_markdown(['Readings', 'Materials', 'Topics', 'Event']).sub_missing(
-        columns=["Topics", "Readings", "Materials"],
+        columns=["Topics", "Materials", "Readings" ],
         missing_text=""
     ).tab_style(
         style=[
@@ -38,6 +38,11 @@ cal = pl.read_excel('Calendar.xlsx').select(pl.col('Date'), pl.col('Event'), pl.
             style.fill(color="lightyellow"),
         ],
         locations=loc.body(rows=pl.col('Type') == 'break')
-    ).fmt_date('Date', date_style='m_day_year')
+    ).fmt_date('Date', date_style='m_day_year').tab_style(
+        style=[
+            style.fill(color="lightgrey"),
+        ],
+        locations=loc.row_groups()
+    )
 )
 ```

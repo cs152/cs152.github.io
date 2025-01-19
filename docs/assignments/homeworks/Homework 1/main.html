@@ -166,14 +166,42 @@ window.Quarto = {
     <a class="nav-link" href="../../../assignments/final-project/outline.html"> 
 <span class="menu-text">Project</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="https://github.com/orgs/CS152/"> 
-<span class="menu-text">Github</span></a>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-resources" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Resources</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-resources">    
+        <li>
+    <a class="dropdown-item" href="https://probml.github.io/pml-book/book1.html">
+ <span class="dropdown-text">Textbook</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="https://www.gradescope.com/courses/710173"> 
-<span class="menu-text">Gradescope</span></a>
+        <li>
+    <a class="dropdown-item" href="https://blank-app-ufu2uvdeosc.streamlit.app/">
+ <span class="dropdown-text">Notebook conversion</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="https://www.gradescope.com/courses/710173">
+ <span class="dropdown-text">Gradescope</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-solutions" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Solutions</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-solutions">    
+        <li class="dropdown-header">Homework 1 Solutions</li>
+        <li class="dropdown-header">Homework 2 Solutions</li>
+        <li class="dropdown-header">Homework 3 Solutions</li>
+        <li class="dropdown-header">Homework 4 Solutions</li>
+        <li class="dropdown-header">Homework 5 Solutions</li>
+        <li class="dropdown-header">Homework 6 Solutions</li>
+        <li class="dropdown-header">Homework 7 Solutions</li>
+        <li class="dropdown-header">Homework 8 Solutions</li>
+        <li class="dropdown-header">Homework 9 Solutions</li>
+        <li class="dropdown-header">Homework 10 Solutions</li>
+    </ul>
+  </li>
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -190,8 +218,7 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#collaborators" id="toc-collaborators" class="nav-link active" data-scroll-target="#collaborators">Collaborators</a></li>
-  <li><a href="#python-setup" id="toc-python-setup" class="nav-link" data-scroll-target="#python-setup">Python setup</a></li>
+  <li><a href="#python-setup" id="toc-python-setup" class="nav-link active" data-scroll-target="#python-setup">Python setup</a></li>
   <li><a href="#part-1-numpy-basics" id="toc-part-1-numpy-basics" class="nav-link" data-scroll-target="#part-1-numpy-basics"><strong>Part 1</strong>: Numpy basics</a></li>
   <li><a href="#part-2-working-with-batches-of-vectors" id="toc-part-2-working-with-batches-of-vectors" class="nav-link" data-scroll-target="#part-2-working-with-batches-of-vectors">Part 2: Working with batches of vectors</a></li>
   <li><a href="#part-3-loading-and-visualizing-data" id="toc-part-3-loading-and-visualizing-data" class="nav-link" data-scroll-target="#part-3-loading-and-visualizing-data">Part 3: Loading and visualizing data</a></li>
@@ -220,14 +247,9 @@ window.Quarto = {
 </header>
 
 
-<section id="collaborators" class="level3">
-<h3 class="anchored" data-anchor-id="collaborators">Collaborators</h3>
-<p>Please list anyone you discussed or collaborated on this assignment with below.</p>
-<p>LIST COLLABORATORS HERE</p>
-</section>
 <section id="python-setup" class="level3">
 <h3 class="anchored" data-anchor-id="python-setup">Python setup</h3>
-<div id="cell-5" class="cell" data-executioninfo="{&quot;elapsed&quot;:7412,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1733438752928,&quot;user&quot;:{&quot;displayName&quot;:&quot;Gabriel Hope&quot;,&quot;userId&quot;:&quot;02289172270257728733&quot;},&quot;user_tz&quot;:480}" data-execution_count="2">
+<div id="cell-3" class="cell" data-executioninfo="{&quot;elapsed&quot;:7412,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1733438752928,&quot;user&quot;:{&quot;displayName&quot;:&quot;Gabriel Hope&quot;,&quot;userId&quot;:&quot;02289172270257728733&quot;},&quot;user_tz&quot;:480}" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run me first!</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -253,13 +275,18 @@ window.Quarto = {
 ?
 \end{bmatrix}
 \]</span></p>
-<p><strong>Q1:</strong> Perform this matrix-vector multiplication by hand and write the answer in the cell below.</p>
+<section id="q1-5-points" class="level4">
+<h4 class="anchored" data-anchor-id="q1-5-points"><strong>Q1</strong> (5 points)</h4>
+<p>Perform this matrix-vector multiplication by hand and write the answer in the cell below.</p>
 <p>WRITE ANSWER HERE</p>
 <div style="page-break-after: always; visibility: hidden">
 
 </div>
-<p><strong>Q2</strong>: In the code cell below, create the matrix <span class="math inline">\(A\)</span> and the vector <span class="math inline">\(\textbf{x}\)</span> shown above, using Numpy. Then use the <code>np.dot</code> function to find the output of the mapping <span class="math inline">\(\textbf{b} = A\textbf{x}\)</span>. Verify that the answer matches what you derived above.</p>
-<div id="cell-11" class="cell">
+</section>
+<section id="q2-5-points" class="level4">
+<h4 class="anchored" data-anchor-id="q2-5-points"><strong>Q2</strong> (5 points)</h4>
+<p>In the code cell below, create the matrix <span class="math inline">\(A\)</span> and the vector <span class="math inline">\(\textbf{x}\)</span> shown above, using Numpy. Then use the <code>np.dot</code> function to find the output of the mapping <span class="math inline">\(\textbf{b} = A\textbf{x}\)</span>. Verify that the answer matches what you derived above.</p>
+<div id="cell-9" class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fill answers here</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span></span>
@@ -281,8 +308,11 @@ window.Quarto = {
 3
 \end{bmatrix}
 \]</span></p>
-<p><strong>Q3</strong>: Find the missing <span class="math inline">\(\textbf{x}\)</span> in the equation above using the <code>np.linalg.solve</code> function and verify that <span class="math inline">\(A\textbf{x}=\textbf{b}\)</span>.</p>
-<div id="cell-13" class="cell">
+</section>
+<section id="q3-5-points" class="level4">
+<h4 class="anchored" data-anchor-id="q3-5-points"><strong>Q3</strong> (5 points)</h4>
+<p>Find the missing <span class="math inline">\(\textbf{x}\)</span> in the equation above using the <code>np.linalg.solve</code> function and verify that <span class="math inline">\(A\textbf{x}=\textbf{b}\)</span>.</p>
+<div id="cell-11" class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fill answer here (A is the same matrix from above)</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -290,8 +320,11 @@ window.Quarto = {
 <p>In linear algebra you may have learned how to solve a system of linear equations using Gaussian elimination. Here we will implement an alternative approach known as <em>Richardson iteration</em>. In this method we start with an inital guess for the solution: <span class="math inline">\(\textbf{x}^{(0)}\)</span>, then we will iteratively update this guess until the solution is reached. Given a matrix <span class="math inline">\(A\)</span>, a target <span class="math inline">\(\textbf{b}\)</span> and a current guess <span class="math inline">\(\textbf{x}^{(k)}\)</span>, we can compute the Richardson update as:</p>
 <p><span class="math display">\[\textbf{x}^{(k+1)} \leftarrow \textbf{x}^{(k)} + \omega \left(\textbf{b} - A\textbf{x}^{(k)}\right)\]</span></p>
 <p>Here <span class="math inline">\(\omega\)</span> is a constant that we can choose to adjust the algorithm. We will set <span class="math inline">\(\omega = 0.1\)</span>.</p>
-<p><strong>Q4</strong>: Fill in the Richardson iteration function below and apply it to the system of linear equations from above using 100 updates. Verify that if gives a similar answer to <code>np.linalg.solve</code>.</p>
-<div id="cell-15" class="cell">
+</section>
+<section id="q4-5-points" class="level4">
+<h4 class="anchored" data-anchor-id="q4-5-points"><strong>Q4</strong> (5 points)</h4>
+<p>Fill in the Richardson iteration function below and apply it to the system of linear equations from above using 100 updates. Verify that if gives a similar answer to <code>np.linalg.solve</code>.</p>
+<div id="cell-13" class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fill in function below</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> richardson_iter(x_guess, A, b, omega<span class="op">=</span><span class="fl">0.1</span>):</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -306,9 +339,12 @@ window.Quarto = {
 <p>Recall that the length of a vector is given by it’s <em>two-norm</em>, which is defined as: <span class="math display">\[\|\mathbf{x}\|_2 = \sqrt{\sum_{i=1}^n x_i^2}.\]</span></p>
 <p>Correspondingly, the (Euclidian) distance between two points <span class="math inline">\(\mathbf{a}, \mathbf{b} \in \mathbb{R}^n\)</span> can be written as <span class="math inline">\(\|\mathbf{a} - \mathbf{b}\|_2\)</span>. As a convenient measure of error for our Richardson iteration algorithm, we will use the <em>squared Euclidean distance</em>. For a guess <span class="math inline">\(\mathbf{x}^{(k)}\)</span> we will compute the error <span class="math inline">\(e^{(k)}\)</span> as: <span class="math display">\[e^{(k)} = \|A\mathbf{x}^{(k)} - \mathbf{b}\|_2^2\]</span></p>
 <p>In expanded form, this would be written as: <span class="math display">\[e^{(k)} = \sum_{i=1}^n \left(\sum_{j=1}^n A_{ij}x^{(k)}_j - b_i\right)^2\]</span></p>
-<p><strong>Q5:</strong> Write a function to compute the error of a given guess. Then run Richardson iteration again for 100 steps, computing the error at each step. Finally create a plot of the error for each step (error vs.&nbsp;step). <a href="https://cs152.github.io/lecture1-background/notes.html#scatterplots-and-line-plots">Plot reference</a></p>
+</section>
+<section id="q5-10-points" class="level4">
+<h4 class="anchored" data-anchor-id="q5-10-points"><strong>Q5</strong> (10 points)</h4>
+<p>Write a function to compute the error of a given guess. Then run Richardson iteration again for 100 steps, computing the error at each step. Finally create a plot of the error for each step (error vs.&nbsp;step). <a href="https://cs152.github.io/lecture1-background/notes.html#scatterplots-and-line-plots">Plot reference</a></p>
 <p><em>Hint: recall that basic operations in numpy (addition, subtraction, powers) are performed element-wise.</em></p>
-<div id="cell-17" class="cell">
+<div id="cell-15" class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fill in function below</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> error(x_guess, A, b):</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -322,7 +358,10 @@ window.Quarto = {
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    x_guess <span class="op">=</span> richardson_iter(x_guess, A, b)</span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Q6:</strong> Derive the partial derivative of the error with respect to a single entry of <span class="math inline">\(\mathbf{x}^{(k)}\)</span> (without loss of generality, we will say <span class="math inline">\(x^{(k)}_1\)</span>). Work in the <em>expanded form</em> as in the equation above, writing your answer in the markdown cell below.</p>
+</section>
+<section id="q6-10-points" class="level4">
+<h4 class="anchored" data-anchor-id="q6-10-points"><strong>Q6</strong> (10 points)</h4>
+<p>Derive the partial derivative of the error with respect to a single entry of <span class="math inline">\(\mathbf{x}^{(k)}\)</span> (without loss of generality, we will say <span class="math inline">\(x^{(k)}_1\)</span>). Work in the <em>expanded form</em> as in the equation above, writing your answer in the markdown cell below.</p>
 <p><em>Hint: You may find it helpful to refer to the latex equation cheatsheet on the course website. You may show intermediate steps here or as handwritten work as a separate file in the repository. The final answer should be filled in here.</em></p>
 <p><strong>EDIT THIS CELL WITH YOUR ANSWER</strong></p>
 <p><span class="math display">\[\frac{\partial e^{(k)}}{\partial x^{(k)}_1}= \]</span></p>
@@ -332,11 +371,18 @@ window.Quarto = {
 \vdots \\
 \frac{\partial e^{(k)}}{\partial x^{(k)}_n}
 \end{bmatrix}\]</span></p>
-<p><strong>Q7:</strong> Using the formula you just derived, write the formula for the vector of all partial derivatives in the compact matrix/vector notation (e.g.&nbsp;<span class="math inline">\(A\mathbf{x}=\mathbf{b}\)</span>).</p>
+</section>
+<section id="q7-10-points" class="level4">
+<h4 class="anchored" data-anchor-id="q7-10-points"><strong>Q7</strong> (10 points)</h4>
+<p>Using the formula you just derived, write the formula for the vector of all partial derivatives in the compact matrix/vector notation (e.g.&nbsp;<span class="math inline">\(A\mathbf{x}=\mathbf{b}\)</span>).</p>
 <p><strong>EDIT THIS CELL WITH YOUR ANSWER</strong></p>
 <p><span class="math display">\[\frac{\partial e^{(k)}}{\partial \mathbf{x}^{(k)}}= \]</span></p>
-<p><strong>Q8:</strong> Do you notice any relationship between this result and the Richardson iteration algorithm above? (1-2 sentences) <em>We will discuss this more in class!</em></p>
+</section>
+<section id="q8-5-points" class="level4">
+<h4 class="anchored" data-anchor-id="q8-5-points"><strong>Q8</strong> (5 points)</h4>
+<p>Do you notice any relationship between this result and the Richardson iteration algorithm above? (1-2 sentences) <em>We will discuss this more in class!</em></p>
 <p>WRITE YOUR ANSWER HERE</p>
+</section>
 </section>
 <section id="part-2-working-with-batches-of-vectors" class="level2">
 <h2 class="anchored" data-anchor-id="part-2-working-with-batches-of-vectors">Part 2: Working with batches of vectors</h2>
@@ -349,7 +395,9 @@ x_3
 x_1 &amp; x_2 &amp; x_3
 \end{bmatrix}\]</span></p>
 <p>Note that we use the same notation for both as they refer to the same concept (a vector). The difference becomes relevant when we consider matrix-vector multiplication. We can write matrix-vector multiplication in two ways: <span class="math display">\[\text{Matrix-vector: }A\mathbf{x} = \mathbf{b}, \quad \text{Vector-matrix: }\mathbf{x}^TA^T= \mathbf{b}^T\]</span> In <em>matrix-vector multiplication</em> we treat <span class="math inline">\(\textbf{x}\)</span> as a column vector (<span class="math inline">\(n \times 1\)</span> matrix), while in <em>vector-matrix multiplication</em> we treat it as a row vector (<span class="math inline">\(n \times 1\)</span> matrix). Transposing <span class="math inline">\(A\)</span> for left multiplication ensures that the two forms give the same answer.</p>
-<p><strong>Q9:</strong> Using the previously defined <span class="math inline">\(\mathbf{x}\)</span>, create an explicit column vector and row vector. Then using the previously defined <span class="math inline">\(A\)</span>, verify that the matrix-vector and vector-matrix multiplications shown above do produce the same resultant vector <span class="math inline">\(\mathbf{b}\)</span>.</p>
+<section id="q9-5-points" class="level4">
+<h4 class="anchored" data-anchor-id="q9-5-points"><strong>Q9</strong> (5 points)</h4>
+<p>Using the previously defined <span class="math inline">\(\mathbf{x}\)</span>, create an explicit column vector and row vector. Then using the previously defined <span class="math inline">\(A\)</span>, verify that the matrix-vector and vector-matrix multiplications shown above do produce the same resultant vector <span class="math inline">\(\mathbf{b}\)</span>.</p>
 <p><em>Hint: Recall that</em> <code>np.dot</code> <em>is also used for matrix-matrix multiplication. The values of <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(A\)</span> are:</em> <span class="math display">\[\mathbf{x} = \begin{bmatrix}
 1 \\
 -2 \\
@@ -359,14 +407,17 @@ x_1 &amp; x_2 &amp; x_3
 6 &amp; 5  &amp; 1 \\
 -4 &amp; -1 &amp; 2
 \end{bmatrix}\]</span></p>
-<div id="cell-27" class="cell">
+<div id="cell-25" class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fill in code here</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>x_col <span class="op">=</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>x_row <span class="op">=</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The distinction between row and column vectors also affects the behaivior of other operations on <code>np.array</code> objects, particularly through the concept of <a href="https://cs152.github.io/lecture1-background/notes.html#element-wise-matrix-operations"><em>broadcasting</em></a>.</p>
-<p><strong>Q10:</strong> Consider a <span class="math inline">\(3 \times 3\)</span> matrix of all ones as defined in code below, along with the 1-d vector <span class="math inline">\(\mathbf{x}\)</span>.</p>
-<div id="cell-30" class="cell" data-executioninfo="{&quot;elapsed&quot;:516,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1733439058698,&quot;user&quot;:{&quot;displayName&quot;:&quot;Gabriel Hope&quot;,&quot;userId&quot;:&quot;02289172270257728733&quot;},&quot;user_tz&quot;:480}" data-outputid="1ce3fabf-d440-4757-d717-1edfae62ca4b" data-execution_count="5">
+</section>
+<section id="q10-5-points" class="level4">
+<h4 class="anchored" data-anchor-id="q10-5-points"><strong>Q10</strong> (5 points)</h4>
+<p>Consider a <span class="math inline">\(3 \times 3\)</span> matrix of all ones as defined in code below, along with the 1-d vector <span class="math inline">\(\mathbf{x}\)</span>.</p>
+<div id="cell-28" class="cell" data-executioninfo="{&quot;elapsed&quot;:516,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1733439058698,&quot;user&quot;:{&quot;displayName&quot;:&quot;Gabriel Hope&quot;,&quot;userId&quot;:&quot;02289172270257728733&quot;},&quot;user_tz&quot;:480}" data-outputid="1ce3fabf-d440-4757-d717-1edfae62ca4b" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ones <span class="op">=</span> np.ones((<span class="dv">3</span>, <span class="dv">3</span>))</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="op">-</span><span class="dv">2</span>, <span class="dv">1</span>])</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>ones</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -383,7 +434,7 @@ x_1 &amp; x_2 &amp; x_3
 1 &amp; -2 &amp; 1
 \end{bmatrix}\]</span></p>
 <p><em>Hint: You should replace <code>SHAPE</code> with an appropriate shape for broadcasting and <code>OPERATION</code> with an appropriate operation (e.g.&nbsp;<code>+, -, *, /</code>)</em></p>
-<div id="cell-32" class="cell">
+<div id="cell-30" class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fill in code here</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>ones OPERATION x.reshape( SHAPE )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -401,8 +452,11 @@ x_1 &amp; x_2 &amp; x_3
 -2 &amp; -1 &amp; 5
 \end{bmatrix} \]</span></p>
 <p>We will call this matrix <span class="math inline">\(X\)</span> to denote that it is a collection of vectors, rather than a single vector (<span class="math inline">\(\mathbf{x}\)</span>).</p>
-<p><strong>Q11:</strong> Create this matrix in numpy using th <code>np.stack</code> function.</p>
-<div id="cell-34" class="cell">
+</section>
+<section id="q11-5-points" class="level4">
+<h4 class="anchored" data-anchor-id="q11-5-points"><strong>Q11</strong> (5 points)</h4>
+<p>Create this matrix in numpy using th <code>np.stack</code> function.</p>
+<div id="cell-32" class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fill code here</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span></span>
@@ -410,63 +464,78 @@ x_1 &amp; x_2 &amp; x_3
 </div>
 <p>When taken together as a matrix in this way, we can apply the linear mapping <span class="math inline">\(A\)</span> to all vectors using matrix-matrix multiplication: <span class="math display">\[B=XA^T\]</span></p>
 <p>Let’s put this into practice with a visual example.</p>
-<p><strong>Q12:</strong> Create a <span class="math inline">\(20 \times 3\)</span> matrix, <code>circle</code>, in numpy of the following form</p>
+</section>
+<section id="q12-5-points" class="level4">
+<h4 class="anchored" data-anchor-id="q12-5-points"><strong>Q12</strong> (5 points)</h4>
+<p>Create a <span class="math inline">\(20 \times 3\)</span> matrix, <code>circle</code>, in numpy of the following form</p>
 <p><span class="math display">\[ \begin{bmatrix} \sin(\theta_1) &amp; \cos(\theta_1)  &amp; 1 \\
 \sin(\theta_2) &amp; \cos(\theta_2)  &amp; 1 \\
 \vdots &amp; \vdots &amp; \vdots \\
 \sin(\theta_{20}) &amp; \cos(\theta_{20})  &amp; 1 \\
 \end{bmatrix}\]</span> Where <span class="math inline">\(\theta_1...\theta_{20}\)</span> are evenly spaced between <span class="math inline">\(0\)</span> and <span class="math inline">\(2\pi\)</span>.</p>
-<div id="cell-36" class="cell">
+<div id="cell-34" class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>theta <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">2</span> <span class="op">*</span> np.pi, <span class="dv">20</span>) <span class="co"># Generates 20 evenly-spaced numbers between 0 and 2π</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Fill in your code here</span></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>circle <span class="op">=</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The code we just wrote creates a matrix corresponding to a collection of <span class="math inline">\(20\)</span> row vectors of length 3. Each vector represents a point on the unit circle where the first entry is the x-coordinate, the second entry is the y-coordinate and the third entry is always <span class="math inline">\(1\)</span>: <span class="math display">\[ \begin{bmatrix} x &amp; y &amp; 1 \end{bmatrix}\]</span></p>
-<p><strong>Q13:</strong> Plot the set of 20 points in <code>circle</code> using the <code>plt.plot</code> function. <em>Use only the x and y coordinates, ignoring the column of 1s.</em></p>
-<div id="cell-38" class="cell">
+</section>
+<section id="q13-5-points" class="level4">
+<h4 class="anchored" data-anchor-id="q13-5-points"><strong>Q13</strong> (5 points)</h4>
+<p>Plot the set of 20 points in <code>circle</code> using the <code>plt.plot</code> function. <em>Use only the x and y coordinates, ignoring the column of 1s.</em></p>
+<div id="cell-36" class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">4</span>, <span class="dv">4</span>))</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>plt.xlim(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>plt.ylim(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>)</span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Fill your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Q14:</strong> Transform all the vectors in <code>circle</code> with the matrix <span class="math inline">\(A\)</span> using a single call to <code>np.dot</code>. Then plot the original set of points in black and the transformed points in red using the <code>plt.plot</code> function.</p>
+</section>
+<section id="q14-5-points" class="level4">
+<h4 class="anchored" data-anchor-id="q14-5-points"><strong>Q14</strong> (5 points)</h4>
+<p>Transform all the vectors in <code>circle</code> with the matrix <span class="math inline">\(A\)</span> using a single call to <code>np.dot</code>. Then plot the original set of points in black and the transformed points in red using the <code>plt.plot</code> function.</p>
 <p><em>You might also consider why we added the extra column of 1s! We will discuss the answer to that in class. <span class="math inline">\(A\)</span> is the same matrix from q1.</em></p>
-<div id="cell-40" class="cell">
+<div id="cell-38" class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fill your code here</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>transformed_circle <span class="op">=</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-41" class="cell">
+<div id="cell-39" class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">4</span>, <span class="dv">4</span>))</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>plt.xlim(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>)</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>plt.ylim(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>)</span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Fill your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Q15:</strong> Finally, shift all the vectors in <code>transformed_circle</code> by the vector <span class="math inline">\(\mathbf{b}\)</span> defined below, that is, add <span class="math inline">\(\mathbf{b}\)</span> to every <em>row</em> of the output matrix. Again plot the original set of points in black and the transformed points in red using the <code>plt.plot</code> function.</p>
+</section>
+<section id="q15-5-points" class="level4">
+<h4 class="anchored" data-anchor-id="q15-5-points"><strong>Q15</strong> (5 points)</h4>
+<p>Finally, shift all the vectors in <code>transformed_circle</code> by the vector <span class="math inline">\(\mathbf{b}\)</span> defined below, that is, add <span class="math inline">\(\mathbf{b}\)</span> to every <em>row</em> of the output matrix. Again plot the original set of points in black and the transformed points in red using the <code>plt.plot</code> function.</p>
 <p><em>Hint: the solution to this question should <strong>not</strong> involve any loops, instead use broadcasting.</em></p>
-<div id="cell-43" class="cell">
+<div id="cell-41" class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fill your code here</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> np.array([<span class="op">-</span><span class="fl">0.5</span>, <span class="fl">1.2</span>, <span class="dv">0</span>])</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>transformed_circle <span class="op">=</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-44" class="cell">
+<div id="cell-42" class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">4</span>, <span class="dv">4</span>))</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>plt.xlim(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>plt.ylim(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>plt.xlim(<span class="op">-</span><span class="dv">10</span>, <span class="dv">10</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>plt.ylim(<span class="op">-</span><span class="dv">10</span>, <span class="dv">10</span>)</span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Fill your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
 </section>
 <section id="part-3-loading-and-visualizing-data" class="level2">
 <h2 class="anchored" data-anchor-id="part-3-loading-and-visualizing-data">Part 3: Loading and visualizing data</h2>
 <p>For most of this class we will be working with real-world data. A very well-known dataset in statistics is the <a href="https://en.wikipedia.org/wiki/Iris_flower_data_set"><em>Iris flower dataset</em></a> collected by Edgar Anderson in 1929. The dataset consists of measurments of iris flowers. Each flower has 4 collected measurements: sepal length, sepal width, petal length, petal width, as well as a classification into one of 3 species: <em>Iris setosa</em>, <em>Iris versicolor</em> and <em>Iris virginica</em>. We will return to this dataset in the next homework.</p>
 <p>We can load this dataset as Numpy objects using the Scikit-Learn library. Below we’ve extrated 4 relevant arrays: - <code>features</code>: a matrix which has one row per observed flower and one column per measurement. - <code>targets</code>: An array that specifies the species of each flower as a number 0-2. - <code>feature_names</code>: a list of strings with the name of each measurement. - <code>target_names</code>: a list of strings with the name of each species.</p>
 <p>In this homework, we will only visualize this dataset, which is typically a good first step in working with a new type of data. We’ll start by just looking at 2 measurements <em>sepal length</em> and <em>petal length</em>, along with the species.</p>
-<p><strong>Q16:</strong> Based on the Iris dataset loaded below, how many flowers did Edgar Anderson measure?</p>
+<section id="q16-10-points" class="level4">
+<h4 class="anchored" data-anchor-id="q16-10-points"><strong>Q16</strong> (10 points)</h4>
+<p>Based on the Iris dataset loaded below, how many flowers did Edgar Anderson measure?</p>
 <p><em>In other words, how many observations are in this dataset?</em></p>
-<div id="cell-47" class="cell">
+<div id="cell-45" class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sklearn.datasets <span class="im">as</span> datasets</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> datasets.load_iris()</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>features <span class="op">=</span> dataset[<span class="st">'data'</span>]</span>
@@ -477,13 +546,14 @@ x_1 &amp; x_2 &amp; x_3
 <span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Write any code to determine the number of observations here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Fill in the code to create a scatterplot for the Iris dataset below. Plot <em>sepal length</em> on the <strong>x-axis</strong> and <em>petal length</em> on the <strong>y-axis</strong>. Set the <strong>color</strong> to correspond to the <em>species</em>.</p>
-<div id="cell-49" class="cell" data-executioninfo="{&quot;elapsed&quot;:885,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1733440667394,&quot;user&quot;:{&quot;displayName&quot;:&quot;Gabriel Hope&quot;,&quot;userId&quot;:&quot;02289172270257728733&quot;},&quot;user_tz&quot;:480}" data-execution_count="6">
+<div id="cell-47" class="cell" data-executioninfo="{&quot;elapsed&quot;:885,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1733440667394,&quot;user&quot;:{&quot;displayName&quot;:&quot;Gabriel Hope&quot;,&quot;userId&quot;:&quot;02289172270257728733&quot;},&quot;user_tz&quot;:480}" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fill your code here</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">4</span>, <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

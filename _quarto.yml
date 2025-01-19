@@ -1,6 +1,7 @@
 project:
   type: website
   output-dir: docs
+  resources: assignments/homeworks/Homework*
 
 website:
   title: "CS 152: Neural Networks"
@@ -12,10 +13,39 @@ website:
         text: Calendar
       - href: https://drive.google.com/drive/folders/1JFhwmcFBTHiRbfhQ0VRDj9xIPxFpHuWj?usp=drive_link
         text: Homeworks
+     
       - href: assignments/final-project/outline.qmd
         text: Project
-      - href: https://www.gradescope.com/courses/710173
-        text: Gradescope
+      - text: Resources
+        menu:
+          - href: https://probml.github.io/pml-book/book1.html
+            text: Textbook
+          - href: https://blank-app-ufu2uvdeosc.streamlit.app/
+            text: Notebook conversion
+          - href: https://www.gradescope.com/courses/710173
+            text: Gradescope
+      - text: Solutions
+        menu:
+          - text: Homework 1 Solutions
+            #href: https://probml.github.io/pml-book/book1.html
+          - text: Homework 2 Solutions
+            #href: https://blank-app-ufu2uvdeosc.streamlit.app/
+          - text: Homework 3 Solutions
+            #href: https://probml.github.io/pml-book/book1.html
+          - text: Homework 4 Solutions
+            #href: https://probml.github.io/pml-book/book1.html
+          - text: Homework 5 Solutions
+            #href: https://probml.github.io/pml-book/book1.html
+          - text: Homework 6 Solutions
+            #href: https://probml.github.io/pml-book/book1.html
+          - text: Homework 7 Solutions
+            #href: https://probml.github.io/pml-book/book1.html
+          - text: Homework 8 Solutions
+            #href: https://probml.github.io/pml-book/book1.html
+          - text: Homework 9 Solutions
+            #href: https://probml.github.io/pml-book/book1.html
+          - text: Homework 10 Solutions
+            #href: https://probml.github.io/pml-book/book1.html
 
 
 format:

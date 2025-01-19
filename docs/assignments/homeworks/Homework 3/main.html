@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Homework 3: Logistic regression and feature transforms – CS 152: Neural Networks</title>
+<title>Homework 3: Logistic regression and classification – CS 152: Neural Networks</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -166,14 +166,42 @@ window.Quarto = {
     <a class="nav-link" href="../../../assignments/final-project/outline.html"> 
 <span class="menu-text">Project</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="https://github.com/orgs/CS152/"> 
-<span class="menu-text">Github</span></a>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-resources" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Resources</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-resources">    
+        <li>
+    <a class="dropdown-item" href="https://probml.github.io/pml-book/book1.html">
+ <span class="dropdown-text">Textbook</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="https://www.gradescope.com/courses/710173"> 
-<span class="menu-text">Gradescope</span></a>
+        <li>
+    <a class="dropdown-item" href="https://blank-app-ufu2uvdeosc.streamlit.app/">
+ <span class="dropdown-text">Notebook conversion</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="https://www.gradescope.com/courses/710173">
+ <span class="dropdown-text">Gradescope</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-solutions" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Solutions</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-solutions">    
+        <li class="dropdown-header">Homework 1 Solutions</li>
+        <li class="dropdown-header">Homework 2 Solutions</li>
+        <li class="dropdown-header">Homework 3 Solutions</li>
+        <li class="dropdown-header">Homework 4 Solutions</li>
+        <li class="dropdown-header">Homework 5 Solutions</li>
+        <li class="dropdown-header">Homework 6 Solutions</li>
+        <li class="dropdown-header">Homework 7 Solutions</li>
+        <li class="dropdown-header">Homework 8 Solutions</li>
+        <li class="dropdown-header">Homework 9 Solutions</li>
+        <li class="dropdown-header">Homework 10 Solutions</li>
+    </ul>
+  </li>
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -190,9 +218,7 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#collaborators" id="toc-collaborators" class="nav-link active" data-scroll-target="#collaborators">Collaborators</a></li>
-  <li><a href="#course-feedback" id="toc-course-feedback" class="nav-link" data-scroll-target="#course-feedback">Course feedback</a></li>
-  <li><a href="#important-notes" id="toc-important-notes" class="nav-link" data-scroll-target="#important-notes">Important notes</a></li>
+  <li><a href="#important-notes" id="toc-important-notes" class="nav-link active" data-scroll-target="#important-notes">Important notes</a></li>
   <li><a href="#background" id="toc-background" class="nav-link" data-scroll-target="#background">Background</a></li>
   <li><a href="#part-1-logistic-regression" id="toc-part-1-logistic-regression" class="nav-link" data-scroll-target="#part-1-logistic-regression">Part 1: Logistic regression</a></li>
   <li><a href="#part-2-alternative-losses" id="toc-part-2-alternative-losses" class="nav-link" data-scroll-target="#part-2-alternative-losses">Part 2: Alternative losses</a></li>
@@ -205,7 +231,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><strong>Homework 3:</strong> Logistic regression and feature transforms</h1>
+<h1 class="title"><strong>Homework 3:</strong> Logistic regression and classification</h1>
 </div>
 
 
@@ -222,15 +248,6 @@ window.Quarto = {
 </header>
 
 
-<section id="collaborators" class="level3">
-<h3 class="anchored" data-anchor-id="collaborators">Collaborators</h3>
-<p>Please list anyone you discussed or collaborated on this assignment with below.</p>
-<p>LIST COLLABORATORS HERE</p>
-</section>
-<section id="course-feedback" class="level3">
-<h3 class="anchored" data-anchor-id="course-feedback">Course feedback</h3>
-<p>Please submit this week’s course survey here: https://forms.gle/PC3AYmqanDChmqCDA</p>
-</section>
 <section id="important-notes" class="level1">
 <h1>Important notes</h1>
 <p><strong>This homework requires installing additional python libraries. You can install all the nessecary dependencies by running: <code>pip install -r requirements.txt</code> in the homework directory. If using Colab, this step should not be needed.</strong></p>
@@ -238,20 +255,20 @@ window.Quarto = {
 <p><span class="math inline">\(N:\quad\text{Number of observations in a dataset, so } \mathcal{D} = \{ (\mathbf{x}_1, y_1),\ (\mathbf{x}_2, y_2),\ ... \,(\mathbf{x}_N, y_N) \}\)</span></p>
 <p><span class="math inline">\(d:\quad\ \text{Dimension of input (number of features), so } \mathbf{x}_i \in \mathbb{R}^d\)</span></p>
 <p><span class="math inline">\(C: \quad\ \text{Number of classes, so } y_i \in \{1,...,C\}\)</span></p>
-<div id="cell-7" class="cell" data-execution_count="12">
+<div id="cell-4" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Uncomment and run if using Colab!</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#import urllib.request</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#remote_url = 'https://gist.githubusercontent.com/gabehope/2f0c3af9eed3b910037df98e21c6c035/raw/925ff6b8ad5dcc2c17674b6ec609d854a811c453/hw2_code.py'</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#with urllib.request.urlopen(remote_url) as remote, open('hw2_code.py', 'w') as local:</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#with urllib.request.urlopen(remote_url) as remote, open('hw3_support.py', 'w') as local:</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  [local.write(str(line, encoding='utf-8')) for line in remote]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-8" class="cell" data-execution_count="1">
+<div id="cell-5" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run me first!</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> autograd.numpy <span class="im">as</span> np</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> make_blobs</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hw2_code <span class="im">import</span> get_dataset, gradient_descent, test_nll, test_nll_grad, test_predict, plot_boundary, test_softmax, test_split</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hw3_support <span class="im">import</span> get_dataset, gradient_descent, test_nll, test_nll_grad, test_predict, plot_boundary, test_softmax, test_split,test_predict_probability, test_nll_gradient_c</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="background" class="level1">
@@ -263,7 +280,7 @@ window.Quarto = {
 <p><span class="math display">\[\mathbf{NLL}(\mathbf{w}, \mathbf{X}, \mathbf{y})=-\sum_{i=1}^N \log \sigma\big((2 y_i - 1)\mathbf{x}_i^T\mathbf{w}\big)\]</span></p>
 <p>and it’s gradient with respect to <span class="math inline">\(\mathbf{w}\)</span> is: <span class="math display">\[\nabla_{\mathbf{w}}\mathbf{NLL}(\mathbf{w}, \mathbf{X}, \mathbf{y})=-\sum_{i=1}^N \big(1 - \sigma((2 y_i - 1)\mathbf{x}_i^T\mathbf{w})\big) \big(2 y_i - 1\big)\mathbf{x}_i\]</span></p>
 <p>Below is an implementation of logistic regression using the functions we derived in class. In this example, we’ve created a logistic regression class that encapsulates the weights along with all of the functions we need to train and make predictions with the model.</p>
-<div id="cell-12" class="cell" data-execution_count="2">
+<div id="cell-9" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> linear_function(X, w):</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Returns a linear function of X (and adds bias)</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> np.pad(X, ((<span class="dv">0</span>,<span class="dv">0</span>), (<span class="dv">0</span>,<span class="dv">1</span>)), constant_values<span class="op">=</span><span class="fl">1.</span>)</span>
@@ -359,7 +376,7 @@ window.Quarto = {
 <span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s take a look at how to use this class. The code below uses the <code>scikit-learn</code> library to load a simple example dataset. Here we have 2 classes (purple and yellow) and our goal will be to separate the two.</p>
-<div id="cell-14" class="cell" data-execution_count="23">
+<div id="cell-11" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load a dataset with sklearn</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> make_blobs(n_samples<span class="op">=</span><span class="dv">200</span>, random_state<span class="op">=</span><span class="dv">42</span>, centers<span class="op">=</span><span class="dv">2</span>, cluster_std<span class="op">=</span><span class="dv">3</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -374,12 +391,12 @@ window.Quarto = {
 </div>
 </div>
 <p>We can create a model using the <code>LogisticRegression</code> class, specifying the number of features (<span class="math inline">\(d\)</span>):</p>
-<div id="cell-16" class="cell" data-execution_count="4">
+<div id="cell-13" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> LogisticRegression(X.shape[<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can train the model using the <code>gradient_descent</code> function provided in the support code:</p>
 <p><em><strong>Note:</strong> Use this learning rate and number of steps throughout the homework!</em></p>
-<div id="cell-18" class="cell" data-execution_count="5">
+<div id="cell-15" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>losses <span class="op">=</span> gradient_descent(model, X, y, lr<span class="op">=</span><span class="fl">1e-6</span>, steps<span class="op">=</span><span class="dv">2500</span>, watch<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Uncomment to run with a live visualization</span></span>
@@ -389,7 +406,7 @@ window.Quarto = {
 </div>
 </div>
 <p>We provide a built-in function to visualize the data and decision boundary</p>
-<div id="cell-20" class="cell" data-execution_count="21">
+<div id="cell-17" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Show an image and the corresponding prediction</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>plot_boundary(model, X, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -401,7 +418,7 @@ window.Quarto = {
 </div>
 </div>
 <p>We can also make predictions using the built-in methods. Here we’ll visualize which observations we predicted incorrectly:</p>
-<div id="cell-22" class="cell" data-execution_count="24">
+<div id="cell-19" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>prediction <span class="op">=</span> model.predict(X)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>probabilities <span class="op">=</span> model.predict_probability(X)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -421,10 +438,10 @@ window.Quarto = {
 <section id="part-1-logistic-regression" class="level1">
 <h1>Part 1: Logistic regression</h1>
 <p>We’ll first evaluate the performance of the logistic regression model above.</p>
-<section id="q1-train-and-test-splits" class="level4">
-<h4 class="anchored" data-anchor-id="q1-train-and-test-splits"><strong>Q1:</strong> Train and test splits</h4>
+<section id="q1-train-and-test-splits-5-points" class="level4">
+<h4 class="anchored" data-anchor-id="q1-train-and-test-splits-5-points"><strong>Q1:</strong> Train and test splits (5 points)</h4>
 <p>Write a function to split the provided dataset into a <em>train set</em> and a <em>test set</em>. The train set should include 70% of the observations and the test set should include the remaining 30%. The data should be randomly shuffled to make sure there is no bias in the ordering.</p>
-<div id="cell-27" class="cell">
+<div id="cell-24" class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> split_data(X, y):</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">## YOUR CODE HERE</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -435,10 +452,10 @@ window.Quarto = {
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>test_split(X, y, Xtrain, ytrain, Xtest, ytest)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="q2-model-evaluation" class="level4">
-<h4 class="anchored" data-anchor-id="q2-model-evaluation"><strong>Q2:</strong> Model evaluation</h4>
+<section id="q2-model-evaluation-5-points" class="level4">
+<h4 class="anchored" data-anchor-id="q2-model-evaluation-5-points"><strong>Q2:</strong> Model evaluation (5 points)</h4>
 <p>Using the function you just wrote, train a new logistic regression model on just the training data. Evaluate the <strong>accuracy</strong> and <strong>loss</strong> of the trained model on <em>both</em> the <strong>training data</strong> and the <strong>test data</strong>.</p>
-<div id="cell-30" class="cell">
+<div id="cell-27" class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">## YOUR CODE HERE</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -460,7 +477,7 @@ window.Quarto = {
 <p><span class="math display">\[\mathbf{ExpLoss}(\mathbf{w}, \mathbf{X}, \mathbf{y})=\sum_{i=1}^N \exp\big(-(2 y_i - 1)\mathbf{x}_i^T\mathbf{w}\big)\]</span></p>
 <p><em>Note that <span class="math inline">\(\exp(x) = e^x\)</span></em></p>
 <p>Plotting this we see that just like negative log-likelihood, the loss monotonically increases as we get further from a correct prediction, which is what we’d like!</p>
-<div id="cell-35" class="cell" data-execution_count="40">
+<div id="cell-32" class="cell" data-execution_count="40">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>yxw <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">200</span>)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>acc <span class="op">=</span> np.where(yxw <span class="op">&gt;</span> <span class="dv">0</span>, <span class="fl">0.</span>, <span class="fl">1.</span>)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>nll <span class="op">=</span> <span class="op">-</span>np.log(sigmoid(yxw))</span>
@@ -479,17 +496,17 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<section id="q3-exponential-loss-gradient" class="level4">
-<h4 class="anchored" data-anchor-id="q3-exponential-loss-gradient"><strong>Q3:</strong> Exponential loss gradient</h4>
+<section id="q3-exponential-loss-gradient-10-points" class="level4">
+<h4 class="anchored" data-anchor-id="q3-exponential-loss-gradient-10-points"><strong>Q3:</strong> Exponential loss gradient (10 points)</h4>
 <p>Derive the gradient of the exponential loss with respect to <span class="math inline">\(\mathbf{w}\)</span>, the weight vector for the linear model.</p>
 <p>YOUR ANSWER HERE</p>
 <p><span class="math display">\[\nabla_{\mathbf{w}} \textbf{ExpLoss}(\mathbf{W}, \mathbf{X}, \mathbf{y}) = \]</span></p>
 </section>
-<section id="q4-exponential-loss-implementation" class="level4">
-<h4 class="anchored" data-anchor-id="q4-exponential-loss-implementation"><strong>Q4:</strong> Exponential loss implementation</h4>
+<section id="q4-exponential-loss-implementation-10-points" class="level4">
+<h4 class="anchored" data-anchor-id="q4-exponential-loss-implementation-10-points"><strong>Q4:</strong> Exponential loss implementation (10 points)</h4>
 <p>Let’s try using the exponential loss. Below is a sub-class of the <code>LogisticRegression</code> class above that replaces the negative log-likelihood loss with the exponential loss.</p>
 <p>Complete the <code>nll_gradient</code> method using the gradient you derived above.</p>
-<div id="cell-39" class="cell">
+<div id="cell-36" class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ExponentialRegression(LogisticRegression):</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> nll(<span class="va">self</span>, X, y):</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>        <span class="co">'''</span></span>
@@ -517,22 +534,23 @@ window.Quarto = {
 <span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>      <span class="co"># YOUR CODE HERE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="q5-exponential-loss-comparison" class="level4">
-<h4 class="anchored" data-anchor-id="q5-exponential-loss-comparison"><strong>Q5:</strong> Exponential loss comparison</h4>
+<section id="q5-exponential-loss-comparison-5-points" class="level4">
+<h4 class="anchored" data-anchor-id="q5-exponential-loss-comparison-5-points"><strong>Q5:</strong> Exponential loss comparison (5 points)</h4>
 <p>Repeat <strong>q2</strong>, training a new <strong>exponential-loss</strong> regression model on just the training data. Evaluate the <strong>accuracy</strong> and <strong>loss</strong> of the trained model on <em>both</em> the <strong>training data</strong> and the <strong>test data</strong>.</p>
-<div id="cell-41" class="cell">
+<div id="cell-38" class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">## YOUR CODE HERE</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Training accuracy: </span><span class="sc">%.3f</span><span class="st">, loss: </span><span class="sc">%.3f</span><span class="st">'</span> <span class="op">%</span> (train_acc, train_loss))</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Test accuracy: </span><span class="sc">%.3f</span><span class="st">, loss: </span><span class="sc">%.3f</span><span class="st">'</span> <span class="op">%</span> (test_acc, test_loss))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Test accuracy: </span><span class="sc">%.3f</span><span class="st">, loss: </span><span class="sc">%.3f</span><span class="st">'</span> <span class="op">%</span> (test_acc, test_loss))</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>plot_boundary(model, X, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>What differences do you notice between this and the log-likelihood loss?</p>
+<p>What differences (if any) do you notice between this and the log-likelihood loss?</p>
 <p>YOUR ANSWER HERE</p>
 </section>
-<section id="q6-linear-losses" class="level4">
-<h4 class="anchored" data-anchor-id="q6-linear-losses"><strong>Q6:</strong> Linear losses</h4>
+<section id="q6-linear-losses-5-points" class="level4">
+<h4 class="anchored" data-anchor-id="q6-linear-losses-5-points"><strong>Q6:</strong> Linear losses (5 points)</h4>
 <p>Note that both the negative log-likelihood and exponential losses are strictly positive, and threrefore bounded below by 0. <strong>Why is having a lower bound a desirable property for a classification loss?</strong></p>
 <p>For instance, why not simply use a linear loss?</p>
 <p><span class="math display">\[\mathbf{Loss}(\mathbf{w}, \mathbf{X}, \mathbf{y})=-\sum_{i=1}^N (2 y_i - 1)\mathbf{x}_i^T\mathbf{w}\]</span></p>
@@ -555,7 +573,7 @@ p(y_i=c \mid \mathbf{x}, \mathbf{W}) = \text{softmax}(\mathbf{x}^T\mathbf{W})_c=
 <p><strong>1:</strong> We will still assume <code>y</code> is an array of <code>int</code> in numpy. We can convert an array <code>y</code> to an array of <code>int</code> with <code>y = y.astype(int)</code> and back with <code>y = y.astype(float)</code></p>
 <p><strong>2:</strong> Remeber that numpy is <strong>0-indexed</strong>, so our classes will actually be <span class="math inline">\(0\)</span> to <span class="math inline">\(C-1\)</span>, (<span class="math inline">\(y\in \{0,...,C-1\}\)</span>)</p>
 <p><strong>2:</strong> We will assume our weight matrix is a <span class="math inline">\(C \times d\)</span> matrix as shown below</p>
-<div id="cell-49" class="cell">
+<div id="cell-46" class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> MultinomialLogisticRegression(LogisticRegression):</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, classes, dims):</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>        <span class="co">'''</span></span>
@@ -566,10 +584,10 @@ p(y_i=c \mid \mathbf{x}, \mathbf{W}) = \text{softmax}(\mathbf{x}^T\mathbf{W})_c=
 <span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.classes <span class="op">=</span> classes</span>
 <span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.weights <span class="op">=</span> np.zeros((classes, dims <span class="op">+</span> <span class="dv">1</span>,))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="q7-prediction" class="level4">
-<h4 class="anchored" data-anchor-id="q7-prediction"><strong>Q7:</strong> Prediction</h4>
+<section id="q7-prediction-5-points" class="level4">
+<h4 class="anchored" data-anchor-id="q7-prediction-5-points"><strong>Q7:</strong> Prediction (5 points)</h4>
 <p>Write a function to make a prediction using the multinomial logistic regression prediction rule above. (assume <code>self</code> is the <code>MultinomialLogisticRegression</code> object)</p>
-<div id="cell-51" class="cell">
+<div id="cell-48" class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> multiclass_predict(<span class="va">self</span>, X):</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Predict labels given a set of inputs.</span></span>
@@ -593,14 +611,15 @@ p(y_i=c \mid \mathbf{x}, \mathbf{W}) = \text{softmax}(\mathbf{x}^T\mathbf{W})_c=
 <span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>MultinomialLogisticRegression.predict <span class="op">=</span> multiclass_predict</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="q8-softmax" class="level4">
-<h4 class="anchored" data-anchor-id="q8-softmax"><strong>Q8:</strong> Softmax</h4>
+<section id="q8-softmax-5-points" class="level4">
+<h4 class="anchored" data-anchor-id="q8-softmax-5-points"><strong>Q8:</strong> Softmax (5 points)</h4>
 <p>Implement the softmax function. <span class="math display">\[
 \text{softmax}(\mathbf{x})_c = \frac{e^{x_c}}{\sum_{j=1}^Ce^{x_j}}, \quad
 \text{softmax}(\mathbf{x}) = \begin{bmatrix}\frac{e^{x_1}}{\sum_{j=1}^Ce^{x_j}} \\ \frac{e^{x_2}}{\sum_{j=1}^Ce^{x_j}} \\ \vdots \\ \frac{e^{x_C}}{\sum_{j=1}^Ce^{x_j}} \end{bmatrix}
 \]</span></p>
 <p>You function should accept inputs as either a length <span class="math inline">\(C\)</span> vector or as an <span class="math inline">\(N\times C\)</span> matrix. If the input is a matrix, the softmax function should be applied to each <strong>row</strong> of the matrix.</p>
-<div id="cell-53" class="cell">
+<p>Then, use your softmax function to complete the predict_probability method for multinomial logistic regression.</p>
+<div id="cell-50" class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> softmax(x):</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Apply the softmax function to a vector or matrix</span></span>
@@ -612,17 +631,29 @@ p(y_i=c \mid \mathbf{x}, \mathbf{W}) = \text{softmax}(\mathbf{x}^T\mathbf{W})_c=
 <span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="co">    '''</span></span>
 <span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">## YOUR CODE HERE</span></span>
 <span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>test_softmax(softmax)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> multiclass_predict_probability(<span class="va">self</span>, X):</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="co">    Predict the probability of each class given a set of inputs</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="co">        X (array): An N x d matrix of observations.</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="co">        probs (array): A length N x d matrix of predicted class probabilities</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a><span class="co">    '''</span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">## YOUR CODE HERE</span></span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>test_softmax(softmax)</span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>test_predict_probability(multiclass_predict_probability)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="q9-multinomial-logistic-regression-nll" class="level4">
-<h4 class="anchored" data-anchor-id="q9-multinomial-logistic-regression-nll"><strong>Q9:</strong> Multinomial logistic regression NLL</h4>
+<section id="q9-multinomial-logistic-regression-nll-10-points" class="level4">
+<h4 class="anchored" data-anchor-id="q9-multinomial-logistic-regression-nll-10-points"><strong>Q9:</strong> Multinomial logistic regression NLL (10 points)</h4>
 <p>Implement a function to compute the multinomial logistic regression negative log-likelihood. <span class="math display">\[
 \textbf{NLL}(\mathbf{W}, \mathbf{X}, \mathbf{y})=-\sum_{i=1}^N \bigg(\mathbf{x}_i^T\mathbf{w}_{y_i}- \log\sum_{j=1}^Ce^{\mathbf{x}_i^T\mathbf{w}_{j}}\bigg)
 \]</span></p>
 <p><em><strong>Hint:</strong> Recall that <span class="math inline">\(y_i\)</span> is an integer, so <span class="math inline">\(\mathbf{w}_{j}\)</span> refers to the row of the weight matrix at index <span class="math inline">\(y_i\)</span> (you could access this as <code>W[y[i]]</code>). It’s possible to answer this question without loops, but you may find it easier to loop over each possible class/observation.</em></p>
-<div id="cell-55" class="cell">
+<div id="cell-52" class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> nll(<span class="va">self</span>, X, y):</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Compute the negative log-likelihood loss.</span></span>
@@ -642,17 +673,17 @@ p(y_i=c \mid \mathbf{x}, \mathbf{W}) = \text{softmax}(\mathbf{x}^T\mathbf{W})_c=
 <span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>MultinomialLogisticRegression.nll <span class="op">=</span> nll</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="q10-gradient-of-nll" class="level4">
-<h4 class="anchored" data-anchor-id="q10-gradient-of-nll"><strong>Q10:</strong> Gradient of NLL</h4>
+<section id="q10-gradient-of-nll-10-points" class="level4">
+<h4 class="anchored" data-anchor-id="q10-gradient-of-nll-10-points"><strong>Q10:</strong> Gradient of NLL (10 points)</h4>
 <p>Derive the gradient of the negative log-likelihood with respect to <span class="math inline">\(\mathbf{w}_c\)</span>, the weight vector for a <strong>single class</strong>.</p>
 <p><em><strong>Hint:</strong> Again note that <span class="math inline">\(\mathbf{w}_{y_i}\)</span> refers to the weight vector corresponding to the <strong>true</strong> class of observation <span class="math inline">\(i\)</span>, and so only depends on <span class="math inline">\(\mathbf{w}_c\)</span> if <span class="math inline">\(y_i=c\)</span>. This means that:</em> <span class="math display">\[\frac{d}{d\mathbf{w}_c} \mathbf{x_i}^T \mathbf{w}_{y_i} = \begin{cases}\mathbf{x}_i \quad \text{ if } y_i = c \\ 0 \quad \ \text{ otherwise}  \end{cases}\]</span> <em>We can write this more compactly using an indicator function:</em> <span class="math display">\[\frac{d}{d\mathbf{w}_c} \mathbf{x_i}^T \mathbf{w}_{y_i} = \mathbb{I}(y_i=c)\ \mathbf{x}_i \]</span></p>
 <p>YOUR ANSWER HERE</p>
 <p><span class="math display">\[\nabla_{\mathbf{w}_c} \textbf{NLL}(\mathbf{W}, \mathbf{X}, \mathbf{y}) = \]</span></p>
 </section>
-<section id="q11-implementing-the-gradient" class="level4">
-<h4 class="anchored" data-anchor-id="q11-implementing-the-gradient"><strong>Q11:</strong> Implementing the gradient</h4>
+<section id="q11-implementing-the-gradient-10-points" class="level4">
+<h4 class="anchored" data-anchor-id="q11-implementing-the-gradient-10-points"><strong>Q11:</strong> Implementing the gradient (10 points)</h4>
 <p>Write a function that computes the gradient of the negative log-likelihood with repect to the weight vector for a given class, using the results of the derivation above.</p>
-<div id="cell-59" class="cell">
+<div id="cell-56" class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> nll_gradient_c(W, X, y, c):</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Compute the negative log-likelihood loss.</span></span>
@@ -668,13 +699,14 @@ p(y_i=c \mid \mathbf{x}, \mathbf{W}) = \text{softmax}(\mathbf{x}^T\mathbf{W})_c=
 <span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">## YOUR CODE HERE</span></span>
 <span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> grad</span>
-<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>test_nll_gradient_c(nll_gradient_c)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="q12-implementing-the-full-gradient" class="level4">
-<h4 class="anchored" data-anchor-id="q12-implementing-the-full-gradient"><strong>Q12:</strong> Implementing the full gradient</h4>
+<section id="q12-implementing-the-full-gradient-10-points" class="level4">
+<h4 class="anchored" data-anchor-id="q12-implementing-the-full-gradient-10-points"><strong>Q12:</strong> Implementing the full gradient (10 points)</h4>
 <p>Using the function you just wrote, write a function to compute the full gradient with respect to the <span class="math inline">\(C \times d\)</span> weight matrix. <em><strong>Hint:</strong> The output should be a matrix!</em></p>
-<div id="cell-61" class="cell">
+<div id="cell-58" class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> nll_gradient(<span class="va">self</span>, X, y, c):</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Compute the negative log-likelihood loss.</span></span>
@@ -694,7 +726,7 @@ p(y_i=c \mid \mathbf{x}, \mathbf{W}) = \text{softmax}(\mathbf{x}^T\mathbf{W})_c=
 <span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>MultinomialLogisticRegression.nll_gradient <span class="op">=</span> nll_gradient</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Note if you are struggling with this problem, you can uncomment the following cell to get a valid gradient function based on your nll function. You can use this for testing to to complete the remaining questions.</p>
-<div id="cell-63" class="cell">
+<div id="cell-60" class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">'''</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co">def autograd_nll_gradient(self, X, y):</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co">    import autograd</span></span>
@@ -708,7 +740,7 @@ p(y_i=c \mid \mathbf{x}, \mathbf{W}) = \text{softmax}(\mathbf{x}^T\mathbf{W})_c=
 </div>
 <p>Finally, we will test out our multinomial logistic regression classifier on the MNIST dataset (https://en.wikipedia.org/wiki/MNIST_database), one of the most popular datasets in machine learning!</p>
 <p>We’ll start by loading it as before. As we saw in class, before we can use logistic regression on image data, we first need to reshape it from a 3-dimensional array into a 2-dimensional matrix.</p>
-<div id="cell-65" class="cell">
+<div id="cell-62" class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>images, labels, label_names <span class="op">=</span> get_dataset(<span class="st">'mnist'</span>)</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>image_shape <span class="op">=</span> images[<span class="dv">0</span>].shape                <span class="co"># Keep track of the original image shape</span></span>
@@ -720,35 +752,40 @@ p(y_i=c \mid \mathbf{x}, \mathbf{W}) = \text{softmax}(\mathbf{x}^T\mathbf{W})_c=
 <span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> MultinomialLogisticRegression(classes<span class="op">=</span><span class="bu">len</span>(label_names), dims<span class="op">=</span>X.shape[<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="q13-repeat-question-2-using-the-mnist-dataset" class="level4">
-<h4 class="anchored" data-anchor-id="q13-repeat-question-2-using-the-mnist-dataset"><strong>Q13:</strong> Repeat question 2 using the MNIST dataset</h4>
-<div id="cell-67" class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">## YOUR CODE HERE</span></span>
+<section id="q13-repeat-question-2-using-the-mnist-dataset-5-points" class="level4">
+<h4 class="anchored" data-anchor-id="q13-repeat-question-2-using-the-mnist-dataset-5-points"><strong>Q13:</strong> Repeat question 2 using the MNIST dataset (5 points)</h4>
+<div id="cell-64" class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>Xtrain, ytrain, Xtest, ytest <span class="op">=</span> split_data(X, y)</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> <span class="co">## YOUR CODE HERE</span></span>
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Training accuracy: </span><span class="sc">%.3f</span><span class="st">, loss: </span><span class="sc">%.3f</span><span class="st">'</span> <span class="op">%</span> (train_acc, train_loss))</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Test accuracy: </span><span class="sc">%.3f</span><span class="st">, loss: </span><span class="sc">%.3f</span><span class="st">'</span> <span class="op">%</span> (test_acc, test_loss))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co">## Note that we need to pass "image_shape" here to reshape our data to a vector</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>losses <span class="op">=</span> gradient_descent(model, Xtrain, ytrain, lr<span class="op">=</span><span class="fl">1e-4</span>, steps<span class="op">=</span><span class="dv">2500</span>, image_shape<span class="op">=</span>image_shape, watch<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="co">## YOUR CODE HERE</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Training accuracy: </span><span class="sc">%.3f</span><span class="st">, loss: </span><span class="sc">%.3f</span><span class="st">'</span> <span class="op">%</span> (train_acc, train_loss))</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Test accuracy: </span><span class="sc">%.3f</span><span class="st">, loss: </span><span class="sc">%.3f</span><span class="st">'</span> <span class="op">%</span> (test_acc, test_loss))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Here we’ll show an image and the corresponding prediction made by the model.</p>
-<div id="cell-69" class="cell">
+<div id="cell-66" class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>prediction <span class="op">=</span> model.predict(X)</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>probabilities <span class="op">=</span> model.predict_probability(X)</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the probability of the prediction [p(y=1) if prediction is 1 otherwise p(y=0)]</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>probability_of_prediction <span class="op">=</span> np.where(prediction, probabilities, <span class="dv">1</span> <span class="op">-</span> probabilities)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>probability_of_prediction <span class="op">=</span> probabilities[np.arange(probabilities.shape[<span class="dv">0</span>]), prediction]</span>
 <span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Show an image and the corresponding prediction</span></span>
 <span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>plt.imshow(X[<span class="dv">0</span>].reshape(image_shape), cmap<span class="op">=</span><span class="st">'gray'</span>)</span>
 <span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Prediction: </span><span class="sc">%s</span><span class="st">, probability: </span><span class="sc">%.3f</span><span class="st">'</span> <span class="op">%</span> (label_names[prediction[<span class="dv">0</span>]], probability_of_prediction[<span class="dv">0</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="q14-visualize-the-learned-weights" class="level4">
-<h4 class="anchored" data-anchor-id="q14-visualize-the-learned-weights"><strong>Q14:</strong> Visualize the learned weights</h4>
+<section id="q14-visualize-the-learned-weights-10-points" class="level4">
+<h4 class="anchored" data-anchor-id="q14-visualize-the-learned-weights-10-points"><strong>Q14:</strong> Visualize the learned weights (10 points)</h4>
 <p>The Matplotlib function <code>plt.imshow</code> (or <code>ax.imshow</code> for subplots) will display a matrix as an image as shown above.</p>
 <p>Reshape the weight vector for <strong>each of the 10 classes</strong> in your trained model into a <span class="math inline">\(28 \times 28\)</span> matrix (ignore the last, bias dimension for each). Then plot each weight vector using the <code>imshow</code> function.</p>
 <p><em><strong>Hint:</strong> Your weight matrix should be of size <span class="math inline">\(10 \times 785\)</span></em></p>
-<div id="cell-71" class="cell">
+<div id="cell-68" class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">## YOUR CODE HERE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 

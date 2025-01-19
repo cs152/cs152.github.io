@@ -6,66 +6,66 @@ title: "Homeworks"
 
 - [**Assignment**](/assignments/homeworks/Homework%201/main.ipynb)
 - [**Requirements.txt**](/assignments/homeworks/Homework%201/requirements.txt)
-- [**Notebook**](https://colab.research.google.com/github/cs152/cs152.github.io/blob/main/assignments/homeworks/Homework 1/submission.ipynb)
+- [**Notebook**](https://cs152.github.io/assignments/homeworks/Homework 1/submission.ipynb)
 
 # Homework 2
 
 - [**Assignment**](/assignments/homeworks/Homework%202/main.ipynb)
 - [**Requirements.txt**](/assignments/homeworks/Homework%202/requirements.txt)
-- [**Notebook**](https://colab.research.google.com/github/cs152/cs152.github.io/blob/main/assignments/homeworks/Homework 2/submission.ipynb)
+- [**Notebook**](https://cs152.github.io/assignments/homeworks/Homework 2/submission.ipynb)
 
 # Homework 3
 
 - [**Assignment**](/assignments/homeworks/Homework%203/main.ipynb)
 - [**Requirements.txt**](/assignments/homeworks/Homework%203/requirements.txt)
-- [**Notebook**](https://colab.research.google.com/github/cs152/cs152.github.io/blob/main/assignments/homeworks/Homework 3/submission.ipynb)
+- [**Notebook**](https://cs152.github.io/assignments/homeworks/Homework 3/submission.ipynb)
 - [**Support code**](/assignments/homeworks/Homework%203/hw3_support.py)
 
 # Homework 4
 
 - [**Assignment**](/assignments/homeworks/Homework%204/main.ipynb)
 - [**Requirements.txt**](/assignments/homeworks/Homework%204/requirements.txt)
-- [**Notebook**](https://colab.research.google.com/github/cs152/cs152.github.io/blob/main/assignments/homeworks/Homework 4/submission.ipynb)
+- [**Notebook**](https://cs152.github.io/assignments/homeworks/Homework 4/submission.ipynb)
 - [**Support code**](/assignments/homeworks/Homework%204/hw4_support.py)
 
 # Homework 5
 
 - [**Assignment**](/assignments/homeworks/Homework%205/main.ipynb)
 - [**Requirements.txt**](/assignments/homeworks/Homework%205/requirements.txt)
-- [**Notebook**](https://colab.research.google.com/github/cs152/cs152.github.io/blob/main/assignments/homeworks/Homework 5/submission.ipynb)
+- [**Notebook**](https://cs152.github.io/assignments/homeworks/Homework 5/submission.ipynb)
 - [**Support code**](/assignments/homeworks/Homework%205/hw5_support.py)
 
 # Homework 6
 
 - [**Assignment**](/assignments/homeworks/Homework%206/main.ipynb)
 - [**Requirements.txt**](/assignments/homeworks/Homework%206/requirements.txt)
-- [**Notebook**](https://colab.research.google.com/github/cs152/cs152.github.io/blob/main/assignments/homeworks/Homework 6/submission.ipynb)
+- [**Notebook**](https://cs152.github.io/assignments/homeworks/Homework 6/submission.ipynb)
 - [**Support code**](/assignments/homeworks/Homework%206/hw6_support.py)
 
 # Homework 7
 
 - [**Assignment**](/assignments/homeworks/Homework%207/main.ipynb)
 - [**Requirements.txt**](/assignments/homeworks/Homework%207/requirements.txt)
-- [**Notebook**](https://colab.research.google.com/github/cs152/cs152.github.io/blob/main/assignments/homeworks/Homework 7/submission.ipynb)
+- [**Notebook**](https://cs152.github.io/assignments/homeworks/Homework 7/submission.ipynb)
 - [**Support code**](/assignments/homeworks/Homework%207/hw7_support.py)
 
 # Homework 8
 
 - [**Assignment**](/assignments/homeworks/Homework%208/main.ipynb)
 - [**Requirements.txt**](/assignments/homeworks/Homework%208/requirements.txt)
-- [**Notebook**](https://colab.research.google.com/github/cs152/cs152.github.io/blob/main/assignments/homeworks/Homework 8/submission.ipynb)
+- [**Notebook**](https://cs152.github.io/assignments/homeworks/Homework 8/submission.ipynb)
 - [**Support code**](/assignments/homeworks/Homework%208/hw8_support.py)
 
 # Homework 9
 
 - [**Assignment**](/assignments/homeworks/Homework%209/main.ipynb)
 - [**Requirements.txt**](/assignments/homeworks/Homework%209/requirements.txt)
-- [**Notebook**](https://colab.research.google.com/github/cs152/cs152.github.io/blob/main/assignments/homeworks/Homework 9/submission.ipynb)
+- [**Notebook**](https://cs152.github.io/assignments/homeworks/Homework 9/submission.ipynb)
 - [**Support code**](/assignments/homeworks/Homework%209/hw9_support.py)
 
 # Homework 10
 
 - [**Assignment**](/assignments/homeworks/Homework%2010/main.ipynb)
 - [**Requirements.txt**](/assignments/homeworks/Homework%2010/requirements.txt)
-- [**Notebook**](https://colab.research.google.com/github/cs152/cs152.github.io/blob/main/assignments/homeworks/Homework 10/submission.ipynb)
+- [**Notebook**](https://cs152.github.io/assignments/homeworks/Homework 10/submission.ipynb)
 - [**Support code**](/assignments/homeworks/Homework%2010/hw10_support.py)

@@ -54,7 +54,7 @@ def test_backward_pass_numbers(AGClass):
         def __init__(self, *args):
             self.parents = list(args)
             self.value = 1
-            self.args = [arg.value if isinstance(arg, AGClass) else arg for arg in self.parents]
+            self.parent_values= [arg.value if isinstance(arg, AGClass) else arg for arg in self.parents]
             self.grad = []
 
         def grads(self, *args):
@@ -90,7 +90,7 @@ def test_backward_pass(AGClass):
         def __init__(self, *args):
             self.parents = list(args)
             self.value = 1
-            self.args = [arg.value if isinstance(arg, AGClass) else arg for arg in self.parents]
+            self.parent_values = [arg.value if isinstance(arg, AGClass) else arg for arg in self.parents]
             self.grad = []
 
         def grads(self, *args):
@@ -127,7 +127,7 @@ def test_backward(AGClass):
         def __init__(self, *args):
             self.parents = list(args)
             self.value = 1
-            self.args = [arg.value if isinstance(arg, AGClass) else arg for arg in self.parents]
+            self.parent_values= [arg.value if isinstance(arg, AGClass) else arg for arg in self.parents]
             self.grad = 0.
             self.visited = False
 
@@ -527,3 +527,160 @@ def test_vjp(op, name='', binary=False, true_func=None, issum=False):
         assert np.allclose(impl[1], truth), 'dL_db has an incorrect value (See printout above)!'
     print('Passed ' + name +'!')
         
+class AutogradValue:
+    '''
+    Base class for automatic differentiation operations. Represents variable delcaration.
+    Subclasses will overwrite func and grads to define new operations.
+
+    Properties:
+        parents (list): A list of the inputs to the operation, may be AutogradValue or float
+        parent_values    (list): A list of raw values of each input (as floats)
+        forward_grads (dict): A dictionary mapping inputs to gradients
+        grad    (float): The derivative of the final loss with respect to this value (dL/da)
+        value   (float): The value of the result of this operation
+    '''
+
+    def __init__(self, *args):
+        self.parents = list(args)
+        self.parent_values = [arg.value if isinstance(arg, AutogradValue) else arg for arg in args]
+        self.forward_grads = {}
+        self.value = self.forward_pass()
+        self.grad = 0. # Used later for reverse mode
+
+    def func(self, input):
+        '''
+        Compute the value of the operation given the inputs.
+        For declaring a variable, this is just the identity function (return the input).
+
+        Args:
+            input (float): The input to the operation
+        Returns:
+            value (float): The result of the operation
+        '''
+        return input
+
+    def grads(self, *args):
+        '''
+        Compute the derivative of the operation with respect to each input.
+        In the base case the derivative of the identity function is just 1. (da/da = 1).
+
+        Args:
+            input (float): The input to the operation
+        Returns:
+            grads (tuple): The derivative of the operation with respect to each input
+                            Here there is only a single input, so we return a length-1 tuple.
+        '''
+        return (1,)
+
+    def forward_pass(self):
+        # Calls func to compute the value of this operation
+        return self.func(*self.parent_values)
+
+    def __repr__(self):
+        # Python magic function for string representation.
+        return str(self.value)
+
+
+class ForwardValue(AutogradValue):
+    '''
+    Subclass for forward-mode automatic differentiation. Initialized the forward_grads
+    dict to include this value.
+    '''
+
+    def __init__(self, *args):
+        super().__init__(*args)
+        if len(self.forward_grads.keys()) == 0:
+            self.forward_grads = {self: 1}
+
+def pad(a):
+    # Pads an array with a column of 1s (for bias term)
+    return a.pad() if isinstance(a, AutogradValue) else np.pad(a, ((0, 0), (0, 1)), constant_values=1., mode='constant')
+
+def matmul(a, b):
+    # Multiplys two matrices
+    return _matmul(a, b) if isinstance(a, AutogradValue) else np.matmul(a, b)
+
+def sigmoid(x):
+    # Computes the sigmoid function
+    return 1. / (1. + (-x).exp()) if isinstance(x, AutogradValue) else 1. / (1. + np.exp(-x))
+
+class NeuralNetwork:
+    def __init__(self, dims, hidden_sizes=[]):
+        # Create a list of all layer dimensions (including input and output)
+        sizes = [dims] + hidden_sizes + [1]
+        # Create each layer weight matrix (including bias dimension)
+        self.weights = [np.random.normal(scale=1., size=(i + 1, o))
+                        for (i, o) in zip(sizes[:-1], sizes[1:])]
+
+    def prediction_function(self, X, w):
+        '''
+        Get the result of our base function for prediction (i.e. x^t w)
+
+        Args:
+            X (array): An N x d matrix of observations.
+            w (list of arrays): A list of weight matrices
+        Returns:
+            pred (array): An N x 1 matrix of f(X).
+        '''
+        # Iterate through the weights of each layer and apply the linear function and activation
+        for wi in w[:-1]:
+            X = pad(X) # Only if we're using bias
+            X = sigmoid(matmul(X, wi))
+
+        # For the output layer, we don't apply the activation
+        X = pad(X)
+        return matmul(X, w[-1])
+
+    def predict(self, X):
+        '''
+        Predict labels given a set of inputs.
+
+        Args:
+            X (array): An N x d matrix of observations.
+        Returns:
+            pred (array): An N x 1 column vector of predictions in {0, 1}
+        '''
+        return (self.prediction_function(X, self.weights) > 0)
+
+    def predict_probability(self, X):
+        '''
+        Predict the probability of each class given a set of inputs
+
+        Args:
+            X (array): An N x d matrix of observations.
+        Returns:
+            probs (array): An N x 1 column vector of predicted class probabilities
+        '''
+        return sigmoid(self.prediction_function(X, self.weights))
+
+    def accuracy(self, X, y):
+        '''
+        Compute the accuracy of the model's predictions on a dataset
+
+        Args:
+            X (array): An N x d matrix of observations.
+            y (array): A length N vector of labels.
+        Returns:
+            acc (float): The accuracy of the classifier
+        '''
+        y = y.reshape((-1, 1))
+        return (self.predict(X) == y).mean()
+
+    def nll(self, X, y, w=None):
+        '''
+        Compute the negative log-likelihood loss.
+
+        Args:
+            X (array): An N x d matrix of observations.
+            y (array): A length N vector of labels.
+            w (array, optional): A (d+1) x 1 matrix of weights.
+        Returns:
+            nll (float): The NLL loss
+        '''
+        if w is None:
+            w = self.weights
+
+        y = y.reshape((-1, 1))
+        xw = self.prediction_function(X, w)
+        py = sigmoid((2 * y - 1) * xw)
+        return -(np.log(py)).sum()

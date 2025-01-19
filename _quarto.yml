@@ -1,7 +1,11 @@
 project:
   type: website
   output-dir: docs
-  resources: assignments/homeworks/Homework*
+  resources: 
+    - assignments/homeworks/Homework*/submission.ipynb
+    - assignments/homeworks/Homework*/requirements.txt
+    - assignments/homeworks/Homework*/*.py
+
 
 website:
   title: "CS 152: Neural Networks"
@@ -11,7 +15,7 @@ website:
         text: Home
       - href: calendar/calendar.qmd
         text: Calendar
-      - href: https://drive.google.com/drive/folders/1JFhwmcFBTHiRbfhQ0VRDj9xIPxFpHuWj?usp=drive_link
+      - href: assignments/homeworks/homeworks.qmd #https://drive.google.com/drive/folders/1JFhwmcFBTHiRbfhQ0VRDj9xIPxFpHuWj?usp=drive_link
         text: Homeworks
      
       - href: assignments/final-project/outline.qmd

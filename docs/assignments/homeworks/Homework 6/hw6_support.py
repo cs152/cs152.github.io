@@ -527,3 +527,55 @@ def test_vjp(op, name='', binary=False, true_func=None, issum=False):
         assert np.allclose(impl[1], truth), 'dL_db has an incorrect value (See printout above)!'
     print('Passed ' + name +'!')
         
+class AutogradValue:
+    '''
+    Base class for automatic differentiation operations. Represents variable delcaration.
+    Subclasses will overwrite func and grads to define new operations.
+
+    Properties:
+        parents (list): A list of the inputs to the operation, may be AutogradValue or float
+        parent_values    (list): A list of raw values of each input (as floats)
+        forward_grads (dict): A dictionary mapping inputs to gradients
+        grad    (float): The derivative of the final loss with respect to this value (dL/da)
+        value   (float): The value of the result of this operation
+    '''
+
+    def __init__(self, *args):
+        self.parents = list(args)
+        self.parent_values = [arg.value if isinstance(arg, AutogradValue) else arg for arg in args]
+        self.forward_grads = {}
+        self.value = self.forward_pass()
+        self.grad = 0. # Used later for reverse mode
+
+    def func(self, input):
+        '''
+        Compute the value of the operation given the inputs.
+        For declaring a variable, this is just the identity function (return the input).
+
+        Args:
+            input (float): The input to the operation
+        Returns:
+            value (float): The result of the operation
+        '''
+        return input
+
+    def grads(self, *args):
+        '''
+        Compute the derivative of the operation with respect to each input.
+        In the base case the derivative of the identity function is just 1. (da/da = 1).
+
+        Args:
+            input (float): The input to the operation
+        Returns:
+            grads (tuple): The derivative of the operation with respect to each input
+                            Here there is only a single input, so we return a length-1 tuple.
+        '''
+        return (1,)
+
+    def forward_pass(self):
+        # Calls func to compute the value of this operation
+        return self.func(*self.parent_values)
+
+    def __repr__(self):
+        # Python magic function for string representation.
+        return str(self.value)

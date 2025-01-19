@@ -5,6 +5,109 @@ import tqdm as tqdm
 from sklearn.datasets import make_moons, make_blobs
 from sklearn.inspection import DecisionBoundaryDisplay
 
+def linear_function(X, w):
+    # Returns a linear function of X (and adds bias)
+    X = np.pad(X, ((0,0), (0,1)), constant_values=1.)
+    return np.dot(X, w)
+
+def sigmoid(x):
+    # Computes the sigmoid function
+    return 1 / (1 + np.exp(-x))
+
+class LogisticRegression:
+    def __init__(self, dims):
+        '''
+        Args:
+            dims (int): d, the dimension of each input
+        '''
+        self.weights = np.zeros((dims + 1,))
+
+    def predict(self, X):
+        '''
+        Predict labels given a set of inputs.
+
+        Args:
+            X (array): An N x d matrix of observations.
+        Returns:
+            pred (int array): A length N array of predictions in {0, 1}
+        '''
+        return (linear_function(X, self.weights) > 0).astype(int)
+
+    def predict_probability(self, X):
+        '''
+        Predict the probability of each class given a set of inputs
+
+        Args:
+            X (array): An N x d matrix of observations.
+        Returns:
+            probs (array): A length N vector of predicted class probabilities
+        '''
+        return sigmoid(linear_function(X, self.weights))
+
+    def accuracy(self, X, y):
+        '''
+        Compute the accuracy of the model's predictions on a dataset
+
+        Args:
+            X (array): An N x d matrix of observations.
+            y (array): A length N vector of labels.
+        Returns:
+            acc (float): The accuracy of the classifier
+        '''
+        return np.mean(self.predict(X) == y)
+
+    def nll(self, X, y):
+        '''
+        Compute the negative log-likelihood loss.
+
+        Args:
+            X (array): An N x d matrix of observations.
+            y (int array): A length N vector of labels.
+        Returns:
+            nll (float): The NLL loss
+        '''
+        xw = linear_function(X, self.weights)
+        py = sigmoid((2 * y - 1) * xw)
+        return -np.sum(np.log(py))
+
+    def nll_gradient(self, X, y):
+        '''
+        Compute the gradient of the negative log-likelihood loss.
+
+        Args:
+            X (array): An N x d matrix of observations.
+            y (array): A length N vector of labels.
+        Returns:
+            grad (array): A length (d + 1) vector with the gradient
+        '''
+        xw = linear_function(X, self.weights)
+        py = sigmoid((2 * y - 1) * xw)
+        grad = ((1 - py) * (2 * y - 1)).reshape((-1, 1)) * np.pad(X, [(0,0), (0,1)], constant_values=1.)
+        return -np.sum(grad, axis=0)
+
+    def nll_and_grad(self, X, y):
+        '''
+        Compute both the NLL and it's gradient
+
+        Args:
+            X (array): An N x d matrix of observations.
+            y (array): A length N vector of labels.
+        Returns:
+            nll (float): The NLL loss
+            grad (array): A length (d + 1) vector with the gradient
+        '''
+        return self.nll(X, y), self.nll_gradient(X, y)
+
+class MultinomialLogisticRegression(LogisticRegression):
+    def __init__(self, classes, dims):
+        '''
+        Args:
+            classes (int): C, the number of possible outputs
+            dims (int): d, the dimension of each input
+        '''
+        self.classes = classes
+        self.weights = np.zeros((classes, dims + 1,))
+
 def get_dataset(name):
     data = np.load('data.npz')
     hhimages, hhlabels, hhlabel_names = data['hhimages'], data['hhlabels'], data['hhlabel_names']
@@ -216,3 +319,18 @@ def test_nll_grad(grad_fun):
     assert np.isclose(nll_grad, answer).all(), 'nll_grad failed test case'
     print('Passed!')
 
+# Test cases for nll_gradient_c function
+def test_nll_gradient_c(nll_gradient_c):
+    W = np.array([[0.1, 0.2, 0.3], [0.4, 0.5, 0.6]])
+    X = np.array([[1, 2], [3, 4], [5, 6]])
+    y = np.array([0, 1, 0])
+    c = 0
+    expected_grad = np.array([-5.38602173, -7.04477682, -1.65875509])
+    grad = nll_gradient_c(W, X, y, c)
+    assert np.allclose(grad, expected_grad), f"Expected {expected_grad}, but got {grad}"
+
+    c = 1
+    expected_grad = np.array([5.38602173, 7.04477682, 1.65875509])
+    grad = nll_gradient_c(W, X, y, c)
+    assert np.allclose(grad, expected_grad), f"Expected {expected_grad}, but got {grad}"
+    print("Passed!")

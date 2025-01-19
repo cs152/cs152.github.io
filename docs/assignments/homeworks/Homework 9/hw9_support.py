@@ -35,14 +35,14 @@ def get_fmnist_data_loaders(path, batch_size, valid_batch_size=0):
     xforms = Compose([ToTensor(), Normalize(data_mean, data_std)])
 
     # Training data loader
-    train_dataset = FashionMNIST(root=path, train=True, download=True, transform=xforms)
+    train_dataset = MNIST(root=path, train=True, download=True, transform=xforms)
 
     # Set the batch size to N if batch_size is 0
     tbs = len(train_dataset) if batch_size == 0 else batch_size
     train_loader = DataLoader(train_dataset, batch_size=tbs, shuffle=True)
 
     # Validation data loader
-    valid_dataset = FashionMNIST(root=path, train=False, download=True, transform=xforms)
+    valid_dataset = MNIST(root=path, train=False, download=True, transform=xforms)
 
     # Set the batch size to N if batch_size is 0
     vbs = len(valid_dataset) if valid_batch_size == 0 else valid_batch_size
@@ -52,16 +52,27 @@ def get_fmnist_data_loaders(path, batch_size, valid_batch_size=0):
 
 from torch.optim import Adam
 
+def nll_loss(model, X, Y):
+    # Compute the output
+    train_output = model(X)
+
+    # Compute loss
+    train_loss = criterion(train_output, Y)
+    return train_output, train_loss
+
 # Here we'll define a function to train and evaluate a neural network with a specified architecture
 # using a specified optimizer.
 def run_model(data_path, model, optimizer=Adam, 
-              learning_rate=0.001):
+              learning_rate=0.001, get_output_and_loss=nll_loss):
     
     # Get the dataset
     train_loader, valid_loader = get_fmnist_data_loaders(data_path, batch_size)
-    return gradient_descent(model, train_loader, valid_loader, optimizer, learning_rate)
+    return gradient_descent(model, train_loader, valid_loader, optimizer, learning_rate, get_output_and_loss=get_output_and_loss)
 
-def gradient_descent(model, train_loader, valid_loader, optimizer=Adam, learning_rate=0.001):
+
+
+
+def gradient_descent(model, train_loader, valid_loader, optimizer=Adam, learning_rate=0.001, get_output_and_loss=nll_loss):
 
     # Do model creation here so that the model is recreated each time the cell is run
     model = model.to(device)
@@ -97,11 +108,7 @@ def gradient_descent(model, train_loader, valid_loader, optimizer=Adam, learning
             train_X, train_Y = next(train_dataiterator)
             train_X, train_Y = train_X.to(device), train_Y.to(device)
 
-            # Compute the output
-            train_output = model(train_X)
-
-            # Compute loss
-            train_loss = criterion(train_output, train_Y)
+            train_output, train_loss = get_output_and_loss(model, train_X, train_Y)
 
             num_in_batch = len(train_X)
             tloss = train_loss.item() * num_in_batch / train_N
@@ -135,20 +142,21 @@ def gradient_descent(model, train_loader, valid_loader, optimizer=Adam, learning
 
                 valid_X, valid_Y = valid_X.to(device), valid_Y.to(device)
 
-                valid_output = model(valid_X)
-
-                valid_loss = criterion(valid_output, valid_Y)
+                valid_output, valid_loss = get_output_and_loss(model, valid_X, valid_Y)
 
                 num_in_batch = len(valid_X)
                 vloss = valid_loss.item() * num_in_batch / valid_N
                 valid_loss_mean += vloss
                 valid_losses.append(valid_loss.item())
 
-                # Convert network output into predictions (one-hot -> number)
-                predictions = valid_output.argmax(1)
+                try:
+                    # Convert network output into predictions (one-hot -> number)
+                    predictions = valid_output.argmax(1)
 
-                # Sum up total number that were correct
-                valid_correct += (predictions == valid_Y).type(torch.float).sum().item()
+                    # Sum up total number that were correct
+                    valid_correct += (predictions == valid_Y).type(torch.float).sum().item()
+                except:
+                    pass
 
         valid_accuracy = 100 * (valid_correct / valid_N)
 

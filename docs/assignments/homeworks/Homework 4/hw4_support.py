@@ -6,6 +6,104 @@ from sklearn.inspection import DecisionBoundaryDisplay
 from sklearn.datasets import make_moons
 import matplotlib.pyplot as plt
 
+def sigmoid(x):
+    # Computes the sigmoid function
+    return 1. / (1. + np.exp(-x))
+
+class LogisticRegression:
+    def __init__(self, dims):
+        '''
+        Args:
+            dims (int): d, the dimension of each input
+        '''
+        self.weights = np.zeros((dims + 1, 1))
+
+    def prediction_function(self, X, w):
+        '''
+        Get the result of our base function for prediction (i.e. x^t w)
+
+        Args:
+            X (array): An N x d matrix of observations.
+            w (array): A (d+1) x 1 vector of weights.
+        Returns:
+            pred (array): A length N vector of f(X).
+        '''
+        X = np.pad(X, ((0,0), (0,1)), constant_values=1., mode='constant')
+        return np.dot(X, w)
+
+    def predict(self, X):
+        '''
+        Predict labels given a set of inputs.
+
+        Args:
+            X (array): An N x d matrix of observations.
+        Returns:
+            pred (array): An N x 1 column vector of predictions in {0, 1}
+        '''
+        return (self.prediction_function(X, self.weights) > 0)
+
+    def predict_probability(self, X):
+        '''
+        Predict the probability of each class given a set of inputs
+
+        Args:
+            X (array): An N x d matrix of observations.
+        Returns:
+            probs (array): An N x 1 column vector of predicted class probabilities
+        '''
+        return sigmoid(self.prediction_function(X, self.weights))
+
+    def accuracy(self, X, y):
+        '''
+        Compute the accuracy of the model's predictions on a dataset
+
+        Args:
+            X (array): An N x d matrix of observations.
+            y (array): A length N vector of labels.
+        Returns:
+            acc (float): The accuracy of the classifier
+        '''
+        y = y.reshape((-1, 1))
+        return (self.predict(X) == y).mean()
+
+    def nll(self, X, y, w=None):
+        '''
+        Compute the negative log-likelihood loss.
+
+        Args:
+            X (array): An N x d matrix of observations.
+            y (array): A length N vector of labels.
+            w (array, optional): A (d+1) x 1 matrix of weights.
+        Returns:
+            nll (float): The NLL loss
+        '''
+        if w is None:
+            w = self.weights
+
+        y = y.reshape((-1, 1))
+        xw = self.prediction_function(X, w)
+        py = sigmoid((2 * y - 1) * xw)
+        return -(np.log(py)).sum()
+
+    def nll_gradient(self, X, y):
+        '''
+        Compute the gradient of the negative log-likelihood loss.
+
+        Args:
+            X (array): An N x d matrix of observations.
+            y (array): A length N vector of labels.
+        Returns:
+            grad (array): A length (d + 1) vector with the gradient
+        '''
+        y = y.reshape((-1, 1))
+        xw = self.prediction_function(X, self.weights)
+        py = sigmoid((2 * y - 1) * xw)
+        grad = ((1 - py) * (2 * y - 1)).reshape((-1, 1)) * np.pad(X, [(0,0), (0,1)], constant_values=1., mode='constant')
+        return -np.sum(grad, axis=0)
+
+    def nll_and_grad_no_autodiff(self, X, y):
+        # Compute nll_and_grad without automatic diferentiation
+        return self.nll(X, y), self.nll_gradient(X, y)
 
 def aslist(value):
     # Converts iterables to lists and single values to a single-element lists

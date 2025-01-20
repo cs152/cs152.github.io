@@ -25,30 +25,30 @@ website:
             text: Textbook
           - href: https://blank-app-ufu2uvdeosc.streamlit.app/
             text: Notebook conversion
-          - href: https://www.gradescope.com/courses/710173
+          - href: https://www.gradescope.com/courses/960105
             text: Gradescope
       - text: Solutions
         menu:
           - text: Homework 1 Solutions
-            #href: https://probml.github.io/pml-book/book1.html
+            # href: assignments/homeworks/Homework 1/solutions-AVPHKV.ipynb
           - text: Homework 2 Solutions
-            #href: https://blank-app-ufu2uvdeosc.streamlit.app/
+            # href: assignments/homeworks/Homework 2/solutions-QXP5GA.ipynb
           - text: Homework 3 Solutions
-            #href: https://probml.github.io/pml-book/book1.html
+            # href: assignments/homeworks/Homework 3/solutions-NVLZ0K.ipynb
           - text: Homework 4 Solutions
-            #href: https://probml.github.io/pml-book/book1.html
+            # href: assignments/homeworks/Homework 4/solutions-S4MH4K.ipynb
           - text: Homework 5 Solutions
-            #href: https://probml.github.io/pml-book/book1.html
+            # href: assignments/homeworks/Homework 5/solutions-CCLQOR.ipynb
           - text: Homework 6 Solutions
-            #href: https://probml.github.io/pml-book/book1.html
+            # href: assignments/homeworks/Homework 6/solutions-M7GY1X.ipynb
           - text: Homework 7 Solutions
-            #href: https://probml.github.io/pml-book/book1.html
+            # href: assignments/homeworks/Homework 7/solutions-TOLGQV.ipynb
           - text: Homework 8 Solutions
-            #href: https://probml.github.io/pml-book/book1.html
+            # href: assignments/homeworks/Homework 8/solutions-ED50PD.ipynb
           - text: Homework 9 Solutions
-            #href: https://probml.github.io/pml-book/book1.html
+            # href: assignments/homeworks/Homework 9/solutions-MTCMFU.ipynb
           - text: Homework 10 Solutions
-            #href: https://probml.github.io/pml-book/book1.html
+            # href: assignments/homeworks/Homework 10/solutions-RMZHDS.ipynb
 
 
 format:

@@ -1,0 +1,783 @@
+,Diagnosis
+0,appendicitis
+1,no appendicitis
+2,no appendicitis
+3,no appendicitis
+4,appendicitis
+5,no appendicitis
+6,no appendicitis
+7,no appendicitis
+8,no appendicitis
+9,appendicitis
+10,appendicitis
+11,no appendicitis
+12,no appendicitis
+13,no appendicitis
+14,appendicitis
+15,no appendicitis
+16,appendicitis
+17,appendicitis
+18,appendicitis
+19,no appendicitis
+20,appendicitis
+21,no appendicitis
+22,no appendicitis
+23,no appendicitis
+24,no appendicitis
+25,appendicitis
+26,appendicitis
+27,no appendicitis
+28,appendicitis
+29,appendicitis
+30,no appendicitis
+31,appendicitis
+32,appendicitis
+33,no appendicitis
+34,appendicitis
+35,no appendicitis
+36,appendicitis
+37,no appendicitis
+38,appendicitis
+39,appendicitis
+40,appendicitis
+41,appendicitis
+42,no appendicitis
+43,no appendicitis
+44,no appendicitis
+45,no appendicitis
+46,no appendicitis
+47,appendicitis
+48,no appendicitis
+49,no appendicitis
+50,appendicitis
+51,no appendicitis
+52,no appendicitis
+53,appendicitis
+54,no appendicitis
+55,appendicitis
+56,no appendicitis
+57,no appendicitis
+58,no appendicitis
+59,no appendicitis
+60,appendicitis
+61,no appendicitis
+62,no appendicitis
+63,no appendicitis
+64,appendicitis
+65,appendicitis
+66,no appendicitis
+67,no appendicitis
+68,no appendicitis
+69,appendicitis
+70,no appendicitis
+71,no appendicitis
+72,no appendicitis
+73,no appendicitis
+74,appendicitis
+75,no appendicitis
+76,appendicitis
+77,appendicitis
+78,appendicitis
+79,no appendicitis
+80,no appendicitis
+81,appendicitis
+82,no appendicitis
+83,appendicitis
+84,no appendicitis
+85,no appendicitis
+86,appendicitis
+87,appendicitis
+88,appendicitis
+89,appendicitis
+90,appendicitis
+91,appendicitis
+92,no appendicitis
+93,no appendicitis
+94,no appendicitis
+95,appendicitis
+96,no appendicitis
+97,appendicitis
+98,no appendicitis
+99,appendicitis
+100,no appendicitis
+101,no appendicitis
+102,appendicitis
+103,appendicitis
+104,appendicitis
+105,appendicitis
+106,no appendicitis
+107,no appendicitis
+108,appendicitis
+109,no appendicitis
+110,no appendicitis
+111,no appendicitis
+112,no appendicitis
+113,appendicitis
+114,appendicitis
+115,no appendicitis
+116,no appendicitis
+117,no appendicitis
+118,appendicitis
+119,no appendicitis
+120,appendicitis
+121,appendicitis
+122,no appendicitis
+123,no appendicitis
+124,no appendicitis
+125,appendicitis
+126,appendicitis
+127,appendicitis
+128,appendicitis
+129,appendicitis
+130,no appendicitis
+131,no appendicitis
+132,no appendicitis
+133,no appendicitis
+134,no appendicitis
+135,no appendicitis
+136,no appendicitis
+137,appendicitis
+138,appendicitis
+139,no appendicitis
+140,no appendicitis
+141,no appendicitis
+142,appendicitis
+143,no appendicitis
+144,no appendicitis
+145,appendicitis
+146,appendicitis
+147,no appendicitis
+148,appendicitis
+149,appendicitis
+150,no appendicitis
+151,no appendicitis
+152,no appendicitis
+153,no appendicitis
+154,no appendicitis
+155,no appendicitis
+156,no appendicitis
+157,no appendicitis
+158,appendicitis
+159,appendicitis
+160,no appendicitis
+161,appendicitis
+162,no appendicitis
+163,appendicitis
+164,appendicitis
+165,appendicitis
+166,no appendicitis
+167,appendicitis
+168,no appendicitis
+169,no appendicitis
+170,appendicitis
+171,no appendicitis
+172,no appendicitis
+173,no appendicitis
+174,no appendicitis
+175,no appendicitis
+176,appendicitis
+177,no appendicitis
+178,no appendicitis
+179,no appendicitis
+180,no appendicitis
+181,no appendicitis
+182,appendicitis
+183,appendicitis
+184,appendicitis
+185,no appendicitis
+186,no appendicitis
+187,no appendicitis
+188,no appendicitis
+189,no appendicitis
+190,appendicitis
+191,appendicitis
+192,appendicitis
+193,appendicitis
+194,no appendicitis
+195,appendicitis
+196,no appendicitis
+197,no appendicitis
+198,appendicitis
+199,appendicitis
+200,no appendicitis
+201,appendicitis
+202,appendicitis
+203,no appendicitis
+204,no appendicitis
+205,no appendicitis
+206,no appendicitis
+207,appendicitis
+208,appendicitis
+209,no appendicitis
+210,no appendicitis
+211,no appendicitis
+212,no appendicitis
+213,no appendicitis
+214,no appendicitis
+215,no appendicitis
+216,no appendicitis
+217,no appendicitis
+218,no appendicitis
+219,no appendicitis
+220,appendicitis
+221,no appendicitis
+222,no appendicitis
+223,no appendicitis
+224,no appendicitis
+225,no appendicitis
+226,appendicitis
+227,appendicitis
+228,appendicitis
+229,no appendicitis
+230,no appendicitis
+231,appendicitis
+232,appendicitis
+233,no appendicitis
+234,no appendicitis
+235,no appendicitis
+236,no appendicitis
+237,appendicitis
+238,no appendicitis
+239,appendicitis
+240,no appendicitis
+241,no appendicitis
+242,no appendicitis
+243,no appendicitis
+244,no appendicitis
+245,appendicitis
+246,appendicitis
+247,appendicitis
+248,no appendicitis
+249,no appendicitis
+250,no appendicitis
+251,appendicitis
+252,appendicitis
+253,appendicitis
+254,no appendicitis
+255,no appendicitis
+256,appendicitis
+257,no appendicitis
+258,no appendicitis
+259,no appendicitis
+260,no appendicitis
+261,appendicitis
+262,appendicitis
+263,appendicitis
+264,appendicitis
+265,appendicitis
+266,appendicitis
+267,appendicitis
+268,appendicitis
+269,no appendicitis
+270,appendicitis
+271,no appendicitis
+272,no appendicitis
+273,no appendicitis
+274,appendicitis
+275,appendicitis
+276,appendicitis
+277,no appendicitis
+278,no appendicitis
+279,no appendicitis
+280,no appendicitis
+281,no appendicitis
+282,no appendicitis
+283,appendicitis
+284,appendicitis
+285,appendicitis
+286,no appendicitis
+287,no appendicitis
+288,no appendicitis
+289,appendicitis
+290,appendicitis
+291,no appendicitis
+292,no appendicitis
+293,appendicitis
+294,appendicitis
+295,no appendicitis
+296,no appendicitis
+297,no appendicitis
+298,appendicitis
+299,no appendicitis
+300,no appendicitis
+301,no appendicitis
+302,no appendicitis
+303,no appendicitis
+304,no appendicitis
+305,appendicitis
+306,no appendicitis
+307,appendicitis
+308,no appendicitis
+309,no appendicitis
+310,no appendicitis
+311,no appendicitis
+312,no appendicitis
+313,no appendicitis
+314,no appendicitis
+315,appendicitis
+316,appendicitis
+317,no appendicitis
+318,no appendicitis
+319,no appendicitis
+320,no appendicitis
+321,no appendicitis
+322,appendicitis
+323,no appendicitis
+324,no appendicitis
+325,no appendicitis
+326,no appendicitis
+327,no appendicitis
+328,no appendicitis
+329,appendicitis
+330,appendicitis
+331,appendicitis
+332,no appendicitis
+333,appendicitis
+334,appendicitis
+335,no appendicitis
+336,no appendicitis
+337,appendicitis
+338,appendicitis
+339,no appendicitis
+340,no appendicitis
+341,appendicitis
+342,no appendicitis
+343,appendicitis
+344,no appendicitis
+345,appendicitis
+346,appendicitis
+347,appendicitis
+348,no appendicitis
+349,no appendicitis
+350,no appendicitis
+351,no appendicitis
+352,no appendicitis
+353,no appendicitis
+354,no appendicitis
+355,no appendicitis
+356,no appendicitis
+357,appendicitis
+358,no appendicitis
+359,no appendicitis
+360,no appendicitis
+361,appendicitis
+362,no appendicitis
+363,no appendicitis
+364,appendicitis
+365,appendicitis
+366,no appendicitis
+367,no appendicitis
+368,no appendicitis
+369,no appendicitis
+370,no appendicitis
+371,no appendicitis
+372,no appendicitis
+373,no appendicitis
+374,no appendicitis
+375,no appendicitis
+376,appendicitis
+377,no appendicitis
+378,no appendicitis
+379,no appendicitis
+380,no appendicitis
+381,no appendicitis
+382,appendicitis
+383,no appendicitis
+384,no appendicitis
+385,no appendicitis
+386,no appendicitis
+387,no appendicitis
+388,no appendicitis
+389,no appendicitis
+390,no appendicitis
+391,appendicitis
+392,no appendicitis
+393,appendicitis
+394,no appendicitis
+395,no appendicitis
+396,no appendicitis
+397,no appendicitis
+398,appendicitis
+399,no appendicitis
+400,no appendicitis
+401,no appendicitis
+402,appendicitis
+403,no appendicitis
+404,no appendicitis
+405,no appendicitis
+406,no appendicitis
+407,no appendicitis
+408,no appendicitis
+409,appendicitis
+410,no appendicitis
+411,appendicitis
+412,no appendicitis
+413,no appendicitis
+414,no appendicitis
+415,appendicitis
+416,no appendicitis
+417,no appendicitis
+418,appendicitis
+419,no appendicitis
+420,no appendicitis
+421,no appendicitis
+422,appendicitis
+423,no appendicitis
+424,no appendicitis
+425,no appendicitis
+426,no appendicitis
+427,no appendicitis
+428,
+429,no appendicitis
+430,appendicitis
+431,no appendicitis
+432,appendicitis
+433,appendicitis
+434,appendicitis
+435,no appendicitis
+436,no appendicitis
+437,no appendicitis
+438,no appendicitis
+439,no appendicitis
+440,no appendicitis
+441,no appendicitis
+442,appendicitis
+443,no appendicitis
+444,appendicitis
+445,no appendicitis
+446,no appendicitis
+447,no appendicitis
+448,no appendicitis
+449,no appendicitis
+450,no appendicitis
+451,appendicitis
+452,no appendicitis
+453,no appendicitis
+454,no appendicitis
+455,no appendicitis
+456,appendicitis
+457,no appendicitis
+458,no appendicitis
+459,no appendicitis
+460,no appendicitis
+461,no appendicitis
+462,no appendicitis
+463,no appendicitis
+464,appendicitis
+465,no appendicitis
+466,appendicitis
+467,appendicitis
+468,no appendicitis
+469,no appendicitis
+470,no appendicitis
+471,no appendicitis
+472,no appendicitis
+473,no appendicitis
+474,no appendicitis
+475,appendicitis
+476,appendicitis
+477,no appendicitis
+478,no appendicitis
+479,no appendicitis
+480,no appendicitis
+481,no appendicitis
+482,no appendicitis
+483,appendicitis
+484,appendicitis
+485,appendicitis
+486,appendicitis
+487,appendicitis
+488,appendicitis
+489,appendicitis
+490,appendicitis
+491,appendicitis
+492,appendicitis
+493,appendicitis
+494,appendicitis
+495,appendicitis
+496,appendicitis
+497,appendicitis
+498,appendicitis
+499,appendicitis
+500,appendicitis
+501,appendicitis
+502,appendicitis
+503,appendicitis
+504,appendicitis
+505,appendicitis
+506,appendicitis
+507,appendicitis
+508,appendicitis
+509,appendicitis
+510,appendicitis
+511,appendicitis
+512,appendicitis
+513,appendicitis
+514,appendicitis
+515,appendicitis
+516,appendicitis
+517,appendicitis
+518,appendicitis
+519,appendicitis
+520,appendicitis
+521,appendicitis
+522,appendicitis
+523,appendicitis
+524,appendicitis
+525,appendicitis
+526,appendicitis
+527,no appendicitis
+528,appendicitis
+529,appendicitis
+530,appendicitis
+531,appendicitis
+532,appendicitis
+533,appendicitis
+534,appendicitis
+535,
+536,appendicitis
+537,appendicitis
+538,appendicitis
+539,appendicitis
+540,appendicitis
+541,appendicitis
+542,appendicitis
+543,appendicitis
+544,appendicitis
+545,appendicitis
+546,appendicitis
+547,appendicitis
+548,appendicitis
+549,appendicitis
+550,appendicitis
+551,appendicitis
+552,appendicitis
+553,appendicitis
+554,appendicitis
+555,appendicitis
+556,appendicitis
+557,appendicitis
+558,appendicitis
+559,appendicitis
+560,appendicitis
+561,appendicitis
+562,appendicitis
+563,appendicitis
+564,appendicitis
+565,appendicitis
+566,appendicitis
+567,appendicitis
+568,appendicitis
+569,appendicitis
+570,appendicitis
+571,appendicitis
+572,appendicitis
+573,appendicitis
+574,appendicitis
+575,appendicitis
+576,appendicitis
+577,appendicitis
+578,appendicitis
+579,appendicitis
+580,appendicitis
+581,appendicitis
+582,appendicitis
+583,appendicitis
+584,appendicitis
+585,appendicitis
+586,appendicitis
+587,appendicitis
+588,appendicitis
+589,appendicitis
+590,appendicitis
+591,appendicitis
+592,no appendicitis
+593,appendicitis
+594,appendicitis
+595,appendicitis
+596,appendicitis
+597,appendicitis
+598,appendicitis
+599,appendicitis
+600,appendicitis
+601,appendicitis
+602,appendicitis
+603,appendicitis
+604,appendicitis
+605,appendicitis
+606,appendicitis
+607,appendicitis
+608,appendicitis
+609,appendicitis
+610,appendicitis
+611,appendicitis
+612,appendicitis
+613,appendicitis
+614,appendicitis
+615,appendicitis
+616,appendicitis
+617,appendicitis
+618,appendicitis
+619,appendicitis
+620,appendicitis
+621,appendicitis
+622,appendicitis
+623,appendicitis
+624,appendicitis
+625,appendicitis
+626,appendicitis
+627,appendicitis
+628,appendicitis
+629,appendicitis
+630,appendicitis
+631,appendicitis
+632,appendicitis
+633,appendicitis
+634,appendicitis
+635,appendicitis
+636,appendicitis
+637,appendicitis
+638,appendicitis
+639,appendicitis
+640,appendicitis
+641,no appendicitis
+642,appendicitis
+643,appendicitis
+644,appendicitis
+645,appendicitis
+646,appendicitis
+647,appendicitis
+648,appendicitis
+649,appendicitis
+650,appendicitis
+651,appendicitis
+652,appendicitis
+653,appendicitis
+654,appendicitis
+655,appendicitis
+656,appendicitis
+657,appendicitis
+658,appendicitis
+659,appendicitis
+660,appendicitis
+661,appendicitis
+662,appendicitis
+663,appendicitis
+664,appendicitis
+665,appendicitis
+666,appendicitis
+667,appendicitis
+668,appendicitis
+669,appendicitis
+670,appendicitis
+671,appendicitis
+672,appendicitis
+673,appendicitis
+674,appendicitis
+675,appendicitis
+676,appendicitis
+677,appendicitis
+678,appendicitis
+679,appendicitis
+680,appendicitis
+681,appendicitis
+682,appendicitis
+683,appendicitis
+684,appendicitis
+685,appendicitis
+686,appendicitis
+687,appendicitis
+688,appendicitis
+689,appendicitis
+690,appendicitis
+691,appendicitis
+692,appendicitis
+693,appendicitis
+694,appendicitis
+695,appendicitis
+696,appendicitis
+697,appendicitis
+698,appendicitis
+699,appendicitis
+700,appendicitis
+701,appendicitis
+702,appendicitis
+703,appendicitis
+704,appendicitis
+705,appendicitis
+706,appendicitis
+707,appendicitis
+708,appendicitis
+709,appendicitis
+710,appendicitis
+711,appendicitis
+712,appendicitis
+713,appendicitis
+714,appendicitis
+715,appendicitis
+716,appendicitis
+717,appendicitis
+718,appendicitis
+719,appendicitis
+720,appendicitis
+721,appendicitis
+722,appendicitis
+723,appendicitis
+724,appendicitis
+725,appendicitis
+726,appendicitis
+727,appendicitis
+728,appendicitis
+729,appendicitis
+730,appendicitis
+731,appendicitis
+732,appendicitis
+733,appendicitis
+734,appendicitis
+735,appendicitis
+736,appendicitis
+737,appendicitis
+738,appendicitis
+739,appendicitis
+740,appendicitis
+741,appendicitis
+742,appendicitis
+743,appendicitis
+744,appendicitis
+745,appendicitis
+746,appendicitis
+747,appendicitis
+748,appendicitis
+749,appendicitis
+750,appendicitis
+751,appendicitis
+752,appendicitis
+753,appendicitis
+754,appendicitis
+755,appendicitis
+756,appendicitis
+757,appendicitis
+758,appendicitis
+759,appendicitis
+760,appendicitis
+761,appendicitis
+762,appendicitis
+763,appendicitis
+764,appendicitis
+765,appendicitis
+766,appendicitis
+767,appendicitis
+768,appendicitis
+769,appendicitis
+770,appendicitis
+771,appendicitis
+772,appendicitis
+773,no appendicitis
+774,appendicitis
+775,appendicitis
+776,appendicitis
+777,appendicitis
+778,appendicitis
+779,appendicitis
+780,appendicitis
+781,appendicitis

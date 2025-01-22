@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Lecture 1: Introduction to Neural Networks – CS 152: Neural Networks</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">CS 152: Neural Networks</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../calendar/calendar.html"> 
+<span class="menu-text">Calendar</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../assignments/homeworks/homeworks.html"> 
+<span class="menu-text">Homeworks</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../assignments/final-project/outline.html"> 
+<span class="menu-text">Project</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-resources" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Resources</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-resources">    
+        <li>
+    <a class="dropdown-item" href="https://probml.github.io/pml-book/book1.html">
+ <span class="dropdown-text">Textbook</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://blank-app-ufu2uvdeosc.streamlit.app/">
+ <span class="dropdown-text">Notebook conversion</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://www.gradescope.com/courses/960105">
+ <span class="dropdown-text">Gradescope</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-solutions" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Solutions</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-solutions">    
+        <li class="dropdown-header">Homework 1 Solutions</li>
+        <li class="dropdown-header">Homework 2 Solutions</li>
+        <li class="dropdown-header">Homework 3 Solutions</li>
+        <li class="dropdown-header">Homework 4 Solutions</li>
+        <li class="dropdown-header">Homework 5 Solutions</li>
+        <li class="dropdown-header">Homework 6 Solutions</li>
+        <li class="dropdown-header">Homework 7 Solutions</li>
+        <li class="dropdown-header">Homework 8 Solutions</li>
+        <li class="dropdown-header">Homework 9 Solutions</li>
+        <li class="dropdown-header">Homework 10 Solutions</li>
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#goals-of-neural-networks" id="toc-goals-of-neural-networks" class="nav-link active" data-scroll-target="#goals-of-neural-networks">Goals of neural networks</a>
+  <ul class="collapse">
+  <li><a href="#prediction" id="toc-prediction" class="nav-link" data-scroll-target="#prediction">Prediction</a></li>
+  <li><a href="#detection" id="toc-detection" class="nav-link" data-scroll-target="#detection">Detection</a></li>
+  <li><a href="#generation" id="toc-generation" class="nav-link" data-scroll-target="#generation">Generation</a></li>
+  <li><a href="#transformation" id="toc-transformation" class="nav-link" data-scroll-target="#transformation">Transformation</a></li>
+  <li><a href="#approximation" id="toc-approximation" class="nav-link" data-scroll-target="#approximation">Approximation</a></li>
+  </ul></li>
+  <li><a href="#prediction-problems" id="toc-prediction-problems" class="nav-link" data-scroll-target="#prediction-problems">Prediction problems</a></li>
+  <li><a href="#types-of-data" id="toc-types-of-data" class="nav-link" data-scroll-target="#types-of-data">Types of data</a>
+  <ul class="collapse">
+  <li><a href="#tabluar-data" id="toc-tabluar-data" class="nav-link" data-scroll-target="#tabluar-data">Tabluar data</a>
+  <ul class="collapse">
+  <li><a href="#tidy-data" id="toc-tidy-data" class="nav-link" data-scroll-target="#tidy-data">Tidy data</a></li>
+  <li><a href="#variable-types" id="toc-variable-types" class="nav-link" data-scroll-target="#variable-types">Variable types</a></li>
+  </ul></li>
+  <li><a href="#matrix-data" id="toc-matrix-data" class="nav-link" data-scroll-target="#matrix-data">Matrix data</a>
+  <ul class="collapse">
+  <li><a href="#encoding-non-numeric-variables" id="toc-encoding-non-numeric-variables" class="nav-link" data-scroll-target="#encoding-non-numeric-variables">Encoding non-numeric variables</a></li>
+  </ul></li>
+  <li><a href="#other-types-of-data" id="toc-other-types-of-data" class="nav-link" data-scroll-target="#other-types-of-data">Other types of data</a>
+  <ul class="collapse">
+  <li><a href="#image-and-field-data" id="toc-image-and-field-data" class="nav-link" data-scroll-target="#image-and-field-data">Image and field data</a></li>
+  <li><a href="#text-and-sequence-data" id="toc-text-and-sequence-data" class="nav-link" data-scroll-target="#text-and-sequence-data">Text and sequence data</a></li>
+  <li><a href="#graphnetwork-data" id="toc-graphnetwork-data" class="nav-link" data-scroll-target="#graphnetwork-data">Graph/network data</a></li>
+  <li><a href="#multi-modal-data" id="toc-multi-modal-data" class="nav-link" data-scroll-target="#multi-modal-data">Multi-modal data</a></li>
+  </ul></li>
+  <li><a href="#label-types" id="toc-label-types" class="nav-link" data-scroll-target="#label-types">Label types</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Lecture 1: Introduction to Neural Networks</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="goals-of-neural-networks" class="level1">
+<h1>Goals of neural networks</h1>
+<p>The goal of this course is to learn to build neural neural networks, but first we should make sure that we understand what neural networks do and why we’d be interested in learning about them in the first place. You’re probably already familar with a lot of the real-world applications of neural networks, as in the past few years they’ve changed the way we use technology. Systems for everything from voice recognition, to photo-editing, to text and image generation and more now are largely built on the foundation of neural networks. Let’s start by introducing a few broad categories of neural network applications along with some specific examples that you may or may not have seen.</p>
+<section id="prediction" class="level3">
+<h3 class="anchored" data-anchor-id="prediction">Prediction</h3>
+<p>In <em>prediction</em> applications neural networks are used to assign a label or a prediction to a given input. Examples of applications using neural networks for prediction include:</p>
+<p><strong>Image classification (Example: Google Lens)</strong></p>
+<p>Image classification applications like Google Lens can take an image as input and identify the contents of the image using neural networks. This task will be the focus of one of the later modules in the course.</p>
+<p><strong>Medical diagnosis</strong></p>
+<p>Does a patient have lung cancer? Neural networks for medical diagnosis might be able take in a patient s symtoms and test results and give an answer.</p>
+</section>
+<section id="detection" class="level3">
+<h3 class="anchored" data-anchor-id="detection">Detection</h3>
+<p>In <em>detection</em> applications, neural networks are used to identify any instances of a particular pattern in a given input. For example:</p>
+<p><strong>Voice recognition (Example: Siri)</strong></p>
+<p>When you say “Hey Siri!” and your phone responds, it was a neural network that recognized your voice; taking as input the audio captured by your phone’s microphone and detecting any instances of the activation phrase.</p>
+<p><strong>Object detection (Example: YOLO)</strong></p>
+<p>Object detection neural networks like YOLO (You Only Look Once) can identify multiple objects in an image. These types of networks are often used in applications like autonomous cars, which need to identify vehicles, pedestrians and other hazards on the road.</p>
+</section>
+<section id="generation" class="level3">
+<h3 class="anchored" data-anchor-id="generation">Generation</h3>
+<p>Possibly the most widely discussed application of neural networks in recent years has been <em>generative models</em>, that is models that can generate realistic new data such as images and text.</p>
+<p><strong>Text generation (Example: ChatGPT)</strong> Large language models, such as the GPT models that power ChatGPT, use neural networks to synthesize realistic language.</p>
+<p><strong>Image generation (Example: Dall-E 3)</strong> Deep generative models for images similarly can generate realistic images.</p>
+</section>
+<section id="transformation" class="level3">
+<h3 class="anchored" data-anchor-id="transformation">Transformation</h3>
+<p>Transformation tasks take existing data in the form of images or text and create new and improved versions.</p>
+<p><strong>Photo editing (Example: Adobe Photoshop)</strong></p>
+<p>Image editing tools like Photoshop use neural networks to output enhanced versions of images, either adjusting properties like color or even filling in missings parts of images!</p>
+<ul>
+<li>Translation</li>
+</ul>
+</section>
+<section id="approximation" class="level3">
+<h3 class="anchored" data-anchor-id="approximation">Approximation</h3>
+<ul>
+<li>DFT approximation (physics)</li>
+<li>NERFs</li>
+</ul>
+</section>
+</section>
+<section id="prediction-problems" class="level1">
+<h1>Prediction problems</h1>
+<p>We’ll cover most of these application categories in the course, but we’ll start our journey with what is likely the most common, <em>prediction problems</em>. As a motivating example, we’ll put ourselves in the shoes of a medical professional. In this context, we will likely want to be able to predict if a given patient has a disease, such as appendicitis. So we want a system that can take in some information about our patient and use it to make an informed prediction as to whether or not our patient has a given condition.</p>
+<p>Let’s introduce some notation, so that we can start to formalize this problem a bit better. We’ll use <span class="math inline">\(\mathbf{x}\)</span> to denote the input to our system, which we’ll call an <strong>observation</strong>. In this case our observation is a collection of information we have about our patient, e.g.&nbsp;age, prior conditions, test results, etc. Likewise, we’ll use <span class="math inline">\(y\)</span> to denote the <em>output</em> of our system, which we’ll call a <strong>label</strong>. In this case our label is a determination of whether or not our patient has the condition. So ultimately what we want is a mapping from any input <span class="math inline">\(\mathbf{x}\)</span> to an output <span class="math inline">\(y\)</span>. Mathamatically, what we want is a <em>function</em>.</p>
+<p><span class="math display">\[
+\text{Input: } \mathbf{x}  \underset{predict}{\longrightarrow} \text{ Output: }y, \quad y=f(\mathbf{x})
+\]</span></p>
+<p>Ultimately, what most of this class is about is simply how to find a function <span class="math inline">\(f\)</span> that does a good job of making these sorts of predictions in the real world. That may sound simple enough, but it practice it can be very difficult! <strong>Neural networks</strong> are a class of functions that are very powerful for a wide variety of problems.</p>
+<p>As a preview of what’s to come, our general approach will be to start with a <strong>dataset</strong> <span class="math inline">\(\mathcal{D}\)</span> made up of <span class="math inline">\(N\)</span> pairs of inputs ( <span class="math inline">\(\mathbf{x}\)</span> ) and outputs ( <span class="math inline">\(y\)</span> ):</p>
+<p><span class="math display">\[
+\mathcal{D} = \{ (\mathbf{x}_1, y_1),\ (\mathbf{x}_2, y_2),\ ...\ (\mathbf{x}_N, y_N)\}
+\]</span></p>
+<p>We’ll then try to choose a function <span class="math inline">\(f\)</span> that does a good job matching the mapping expressed by this dataset. The fact that we typically <em>learn</em> neural network functions from examples is why we generally consider neural networks to be part of the field of <em>machine learning</em>. We’ll get back to how this process works later. For now, let’s focus on what our data actually looks like in practice.</p>
+</section>
+<section id="types-of-data" class="level1">
+<h1>Types of data</h1>
+<p>The first step in all of this is going be thinking about how to translate a real-world input like a patient, image, text record etc. as a mathamatical object <span class="math inline">\(\mathbf{x}\)</span> that we can reason about abstractly and ultimately represent in a computer program. We’ll do the same for our output <span class="math inline">\(y\)</span> in a moment.</p>
+<section id="tabluar-data" class="level2">
+<h2 class="anchored" data-anchor-id="tabluar-data">Tabluar data</h2>
+<p>If you’ve worked with Excel, SQL or even many physical records, you’re likely familiar with the concept of <strong>tabular data</strong>. Tabular data essentially refers to any data that we can easily represent in a table format. As this could mean a few different things, when we talk about tabular data in this class, we’ll specifically be refering to data in what is often called the <strong>tidy data</strong> format.</p>
+<section id="tidy-data" class="level3">
+<h3 class="anchored" data-anchor-id="tidy-data">Tidy data</h3>
+<p>We’ll say that data is in in the “tidy” format if each <strong>observation</strong> is represented with a single row of our table and each <strong>feature</strong> is represented with a single column. An observation is an entity, such as a patient in a hospital, that we may want to make preditions about. A <strong>feature</strong> (or variable) represents some measureable property that every observation has. For the patients in our example the set of features might correspond to measurements like the heart rate, blood pressure or oxygen level of each patient, as well as properties like the patient’s name, age and gender. This organizaton makes it easy to find any given measurement for any given patient (just use the row and column coordinates in the table). For tabular data we’ll assume that the ordering of both rows and columns in our table has no special significance, so could change the ordering of either without altering what our table represents.</p>
+<p>Note that how we organize a set of measurements into observations and features isn’t nessecarily fixed, and might change depending on our goals. For example, if our goal is to predict whether a patient has some given underlying condition, we might have one observation per patient. Alternatively, if a given patient visits the hospital several times and our goal is to predict whether a patient will be admitted overnight for a given visit, we might have one observation per visit.</p>
+</section>
+<section id="variable-types" class="level3">
+<h3 class="anchored" data-anchor-id="variable-types">Variable types</h3>
+<p>The idea of tidy data should also be intuitive to programmers familiar with the object-oriented programming paradigm. There we organize our data in objects (observations) where each object has a common set of properies (features). Just as in object oriented programming, its important to consider the <strong>type</strong> of each feature, which defines what values it can take and what operations we can perform on it. We’ll consider a few useful general feature types and how we might map them to concrete types in code.</p>
+<section id="quantitative-features" class="level4">
+<h4 class="anchored" data-anchor-id="quantitative-features">Quantitative features</h4>
+<p><strong>Quantitative features</strong> are simply numbers like our patient’s blood pressure, heart rate etc. We can further subdivide this category into integer features, that we’d encode as integer types (e.g.&nbsp;<code>int</code>, <code>uint</code>) and real-valued features that we’d encode as floating point values (e.g.&nbsp;<code>float</code>).</p>
+</section>
+<section id="categorical-features" class="level4">
+<h4 class="anchored" data-anchor-id="categorical-features">Categorical features</h4>
+<p><strong>Categorical features</strong> are features that can only take a few distinct, non-numerical values. For example this could be the department that a patient was admitted to ({ER, Neurology, Obstetrics, Dermatology, etc.}) or the patient’s gender identity ({female, male, non-binary, etc.}). These values might be best encoded through an <code>enum</code> type, but are typically encoded as either a <code>string</code> or <code>int</code> in practice.</p>
+<p><strong>Boolean features</strong> are a special case of categorical features with only two possible values. They could be encoded as an <code>bool</code> or <code>int</code> type.</p>
+</section>
+<section id="ordinal-features" class="level4">
+<h4 class="anchored" data-anchor-id="ordinal-features">Ordinal features</h4>
+<p><strong>Ordinal features</strong> are something of a middle-ground between quantitative and categorical features. They represent features where the possible values have a well-definded ordering (like numbers), but no concept of distance (like categorical values). For example our patients might be assigned a priority level that takes the values <code>low</code>, <code>medium</code> or <code>high</code>. In this case it’s well-defined to say that <code>low</code> &lt; <code>medium</code> &lt; <code>high</code>, but asking for the result of <code>high - low</code> is not defined. We might encode these features as <code>int</code> types as well.</p>
+</section>
+<section id="general-nomial-features" class="level4">
+<h4 class="anchored" data-anchor-id="general-nomial-features">General “nomial” features</h4>
+<p>Non-numerical features that don’t have a fixed set of possible values is what we’d call <strong>nominal</strong> or unstructured data. While it’s common in many contexts to see such values within tabluar data, for neural networks we’ll generally treat them as their own data type, outside of the tidy, tablular data paradigm.</p>
+</section>
+</section>
+</section>
+<section id="matrix-data" class="level2">
+<h2 class="anchored" data-anchor-id="matrix-data">Matrix data</h2>
+<p>While tables are useful for reading and understanding datasets, as we’ve seen, we want to think about neural networks as mathamatical <em>functions</em> of our data. Therefore, in order to work with them we’ll usually need to abstract away from the specifics of our data into a more convenient mathamatical form. In particular, as tablular data has 2 dimensions (observation rows and feature columns), the natural way to think about a dataset mathamatically is as a <em>matrix</em>. By convention, we’ll usually think about our data as an <span class="math inline">\(N \times d\)</span> matrix, where we have <span class="math inline">\(N\)</span> observations and <span class="math inline">\(d\)</span> features and we’ll typically call this matrix <span class="math inline">\(\mathbf{X}\)</span>.</p>
+<p>Under this convention, the first index into our matrix will denote the row or observation and the second, the column or feature. In code, we’ll use <code>numpy</code> arrays to represent matrices, which work similarly.</p>
+<p>We can also think about each row as being a <em>vector</em> of length <span class="math inline">\(d\)</span> representing a single observation. So we’ll say that each observation <span class="math inline">\(\mathbf{x}_i\)</span> is a <span class="math inline">\(d\)</span>-dimension vector <span class="math inline">\(\mathbf{x}_i \in \mathbb{R}^d\)</span>. This is why so far we’ve used the bold (<span class="math inline">\(\mathbf{x}\)</span>) notation.</p>
+<p>Here it’s worth pointing out a bit of a notational quirk that can get a little confusing. A vector is a 1-dimensional object; we can think of it as a 1-d array in code. However, when we do mathamatical operations involving both matrices and vectors, it’s often convenient to treat a vector as either a <span class="math inline">\(d \times 1\)</span> matrix, also known as a <em>column vector</em>, or as a <span class="math inline">\(1 \times d\)</span> matrix (<em>row vector</em>).</p>
+<p>By convention, in mathamatical expressions we’ll assume that by default, any vector we refer to will be treated as a column vector, <em>even if the vector was a row in a matrix</em>. If we want to treat a vector as a row vector, we will explicitly transpose it. This can get confusing so it’s worth keeping this in your head as we move forward. Under this convention, we might think about our matrix of all observations as:</p>
+<p><span class="math display">\[\mathbf{X} = \]</span></p>
+<section id="encoding-non-numeric-variables" class="level3">
+<h3 class="anchored" data-anchor-id="encoding-non-numeric-variables">Encoding non-numeric variables</h3>
+<p>You might be wondering at this point: if we’re treating everything as matrices and vectors, how do deal with features that aren’t inherently real-valued numbers?</p>
+<p>Integer values are straightforward; we can easily treat them as real numbers already and in code we can simply cast them.</p>
+<p>We’ll talk (a lot) about unstructured text later in this course, so for now will just worry about categorical/ordinal features.</p>
+</section>
+</section>
+<section id="other-types-of-data" class="level2">
+<h2 class="anchored" data-anchor-id="other-types-of-data">Other types of data</h2>
+<p>We’ll focus on tabular data for the first part of this course, but it’s far from the only type of data that we’ll consider. We won’t go into detail here about representing these types of data, we’ll leave that until we introduce the relevant neural network material.</p>
+<section id="image-and-field-data" class="level3">
+<h3 class="anchored" data-anchor-id="image-and-field-data">Image and field data</h3>
+<p>Images are one of the most common inputs to neural networks for many real-world problems. A single image typically consists of thousands to <em>millions</em> of individual measurements making up the <em>pixels</em> of the image (each “pixel” represents the color or brightness of the image at a given location). In tabular data we generally assume each feature has a different interpretation and the order of the features isn’t inherently meaningful. In image data, our features all have the same interpretation (as pixels), and a specific configuration as a 2-dimensional grid.</p>
+<p>More generally, we can think of image data as being a member of the larger category of <em>field data</em>. Field data refers to data where every point in a given space has a value or set of values associated with it. This includes image data (each pixel has a brightness or red, green and blue color values), as well as things like video (with a third, time dimension), audio (with only a time dimension), 3-d medical scans (with x, y <em>and</em> z spatial dimensions) and climate data (latitude and longitude coordinates) among others.</p>
+</section>
+<section id="text-and-sequence-data" class="level3">
+<h3 class="anchored" data-anchor-id="text-and-sequence-data">Text and sequence data</h3>
+<p>Text is another widely used application of neural networks. In this case our observation could be a sentence or paragraph of text. More generally, we can frame this as a variable-length sequence of categorical features (or <em>tokens</em>). Beyond text, we can also frame things like genetic data in this way.</p>
+</section>
+<section id="graphnetwork-data" class="level3">
+<h3 class="anchored" data-anchor-id="graphnetwork-data">Graph/network data</h3>
+<p>In many cases our data might be defined not just by the features of each observation, but also by the <em>relationships</em> between observations. In this case we have what we’d call <em>graph</em> or <em>network</em> data. A classic example would be social networks, where the relationships between people (e.g.&nbsp;whether or not they are friends) is of upmost importance. Other examples include things like protein structures, where the configuration of atoms in a molecule is as important as the types of the atoms.</p>
+</section>
+<section id="multi-modal-data" class="level3">
+<h3 class="anchored" data-anchor-id="multi-modal-data">Multi-modal data</h3>
+<p>In many cases it’s also common to consider more than one type of data at once. For example, a diagnosis system might take in an x-ray image, text of doctor notes and tabular test result data as inputs to its prediction function. We this <strong>multi-modal</strong> data, as it has multiple different types or <em>modes</em> in one (image, text and tabluar).</p>
+</section>
+</section>
+<section id="label-types" class="level2">
+<h2 class="anchored" data-anchor-id="label-types">Label types</h2>
+<p>For our discussion of prediction problems, we’ll assume that the <strong>label</strong> that we want to predict is just a single value, which is why we’ve used the scalar notation <span class="math inline">\(y\)</span>.</p>
+<p>If our labels are real numbers <span class="math inline">\(y \in \mathbb{R}\)</span>, e.g.&nbsp;if we’re trying to predict the red blood cell count of a patient, then we’ll say that we have a <strong>regression</strong> problem.</p>
+<p>Alternatively, if our labels are categorical values, e.g.&nbsp;we’re trying to predict whether or not a patient’s tumor is benign, <span class="math inline">\(y \in \{\textit{benign}, \textit{malignent}\}\)</span>, then we’ll say that we have a <strong>classification</strong> problem.</p>
+<p>If we have a full dataset of <span class="math inline">\(N\)</span> observations and labels, we could refer to the collection of <span class="math inline">\(N\)</span> labels as a vector <span class="math inline">\(\mathbf{y} \in \mathbb{R}^N\)</span>.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

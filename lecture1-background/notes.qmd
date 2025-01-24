@@ -1,1312 +1,249 @@
 ---
-title: "Prerequisites for neural networks"
+title: "Lecture 1: Introduction to Neural Networks"
 format:
     html:
         toc: true
         toc-depth: 3
 ---
 
-# Linear algebra prerequisites
+# Goals of neural networks
 
-We will begin with a review of many of the basic concepts from linear algebra that we will need for this course. As we go through these concepts we will see how to implement them in Python.
+The goal of this course is to learn to build neural neural networks, but first we should make sure that we understand what neural networks do and why we'd be interested in learning about them in the first place. You're probably already familar with a lot of the real-world applications of neural networks, as in the past few years they've changed the way we use technology. Systems for everything from voice recognition, to photo-editing, to text and image generation and more now are largely built on the foundation of neural networks. Let's start by introducing a few broad categories of neural network applications along with some specific examples that you may or may not have seen.
 
-## Numpy
+### Prediction
 
-[**Numpy**](https://numpy.org/) Is the linear algebra library that we will be using for much of this class (later on we will introduce [**PyTorch**](https://pytorch.org/), which is more geared towards neural networks). The standard way to import Numpy is:
+In *prediction* applications neural networks are used to assign a label or a prediction to a given input. Examples of applications using neural networks for prediction include:
 
-```{python}
-import numpy as np
-```
+**Image classification (Example: Google Lens)**
 
-The most basic object from Numpy that we will just is the *array* (`np.array`), which will represent vectors matrices and even higher-dimensional objects known as *tensors*.
+Image classification applications like Google Lens can take an image as input and identify the contents of the image using neural networks. This task will be the focus of one of the later modules in the course.
 
-## Scalars
+![](images/paste-1.png){fig-align="center" width="511"}
 
-**Scalars** are just single numbers. In our math we will typically denote scalars with a lower-case letter. For example, we might call a scalar $x$ and give it a value as $x=3.5$. In code this would be written as:
+*Credit: Google*
 
-```{python}
-x = 3.5
+**Medical diagnosis**
 
-# or as a 0-dimensional numpy array
-x = np.array(3.5)
-```
+Does a patient have lung cancer? Neural networks for medical diagnosis might be able take in a patient s symtoms and test results and give an answer.
 
-In general, we will assume that scalars are *real numbers* meaning decimal numbers in the range $(-\infty, \infty)$. We can denote this as $x \in \mathbb{R}$, meaning "$x$ is in the set of real numbers".
+![](images/paste-2.png){fig-align="center" width="434"}
 
-## Vectors
+*Credit: Microsoft Research*
 
-**Vectors** are ordered lists of numbers, as shown below. We will typically denote vectors with **bold** lower case letters, such as $\mathbf{x}$.
+### Detection
 
-$$
-\mathbf{x} = \begin{bmatrix} 2\\ 5\\ 1\end{bmatrix}
-$$
-
-This **bold** notation is common, but not universal, so expect that external resources may denote things differently!
-
-In Numpy, we can create an array object representing a vector by passing `np.array` a list of numbers.
-
-```{python}
-x = np.array([2, 5, 1])
-```
-
-::: {.callout-note collapse="true"}
-## Other useful vector creation functions
-
-**Constants:**
-
-```{python}
-a = np.zeros(5) # Create a size 5 vector filled with zeros
-print(a)
-a = np.ones(5) # Create a size 5 vector filled with ones
-print(a)
-```
-
-**Integer ranges:**
-
-```{python}
-a = np.array([1,2,3,4,5,6,7])
-print(a)
-# or equivalently, using Python iterables:
-a = np.array( range(1,8) )
-print(a)
-# or the NumPy function np.arange:
-a = np.arange(1, 8)
-print(a)
-```
-
-**Decimal ranges:**
-
-```{python}
-b = np.linspace(1.0, 7.0, 4) # length-4 vector interpolating between 1.0 and 7.0
-print(b)
-c = np.logspace(0.0, 2.0, 5) # length-7 vector interpolating between 10^0 and 10^2 logarithmically
-print(c)
-```
-
-**Combining vectors**
-
-```{python}
-a = np.concatenate([b, c]) # length 4 + 7 vector with the elements of both b and c
-```
-:::
-
-The individual numbers in the vector are called the *entries* and we will refer to them individually as subscripted scalars: $x_1, x_2,…,x_n$, where $n$ is the number of entries or *size* of the vector.
-
-$$
-\mathbf{x} = \begin{bmatrix} x_1\\ x_2\\ x_3\end{bmatrix}
-$$
-
-We may say that $\mathbf{x} \in \mathbb{R}^n$ to mean that $\mathbf{x}$ is in the set of vectors with $n$ real-valued entries. In numpy we can access individual elements of a vector using `[]` operators (note that numpy is 0-indexed!).
-
-```{python}
-x[0]
-```
-
-A vector represents either a *location* or a *change in location* in $n$ -dimensional space. For instance, the $\mathbf{x}$ vector we defined could represent the point with coordinates $(2, 5, 1)$ in 3-D space or a movement of 2 along the first axis, 5 along the second axis and 1 along the third axis.
-
-```{python}
-#| echo: false
-import warnings
-warnings.filterwarnings("ignore")
-import os
-import contextlib
-with open(os.devnull, "w") as f, contextlib.redirect_stdout(f):
-    from manim import *
-
-class LectureScene(Scene):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.camera.background_color = "#ffffff"
-        self.template = TexTemplate()
-        self.template.add_to_preamble(r"\usepackage{amsmath}")
-    
-
-class VectorScene(LectureScene):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.ax = Axes(
-            x_range=[-7.5, 7.5, 1],
-            y_range=[-5, 5, 1],
-            x_length=12,
-            y_length=8,
-            axis_config={"color": GREY},
-        )
-        
-        axes_labels = axes.get_axis_labels()
-        #axes_labels.set_color(GREY)
-        self.add(axes, axes_labels)
-
-class PositiveVectorScene(LectureScene):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.ax = Axes(
-            x_range=[-2.5, 12.5, 1],
-            y_range=[-1, 9, 1],
-            x_length=12,
-            y_length=8,
-            axis_config={"color": GREY},
-        )
-        
-        axes_labels = axes.get_axis_labels()
-        #axes_labels.set_color(GREY)
-        self.add(axes, axes_labels)
-
-class ComparisonVectorScene(LectureScene):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.ax1 = Axes(
-            x_range=[-5, 5, 1],
-            y_range=[-5, 5, 1],
-            x_length=6,
-            y_length=6,
-            axis_config={"color": GREY},
-        )
-        self.ax2 = Axes(
-            x_range=[-5, 5, 1],
-            y_range=[-5, 5, 1],
-            x_length=6,
-            y_length=6,
-            axis_config={"color": GREY},
-        )
-        axgroup = Group(self.ax1, self.ax2)
-        axgroup.arrange_in_grid(buf=2)
-        
-        #axes_labels.set_color(GREY)
-        self.add(axgroup)
-```
-
-```{python}
-#| echo: false
-%%manim -sqh -v CRITICAL --progress_bar none WhatIsAVector
-
-class WhatIsAVector(ComparisonVectorScene):
-    def construct(self):
-        arrow = Arrow(self.ax2.coords_to_point(*ORIGIN), self.ax2.coords_to_point(3, 2, 0), buff=0, color=RED)
-        dot = Dot(self.ax1.coords_to_point(3, 2, 0),  color=RED)
-        line = Line(self.ax1.coords_to_point(*ORIGIN), self.ax1.coords_to_point(3, 2, 0))
-        
-        tip_text = Tex('(3, 2)', color=RED, font_size=30).next_to(arrow.get_end(), RIGHT)
-        dot_tip_text = Tex('(3, 2)', color=RED, font_size=30).next_to(dot, RIGHT)
-        bh = Brace(line, color=GREY)
-        bhtext = bh.get_tex("x_1")
-        bhtext.set_color(GREY)
-        bv = Brace(line, color=GREY, direction=LEFT)
-        bvtext = bv.get_tex("x_2")
-        bvtext.set_color(GREY)
-        
-        myTemplate = TexTemplate()
-        myTemplate.add_to_preamble(r"\usepackage{amsmath}")
-        matlabel =  Tex(r'$\mathbf{x} = \begin{bmatrix} 3 \\ 2 \end{bmatrix}$', tex_template=myTemplate, color=BLACK, font_size=36, )
-        matlabel.to_corner(UL)
-        self.add(arrow, tip_text, dot, dot_tip_text, bh, bv, bhtext, bvtext,  matlabel)
-        # show the circle on screen
-```
-
-## Vectors as data
-
-Vectors do not necessarily need to represent geometric points or directions. As they are simply ordered collections of numbers, we can a vector to represent any type of data in a more formal way.
-
-For example, a space of vectors could represent students, with each entry corresponding to a student's grade in a different subject:
-
-$$
-\text{Student } \mathbf{x} = \begin{bmatrix} \text{Math} \\ \text{CS} \\ \text{Literature} \\\text{History} \end{bmatrix}
-$$
-
-Any two students might have different grades across the subjects. We can represent these two students (say $\mathbf{x}_1$ and $\mathbf{x}_2$) as two vectors.
-
-$$
-\mathbf{x}_1 = \begin{bmatrix} 3.0 \\ 4.0 \\ 3.7 \\ 2.3 \end{bmatrix}, \quad \mathbf{x}_2 = \begin{bmatrix} 3.7 \\ 3.3 \\ 3.3 \\ 4.0 \end{bmatrix}
-$$
-
-## Vector equality
-
-We say that two vectors are *equal* if and only if all of the corresponding elements are equal, so $\mathbf{x} = \mathbf{y}$ implies that $x_1=y_1, x_2=y_2…$. In numpy when we compare two vectors for equality, we get a new vector that indicates which entries are equal.
-
-```{python}
-x = np.array([2, 5, 1])
-y = np.array([3, 5, 2])
-x == y
-```
-
-We can check if all entries are equal (and therefore the vectors are equal) using the `np.all` function.
-
-```{python}
-np.all(x == y), np.all(x == x)
-```
-
-Other comparison operators (`>`,`<`, `>=`, `<=`, `!=`) also perform element-wise comparison in numpy.
-
-## Vector addition
-
-When we add or subtract vectors, we add or subtract the corresponding elements.
-
-$$\mathbf{x} + \mathbf{y} = \begin{bmatrix} x_1\\ x_2\\ x_3\end{bmatrix} + \begin{bmatrix} y_1\\ y_2\\ y_3\end{bmatrix} = \begin{bmatrix} x_1 + y_1\\ x_2 + y_2\\ x_3 + y_3\end{bmatrix}$$ This works the same in numpy
-
-```{python}
-x + y
-```
-
-This corresponds to *shifting* the point $\mathbf{x}$ by the vector $\mathbf{y}$.
-
-```{python}
-#| echo: false
-%%manim -sqh -v CRITICAL --progress_bar none VectorAddition
-
-class VectorAddition(Scene):
-    def construct(self):
-        self.camera.background_color = "#ffffff"
-        axes = Axes(
-            x_range=[-2.5, 12.5, 1],
-            y_range=[-1, 9, 1],
-            x_length=12,
-            y_length=8,
-            axis_config={"color": GREY},
-        )
-        
-        axes_labels = axes.get_axis_labels()
-        #axes_labels.set_color(GREY)
-        self.add(axes, axes_labels)
-
-        v1 = np.array([2, 5, 0])
-        arrow1 = Arrow(axes.c2p(*ORIGIN), axes.c2p(*v1), buff=0, color=RED)
-        dot1 = Dot(axes.c2p(*v1),  color=RED)
-        tt1 = Tex(r'$\mathbf{x}$', color=RED).next_to(arrow1.get_end(), UP)
-        vec1 = Group(arrow1,  tt1)
-
-        v2 = np.array([4, 1, 0])
-        arrow2 = Arrow(axes.c2p(*ORIGIN), axes.c2p(*v2), buff=0, color=BLUE)
-        dot2 = Dot(axes.c2p(*v2),  color=BLUE)
-        tt2 = Tex(r'$\mathbf{y}$', color=BLUE).next_to(arrow2.get_end(), UR)
-        vec2 = Group(arrow2,  tt2)
-        self.add(vec2, vec1)
-        
-        
-        v3 = v1 + v2
-        arrow3 = Arrow(axes.c2p(*ORIGIN), axes.c2p(*v3), buff=0, color=GREEN)
-        dot3 = Dot(axes.c2p(*v3),  color=GREEN)
-        tt3 = Tex(r'$\mathbf{x} + \mathbf{y}$', color=GREEN).next_to(arrow3.get_end(), DR)
-        vec3 = Group(arrow3, tt3)
-
-        bh = Brace(arrow3, color=GREY, direction=UP)
-        bhtext = bh.get_tex(r"x_1+y_1")
-        bhtext.set_color(GREY)
-        bv = Brace(arrow3, color=GREY, direction=LEFT)
-        bvtext = bv.get_tex(r"x_2+y_2")
-        bvtext.set_color(GREY)
-        
-        
-        self.wait()
-        self.play(vec2.animate.shift(axes.c2p(*v1) - axes.c2p(*ORIGIN)))
-        self.wait()
-        self.play(Create(arrow3), Create(tt3), Create(bh), Create(bhtext), Create(bv), Create(bvtext))
-        self.wait(3)
-        
-```
-
-## Element-wise operations
-
-In both mathematical notation and numpy, most operations on vectors will be assumed to be taken *element-wise*. That is,
-
-$$
-\mathbf{x}^2 = \begin{bmatrix} x_1^2 \\ x_2^2 \\ x_3^2 \end{bmatrix} , \quad \log(\mathbf{x}) = \begin{bmatrix} \log x_1 \\ \log x_2 \\ \log x_3 \end{bmatrix},\ \text{etc.}
-$$
-
-In numpy:
-
-```{python}
-x ** 2, np.log(x)
-```
-
-Note that in this class (and in numpy!) logarithms are assumed to be base $e$, otherwise known as *natural logarithms*.
-
-Operations between scalars and vectors are also assumed to be element-wise as in this scalar-vector multiplication
-
-$$
-a\mathbf{x} = \begin{bmatrix} a x_1 \\ a x_2 \\ a x_3 \end{bmatrix}, \quad a + \mathbf{x} = \begin{bmatrix} a + x_1 \\ a + x_2 \\ a + x_3 \end{bmatrix}
-$$
-
-## Vector magnitude
-
-The *magnitude* of a vector its length in $\mathbb{R}^n$, or equivalently the Euclidean distance from the origin to the point the vector represents. It is denoted as$\|\mathbf{x}\|_2$ and defined as:
-
-$$
-\|\mathbf{x}\|_2 = \sqrt{\sum_{i=1}^n x_i^2}
-$$
-
-The subscript $2$ specifies that we are talking about Euclidean distance. Because of this we will also refer to the magnitude as the *two-norm*.
-
-In numpy we can compute this using the `np.linalg.norm` function.
-
-```{python}
-xnorm = np.linalg.norm(x)
-```
-
-We can also compute this explicitly with the `np.sum` function, which computes the sum of the elements of a vector.
-
-```{python}
-xnorm_explicit = np.sqrt(np.sum(x ** 2))
-xnorm, xnorm_explicit
-```
-
-::: {.callout-note collapse="true"}
-## Other useful aggregation functions
-
-```{python}
-print(np.mean(x))    # Take the mean of the elements in x
-print(np.std(x))     # Take the standard deviation of the elements in x
-print(np.min(x))     # Find the minimum element in x
-print(np.max(x))     # Find the maximum element in x
-```
-:::
-
-A **unit vector** is a vector with length $1$. We can find a unit vector that has the same *direction* as $\mathbf{x}$ by dividing $\mathbf{x}$ by it's magnitude:
-
-$$
-\frac{\mathbf{x}}{\|\mathbf{x}\|_2}
-$$
-
-```{python}
-x / np.linalg.norm(x)
-```
-
-## Dot products
-
-The **dot-product** operation between two vectors is defined as
-
-$$
-\mathbf{x} \cdot \mathbf{y} = \sum_{i=1}^n x_i y_i
-$$
-
-More commonly in this class we will write the dot-product between the vectors $\mathbf{x}$ and $\mathbf{y}$ as: $$\mathbf{x}^T \mathbf{y} = \sum_{i=1}^n x_i y_i$$\$
-
-The result of a dot product is a scalar whose value is equal to $\|\mathbf{x}\|_2\|\mathbf{y}\|_2 \cos\theta$, where $\theta$ is the *angle* between them. If$\theta=\frac{\pi}{2}$, the vectors are *orthogonal* and the dot product with be $0$. If $\theta>\frac{\pi}{2}$ or $\theta < -\frac{\pi}{2}$ , the dot product will be negative.
-
-If $\theta=0$ then $\cos(\theta)=1$. In this case we say the vectors are *colinear*. This formulation implies that given two vectors of fixed length, the dot product is maximized with they are colinear ( $\theta=0$ ).
-
-We can compute dot products in numpy using the `np.dot` function
-
-```{python}
-np.dot(x, y)
-```
-
-Geometrically, $\|\mathbf{x}\|_2\cos\theta$ is the length of the *projection* of $\mathbf{x}$ onto $\mathbf{y}$. Thus, we can compute the length of this projection using the dot-product as $\frac{\mathbf{x}\cdot\mathbf{y}}{\|\mathbf{y}\|}$ .
-
-## Matrices
-
-A **matrix** is a 2-dimensional collection of numbers. We will denote matrices using bold capital letters, e.g. $\mathbf{A}$.
-
-$$
-\mathbf{A} = \begin{bmatrix} 3 & 5 & 4 \\ 1 & 1 & 2  \end{bmatrix}
-$$
-
-In numpy we can create a matrix by passing `np.array` as list-of-lists, where each inner list specifies a *row* of the matrix.
-
-```{python}
-A = np.array([[3, 5, 4], [1, 1, 2]])
-A
-```
-
-As with vectors we will denote individual elements of a matrix using subscripts. In this case, each element has 2 coordinates. Conventions is to always list the *row* *first*.
-
-$$
-\mathbf{A} = \begin{bmatrix} A_{11} & A_{12} & A_{13} \\ A_{21} & A_{22} & A_{23} \end{bmatrix}
-$$
-
-In numpy we can access elements in a matrix similarly.
-
-```{python}
-A[1, 2]
-```
-
-As with vectors, we say that two matrices are *equal* if and only if all of the corresponding elements are equal.
-
-::: {.callout-note collapse="true"}
-## Other matrix creation routines
-
-**Basic creation functions**
-
-```{python}
-A0 = np.zeros((3, 4))          # create a 3x4 matrix of all zeros
-A1 = np.ones((4, 4))           # create a 4x4 matrix of all ones
-Ainf = np.full((3, 3), np.inf) # create a 3x3 matrix of all infinities
-I = np.eye(3)                  # create a 3x3 itentity matrix
-```
-
-**Creating a matrix by "reshaping" a vector with the same number of elements**
-
-```{python}
-V = np.arange(1, 13).reshape((3, 4)) # Create a 3x4 matrix with elements 1-12
-```
-
-**Creating matrices by combining matrices**
-
-```{python}
-B = np.tile(A0, (3, 2))               # create a matrix by "tiling" copies of A0 (3 copies by 2 copies)
-B = np.concatenate([A0, A1], axis=0)  # create a (2n x m) matrix by stacking two matrices vertically
-B = np.concatenate([A0, I], axis=1)  # create a (n x 2m) matrix by stacking two matrices horizontally
-```
-:::
-
-## Slicing matrices
-
-Often we will refer to an entire row of a matrix (which is itself a vector) using matrix notation with a single index
-
-$$
-\mathbf{A}_i = \begin{bmatrix} A_{i1} \\ A_{i2} \\ \vdots \end{bmatrix}
-$$
-
-In numpy we can access a single row similarly.
-
-```{python}
-A[1]
-```
-
-We can refer to an entire *column* by replacing the row index with a $*$, indicating we are referring to *all* rows in that column.
-
-$$
-\mathbf{A}_{*i} = \begin{bmatrix} A_{1i} \\ A_{2i} \\ \vdots \end{bmatrix}
-$$
-
-In numpy we can access an entire column (or row) using the *slice* operator `:`, which takes all elements along an axis.
-
-```{python}
-A[:, 1] # Take all elements in column 1
-
-```
-
-We can also use the slice operator to take a subset of elements along an axis.
-
-```{python}
-A[:, 1:3] #Take the second and third columns of A
-```
-
-::: {.callout-note collapse="true"}
-## Advanced slicing in numpy
-
-```{python}
-A = np.arange(1, 13).reshape((3, 4))
-print(A)
-```
-
-**Open-ended slices**
-
-```{python}
-print("A[:2]=", A[:2]) # Take rows up to 2 (not inucluding 2)
-print("A[1:]=", A[1:]) # Take rows starting at (and including) 1
-```
-
-**Taking rows and colmns**
-
-```{python}
-print("A[0, :]=", A[0, :])   # first row, all columns
-print("A[:, 1]=", A[:, 1])   # all rows, second column
-print("A[-1, :]", A[-1, :])  # all columns of the last row
-print("A[:, -2]", A[:, -2])  # second to last column of every row
-```
-
-**More general slicing with steps**
-
-```{python}
-print("A[1,0:2]=", A[1,0:2])
-print("A[0,0:4:2]=", A[0,0:4:2])
-print("A[:,0:4:2]=\n", A[:,0:4:2])
-```
-
-**Taking one row and selected columns**
-
-```{python}
-print("A[2, [1,4]]=",A[2, [0,3]])
-```
-
-**Taking all rows and selected columns**
-
-```{python}
-print("A[:, [1,4]]=\n",A[:, [0,3]])
-```
-:::
-
-## Matrix shapes
-
-The matrix $\mathbf{A}$ above has 2 rows and 3 columns, thus we would specify it's *shape* as $2\times3$. A *square matrix* has the same number of rows and columns.
-
-$$
-\mathbf{A} = \begin{bmatrix} 3 & 5 & 4 \\ 1 & 1 & 2 \\ 4 & 1 & 3 \end{bmatrix}
-$$
-
-We can access the shape of a matrix in numpy using its `shape` property.
-
-```{python}
-A = np.array([[3, 5, 4], [1, 1, 2], [4, 1, 3]])
-print(A.shape)
-```
-
-## Matrix transpose
-
-The **transpose** of a matrix is an operation that swaps the rows and columns of the matrix. We denote the transpose of a matrix $\mathbf{A}$ as $\mathbf{A}^T$.
-
-$$
-\mathbf{A} = \begin{bmatrix} A_{11} & A_{12} & A_{13} \\ A_{21} & A_{22} & A_{23} \end{bmatrix}, \quad \mathbf{A}^T = \begin{bmatrix} A_{11} & A_{21} \\  A_{12} & A_{22} \\  A_{13} & A_{23} \end{bmatrix}
-$$
-
-In numpy we can transpose a matrix by using the `T` property.
-
-```{python}
-A = np.array([[1, 1, 1], [2, 2, 2]])
-A.T
-```
-
-## Element-wise matrix operations
-
-As with vectors, many operations on matrices are performed *element-wise*:
-
-$$
-\mathbf{A} + \mathbf{B} = \begin{bmatrix} A_{11} + B_{11}  & A_{12} + B_{12} & A_{13} + B_{13} \\ A_{21} + B_{21} & A_{22} + B_{22} & A_{23} + B_{23} \end{bmatrix}, \quad \log\mathbf{A} = \begin{bmatrix} \log A_{11}  & \log A_{12} & \log A_{13} \\ \log A_{21} & \log A_{22} & \log A_{23} \end{bmatrix}
-$$
-
-Scalar-matrix operation are also element-wise:
-
-$$
-c\mathbf{A} = \begin{bmatrix} cA_{11}  & cA_{12} & cA_{13} \\ cA_{21} & cA_{22} & cA_{23} \end{bmatrix}
-$$
-
-In numpy:
-
-```{python}
-B = 5 * A 
-A + B
-```
-
-::: {.callout-note collapse="true"}
-## Other element-wise operations
-
-**Unary operations**
-
-```{python}
-np.sqrt(A)     # Take the square root of every element
-np.log(A)      # Take the (natural) log of every element
-np.exp(A)      # Take e^x for every element x in A
-np.sin(A)      # Take sin(x) for every element x in A
-np.cos(A)      # Take cos(x) for every element x in A
-```
-
-**Scalar operations**
-
-```{python}
-A + 2          # Add a scalar to every element of A
-A - 1          # Subtract a scalar from every element of A
-A * 4          # Multiply a scalar with every element of A
-A / 6          # Divide every element by a scalar
-A ** 3         # Take every element to a power
-```
-:::
-
-## Matrix-vector products
-
-A matrix-vector product is an operation between a matrix and a vector that produces a new vector. Given a matrix $\mathbf{A}$ and a vector $\mathbf{x}$, we write the matrix-vector product as:
-
-$$
-\mathbf{A}\mathbf{x} = \begin{bmatrix} A_{11} & A_{12} & A_{13} \\ A_{21} & A_{22} & A_{23} \\ A_{23} & A_{32} & A_{33} \end{bmatrix} \begin{bmatrix} x_1\\ x_2\\ x_3\end{bmatrix} = \begin{bmatrix} \sum_{i=1}^n x_i A_{1i} \\  \sum_{i=1}^n x_i A_{2i} \\  \sum_{i=1}^n x_i A_{3i} \end{bmatrix} = \begin{bmatrix} \mathbf{x}\cdot  \mathbf{A}_{1} \\ \mathbf{x}\cdot  \mathbf{A}_{2} \\ \mathbf{x} \cdot \mathbf{A}_{2} \end{bmatrix}
-$$
-
-In other words, each entry of the resulting vector is the dot product between $\mathbf{x}$ and a row of $A$. In numpy we also use `np.dot` for matrix-vector products:
-
-```{python}
-A = np.array([[3, 5, 4], [1, 1, 2], [4, 1, 3]])
-x = np.array([2, 5, 1])
-
-np.dot(A, x)
-```
-
-We say that a square matrix $A$ defines a *linear mapping* from $\mathbb{R}^n\rightarrow\mathbb{R}^n$, which simply means if we multiply any vector $\mathbf{x}\in\mathbb{R}^n$ by $A$ we get a new vector in $\mathbb{R}^n$ where the elements are a linear combination of the elements in $\mathbf{x}$.
-
-Geometrically the matrix $A$ defines a transformation that scales and rotates any vector $\mathbf{x}$ about the origin.
-
-The number of columns of $A$ must match the size of the vector $\mathbf{x}$, but if $A$ has a different number of rows, the output will simply have a different size.
-
-```{python}
-np.dot(A[:2], x)
-```
-
-In general, an $n\times m$ matrix defines a linear mapping $\mathbb{R}^n\rightarrow\mathbb{R}^m$, transforming $\mathbf{x} \in \mathbb{R}^n$ into a possibly higher or lower dimensional space $\mathbb{R}^m$.
-
-## Matrix multiplication
-
-**Matrix multiplication** is a fundamental operation between two matrices. It is defined as:
-
-$$
-\mathbf{A}\mathbf{B}  = \begin{bmatrix} A_{11} & A_{12} & A_{13} \\ A_{21} & A_{22} & A_{23} \\ A_{23} & A_{32} & A_{33} \end{bmatrix} \begin{bmatrix} B_{11} & B_{12} \\ B_{21} & B_{22} \\ B_{31} & B_{32} \end{bmatrix}  =\begin{bmatrix} \sum_{i=1}^n A_{1i} B_{i1} & \sum_{i=1}^n A_{i1}B_{i2} \\  \sum_{i=1}^n A_{2i}B_{i1} & \sum_{i=1}^n A_{2i}B_{i2}  \\  \sum_{i=1}^n A_{3i}B_{i1} & \sum_{i=1}^n A_{3i}B_{i2} \end{bmatrix} = \begin{bmatrix} \mathbf{A}_{1} \cdot \mathbf{B}_{*1} & \mathbf{A}_{1} \cdot \mathbf{B}_{*2} \\ \mathbf{A}_{2} \cdot \mathbf{B}_{*1} & \mathbf{A}_{2} \cdot \mathbf{B}_{*2}  \\ \mathbf{A}_{1} \cdot \mathbf{B}_{*1} & \mathbf{A}_{1} \cdot \mathbf{B}_{*2}  \end{bmatrix}
-$$
-
-This means that if we multiply an $n\times m$ matrix $\mathbf{A}$ with an $m\times k$ matrix $\mathbf{B}$ we get an $n\times k$ matrix $\mathbf{C}$, such that $\mathbf{C}_{ij}$ is the dot product of the $i$-th row of $\mathbf{A}$ with the $j$-th row of $\mathbf{B}$.
-
-In numpy we once again use the `np.dot` function to perform matrix-multiplications.
-
-```{python}
-B = np.array([[2, -1], [3, 1], [-2, 5]])
-C = np.dot(A, B)
-```
-
-Note that the number of rows of $\mathbf{A}$ must match the number of columns of $\mathbf{B}$ for the matrix multiplication $\mathbf{A}\mathbf{B}$ to be defined. This implies that matrix multiplication is *non-communitive:*
-
-$$
-\mathbf{A}\mathbf{B}\neq \mathbf{B}\mathbf{A}
-$$
-
-However matrix multiplication is *associative* and *distributive*:
-
-$$
-\mathbf{A}(\mathbf{B}\mathbf{C})=(\mathbf{A}\mathbf{B})\mathbf{C}, \quad \mathbf{A}(\mathbf{B} +\mathbf{C}) = \mathbf{A}\mathbf{B} + \mathbf{A}\mathbf{C}
-$$
-
-We can see matrix multiplication as a *composition* of linear maps, meaning that if we take the product $\mathbf{A}\mathbf{B}$ and apply the resulting matrix to a vector $\mathbf{x}$, it is equivalent to first transforming $\mathbf{x}$ with $\mathbf{B}$ and then with $\mathbf{A}$. We can state this succinctly as:
+In *detection* applications, neural networks are used to identify any instances of a particular pattern in a given input. For example:
 
-$$
-(\mathbf{A}\mathbf{B})\mathbf{x} = \mathbf{A}(\mathbf{B}\mathbf{x})
-$$
-
-We can see this in numpy:
-
-```{python}
-x = np.array([1, 3])
-np.dot(np.dot(A, B), x), np.dot(A, np.dot(B, x))
-```
-
-## Vector notation
-
-As we've seen a vector is a 1-dimensional set of numbers. For example, we can write the vector $\mathbf{x} \in \mathbb{R}^3$ as:
-
-$$\mathbf{x} = \begin{bmatrix} x_1 \\ x_2 \\ x_3 \end{bmatrix}$$
-
-A vector can also be seen as either an $n \times 1$ matrix (column vector) or a $1 \times n$ matrix (row vector).
-
-$$\text{Column vector: } \mathbf{x} = \begin{bmatrix}
-x_1 \\
-x_2 \\
-x_3
-\end{bmatrix}, \quad \text{Row vector: } \mathbf{x} = \begin{bmatrix}
-x_1 & x_2 & x_3
-\end{bmatrix}$$
-
-Note that we *may* use the same notation for both as they refer to the same concept (a vector).
-
-The difference between row and column vectors becomes relevant when we consider matrix-vector multiplication. We can write matrix-vector multiplication in two ways: $$\text{Matrix-vector: }\mathbf{A}\mathbf{x} = \mathbf{b}, \quad \text{Vector-matrix: }\mathbf{x}\mathbf{A}^T= \mathbf{b}$$ In *matrix-vector multiplication* we treat $\textbf{x}$ as a column vector ($n \times 1$ matrix), while in *vector-matrix multiplication* we treat it as a row vector ($n \times 1$ matrix). Transposing $A$ for left multiplication ensures that the two forms give the same answer.
-
-In Numpy the `np.dot` function works in this way. Given a matrix `A` and a 1-dimensional vector `x`, performing both operations will give the same result (another 1-dimensional vector):
-
-```{python}
-A = np.array([[ 1,  2, -1],
-              [ 5, -3,  2],
-              [-2,  1, -4],
-             ])
-x = np.array([1, -2, 1])
-
-Ax   = np.dot(A, x)
-xA_T = np.dot(x, A.T)
-print('Ax   = ', Ax)
-print('xA^T = ', xA_T)
-```
-
-## Vector notation revisited
-
-It often is much simpler to explicitly define vectors as being either row or column vectors. The common convention in machine learning is to assume that all vectors are column vectors ($n \times 1$ matricies) and thus a row vector ( $1\times n$ matrix) is obtained by explicit transposition:
-
-$$\text{Column vector: } \mathbf{x} = \begin{bmatrix}
-x_1 \\
-x_2 \\
-x_3
-\end{bmatrix}, \quad \text{Row vector: } \mathbf{x}^T = \begin{bmatrix}
-x_1 & x_2 & x_3
-\end{bmatrix}$$
-
-In this case, we would rewrite the matrix-vector and vector-matrix products we saw above as:
-
-$$\text{Matrix-vector: }\mathbf{A}\mathbf{x} = \mathbf{b}, \quad \text{Vector-matrix: }\mathbf{x}^T\mathbf{A}^T= \mathbf{b}^T$$
-
-In Numpy, we can make a vector into an explicit column or row vector by inserting a new dimension, either with the `np.expand_dims` function or with the indexing operator:
-
-```{python}
-row_x = np.expand_dims(x, axis=0) # Add a new leading dimension to x
-row_x
-```
-
-```{python}
-column_x = np.expand_dims(x, axis=1) # Add a new second dimension to x
-assert np.all(column_x.T == row_x)
-column_x
-```
-
-Alternatively:
-
-```{python}
-row_x = x[None, :]
-column_x = x[:, None]
-```
-
-## Element-wise multiplication
-
-It is important to note that in numpy the `*` operator does **not** perform matrix multiplication, instead it performs element-wise multiplication for both matrices and vectors.
-
-```{python}
-A = np.array([[1, 1], [2, 2], [3, 3]])
-B = np.array([[1, 2], [1, 2], [1, 2]])
-A * B
-```
-
-In mathematical notation we will denote element-wise multiplication as:
-
-$$
-\mathbf{A} \odot \mathbf{B} = \begin{bmatrix} A_{11} B_{11}  & A_{12}  B_{12} & A_{13}  B_{13} \\ A_{21}  B_{21} & A_{22}  B_{22} & A_{23}  B_{23} \end{bmatrix}
-$$
-
-## Matrix reductions
-
-As we saw with vectors, we can take the **sum** of the elements of a matrix using the `np.sum` function:
-
-```{python}
-np.sum(A)
-```
-
-The result is a scalar of the form:
-
-$$
-\text{sum}(\mathbf{A}) = \sum_{i=1}^n\sum_{j=1}^m A_{ij}
-$$
-
-In many cases we may wish to take the sum *along an axis* of a matrix. This operation results in a vector where each entry is the sum of elements from the corresponding row or column of the matrix.
-
-$$
-\text{rowsum}(\mathbf{A}) = \begin{bmatrix} \sum_{i=1}^n A_{i1} \\ \sum_{i=1}^n A_{i2} \\ \sum_{i=1}^n A_{i3} \\ \vdots\end{bmatrix}, \quad \text{colsum}(\mathbf{A}) = \begin{bmatrix} \sum_{j=1}^m A_{1j} \\ \sum_{j=1}^m A_{2j} \\ \sum_{j=1}^m A_{3j} \\ \vdots\end{bmatrix}
-$$
-
-In numpy we can specify a sum along an axis by providing an `axis` argument to `np.sum`. Setting `axis=0` specifies a row-sum, while `axis=1` specifies a column sum.
-
-```{python}
-A = np.array([[1, 1], [2, 2], [3, 3]])
-print(A)
-np.sum(A, axis=0), np.sum(A, axis=1)
-```
-
-::: {.callout-note collapse="true"}
-## Other matrix reduction examples
-
-```{python}
-print(np.mean(A))            # Take the mean of all elements in x
-print(np.std(A, axis=0))     # Take the standard deviation of each column of x
-print(np.min(A, axis=1))     # Find the minimum element in each row of x
-print(np.max(A))             # Find the maximum element in x
-```
-:::
-
-## Identity Matrices
-
-The identity matrix, denoted at $\mathbf{I}$ is a special type of square matrix. It is defined as the matrix with $1$ for every diagonal element ($\mathbf{I}_{i=j}=1$) and $0$ for every other element ($\mathbf{I}_{i\neq j}=0$). A $3\times 3$ identity matrix looks like:
-
-$$\mathbf{I} = \begin{bmatrix}1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1\end{bmatrix}$$
-
-The identify matrix has the unique property that any appropriately sized matrix (or vector) multiplied with $\mathbf{I}$ will equal itself:
-
-$$
-\mathbf{I}\mathbf{A} = \mathbf{A}
-$$
-
-If we think of matrices as linear mappings the *identity* matrix simply maps any vector to itself.
-
-$$
-\mathbf{I} \mathbf{x} = \mathbf{x}
-$$
-
-In numpy we can create an identity matrix using the `np.eye` function:
-
-```{python}
-I = np.eye(3) # Create a 3x3 identity matrix
-```
-
-## Solving systems of linear equations
-
-Consider the matrix-vector product between a matrix $\mathbf{A}$ and a vector $\mathbf{x}$, we can denote the result of this multiplication as $\mathbf{b}$:
-
-$$
-\mathbf{A}\mathbf{x} =\mathbf{b}
-$$
-
-In many common cases we will know the matrix $\mathbf{A}$ and the vector $\mathbf{b}$, but *not* the vector $\mathbf{x}$. In such cases we need to *solve* this equation for $\mathbf{x}$:
-
-$$
-\begin{bmatrix} A_{11} & A_{12} & A_{13} \\ A_{21} & A_{22} & A_{23} \\ A_{23} & A_{32} & A_{33} \end{bmatrix} \begin{bmatrix} \textbf{?}\\ \textbf{?}\\ \textbf{?}\end{bmatrix} = \begin{bmatrix} b_1 \\  b_2 \\  b_3 \end{bmatrix}
-$$
-
-We call this *solving a system of linear equations*. A common algorithm used to find $\mathbf{x}$ is *Gaussian elimination*, the details of which are outside the scope of this course. Luckily, numpy gives us a convenient function for solving this problem: `np.linalg.solve`.
-
-```{python}
-A = np.array([[3, 1], [-1, 4]])
-b = np.array([-2, 1])
-x = np.linalg.solve(A, b)
-```
-
-Note that in some cases there may not be any $\mathbf{x}$ that satisfies the equation (or there may be infinitely many). The conditions for this are beyond the scope of this course.
-
-## Inverse matrices
-
-The *inverse* of a square matrix is denoted by $\mathbf{A}^{-1}$ and is defined as the matrix such that:
-
-$$
-\mathbf{A}\mathbf{A}^{-1} = \mathbf{I}
-$$
-
-This corresponds to the *inverse* of the linear map defined by $\mathbf{A}$. Any vector transformed by $\mathbf{A}$ can be transformed back by applying the inverse matrix:
-
-$$
-\mathbf{A}^{-1}\left(\mathbf{A}\mathbf{x}\right) =\mathbf{x}
-$$
-
-We can also write the solution to a system of linear equations in terms of the inverse, by multiplying both sides by $\mathbf{A}^{-1}$:
-
-$$
-\mathbf{A}\mathbf{x}=\mathbf{b}\quad \longrightarrow \quad \mathbf{A}^{-1}(\mathbf{A}\mathbf{x})=\mathbf{A}^{-1}\mathbf{b} \quad \longrightarrow \quad \mathbf{x}=\mathbf{A}^{-1}\mathbf{b}
-$$
-
-In numpy we can find the inverse of a matrix using the `np.linalg.inv` function:
-
-```{python}
-A_inv = np.linalg.inv(A)
-```
-
-Note that not every matrix has an inverse! Again, we won't worry about these cases for now.
+**Voice recognition (Example: Siri)**
 
-# Calculus prerequisites
+When you say "Hey Siri!" and your phone responds, it was a neural network that recognized your voice; taking as input the audio captured by your phone's microphone and detecting any instances of the activation phrase.
 
-In addition to linear algebra, we will need a number of fundamental concepts from calculus throughout this course. We will review them here.
+![](images/paste-3.png){fig-align="center" width="471"}
 
-## Functions
+*Credit: Apple*
 
-A **function** is a general mapping from one set to another.
+**Object detection (Example: YOLO)**
 
-$$
-y=f(x),\quad f:\mathbb{R}\rightarrow\mathbb{R}
-$$
+Object detection neural networks like YOLO (You Only Look Once) can identify multiple objects in an image. These types of networks are often used in applications like autonomous cars, which need to identify vehicles, pedestrians and other hazards on the road.
 
-In this course will focus on functions of *real* *numbers,* that is, mappings from real numbers to other real numbers this is denoted using the notation $\mathbb{R}\rightarrow\mathbb{R}$ above. We call the set of possible inputs the *domain* of the function (in this case real numbers) and the corresponding set of possible outputs the *codomain* or *range* of the function. In the notation above $x$ is the real valued *input* and $y$ is the real-valued *output*.
-
-We can definite functions as compositions of simple operations. For example we could define a polynomial function as:
-
-$$
-f(x) = x^2 + 3x + 1
-$$
+![](images/paste-4.png){fig-align="center" width="625"}
 
-In code we can implement functions as, well, functions:
+### Generation
 
-```{python}
-def f(x):
-    return x ** 2 + 3 * x + 1
+Possibly the most widely discussed application of neural networks in recent years has been *generative models*, that is models that can generate realistic new data such as images and text.
 
-f(5)
-```
+**Text generation (Example: ChatGPT)** Large language models, such as the GPT models that power ChatGPT, use neural networks to synthesize realistic language.
 
-## Derivatives
+![](images/paste-5.png){fig-align="center" width="526"}
 
-The **derivative** of a function at input $x$ defines how the function's output changes as the input changes from $x$. It is equivalent to the *slope* of the line tangent to the function at the input $x$. We'll use the notation $\frac{df}{dx}$ to denote the *derivative* of the function $f$ at input $x$. Formally:
+*Credit: OpenAI*
 
-$$
-\frac{df}{dx} = \underset{\epsilon\rightarrow0}{\lim} \frac{f(x+\epsilon) - f(x)}{\epsilon}
-$$
+**Image generation (Example: Dall-E 3)** Deep generative models for images similarly can generate realistic images.
 
-Intunitively, this means if we change our input $x$ by some small amount $\epsilon$, the output of our function will change by approximately $\frac{df}{dx}\epsilon$
+![](images/paste-6.png){fig-align="center" width="526"}
 
-$$
-f(x+\epsilon) \approx f(x)+\frac{df}{dx}\epsilon
-$$
+### Transformation
 
-Note that with respect to $\epsilon$ this approximation is a line with slope $\frac{df}{dx}$ and intercept $f(x)$, therefore we say that this is a *linear approximation* to the function $f$ at input $x$.
+Transformation tasks take existing data in the form of images or text and create new and improved versions.
 
-We can also use the notation $\frac{d}{dx}$ to denote the *derivative operator*. This means "find the derivative of the following expression with respect to $x$".
+**Photo editing (Example: Adobe Photoshop)**
 
-$$
-\frac{d}{dx}f(x) = \frac{df}{dx}
-$$
+Image editing tools like Photoshop use neural networks to output enhanced versions of images, either adjusting properties like color or even filling in missing parts of images!
 
-::: {.callout-note collapse="true"}
-## Caveat
+![](images/paste-7.png){fig-align="center" width="635"}
 
-This definition assumes that the limit exists at the input $x$, which is not always true. We will see practical examples later in the course where this assumption does not hold.
-:::
+*Credit: Adobe*
 
-## Derivative functions
+**Photo editing (Example: Google Translate)**
 
-We can also talk about the function that maps any input $x$ to the derivative $\frac{df}{dx}$ we call this the *derivative function* and denote it as $f'(x)$. So:
+Translation tools like Google translate use neural networks to map text in one language to another much more effectively than prior methods.
 
-$$
-\frac{df}{dx}=f'(x)
-$$
+![](images/paste-8.png){fig-align="center" width="658"}
 
-Given a function defined as a composition of basic operations, we can use a set of standard rules to find the corresponding derivative function. For example using the rules $\frac{d}{dx}x^a=ax$ , $\frac{d}{dx}ax=a$ and $\frac{d}{dx}a=0$, we can derive the derivative function for the polynomial above:
+*Credit: Google*
 
-$$
-f(x) = x^2 + 3x + 1
-$$
+### Approximation
 
-$$
-f'(x) = 2x + 3
-$$
+**Molecular dynamics (Example: AlphaFold)**
 
-::: {.callout-note collapse="true"}
-## Basic derivative rules
+Neural networks are finding applications in the physical sciences allowing researchers to create approximate simulations of complex physical systems such as molecules. AlphaFold uses neural networks to predict the structure of proteins given their chemical composition.
 
-| Operation           | Derivative $\frac{d}{dx}$            |
-|---------------------|--------------------------------------|
-| $a$                 | $0$                                  |
-| $ax$                | $a$                                  |
-| $x^a$               | $ax$                                 |
-| $\log(x)$           | $\frac{1}{x}$                        |
-| $e^x$               | $e^x$                                |
-| $f(x) + g(x)$       | $f'(x)+g'(x)$                        |
-| $f(x)g(x)$          | $f'(x)g(x) + f(x)g'(x)$              |
-| $\frac{f(x)}{g(x)}$ | $\frac{f'(x)g(x)-f(x)g'(x)}{g(x)^2}$ |
-:::
+![](images/paste-9.png){fig-align="center" width="584"}
 
-## Chain rule
+*Credit: Google*
 
-*Composing* two functions means to apply one function to the output of another, for example we could apply $f$ to the output of $g$:
+**Rendering (Example: NeRFs)**
 
-$$
-y = f\big(g\left(x\right)\big)
-$$
+Neural radiance fields (or NeRFs for short) use neural networks to quickly approximate new views of a 3d scene without the need for traditional modeling and rendering.
 
-This is easily replicated in code:
+![](images/paste-10.png){fig-align="center" width="687"}
 
-```{python}
-def f(x):
-    return x ** 2 + 3 * x + 1
+# Prediction problems
 
-def g(x):
-    return 5 * x - 2
+We'll cover most of these application categories in the course, but we'll start our journey with what is likely the most common, *prediction problems*. As a motivating example, we'll put ourselves in the shoes of a medical professional. In this context, we will likely want to be able to predict if a given patient has a disease, such as appendicitis. So we want a system that can take in some information about our patient and use it to make an informed prediction as to whether or not our patient has a given condition.
 
-f(g(3))
-```
+![*Icon credit: vecteezy.com*](images/paste-11.png){fig-align="center" width="578"}
 
-The **chain** **rule** tells us how to find the derivative of a composition of functions like this. We can write the rule either in terms of derivatives or derivative functions
+Let's introduce some notation, so that we can start to formalize this problem a bit better. We'll use $\mathbf{x}$ to denote the input to our system, which we'll call an **observation**. In this case our observation is a collection of information we have about our patient, e.g. age, prior conditions, test results, etc. Likewise, we'll use $y$ to denote the *output* of our system, which we'll call a **label**. In this case our label is a determination of whether or not our patient has the condition. So ultimately what we want is a mapping from any input $\mathbf{x}$ to an output $y$. Mathamatically, what we want is a *function*.
 
 $$
-\frac{d}{dx}f\big(g\left(x\right)\big) = \frac{df}{dg}\frac{dg}{dx} \quad \text{or} \quad \frac{d}{dx}f\big(g\left(x\right)\big) =  f'\big(g\left(x\right)\big)g'\left(x\right)
+\text{Input: } \mathbf{x}  \underset{predict}{\longrightarrow} \text{ Output: }y, \quad y=f(\mathbf{x})
 $$
-
-Note that in our derivative notation we're using $f$ and $g$ to denote the outputs of the respective functions.
-
-::: {.callout-note collapse="true"}
-## Derivatives in code
 
-A natural question to ask at this point is: *does the derivative operator exist in Python or numpy?*. The answer is amazingly: **yes!** However implementing such an operator is nontrivial. In fact, a significant portion of this course will be devoted to exploring how to implement exactly such an operation for numpy. As a preview, we will end up with the ability to take derivatives as follows:
+Ultimately, what most of this class is about is simply how to find a function $f$ that does a good job of making these sorts of predictions in the real world. That may sound simple enough, but it practice it can be very difficult! **Neural networks** are a class of functions that are very powerful for a wide variety of problems.
 
-```{python}
-#| eval: false
-def f(x):
-    return x ** 2 + 3 * x + 1
+![](images/paste-13.png){fig-align="center" width="823"}
 
-fx = f(5)
-df_dx = derivative(f)(5)
-```
-:::
+As a preview of what's to come, our general approach will be to start with a **dataset** $\mathcal{D}$ made up of $N$ pairs of inputs ( $\mathbf{x}$ ) and outputs ( $y$ ):
 
-## Partial derivatives
-
-A function does not need to be restricted to having a single input. We can specify a function with multiple inputs as follows:
-
 $$
-f(x, y, z) = x^2 + 3xy - \log(z)
+\mathcal{D} = \{ (\mathbf{x}_1, y_1),\ (\mathbf{x}_2, y_2),\ ...\ (\mathbf{x}_N, y_N)\}
 $$
-
-In code this would look like;
-
-```{python}
-def f(x, y, z):
-    return x ** 2 + 3 * y + np.log(z)
-```
-
-A **partial derivative** is the derivative of a multiple-input function with respect to a single input, *assuming all other inputs are constant*. We will explore the implications of that condition later on in this course. For now, we will simply view partial derivatives as a straightforward extension of derivatives, using the modified notation $\frac{\partial}{\partial x}$.
 
-More formally, we can define the partial derivative with respect to each input of a function as:
+We'll then try to choose a function $f$ that does a good job matching the mapping expressed by this dataset. The fact that we typically *learn* neural network functions from examples is why we generally consider neural networks to be part of the field of *machine learning*. We'll get back to how this process works later. For now, let's focus on what our data actually looks like in practice.
 
-$$
-\frac{\partial f}{\partial x} = \underset{\epsilon\rightarrow0}{\lim} \frac{f(x+\epsilon, y, z) - f(x,y,z)}{\epsilon}, \quad \frac{\partial f}{\partial y} = \underset{\epsilon\rightarrow0}{\lim} \frac{f(x, y+\epsilon, z) - f(x,y,z)}{\epsilon}
-$$
-
-These partial derivatives tell us how the output of the function changes as we change each of the inputs individually.
+![Machine learning overview](images/paste-12.png){fig-align="center" width="914"}
 
-## Partial derivative functions
+# Types of data
 
-We can also specify partial derivative functions in the same way as derivative functions. We'll use subscript notation to specify which input we are differentiating with respect to.
+The first step in all of this is going be thinking about how to translate a real-world input like a patient, image, text record etc. as a mathamatical object $\mathbf{x}$ that we can reason about abstractly and ultimately represent in a computer program. We'll do the same for our output $y$ in a moment.
 
-$$
-\frac{\partial f}{\partial x} = f_x'(x, y, z)
-$$
+## Tabluar data
 
-We can derive partial derivative functions using the same set of derivative rules:
+If you've worked with Excel, SQL or even many physical records, you're likely familiar with the concept of **tabular data**. Tabular data essentially refers to any data that we can easily represent in a table format. As this could mean a few different things, when we talk about tabular data in this class, we'll specifically be refering to data in what is often called the **tidy data** format.
 
-$$
-f(x, y, z) = x^2 + 3xy - \log(z)
-$$
+### Tidy data
 
-$$
-f_x'(x, y, z) = 2x + 3y
-$$
+We'll say that data is in in the "tidy" format if each **observation** is represented with a single row of our table and each **feature** is represented with a single column. An observation is an entity, such as a patient in a hospital, that we may want to make preditions about. A **feature** (or variable) represents some measureable property that every observation has. For the patients in our example the set of features might correspond to measurements like the heart rate, blood pressure or oxygen level of each patient, as well as properties like the patient's name, age and gender. This organizaton makes it easy to find any given measurement for any given patient (just use the row and column coordinates in the table). For tabular data we'll assume that the ordering of both rows and columns in our table has no special significance, so could change the ordering of either without altering what our table represents.
 
-$$
-f_y'(x, y, z) = 3x
-$$
+![Appendicitis dataset in the "tidy" format](images/paste-14.png){fig-align="center" width="692"}
 
-$$
-f_z'(x, y, z) = -\frac{1}{z}
-$$
+Note that how we organize a set of measurements into observations and features isn't nessecarily fixed, and might change depending on our goals. For example, if our goal is to predict whether a patient has some given underlying condition, we might have one observation per patient. Alternatively, if a given patient visits the hospital several times and our goal is to predict whether a patient will be admitted overnight for a given visit, we might have one observation per visit.
 
-## Functions of vectors
+### Variable types
 
-We can also define functions that take vectors (or matrices) as inputs.
+The idea of tidy data should also be intuitive to programmers familiar with the object-oriented programming paradigm. There we organize our data in objects (observations) where each object has a common set of properies (features). Just as in object oriented programming, its important to consider the **type** of each feature, which defines what values it can take and what operations we can perform on it. We'll consider a few useful general feature types and how we might map them to concrete types in code.
 
-$$
-y = f(\mathbf{x}) \quad f: \mathbb{R}^n \rightarrow \mathbb{R}
-$$
+![](images/paste-15.png){fig-align="center" width="700"}
 
-Here $f$ is a mapping from length $n$ vectors to real numbers. As a concrete example we could define the function:
+#### Quantitative features
 
-$$
-f(\mathbf{x}) = \sum_{i=1}^n x_i^3 + 1
-$$
+**Quantitative features** are simply numbers like our patient's blood pressure, heart rate etc. We can further subdivide this category into integer features, that we'd encode as integer types (e.g. `int`, `uint`) and real-valued features that we'd encode as floating point values (e.g. `float`).
 
-Here's the same function in numpy:
+#### Categorical features
 
-```{python}
-def f(x):
-    return np.sum(x ** 3) + 1
+**Categorical features** are features that can only take a few distinct, non-numerical values. For example this could be the department that a patient was admitted to ({ER, Neurology, Obstetrics, Dermatology, etc.}) or the patient's gender identity ({female, male, non-binary, etc.}). These values might be best encoded through an `enum` type, but are typically encoded as either a `string` or `int` in practice.
 
-f(np.array([1, 2, 3]))
-```
+**Boolean features** are a special case of categorical features with only two possible values. They could be encoded as an `bool` or `int` type.
 
-Note that functions of vectors are equivalent to multiple-input functions, but with a more compact notation!
+#### Ordinal features
 
-$$f(\mathbf{x}) \equiv f(x_1, x_2, x_3...)$$
+**Ordinal features** are something of a middle-ground between quantitative and categorical features. They represent features where the possible values have a well-definded ordering (like numbers), but no concept of distance (like categorical values). For example our patients might be assigned a priority level that takes the values `low`, `medium` or `high`. In this case it's well-defined to say that `low` \< `medium` \< `high`, but asking for the result of `high - low` is not defined. We might encode these features as `int` types as well.
 
-## Partial derivatives of vectors
+#### General "nomial" features
 
-We can take partial derivates of vector functions simply by recognizing that the input vector is a set of variables and applying the standard set of derivative rules.
+Non-numerical features that don't have a fixed set of possible values is what we'd call **nominal** or unstructured data. While it's common in many contexts to see such values within tabluar data, for neural networks we'll generally treat them as their own data type, outside of the tidy, tablular data paradigm.
 
-For example, given a vector $\mathbf{x}\in \mathbb{R}^3$: $$\mathbf{x} = \begin{bmatrix}x_1 \\ x_2\\ x_3 \end{bmatrix}$$ We can find the partial derivative of the dot-product of $\mathbf{x}$ with itself with respect to a single entry: $x_1$: $$\frac{\partial }{\partial x_1} \mathbf{x}^T\mathbf{x}=$$ $$\frac{\partial }{\partial x_1} \sum_{i=1}^n x_i x_i = \frac{\partial }{\partial x_1}(x_1^2 + x_2^2+x_3^2)$$ We see that the terms $x_2^2$ an $x_3^2$ do not depend on $x_1$, therefore the derivative is $0$ and the final result is: $$=\frac{\partial }{\partial x_1} x_1^2 = 2 x_1$$
+## Matrix data
 
-In general, the addition rule applies to summations, so: $$\frac{\partial }{\partial x}\sum f(x) = \sum \frac{\partial }{\partial x} f(x)$$
+While tables are useful for reading and understanding datasets, as we've seen, we want to think about neural networks as mathamatical *functions* of our data. Therefore, in order to work with them we'll usually need to abstract away from the specifics of our data into a more convenient mathamatical form. In particular, as tablular data has 2 dimensions (observation rows and feature columns), the natural way to think about a dataset mathamatically is as a *matrix*. By convention, we'll usually think about our data as an $N \times d$ matrix, where we have $N$ observations and $d$ features and we'll typically call this matrix $\mathbf{X}$.
 
-Other derivative rules also apply. For example, the chain rule works as normal: $$\frac{\partial }{\partial x_1} f(\mathbf{x}^T\mathbf{x})=$$ $$f'(\mathbf{x}^T\mathbf{x}) \frac{\partial }{\partial x_1} \mathbf{x}^T\mathbf{x} = f'(\mathbf{x}^T\mathbf{x}) (2x_1)$$
+![](images/paste-16.png){fig-align="center" width="656"}
 
-## Gradients
+Under this convention, the first index into our matrix will denote the row or observation and the second, the column or feature. In code, we'll use `numpy` arrays to represent matrices, which work similarly.
 
-The **gradient** of a vector-input function is a vector such that each element is the partial derivative of the function with respect to the corresponding element of the input vector. We'll use the same notation as derivatives for gradients.
+![](images/paste-17.png){fig-align="center" width="639"}
 
-$$
-\frac{df}{d\mathbf{x}} = \begin{bmatrix} \frac{\partial f}{\partial x_1} \\ \frac{\partial f}{\partial x_2} \\ \frac{\partial f}{\partial x_3} \\ \vdots \end{bmatrix}
-$$
+We can also think about each row as being a *vector* of length $d$ representing a single observation. So we'll say that each observation $\mathbf{x}_i$ is a $d$-dimension vector $\mathbf{x}_i \in \mathbb{R}^d$. This is why so far we've used the bold ($\mathbf{x}$) notation.
 
-The gradient is a vector that *tangent* to the function $f$ at the input $\mathbf{x}$. Just as with derivatives, this means that the gradient defines a *linear* *approximation* to the function at the point $\mathbf{x}$.
+Here it's worth pointing out a bit of a notational quirk that can get a little confusing. A vector is a 1-dimensional object; we can think of it as a 1-d array in code. However, when we do mathamatical operations involving both matrices and vectors, it's often convenient to treat a vector as either a $d \times 1$ matrix, also known as a *column vector*, or as a $1 \times d$ matrix (*row vector*).
 
-$$
-f(\mathbf{x}+\mathbf{\epsilon}) \approx f(\mathbf{x}) + \frac{df}{d\mathbf{x}} \cdot \mathbf{\epsilon}
-$$
+![](images/paste-18.png){fig-align="center" width="680"}
 
-Where $\mathbf{\epsilon}$ is now a small vector. Intuitively, this means that if we take a small step *in any direction* as defined by $\mathbf{\epsilon}$, the gradient will approximate the change in the output of the function. Becuase we are now in more than 1 dimension, this approximation defines a *plane* in $\mathbb{R}^n$.
+By convention, in mathamatical expressions we'll assume that by default, any vector we refer to will be treated as a column vector, *even if the vector was a row in a matrix*. If we want to treat a vector as a row vector, we will explicitly transpose it. This can get confusing so it's worth keeping this in your head as we move forward. Under this convention, we might think about our matrix of all observations as:
 
-Another extremely important property of the gradient is that it points in the direction of maximum change in the function. Meaning that if we were to take an infinitesimal step $\mathbf{\epsilon}$ from $\mathbf{x}$ in any direction, stepping in the gradient direction would give use the maximum value of $f(\mathbf{x} +\mathbf{\epsilon})$. We can see this from the approximation above: $f(\mathbf{x} +\mathbf{\epsilon})$ is maximized when $\frac{df}{d\mathbf{x}}$ and $\mathbf{\epsilon}$ are colinear.
+$$\mathbf{X} = \begin{bmatrix} \mathbf{x}_1^T \\ \mathbf{x}_2^T \\ \mathbf{x}_3^T \\ \vdots  \end{bmatrix} = \begin{bmatrix} x_{11} & x_{12} & x_{13} & \dots \\ x_{21} & x_{22} & x_{23} & \dots \\ x_{31} & x_{32} & x_{33} & \dots\\ \vdots & \vdots & \vdots & \ddots  \end{bmatrix}$$
 
-We can define the gradient in this sense this more formally as:
+This will become relevant when reading mathematical expressions of matrices and vectors in this class. For example, consider the two vectors $\mathbf{a}$ and $\mathbf{b}$.
 
 $$
-\frac{df}{d\mathbf{x}}= \underset{\gamma \rightarrow 0}{\lim}\ \underset{\|\mathbf{\epsilon}\|_2 < \gamma}{\max} \frac{f(\mathbf{x} + \mathbf{\epsilon}) - f(\mathbf{x})}{\|\mathbf{\epsilon}\|_2}
+\mathbf{a} = \begin{bmatrix} 2 \\ 1 \\ 3\\ \end{bmatrix},\\ \mathbf{b} = \begin{bmatrix} 1 \\ 4 \\ 2\\ \end{bmatrix}, \\
 $$
-
-## Gradient functions
 
-Just as with derivatives and partial derivatives, we can define a **gradient function** that maps an input vector $\mathbf{x}$ to the gradient of the function $f$ at $\mathbf{x}$ as:
+We can write the dot product as:
 
 $$
-\frac{df}{d\mathbf{x}}=\nabla f(\mathbf{x})
+\mathbf{a}^T \mathbf{b} = \big{[} 2 \ \ \ 1 \ \ \ \  3 \big{]} \begin{matrix} \begin{bmatrix} 1 \\ 4 \\ 2\\ \end{bmatrix} \\ \\ \\ \end{matrix} =12
 $$
 
-Here $\nabla f$ is the gradient function for $f$. If the function takes multiple vectors as input, we can specify the gradient function with respect to a particular input using subscript notation:
+Similarly we can write an outer product as:
 
 $$
-\frac{df}{d\mathbf{x}}= \nabla_{\mathbf{x}} f(\mathbf{x}, \mathbf{y}), \quad \frac{df}{d\mathbf{y}}= \nabla_{\mathbf{y}} f(\mathbf{x}, \mathbf{y})
+\mathbf{a} \mathbf{b}^T =  \begin{matrix} \begin{bmatrix} 2 \\ 1 \\ 3\\ \end{bmatrix} \\ \\ \\ \end{matrix} \big{[} 1 \ \ \ 4 \ \ \ \  2 \big{]}  = \begin{matrix} \begin{bmatrix} 2 & 8 & 4 \\ 1 & 4 & 2 \\ 3 & 12 & 6 \end{bmatrix}\\ \\ \\ \end{matrix}
 $$
-
-Note that the gradient function is a mapping from $\mathbb{R}^n\rightarrow\mathbb{R}^n$, meaning that it returns a vector with the same size as the input.
-
-# Probability and statistics prerequisites
-
-## Random variables
-
-A **random variable** represents an unknown or random value. This could be the outcome of a unpredictable event such as a coin flip, a dice roll, or the weather, but could also represent our beliefs about something we simply haven't directly observed, such as a patient's diagnosis.
-
-We'll typically denote a random variable with an upper-case letter and it's instantiation with the same letter in lower-case 
-
-## Distributions
-
-## Uniform distribution
-
-## Bernoulli distribution
-
-## Categorical distribution
-
-## Normal distribution
-
-## Expectation
-
-## Variance
-
-## Standard deviation
-
- 
-
-# Visualization with NumPy and Matplotlib
-
-Throughout this course it will be extremely important to be able to *visualize* the data and functions that we are working with. This section will give a quick introduction to the Python visualization tools we will be using.
-
-[MatPlotLib](http://matplotlib.org/) is a library for generating plots and figures in Python, specifically modeled to mimic the capabilities of Matlab for generating easy visualizations. There are many alternative libraries for plotting data, some with featurs that matplotlib lacks, but MatPlotLib's simplicity and similarity to Matlab syntax and capabilities have made it fairly popular.
-
-## Getting started
-
-The standard way to import MatPlotLib is:
-
-```{python}
-import matplotlib.pyplot as plt
-```
-
-The standard approach to interacting with MatPlotLib can take some getting used to. In MatPlotLib the current plot that we're working on is part of the *global state*, meaning that we don't create an explicit plot object, we simply call functions of `plt` to update what the current plot will look like.
-
-When working in Jupyter notebooks, the current plot is displayed at the end of the current cell when it is run.
-
-## Scatterplots and line plots
-
-The most typical action is to plot one sequence (x-values) against another (y-values); this can be done using disconnected points (a scatterplot), or by connecting adjacent points in the sequence (in the order they were provided). The latter is usually used to give a nice (piecewise linear) visualization of a continuous curve, by specifying x-values in order, and the y-values given by the function at those x-values.
-
-**Plotting** a scatter of data points:
-
-```{python}
-x_values = np.random.rand(1,10)   # unformly in [0,1)
-y_values = np.random.randn(1,10)  # Gaussian distribution
-plt.plot(x_values, y_values, 'ko');
-```
-
-The string determines the plot appearance -- in this case, black circles. You can use color strings ('r', 'g', 'b', 'm', 'c', 'y', ...) or use the "Color" keyword to specify an RGB color. Marker appearance ('o','s','v','.', ...) controls how the points look.
-
-If we connect those points using a line appearance specification ('-','--',':',...), it will not look very good, because the points are not ordered in any meaningful way. Let's try a line plot using an ordered sequence of x values:
-
-```{python}
-x_values = np.linspace(0,8,100)
-y_values = np.sin(x_values)
-plt.plot(x_values,y_values,'b');
-```
-
-This is actually a plot of a large number of points (100), with no marker shape and connected by a solid line.
-
-For plotting multiple point sets or curves, you can pass more vectors into the plot function, or call the function multiple times:
-
-```{python}
-x_values = np.linspace(0,8,100)
-y1 = np.sin(x_values)         # sinusoidal function
-y2 = (x_values - 3)**2 / 12   # a simple quadratic curve
-y3 = 0.5*x_values - 1.0       # a simple linear function
-
-plt.plot(x_values, y1, 'b-', x_values, y2, 'g--');  # plot two curves
-plt.plot(x_values, y3, 'r:'); # add a curve to the plot
-```
-
-You may want to explicitly set the plot ranges -- perhaps the most common pattern is to plot something, get the plot's ranges, and then restore them later after plotting another function:
-
-```{python}
-x_values = np.linspace(0,8,100)
-y1 = np.sin(x_values)         # sinusoidal function
-y3 = 0.5*x_values - 1.0       # a simple linear function
-
-plt.plot(x_values, y1, 'b-') 
-ax = plt.axis()               # get the x and y axis ranges
-print(ax)
-# now plot something else (which will change the axis ranges):
-plt.plot(x_values, y3, 'r:'); # add the linear curve
-plt.axis(ax);                 # restore the original plot's axis ranges
-```
-
-## Legends
-
-When plotting multiple point sets or curves we'll likely want to be able to distinguish what each plot represents. We can do this by specifying a *label* for each plot, then adding a *legend* that tells us what each represents.
-
-```{python}
-x_values = np.linspace(0,8,100)
-y1 = np.sin(x_values)         # sinusoidal function
-y2 = (x_values - 3)**2 / 12   # a simple quadratic curve
-y3 = 0.5*x_values - 1.0       # a simple linear function
 
-plt.plot(x_values, y1, 'b-', label='sin(x)');  # plot two curves
-plt.plot(x_values, y2, 'g--', label='$(x-3)^2 / 12$')
-plt.plot(x_values, y3, 'r:', label='$.5x-1$'); # add a curve to the plot
-plt.legend();
-```
+### Encoding non-quantitative features
 
-Here surrounding text in a label with `$ $` allows us to write mathamatical equations as in LaTex!
+You might be wondering at this point: if we're treating everything as matrices and vectors, how do deal with features that aren't inherently real-valued numbers? Generally the approach will be to convert them into real numbers in some way.
 
-## Titles and labels
+**Integer features** are straightforward; we can easily treat them as real numbers already and in code we can simply cast them. We'll typically map **ordinal features** to the first few non-negative integers, e.g. $\{\text{none},\ \text{low},\ \text{medium},\  \text{high} \} \rightarrow \{ 0, \ 1, \ 2, \ 3 \}$. **Boolean features** are usually mapped to either $\{0, 1\}$ or to $\{-1, 1\}$. Finally **categorical values** are typically first mapped to a set of boolean values. If a categorical feature as $c$ possible values, then it will be mapped to $c$ new boolean variables, each indicating whether the original feature had that value. This is often called *one-hot encoding*.
 
-Typically we would like those viewing our plot to understand what the axes mean! We can label the x and y axes using `plt.xlabel()` and `plt.ylabel()` respectively. We can also set a title for our plot using `plt.title()`
+![](images/paste-19.png){width="846"}
 
-```{python}
-x_values = np.linspace(0,8,100)
-y = np.sin(x_values)          # sinusoidal function
+We'll talk (a lot) about unstructured text later in this course, so for now will just worry about categorical/ordinal features.
 
-plt.plot(x_values, y, 'b-');  # plot two curves
-plt.xlabel('x')               # set the label for the x-axis
-plt.ylabel('$sin(x)$')        # set the label for the y-axis
-plt.title('x vs. $sin(x)$');  # set the title for the plot
-```
+## Label types
 
-## Histograms
+For our discussion of prediction problems, we'll assume that the **label** that we want to predict is just a single value, which is why we've used the scalar notation $y$.
 
-Histograms are also useful visualizations:
+If our labels are real numbers $y \in \mathbb{R}$, e.g. if we're trying to predict the number of hours a patient will stay in the hospital, then we'll say that we have a **regression** problem.
 
-```{python}
-plt.hist(y2, bins=20);
-```
+![](images/paste-20.png){fig-align="center" width="391"}
 
-The outputs of hist include the bin locations, the number of data in each bin, and the "handles" to the plot elements to manipulate their appearance, if desired.
+Alternatively, if our labels are categorical values, e.g. we're trying to predict whether or not a patient has appendicitis, $y \in \{\textit{healthy}, \textit{appendicitis}\}$, then we'll say that we have a **classification** problem.
 
-## Subplots and plot sizes
+![](images/paste-22.png){fig-align="center" width="373"}
 
-It is often useful to put more than one plot together in a group; you can do this using the subplot function. There are various options; for example, "sharex" and "sharey" allow multiple plots to share a single axis range (or, you can set it manually, of course).
+If we have a full dataset of $N$ observations and labels, we could refer to the collection of $N$ labels as a vector $\mathbf{y} \in \mathbb{R}^N$.
 
-I often find it necessary to also change the geometry of the figure for multiple subplots -- although this is more generally useful as well, if you have a plot that looks better wider and shorter, for example.
+## Other types of data
 
-```{python}
-fig,ax = plt.subplots(1,3, figsize=(8.0, 2.0))      # make a 1 x 3 grid of plots:
-ax[0].plot(x_values, y1, 'b-');   # plot y1 in the first subplot
-ax[1].plot(x_values, y2, 'g--');  #   y2 in the 2nd
-ax[2].plot(x_values, y3, 'r:');   #   and y3 in the last
+We'll focus on tabular data for the first part of this course, but it's far from the only type of data that we'll consider. We won't go into detail here about representing these types of data, we'll leave that until we introduce the relevant neural network material.
 
-```
+### Image and field data
 
-## Subplot options
+Images are one of the most common inputs to neural networks for many real-world problems. A single image typically consists of thousands to *millions* of individual measurements making up the *pixels* of the image (each "pixel" represents the color or brightness of the image at a given location). In tabular data we generally assume each feature has a different interpretation and the order of the features isn't inherently meaningful. In image data, our features all have the same interpretation (as pixels), and a specific configuration as a 2-dimensional grid.
 
-If we want to add legends or labeling to individual subplots we need to call methods of the individual subplot objects. In this case, the methods we need change a bit! Rather than using `plt.title()`, `plt.xlabel()` and `plt.ylabel()`, we need to use the methods `ax.set_title()`, `ax.set_xlabel()` and `ax.set_ylabel()`
+More generally, we can think of image data as being a member of the larger category of *field data*. Field data refers to data where every point in a given space has a value or set of values associated with it. This includes image data (each pixel has a brightness or red, green and blue color values), as well as things like video (with a third, time dimension), audio (with only a time dimension), 3-d medical scans (with x, y *and* z spatial dimensions) and climate data (latitude and longitude coordinates) among others.
 
-```{python}
-fig,ax = plt.subplots(1,2, figsize=(8.0, 2.0))      # make a 1 x 3 grid of plots:
-ax[0].plot(x_values, y1, 'b-', label='sin(x)');   # plot y1 in the first subplot
-ax[1].plot(x_values, y2, 'g--', label='$(x-3)^2 / 12$');  #   y2 in the 2nd
+### Text and sequence data
 
-# Add titles to both subplots
-ax[0].set_title('x vs. sin(x)')
-ax[1].set_title('x vs. $(x-3)^2 / 12$')
+Text is another widely used application of neural networks. In this case our observation could be a sentence or paragraph of text. More generally, we can frame this as a variable-length sequence of categorical features (or *tokens*). Beyond text, we can also frame things like genetic data in this way.
 
-# Add axis labels
-ax[0].set_xlabel('x')
-ax[0].set_ylabel('sin(x)')
+### Graph/network data
 
-ax[1].set_xlabel('x')
-ax[1].set_ylabel('$(x-3)^2 / 12$')
+In many cases our data might be defined not just by the features of each observation, but also by the *relationships* between observations. In this case we have what we'd call *graph* or *network* data. A classic example would be social networks, where the relationships between people (e.g. whether or not they are friends) is of upmost importance. Other examples include things like protein structures, where the configuration of atoms in a molecule is as important as the types of the atoms.
 
-# Create legends for both subplots
-ax[0].legend()
-ax[1].legend();
+### Multi-modal data
 
-```
+In many cases it's also common to consider more than one type of data at once. For example, a diagnosis system might take in an x-ray image, text of doctor notes and tabular test result data as inputs to its prediction function. We this **multi-modal** data, as it has multiple different types or *modes* in one (image, text and tabluar).

@@ -202,8 +202,9 @@ window.Quarto = {
   </ul></li>
   <li><a href="#matrix-data" id="toc-matrix-data" class="nav-link" data-scroll-target="#matrix-data">Matrix data</a>
   <ul class="collapse">
-  <li><a href="#encoding-non-numeric-variables" id="toc-encoding-non-numeric-variables" class="nav-link" data-scroll-target="#encoding-non-numeric-variables">Encoding non-numeric variables</a></li>
+  <li><a href="#encoding-non-quantitative-features" id="toc-encoding-non-quantitative-features" class="nav-link" data-scroll-target="#encoding-non-quantitative-features">Encoding non-quantitative features</a></li>
   </ul></li>
+  <li><a href="#label-types" id="toc-label-types" class="nav-link" data-scroll-target="#label-types">Label types</a></li>
   <li><a href="#other-types-of-data" id="toc-other-types-of-data" class="nav-link" data-scroll-target="#other-types-of-data">Other types of data</a>
   <ul class="collapse">
   <li><a href="#image-and-field-data" id="toc-image-and-field-data" class="nav-link" data-scroll-target="#image-and-field-data">Image and field data</a></li>
@@ -211,7 +212,6 @@ window.Quarto = {
   <li><a href="#graphnetwork-data" id="toc-graphnetwork-data" class="nav-link" data-scroll-target="#graphnetwork-data">Graph/network data</a></li>
   <li><a href="#multi-modal-data" id="toc-multi-modal-data" class="nav-link" data-scroll-target="#multi-modal-data">Multi-modal data</a></li>
   </ul></li>
-  <li><a href="#label-types" id="toc-label-types" class="nav-link" data-scroll-target="#label-types">Label types</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -246,53 +246,126 @@ window.Quarto = {
 <p>In <em>prediction</em> applications neural networks are used to assign a label or a prediction to a given input. Examples of applications using neural networks for prediction include:</p>
 <p><strong>Image classification (Example: Google Lens)</strong></p>
 <p>Image classification applications like Google Lens can take an image as input and identify the contents of the image using neural networks. This task will be the focus of one of the later modules in the course.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/paste-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="511"></p>
+</figure>
+</div>
+<p><em>Credit: Google</em></p>
 <p><strong>Medical diagnosis</strong></p>
 <p>Does a patient have lung cancer? Neural networks for medical diagnosis might be able take in a patient s symtoms and test results and give an answer.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/paste-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="434"></p>
+</figure>
+</div>
+<p><em>Credit: Microsoft Research</em></p>
 </section>
 <section id="detection" class="level3">
 <h3 class="anchored" data-anchor-id="detection">Detection</h3>
 <p>In <em>detection</em> applications, neural networks are used to identify any instances of a particular pattern in a given input. For example:</p>
 <p><strong>Voice recognition (Example: Siri)</strong></p>
 <p>When you say “Hey Siri!” and your phone responds, it was a neural network that recognized your voice; taking as input the audio captured by your phone’s microphone and detecting any instances of the activation phrase.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/paste-3.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="471"></p>
+</figure>
+</div>
+<p><em>Credit: Apple</em></p>
 <p><strong>Object detection (Example: YOLO)</strong></p>
 <p>Object detection neural networks like YOLO (You Only Look Once) can identify multiple objects in an image. These types of networks are often used in applications like autonomous cars, which need to identify vehicles, pedestrians and other hazards on the road.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/paste-4.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="625"></p>
+</figure>
+</div>
 </section>
 <section id="generation" class="level3">
 <h3 class="anchored" data-anchor-id="generation">Generation</h3>
 <p>Possibly the most widely discussed application of neural networks in recent years has been <em>generative models</em>, that is models that can generate realistic new data such as images and text.</p>
 <p><strong>Text generation (Example: ChatGPT)</strong> Large language models, such as the GPT models that power ChatGPT, use neural networks to synthesize realistic language.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/paste-5.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="526"></p>
+</figure>
+</div>
+<p><em>Credit: OpenAI</em></p>
 <p><strong>Image generation (Example: Dall-E 3)</strong> Deep generative models for images similarly can generate realistic images.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/paste-6.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="526"></p>
+</figure>
+</div>
 </section>
 <section id="transformation" class="level3">
 <h3 class="anchored" data-anchor-id="transformation">Transformation</h3>
 <p>Transformation tasks take existing data in the form of images or text and create new and improved versions.</p>
 <p><strong>Photo editing (Example: Adobe Photoshop)</strong></p>
-<p>Image editing tools like Photoshop use neural networks to output enhanced versions of images, either adjusting properties like color or even filling in missings parts of images!</p>
-<ul>
-<li>Translation</li>
-</ul>
+<p>Image editing tools like Photoshop use neural networks to output enhanced versions of images, either adjusting properties like color or even filling in missing parts of images!</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/paste-7.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="635"></p>
+</figure>
+</div>
+<p><em>Credit: Adobe</em></p>
+<p><strong>Photo editing (Example: Google Translate)</strong></p>
+<p>Translation tools like Google translate use neural networks to map text in one language to another much more effectively than prior methods.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/paste-8.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="658"></p>
+</figure>
+</div>
+<p><em>Credit: Google</em></p>
 </section>
 <section id="approximation" class="level3">
 <h3 class="anchored" data-anchor-id="approximation">Approximation</h3>
-<ul>
-<li>DFT approximation (physics)</li>
-<li>NERFs</li>
-</ul>
+<p><strong>Molecular dynamics (Example: AlphaFold)</strong></p>
+<p>Neural networks are finding applications in the physical sciences allowing researchers to create approximate simulations of complex physical systems such as molecules. AlphaFold uses neural networks to predict the structure of proteins given their chemical composition.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/paste-9.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="584"></p>
+</figure>
+</div>
+<p><em>Credit: Google</em></p>
+<p><strong>Rendering (Example: NeRFs)</strong></p>
+<p>Neural radiance fields (or NeRFs for short) use neural networks to quickly approximate new views of a 3d scene without the need for traditional modeling and rendering.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/paste-10.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="687"></p>
+</figure>
+</div>
 </section>
 </section>
 <section id="prediction-problems" class="level1">
 <h1>Prediction problems</h1>
 <p>We’ll cover most of these application categories in the course, but we’ll start our journey with what is likely the most common, <em>prediction problems</em>. As a motivating example, we’ll put ourselves in the shoes of a medical professional. In this context, we will likely want to be able to predict if a given patient has a disease, such as appendicitis. So we want a system that can take in some information about our patient and use it to make an informed prediction as to whether or not our patient has a given condition.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/paste-11.png" class="img-fluid figure-img" width="578"></p>
+<figcaption><em>Icon credit: vecteezy.com</em></figcaption>
+</figure>
+</div>
 <p>Let’s introduce some notation, so that we can start to formalize this problem a bit better. We’ll use <span class="math inline">\(\mathbf{x}\)</span> to denote the input to our system, which we’ll call an <strong>observation</strong>. In this case our observation is a collection of information we have about our patient, e.g.&nbsp;age, prior conditions, test results, etc. Likewise, we’ll use <span class="math inline">\(y\)</span> to denote the <em>output</em> of our system, which we’ll call a <strong>label</strong>. In this case our label is a determination of whether or not our patient has the condition. So ultimately what we want is a mapping from any input <span class="math inline">\(\mathbf{x}\)</span> to an output <span class="math inline">\(y\)</span>. Mathamatically, what we want is a <em>function</em>.</p>
 <p><span class="math display">\[
 \text{Input: } \mathbf{x}  \underset{predict}{\longrightarrow} \text{ Output: }y, \quad y=f(\mathbf{x})
 \]</span></p>
 <p>Ultimately, what most of this class is about is simply how to find a function <span class="math inline">\(f\)</span> that does a good job of making these sorts of predictions in the real world. That may sound simple enough, but it practice it can be very difficult! <strong>Neural networks</strong> are a class of functions that are very powerful for a wide variety of problems.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/paste-13.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="823"></p>
+</figure>
+</div>
 <p>As a preview of what’s to come, our general approach will be to start with a <strong>dataset</strong> <span class="math inline">\(\mathcal{D}\)</span> made up of <span class="math inline">\(N\)</span> pairs of inputs ( <span class="math inline">\(\mathbf{x}\)</span> ) and outputs ( <span class="math inline">\(y\)</span> ):</p>
 <p><span class="math display">\[
 \mathcal{D} = \{ (\mathbf{x}_1, y_1),\ (\mathbf{x}_2, y_2),\ ...\ (\mathbf{x}_N, y_N)\}
 \]</span></p>
 <p>We’ll then try to choose a function <span class="math inline">\(f\)</span> that does a good job matching the mapping expressed by this dataset. The fact that we typically <em>learn</em> neural network functions from examples is why we generally consider neural networks to be part of the field of <em>machine learning</em>. We’ll get back to how this process works later. For now, let’s focus on what our data actually looks like in practice.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/paste-12.png" class="img-fluid figure-img" width="914"></p>
+<figcaption>Machine learning overview</figcaption>
+</figure>
+</div>
 </section>
 <section id="types-of-data" class="level1">
 <h1>Types of data</h1>
@@ -303,11 +376,22 @@ window.Quarto = {
 <section id="tidy-data" class="level3">
 <h3 class="anchored" data-anchor-id="tidy-data">Tidy data</h3>
 <p>We’ll say that data is in in the “tidy” format if each <strong>observation</strong> is represented with a single row of our table and each <strong>feature</strong> is represented with a single column. An observation is an entity, such as a patient in a hospital, that we may want to make preditions about. A <strong>feature</strong> (or variable) represents some measureable property that every observation has. For the patients in our example the set of features might correspond to measurements like the heart rate, blood pressure or oxygen level of each patient, as well as properties like the patient’s name, age and gender. This organizaton makes it easy to find any given measurement for any given patient (just use the row and column coordinates in the table). For tabular data we’ll assume that the ordering of both rows and columns in our table has no special significance, so could change the ordering of either without altering what our table represents.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/paste-14.png" class="img-fluid figure-img" width="692"></p>
+<figcaption>Appendicitis dataset in the “tidy” format</figcaption>
+</figure>
+</div>
 <p>Note that how we organize a set of measurements into observations and features isn’t nessecarily fixed, and might change depending on our goals. For example, if our goal is to predict whether a patient has some given underlying condition, we might have one observation per patient. Alternatively, if a given patient visits the hospital several times and our goal is to predict whether a patient will be admitted overnight for a given visit, we might have one observation per visit.</p>
 </section>
 <section id="variable-types" class="level3">
 <h3 class="anchored" data-anchor-id="variable-types">Variable types</h3>
 <p>The idea of tidy data should also be intuitive to programmers familiar with the object-oriented programming paradigm. There we organize our data in objects (observations) where each object has a common set of properies (features). Just as in object oriented programming, its important to consider the <strong>type</strong> of each feature, which defines what values it can take and what operations we can perform on it. We’ll consider a few useful general feature types and how we might map them to concrete types in code.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/paste-15.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="700"></p>
+</figure>
+</div>
 <section id="quantitative-features" class="level4">
 <h4 class="anchored" data-anchor-id="quantitative-features">Quantitative features</h4>
 <p><strong>Quantitative features</strong> are simply numbers like our patient’s blood pressure, heart rate etc. We can further subdivide this category into integer features, that we’d encode as integer types (e.g.&nbsp;<code>int</code>, <code>uint</code>) and real-valued features that we’d encode as floating point values (e.g.&nbsp;<code>float</code>).</p>
@@ -330,17 +414,62 @@ window.Quarto = {
 <section id="matrix-data" class="level2">
 <h2 class="anchored" data-anchor-id="matrix-data">Matrix data</h2>
 <p>While tables are useful for reading and understanding datasets, as we’ve seen, we want to think about neural networks as mathamatical <em>functions</em> of our data. Therefore, in order to work with them we’ll usually need to abstract away from the specifics of our data into a more convenient mathamatical form. In particular, as tablular data has 2 dimensions (observation rows and feature columns), the natural way to think about a dataset mathamatically is as a <em>matrix</em>. By convention, we’ll usually think about our data as an <span class="math inline">\(N \times d\)</span> matrix, where we have <span class="math inline">\(N\)</span> observations and <span class="math inline">\(d\)</span> features and we’ll typically call this matrix <span class="math inline">\(\mathbf{X}\)</span>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/paste-16.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="656"></p>
+</figure>
+</div>
 <p>Under this convention, the first index into our matrix will denote the row or observation and the second, the column or feature. In code, we’ll use <code>numpy</code> arrays to represent matrices, which work similarly.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/paste-17.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="639"></p>
+</figure>
+</div>
 <p>We can also think about each row as being a <em>vector</em> of length <span class="math inline">\(d\)</span> representing a single observation. So we’ll say that each observation <span class="math inline">\(\mathbf{x}_i\)</span> is a <span class="math inline">\(d\)</span>-dimension vector <span class="math inline">\(\mathbf{x}_i \in \mathbb{R}^d\)</span>. This is why so far we’ve used the bold (<span class="math inline">\(\mathbf{x}\)</span>) notation.</p>
 <p>Here it’s worth pointing out a bit of a notational quirk that can get a little confusing. A vector is a 1-dimensional object; we can think of it as a 1-d array in code. However, when we do mathamatical operations involving both matrices and vectors, it’s often convenient to treat a vector as either a <span class="math inline">\(d \times 1\)</span> matrix, also known as a <em>column vector</em>, or as a <span class="math inline">\(1 \times d\)</span> matrix (<em>row vector</em>).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/paste-18.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="680"></p>
+</figure>
+</div>
 <p>By convention, in mathamatical expressions we’ll assume that by default, any vector we refer to will be treated as a column vector, <em>even if the vector was a row in a matrix</em>. If we want to treat a vector as a row vector, we will explicitly transpose it. This can get confusing so it’s worth keeping this in your head as we move forward. Under this convention, we might think about our matrix of all observations as:</p>
-<p><span class="math display">\[\mathbf{X} = \]</span></p>
-<section id="encoding-non-numeric-variables" class="level3">
-<h3 class="anchored" data-anchor-id="encoding-non-numeric-variables">Encoding non-numeric variables</h3>
-<p>You might be wondering at this point: if we’re treating everything as matrices and vectors, how do deal with features that aren’t inherently real-valued numbers?</p>
-<p>Integer values are straightforward; we can easily treat them as real numbers already and in code we can simply cast them.</p>
+<p><span class="math display">\[\mathbf{X} = \begin{bmatrix} \mathbf{x}_1^T \\ \mathbf{x}_2^T \\ \mathbf{x}_3^T \\ \vdots  \end{bmatrix} = \begin{bmatrix} x_{11} &amp; x_{12} &amp; x_{13} &amp; \dots \\ x_{21} &amp; x_{22} &amp; x_{23} &amp; \dots \\ x_{31} &amp; x_{32} &amp; x_{33} &amp; \dots\\ \vdots &amp; \vdots &amp; \vdots &amp; \ddots  \end{bmatrix}\]</span></p>
+<p>This will become relevant when reading mathematical expressions of matrices and vectors in this class. For example, consider the two vectors <span class="math inline">\(\mathbf{a}\)</span> and <span class="math inline">\(\mathbf{b}\)</span>.</p>
+<p><span class="math display">\[
+\mathbf{a} = \begin{bmatrix} 2 \\ 1 \\ 3\\ \end{bmatrix},\\ \mathbf{b} = \begin{bmatrix} 1 \\ 4 \\ 2\\ \end{bmatrix}, \\
+\]</span></p>
+<p>We can write the dot product as:</p>
+<p><span class="math display">\[
+\mathbf{a}^T \mathbf{b} = \big{[} 2 \ \ \ 1 \ \ \ \  3 \big{]} \begin{matrix} \begin{bmatrix} 1 \\ 4 \\ 2\\ \end{bmatrix} \\ \\ \\ \end{matrix} =12
+\]</span></p>
+<p>Similarly we can write an outer product as:</p>
+<p><span class="math display">\[
+\mathbf{a} \mathbf{b}^T =  \begin{matrix} \begin{bmatrix} 2 \\ 1 \\ 3\\ \end{bmatrix} \\ \\ \\ \end{matrix} \big{[} 1 \ \ \ 4 \ \ \ \  2 \big{]}  = \begin{matrix} \begin{bmatrix} 2 &amp; 8 &amp; 4 \\ 1 &amp; 4 &amp; 2 \\ 3 &amp; 12 &amp; 6 \end{bmatrix}\\ \\ \\ \end{matrix}
+\]</span></p>
+<section id="encoding-non-quantitative-features" class="level3">
+<h3 class="anchored" data-anchor-id="encoding-non-quantitative-features">Encoding non-quantitative features</h3>
+<p>You might be wondering at this point: if we’re treating everything as matrices and vectors, how do deal with features that aren’t inherently real-valued numbers? Generally the approach will be to convert them into real numbers in some way.</p>
+<p><strong>Integer features</strong> are straightforward; we can easily treat them as real numbers already and in code we can simply cast them. We’ll typically map <strong>ordinal features</strong> to the first few non-negative integers, e.g.&nbsp;<span class="math inline">\(\{\text{none},\ \text{low},\ \text{medium},\  \text{high} \} \rightarrow \{ 0, \ 1, \ 2, \ 3 \}\)</span>. <strong>Boolean features</strong> are usually mapped to either <span class="math inline">\(\{0, 1\}\)</span> or to <span class="math inline">\(\{-1, 1\}\)</span>. Finally <strong>categorical values</strong> are typically first mapped to a set of boolean values. If a categorical feature as <span class="math inline">\(c\)</span> possible values, then it will be mapped to <span class="math inline">\(c\)</span> new boolean variables, each indicating whether the original feature had that value. This is often called <em>one-hot encoding</em>.</p>
+<p><img src="images/paste-19.png" class="img-fluid" width="846"></p>
 <p>We’ll talk (a lot) about unstructured text later in this course, so for now will just worry about categorical/ordinal features.</p>
 </section>
+</section>
+<section id="label-types" class="level2">
+<h2 class="anchored" data-anchor-id="label-types">Label types</h2>
+<p>For our discussion of prediction problems, we’ll assume that the <strong>label</strong> that we want to predict is just a single value, which is why we’ve used the scalar notation <span class="math inline">\(y\)</span>.</p>
+<p>If our labels are real numbers <span class="math inline">\(y \in \mathbb{R}\)</span>, e.g.&nbsp;if we’re trying to predict the number of hours a patient will stay in the hospital, then we’ll say that we have a <strong>regression</strong> problem.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/paste-20.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="391"></p>
+</figure>
+</div>
+<p>Alternatively, if our labels are categorical values, e.g.&nbsp;we’re trying to predict whether or not a patient has appendicitis, <span class="math inline">\(y \in \{\textit{healthy}, \textit{appendicitis}\}\)</span>, then we’ll say that we have a <strong>classification</strong> problem.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/paste-22.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="373"></p>
+</figure>
+</div>
+<p>If we have a full dataset of <span class="math inline">\(N\)</span> observations and labels, we could refer to the collection of <span class="math inline">\(N\)</span> labels as a vector <span class="math inline">\(\mathbf{y} \in \mathbb{R}^N\)</span>.</p>
 </section>
 <section id="other-types-of-data" class="level2">
 <h2 class="anchored" data-anchor-id="other-types-of-data">Other types of data</h2>
@@ -361,16 +490,9 @@ window.Quarto = {
 <section id="multi-modal-data" class="level3">
 <h3 class="anchored" data-anchor-id="multi-modal-data">Multi-modal data</h3>
 <p>In many cases it’s also common to consider more than one type of data at once. For example, a diagnosis system might take in an x-ray image, text of doctor notes and tabular test result data as inputs to its prediction function. We this <strong>multi-modal</strong> data, as it has multiple different types or <em>modes</em> in one (image, text and tabluar).</p>
-</section>
-</section>
-<section id="label-types" class="level2">
-<h2 class="anchored" data-anchor-id="label-types">Label types</h2>
-<p>For our discussion of prediction problems, we’ll assume that the <strong>label</strong> that we want to predict is just a single value, which is why we’ve used the scalar notation <span class="math inline">\(y\)</span>.</p>
-<p>If our labels are real numbers <span class="math inline">\(y \in \mathbb{R}\)</span>, e.g.&nbsp;if we’re trying to predict the red blood cell count of a patient, then we’ll say that we have a <strong>regression</strong> problem.</p>
-<p>Alternatively, if our labels are categorical values, e.g.&nbsp;we’re trying to predict whether or not a patient’s tumor is benign, <span class="math inline">\(y \in \{\textit{benign}, \textit{malignent}\}\)</span>, then we’ll say that we have a <strong>classification</strong> problem.</p>
-<p>If we have a full dataset of <span class="math inline">\(N\)</span> observations and labels, we could refer to the collection of <span class="math inline">\(N\)</span> labels as a vector <span class="math inline">\(\mathbf{y} \in \mathbb{R}^N\)</span>.</p>
 
 
+</section>
 </section>
 </section>
 

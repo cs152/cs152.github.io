@@ -6,6 +6,8 @@ format:
         toc-depth: 3
 ---
 
+
+
 ```{python}
 #| echo: false
 import warnings
@@ -84,6 +86,8 @@ class ComparisonVectorScene(LectureScene):
 ```
 
 # Linear regression
+
+**Interactive visualization for this lecture available [here](./viz-v2.qmd)**
 
 ## Functions revisited
 
@@ -1272,8 +1276,6 @@ p(y_i\mid\mathbf{x}_i, \mathbf{w}) =  \frac{1}{\sigma \sqrt{2 \pi}} \text{exp}\b
 $$
 
 Why view linear regression as a probabilistic model? Well, generally for real data we can't know if there actually *is* a function that perfectly maps inputs to outputs. It could be that there are variables we're not accounting for, that there errors in our measurements for the data we collected or simply that there is some inherent randomness in the outputs. This view of linear regression makes the uncertainty in our predictions explicit.
-
-{{< include ./viz.qmd >}}
 
 ## Maximum likelihood estimation
 

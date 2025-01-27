@@ -283,7 +283,7 @@ window.Quarto = {
 y=f(\mathbf{x}), \quad \text{Input: } \mathbf{x} \in\mathbb{R}^n \longrightarrow \text{ Output: }y \in\mathbb{R}
 \]</span></p>
 <p>Mathematically, we can easily definite a function using a sequence of basic operations.</p>
-<div id="b02dfe3d" class="cell" data-execution_count="2">
+<div id="1894b0ce" class="cell" data-execution_count="2">
 <div class="cell-output cell-output-display">
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.1</span>
 
@@ -314,7 +314,7 @@ f(\mathbf{x}) = \sum_{i=1}^n x_iw_i +b
 f(\mathbf{x}) = \mathbf{x} \cdot \mathbf{w} + b \quad \text{or} \quad f(\mathbf{x}) = \mathbf{x}^T  \mathbf{w} + b
 \]</span></p>
 <p>In one dimension, a linear (or affine) function is always a line, for example:</p>
-<div id="5d851739" class="cell" data-execution_count="3">
+<div id="92c31f6a" class="cell" data-execution_count="3">
 <div class="cell-output cell-output-display">
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.1</span>
 
@@ -329,7 +329,7 @@ f(\mathbf{x}) = \mathbf{x} \cdot \mathbf{w} + b \quad \text{or} \quad f(\mathbf{
 </div>
 </div>
 <p>In higher dimensions, it is a plane or hyperplane:</p>
-<div id="8ea0d471" class="cell" data-execution_count="4">
+<div id="59107d3b" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-display">
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.1</span>
 
@@ -344,7 +344,7 @@ f(\mathbf{x}) = \mathbf{x} \cdot \mathbf{w} + b \quad \text{or} \quad f(\mathbf{
 </div>
 </div>
 <p>In numpy we can easily write a function of this form:</p>
-<div id="ce2a536b" class="cell" data-execution_count="5">
+<div id="a2993fcf" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> f(x):</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    w <span class="op">=</span> np.array([<span class="op">-</span><span class="fl">0.6</span>, <span class="op">-</span><span class="fl">0.2</span>])</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    b <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span>
@@ -375,7 +375,7 @@ f(\mathbf{x}) = \mathbf{x}^T \mathbf{w} +b = \mathbf{x}_{aug}^T \mathbf{w}_{aug}
 \]</span></p>
 <p>This approach is common enough that we typically won’t bother with the <span class="math inline">\(aug\)</span> notation and just assume that any function defined as <span class="math inline">\(f(\mathbf{x})=\mathbf{x}^T\mathbf{w}\)</span> can be defined to include a bias implicitly. Note that in this case the function is a <em>linear function</em> of the augmented input, thus we will still typically refer to functions of this form as linear functions.</p>
 <p>In numpy this is similarly straightforward:</p>
-<div id="02ac4d21" class="cell" data-execution_count="6">
+<div id="36cb5150" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> f(x):</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    w <span class="op">=</span> np.array([<span class="op">-</span><span class="fl">0.6</span>, <span class="op">-</span><span class="fl">0.2</span>, <span class="op">-</span><span class="dv">1</span>])</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> np.pad(x, ((<span class="dv">0</span>,<span class="dv">1</span>),), constant_values<span class="op">=</span><span class="dv">1</span>)</span>
@@ -414,7 +414,7 @@ f(\mathbf{x}) = \mathbf{x}^T \mathbf{w} +b = \mathbf{x}_{aug}^T \mathbf{w}_{aug}
 \text{Input: } \mathbf{x}_i= \begin{bmatrix} \text{Weight} \\ \text{Horsepower} \\ \text{Displacement} \\ \text{0-60mph}  \end{bmatrix}, \quad \text{Output: } y_i = MPG
 \]</span></p>
 <p>Just as with a known function, we can plot the inputs vs the outputs, however in this case, we only know the outputs for the inputs we’ve seen in our dataset. Let’s take a look at a single feature: <em>the weight of a car</em>.</p>
-<div id="faa4460b" class="cell" data-execution_count="7">
+<div id="49197d69" class="cell" data-execution_count="7">
 <div class="cell-output cell-output-display">
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.1</span>
 
@@ -436,7 +436,7 @@ f(\mathbf{x}) = \mathbf{x}^T \mathbf{w} +b = \mathbf{x}_{aug}^T \mathbf{w}_{aug}
 <section id="how-do-we-predict-the-output-for-an-input-that-we-havent-seen-before" class="level4">
 <h4 class="anchored" data-anchor-id="how-do-we-predict-the-output-for-an-input-that-we-havent-seen-before"><em>How do we <strong>predict</strong> the output for an input that we haven’t seen before?</em></h4>
 <p>For example, in our car scenario, we might know that the car that we’re designing will weigh 3100 lbs. In our dataset we’ve haven’t seen a car that weighs exactly 3100 lbs, so we need a way to <em>predict</em> the output of the function at input 3100 lbs.</p>
-<div id="be979f19" class="cell" data-execution_count="8">
+<div id="7a6df407" class="cell" data-execution_count="8">
 <div class="cell-output cell-output-display">
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.1</span>
 
@@ -459,7 +459,7 @@ f(\mathbf{x}_i) \approx y_i, \quad \forall (\mathbf{x}_i, y_i) \in \mathcal{D}
 <section id="linear-interpolation" class="level2">
 <h2 class="anchored" data-anchor-id="linear-interpolation">Linear interpolation</h2>
 <p>One reasonable approach we might consider is <em>linear interpolation</em>. In this approach, we simply connect all the neighboring points with straight lines:</p>
-<div id="a853d150" class="cell" data-execution_count="9">
+<div id="945893bb" class="cell" data-execution_count="9">
 <div class="cell-output cell-output-display">
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.1</span>
 
@@ -476,7 +476,7 @@ f(\mathbf{x}_i) \approx y_i, \quad \forall (\mathbf{x}_i, y_i) \in \mathcal{D}
 <p>In some cases this can be a reasonable approach! In fact it’s how the <code>plt.plot</code> function works. Real data however tends to be <em>messy</em>. The measurements in our dataset might not be 100% accurate or they might even conflict! What do we do if we have two observations with the same input and different outputs?</p>
 <p><span class="math display">\[(\text{Weight: }3100, \text{MPG: } 34), \quad (\text{Weight: }3100, \text{MPG: } 23) \longrightarrow f(3100) = ?\]</span></p>
 <p>As the size and number of features in our inputs gets larger, this become even more complex. We can see this if we try to apply interpolation to a much larger MPG dataset:</p>
-<div id="e82d03e3" class="cell" data-execution_count="10">
+<div id="a2c98db3" class="cell" data-execution_count="10">
 <div class="cell-output cell-output-display">
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.1</span>
 
@@ -510,7 +510,7 @@ f(\mathbf{x})= \begin{bmatrix} \text{Weight} \\ \text{Horsepower} \\ \text{Displ
 \]</span></p>
 <p>We see that under this approach each <strong>weight</strong> <span class="math inline">\((w_1, w_2…)\)</span> tells us how much our prediction changes as we change the corresponding feature. For example, if we were to increase the weight of our car by 1 lb, the predicted MPG would change by <span class="math inline">\(w_1\)</span>.</p>
 <p>The set of weights defines the particular linear regression function. In numpy we can define a generic class for linear regression:</p>
-<div id="0d53d61e" class="cell" data-execution_count="11">
+<div id="e07e1ee1" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Regression:</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, weights):</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.weights <span class="op">=</span> weights</span>
@@ -520,12 +520,12 @@ f(\mathbf{x})= \begin{bmatrix} \text{Weight} \\ \text{Horsepower} \\ \text{Displ
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> Regression(np.array([<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>]))</span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>model.predict(np.array([<span class="dv">5</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">1</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="33">
+<div class="cell-output cell-output-display" data-execution_count="11">
 <pre><code>np.int64(14)</code></pre>
 </div>
 </div>
 <p>If we again look at our plot of weight vs.&nbsp;MPG, we see we could chose many different linear functions to make predictions:</p>
-<div id="9ec893b8" class="cell" data-execution_count="12">
+<div id="3b164e9f" class="cell" data-execution_count="12">
 <div class="cell-output cell-output-display">
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.1</span>
 
@@ -546,7 +546,7 @@ f(\mathbf{x})= \begin{bmatrix} \text{Weight} \\ \text{Horsepower} \\ \text{Displ
 <p><span class="math display">\[
 e_i = y_i - f(\mathbf{x}_i)
 \]</span></p>
-<div id="2dbfa0ad" class="cell" data-execution_count="13">
+<div id="61bbcf51" class="cell" data-execution_count="13">
 <div class="cell-output cell-output-display">
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.1</span>
 
@@ -590,7 +590,7 @@ MSE(\mathbf{w}, \mathbf{X}, \mathbf{y}) = \frac{1}{N}\sum_{i=1}^N (\mathbf{x}_i^
 <section id="visualizing-loss" class="level2">
 <h2 class="anchored" data-anchor-id="visualizing-loss">Visualizing loss</h2>
 <p>If we consider the case where our inputs are 1-dimensional, as in the weight example above, then our parameter vector <span class="math inline">\(\mathbf{w}\)</span> only has 2 entries: <span class="math inline">\(w_1\)</span> and <span class="math inline">\(b\)</span>. In this case, we can actually plot our loss function directly!</p>
-<div id="7b9c37cf" class="cell" data-execution_count="14">
+<div id="d394e75c" class="cell" data-execution_count="14">
 <div class="cell-output cell-output-display">
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.1</span>
 
@@ -604,7 +604,7 @@ MSE(\mathbf{w}, \mathbf{X}, \mathbf{y}) = \frac{1}{N}\sum_{i=1}^N (\mathbf{x}_i^
 </div>
 </div>
 </div>
-<div id="6c47a431" class="cell" data-execution_count="15">
+<div id="add5ac47" class="cell" data-execution_count="15">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -626,7 +626,7 @@ MSE(\mathbf{w}, \mathbf{X}, \mathbf{y}) = \frac{1}{N}\sum_{i=1}^N (\mathbf{x}_i^
 <p><span class="math display">\[
 \mathbf{w}^{(1)} \leftarrow \mathbf{w}^{(0)} + \mathbf{g}
 \]</span></p>
-<div id="606cd7f3" class="cell" data-execution_count="16">
+<div id="fb896553" class="cell" data-execution_count="16">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -644,7 +644,7 @@ MSE(\mathbf{w}, \mathbf{X}, \mathbf{y}) = \frac{1}{N}\sum_{i=1}^N (\mathbf{x}_i^
 \text{For }i \text{ in 1,...,T}\text{ :} \\
 \quad \mathbf{w}^{(i+1)} \leftarrow \mathbf{w}^{(i)} - \nabla f(\mathbf{w}^{(i)})
 \]</span></p>
-<div id="cf764e98" class="cell" data-execution_count="17">
+<div id="6072b736" class="cell" data-execution_count="17">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -679,7 +679,7 @@ MSE(\mathbf{w}, \mathbf{X}, \mathbf{y}) = \frac{1}{N}\sum_{i=1}^N (\mathbf{x}_i^
 <h2 class="anchored" data-anchor-id="step-sizes">Step sizes</h2>
 <p>Notice that the gradient descent algorithm we’ve defined so far not only says that we want to update our guess in the <em>direction</em> of the gradient, it also say that we want to move in that direction a distance equal to the <em>magnitude</em> of the gradient. It turns out this is often a very bad idea!</p>
 <p>This approach says that when the magnitude of the gradient is large, we should take a large step, and vice-versa. This is desirable for many functions as it means when we’re far from the minimum we take large steps, moving toward the minimum more quickly. While when we’re close to the minimum we take small steps to refine our guess more precisely.</p>
-<div id="f12cce5a" class="cell" data-execution_count="18">
+<div id="932958c6" class="cell" data-execution_count="18">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -689,7 +689,7 @@ MSE(\mathbf{w}, \mathbf{X}, \mathbf{y}) = \frac{1}{N}\sum_{i=1}^N (\mathbf{x}_i^
 </div>
 </div>
 <p>However, if we take too large a step, we can overshoot the minimum entirely! In the worst case, this can lead to <em>divergence,</em> where gradient descent overshoots the minimum more and more at each step.</p>
-<div id="9804cc6d" class="cell" data-execution_count="19">
+<div id="507a89ef" class="cell" data-execution_count="19">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -699,7 +699,7 @@ MSE(\mathbf{w}, \mathbf{X}, \mathbf{y}) = \frac{1}{N}\sum_{i=1}^N (\mathbf{x}_i^
 </div>
 </div>
 <p>Remember that the gradient is making a <em>linear approximation</em> to the function. A strait line has no minimum, so the gradient has no information about where along the approximation the true minimum will be.</p>
-<div id="2868b0c4" class="cell" data-execution_count="20">
+<div id="64376372" class="cell" data-execution_count="20">
 <div class="cell-output cell-output-display">
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Manim Community <span style="color: #008000; text-decoration-color: #008000">v0.18.1</span>
 
@@ -723,7 +723,7 @@ MSE(\mathbf{w}, \mathbf{X}, \mathbf{y}) = \frac{1}{N}\sum_{i=1}^N (\mathbf{x}_i^
 \mathbf{w}^{(i+1)} \leftarrow \mathbf{w}^{(i)} - \alpha \nabla f(\mathbf{w}^{(i)})
 \]</span></p>
 <p>Using a small learning rate <span class="math inline">\((\alpha &lt;&lt; 1)\)</span> will make gradient descent slower, but <em>much</em> more reliable. Later on in the semester we will explore how to choose <span class="math inline">\(\alpha\)</span> (and even update it during optimization).</p>
-<div id="d3e30f6d" class="cell" data-execution_count="21">
+<div id="613a97e3" class="cell" data-execution_count="21">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -732,7 +732,7 @@ MSE(\mathbf{w}, \mathbf{X}, \mathbf{y}) = \frac{1}{N}\sum_{i=1}^N (\mathbf{x}_i^
 </div>
 </div>
 </div>
-<div id="3df303d6" class="cell" data-execution_count="22">
+<div id="d1dc0ffd" class="cell" data-execution_count="22">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">

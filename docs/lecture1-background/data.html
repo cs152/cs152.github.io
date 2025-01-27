@@ -225,11 +225,11 @@ window.Quarto = {
 
 
 
-<div id="cell-0" class="cell" data-execution_count="3">
+<div id="cell-0" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-1" class="cell" data-execution_count="58">
+<div id="cell-1" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#.loc[[627, 464, 600, 389, 603, 667, 180, 341, 704, 105, 502, 65, 324, 20]]</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">'/Users/gabehope/Downloads/app_data.csv'</span>)[[<span class="st">'Age'</span>, <span class="st">'Appendix_Diameter'</span>, <span class="st">'Migratory_Pain'</span>,  <span class="st">'RBC_Count'</span>, <span class="st">'RBC_in_Urine'</span>, <span class="st">'Peritonitis'</span> ]].dropna().loc[[<span class="dv">627</span>, <span class="dv">464</span>, <span class="dv">600</span>, <span class="dv">217</span>, <span class="dv">187</span>, <span class="dv">185</span>, <span class="dv">389</span>, <span class="dv">603</span>, <span class="dv">667</span>, <span class="dv">180</span>, <span class="dv">341</span>, <span class="dv">704</span>, <span class="dv">105</span>, <span class="dv">502</span>, <span class="dv">65</span>, <span class="dv">324</span>, <span class="dv">20</span>]].sample(frac<span class="op">=</span><span class="dv">1</span>).reset_index()[[<span class="st">'Age'</span>, <span class="st">'Appendix_Diameter'</span>, <span class="st">'Migratory_Pain'</span>,  <span class="st">'RBC_Count'</span>, <span class="st">'RBC_in_Urine'</span>, <span class="st">'Peritonitis'</span>]].replace(</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'no appendicitis'</span>, <span class="st">'healthy'</span></span>
@@ -246,9 +246,9 @@ window.Quarto = {
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>data.to_csv(<span class="st">'app_all.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-2" class="cell" data-execution_count="46">
+<div id="cell-2" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pd.read_csv(<span class="st">'/Users/gabehope/Downloads/app_data.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="46">
+<div class="cell-output cell-output-display" data-execution_count="3">
 <div>
 
 
@@ -551,16 +551,16 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<div id="cell-3" class="cell" data-execution_count="45">
+<div id="cell-3" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>ndata <span class="op">=</span> pd.read_csv(<span class="st">'/Users/gabehope/Downloads/app_data.csv'</span>)[[<span class="st">'Age'</span>, <span class="st">'Appendix_Diameter'</span>, <span class="st">'Height'</span>, <span class="st">'Weight'</span>,  <span class="st">'RBC_Count'</span>, <span class="st">'Body_Temperature'</span>, <span class="st">'WBC_Count'</span>, ]].dropna().loc[[<span class="dv">627</span>, <span class="dv">464</span>, <span class="dv">600</span>, <span class="dv">217</span>, <span class="dv">187</span>, <span class="dv">185</span>, <span class="dv">389</span>, <span class="dv">603</span>, <span class="dv">667</span>, <span class="dv">180</span>, <span class="dv">341</span>, <span class="dv">704</span>, <span class="dv">105</span>, <span class="dv">502</span>, <span class="dv">65</span>, <span class="dv">324</span>, <span class="dv">20</span>]].sample(frac<span class="op">=</span><span class="dv">1</span>).reset_index()[[<span class="st">'Age'</span>, <span class="st">'Appendix_Diameter'</span>, <span class="st">'Height'</span>, <span class="st">'Weight'</span>,  <span class="st">'RBC_Count'</span>, <span class="st">'Body_Temperature'</span>, <span class="st">'WBC_Count'</span>, ]].to_csv(<span class="st">'app_numeric.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-4" class="cell" data-execution_count="59">
+<div id="cell-4" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ndata <span class="op">=</span> pd.read_csv(<span class="st">'app_numeric.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-5" class="cell" data-execution_count="61">
+<div id="cell-5" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> ndata[<span class="st">'Unnamed: 0'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-6" class="cell" data-execution_count="65">
+<div id="cell-6" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ndata.values</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -577,74 +577,74 @@ window.Quarto = {
 <span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(matrix_to_latex(ndata.values))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>\begin{pmatrix}
-16.66 &amp; 9.0 &amp; 174.0 &amp; 65.0 &amp; 5.31 &amp; 36.6 &amp; 6.6\\
-10.74 &amp; 9.0 &amp; 146.0 &amp; 57.5 &amp; 5.66 &amp; 37.3 &amp; 10.2\\
-9.04 &amp; 5.3 &amp; 134.0 &amp; 29.4 &amp; 4.92 &amp; 36.0 &amp; 5.1\\
-10.75 &amp; 5.0 &amp; 155.0 &amp; 54.5 &amp; 4.79 &amp; 37.7 &amp; 10.3\\
-7.3 &amp; 6.2 &amp; 123.0 &amp; 23.5 &amp; 4.64 &amp; 37.4 &amp; 21.1\\
-5.11 &amp; 7.0 &amp; 116.0 &amp; 22.0 &amp; 4.55 &amp; 40.2 &amp; 19.4\\
+10.51 &amp; 9.0 &amp; 134.5 &amp; 27.0 &amp; 5.03 &amp; 37.4 &amp; 12.8\\
 14.36 &amp; 9.0 &amp; 163.0 &amp; 50.0 &amp; 4.84 &amp; 37.5 &amp; 14.3\\
 9.61 &amp; 9.0 &amp; 140.0 &amp; 29.2 &amp; 5.18 &amp; 38.7 &amp; 14.3\\
-15.83 &amp; 12.0 &amp; 153.0 &amp; 59.0 &amp; 4.33 &amp; 36.7 &amp; 12.8\\
-9.58 &amp; 7.0 &amp; 132.0 &amp; 24.7 &amp; 5.04 &amp; 38.4 &amp; 13.5\\
-10.37 &amp; 5.5 &amp; 156.0 &amp; 39.0 &amp; 4.8 &amp; 37.4 &amp; 5.6\\
-14.52 &amp; 4.5 &amp; 181.0 &amp; 55.0 &amp; 4.9 &amp; 37.0 &amp; 9.0\\
-12.41 &amp; 3.7 &amp; 150.5 &amp; 42.5 &amp; 5.49 &amp; 37.2 &amp; 9.1\\
-6.67 &amp; 3.5 &amp; 124.0 &amp; 38.5 &amp; 5.27 &amp; 39.6 &amp; 16.8\\
-15.21 &amp; 8.5 &amp; 155.0 &amp; 85.0 &amp; 4.62 &amp; 36.8 &amp; 12.4\\
 12.43 &amp; 12.0 &amp; 157.0 &amp; 46.0 &amp; 4.62 &amp; 37.1 &amp; 16.4\\
-10.51 &amp; 9.0 &amp; 134.5 &amp; 27.0 &amp; 5.03 &amp; 37.4 &amp; 12.8\\
+12.41 &amp; 3.7 &amp; 150.5 &amp; 42.5 &amp; 5.49 &amp; 37.2 &amp; 9.1\\
+10.74 &amp; 9.0 &amp; 146.0 &amp; 57.5 &amp; 5.66 &amp; 37.3 &amp; 10.2\\
+6.67 &amp; 3.5 &amp; 124.0 &amp; 38.5 &amp; 5.27 &amp; 39.6 &amp; 16.8\\
+7.3 &amp; 6.2 &amp; 123.0 &amp; 23.5 &amp; 4.64 &amp; 37.4 &amp; 21.1\\
+9.58 &amp; 7.0 &amp; 132.0 &amp; 24.7 &amp; 5.04 &amp; 38.4 &amp; 13.5\\
+5.11 &amp; 7.0 &amp; 116.0 &amp; 22.0 &amp; 4.55 &amp; 40.2 &amp; 19.4\\
+10.75 &amp; 5.0 &amp; 155.0 &amp; 54.5 &amp; 4.79 &amp; 37.7 &amp; 10.3\\
+16.66 &amp; 9.0 &amp; 174.0 &amp; 65.0 &amp; 5.31 &amp; 36.6 &amp; 6.6\\
+15.83 &amp; 12.0 &amp; 153.0 &amp; 59.0 &amp; 4.33 &amp; 36.7 &amp; 12.8\\
+9.04 &amp; 5.3 &amp; 134.0 &amp; 29.4 &amp; 4.92 &amp; 36.0 &amp; 5.1\\
+14.52 &amp; 4.5 &amp; 181.0 &amp; 55.0 &amp; 4.9 &amp; 37.0 &amp; 9.0\\
+15.21 &amp; 8.5 &amp; 155.0 &amp; 85.0 &amp; 4.62 &amp; 36.8 &amp; 12.4\\
+10.37 &amp; 5.5 &amp; 156.0 &amp; 39.0 &amp; 4.8 &amp; 37.4 &amp; 5.6\\
 \end{pmatrix}</code></pre>
 </div>
 </div>
 <p><span class="math display">\[\\begin{pmatrix}\n16.66 &amp; 9.0 &amp; 174.0 &amp; 65.0 &amp; 5.31 &amp; 36.6 &amp; 6.6\\\\\n10.74 &amp; 9.0 &amp; 146.0 &amp; 57.5 &amp; 5.66 &amp; 37.3 &amp; 10.2\\\\\n9.04 &amp; 5.3 &amp; 134.0 &amp; 29.4 &amp; 4.92 &amp; 36.0 &amp; 5.1\\\\\n10.75 &amp; 5.0 &amp; 155.0 &amp; 54.5 &amp; 4.79 &amp; 37.7 &amp; 10.3\\\\\n7.3 &amp; 6.2 &amp; 123.0 &amp; 23.5 &amp; 4.64 &amp; 37.4 &amp; 21.1\\\\\n5.11 &amp; 7.0 &amp; 116.0 &amp; 22.0 &amp; 4.55 &amp; 40.2 &amp; 19.4\\\\\n14.36 &amp; 9.0 &amp; 163.0 &amp; 50.0 &amp; 4.84 &amp; 37.5 &amp; 14.3\\\\\n9.61 &amp; 9.0 &amp; 140.0 &amp; 29.2 &amp; 5.18 &amp; 38.7 &amp; 14.3\\\\\n15.83 &amp; 12.0 &amp; 153.0 &amp; 59.0 &amp; 4.33 &amp; 36.7 &amp; 12.8\\\\\n9.58 &amp; 7.0 &amp; 132.0 &amp; 24.7 &amp; 5.04 &amp; 38.4 &amp; 13.5\\\\\n10.37 &amp; 5.5 &amp; 156.0 &amp; 39.0 &amp; 4.8 &amp; 37.4 &amp; 5.6\\\\\n14.52 &amp; 4.5 &amp; 181.0 &amp; 55.0 &amp; 4.9 &amp; 37.0 &amp; 9.0\\\\\n12.41 &amp; 3.7 &amp; 150.5 &amp; 42.5 &amp; 5.49 &amp; 37.2 &amp; 9.1\\\\\n6.67 &amp; 3.5 &amp; 124.0 &amp; 38.5 &amp; 5.27 &amp; 39.6 &amp; 16.8\\\\\n15.21 &amp; 8.5 &amp; 155.0 &amp; 85.0 &amp; 4.62 &amp; 36.8 &amp; 12.4\\\\\n12.43 &amp; 12.0 &amp; 157.0 &amp; 46.0 &amp; 4.62 &amp; 37.1 &amp; 16.4\\\\\n10.51 &amp; 9.0 &amp; 134.5 &amp; 27.0 &amp; 5.03 &amp; 37.4 &amp; 12.8\\\\\n\\end{pmatrix}\]</span></p>
 <p>ndata</p>
-<div id="cell-9" class="cell" data-execution_count="76">
+<div id="cell-9" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> ndata.values</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-10" class="cell" data-execution_count="83">
+<div id="cell-10" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>X[<span class="dv">7</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="83">
-<pre><code>array([  9.61,   9.  , 140.  ,  29.2 ,   5.18,  38.7 ,  14.3 ])</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>array([  7.3 ,   6.2 , 123.  ,  23.5 ,   4.64,  37.4 ,  21.1 ])</code></pre>
 </div>
 </div>
-<div id="cell-11" class="cell" data-execution_count="84">
+<div id="cell-11" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>X[<span class="dv">7</span>].shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="84">
+<div class="cell-output cell-output-display" data-execution_count="10">
 <pre><code>(7,)</code></pre>
 </div>
 </div>
-<div id="cell-12" class="cell" data-execution_count="81">
+<div id="cell-12" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>X[<span class="dv">7</span>][:, <span class="va">None</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[[  9.61]
- [  9.  ]
- [140.  ]
- [ 29.2 ]
- [  5.18]
- [ 38.7 ]
- [ 14.3 ]]</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>array([[  7.3 ],
+       [  6.2 ],
+       [123.  ],
+       [ 23.5 ],
+       [  4.64],
+       [ 37.4 ],
+       [ 21.1 ]])</code></pre>
 </div>
 </div>
-<div id="cell-13" class="cell" data-execution_count="85">
+<div id="cell-13" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>X[<span class="dv">7</span>][:, <span class="va">None</span>].shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="85">
+<div class="cell-output cell-output-display" data-execution_count="12">
 <pre><code>(7, 1)</code></pre>
 </div>
 </div>
-<div id="cell-14" class="cell" data-execution_count="88">
+<div id="cell-14" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>X[<span class="dv">7</span>][<span class="va">None</span>, :]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="88">
-<pre><code>array([[  9.61,   9.  , 140.  ,  29.2 ,   5.18,  38.7 ,  14.3 ]])</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>array([[  7.3 ,   6.2 , 123.  ,  23.5 ,   4.64,  37.4 ,  21.1 ]])</code></pre>
 </div>
 </div>
-<div id="cell-15" class="cell" data-execution_count="87">
+<div id="cell-15" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>X[<span class="dv">7</span>][<span class="va">None</span>, :].shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="87">
+<div class="cell-output cell-output-display" data-execution_count="14">
 <pre><code>(1, 7)</code></pre>
 </div>
 </div>
-<div id="cell-16" class="cell">
+<div id="cell-16" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dataclasses <span class="im">import</span> dataclass</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
@@ -653,6 +653,9 @@ window.Quarto = {
 <span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    pain: <span class="bu">bool</span></span>
 <span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    rbc_count: <span class="bu">float</span></span>
 <span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    rbc_urine: <span class="bu">int</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-17" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>pd.read_csv(<span class="st">'/Users/gabehope/Downloads/app_data.csv'</span>)[[<span class="st">'Diagnosis'</span>]].to_csv(<span class="st">'diagnosis.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 

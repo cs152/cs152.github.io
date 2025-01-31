@@ -7,12 +7,14 @@ title: "Homeworks"
 - [**Assignment**](/assignments/homeworks/Homework%201/main.ipynb)
 - [**Requirements.txt**](/assignments/homeworks/Homework%201/requirements.txt)
 - [**Notebook**](https://cs152.github.io/assignments/homeworks/Homework 1/submission.ipynb)
+- [**Hint**](/misc/hw1-hint.qmd)
 
 ## Homework 2
 
 - [**Assignment**](/assignments/homeworks/Homework%202/main.ipynb)
 - [**Requirements.txt**](/assignments/homeworks/Homework%202/requirements.txt)
 - [**Notebook**](https://cs152.github.io/assignments/homeworks/Homework 2/submission.ipynb)
+- [**Hint**](/misc/hw2-hint.qmd)
 
 ## Homework 3
 

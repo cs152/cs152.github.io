@@ -214,21 +214,21 @@
     "href": "assignments/homeworks/homeworks.html",
     "title": "Homeworks",
     "section": "",
-    "text": "Assignment\nRequirements.txt\nNotebook"
+    "text": "Assignment\nRequirements.txt\nNotebook\nHint"
   },
   {
     "objectID": "assignments/homeworks/homeworks.html#homework-1",
     "href": "assignments/homeworks/homeworks.html#homework-1",
     "title": "Homeworks",
     "section": "",
-    "text": "Assignment\nRequirements.txt\nNotebook"
+    "text": "Assignment\nRequirements.txt\nNotebook\nHint"
   },
   {
     "objectID": "assignments/homeworks/homeworks.html#homework-2",
     "href": "assignments/homeworks/homeworks.html#homework-2",
     "title": "Homeworks",
     "section": "Homework 2",
-    "text": "Homework 2\n\nAssignment\nRequirements.txt\nNotebook"
+    "text": "Homework 2\n\nAssignment\nRequirements.txt\nNotebook\nHint"
   },
   {
     "objectID": "assignments/homeworks/homeworks.html#homework-3",
@@ -3630,7 +3630,7 @@
     "href": "misc/hw2-hint.html#question-8",
     "title": "Hints for homework 2",
     "section": "Question 8",
-    "text": "Question 8\nIf we want to split a matrix by its rows in numpy as follow:\n\\[\n\\mathbf{X} =\n\\begin{bmatrix} X_{11} & X_{12} \\\\\nX_{21} & X_{22} \\\\\nX_{31} & X_{32} \\\\\nX_{41} & X_{42} \\\\\nX_{51} & X_{52} \\\\\n                \\end{bmatrix}\\longrightarrow \\begin{bmatrix} X_{11} & X_{12} \\\\\nX_{21} & X_{22} \\\\\nX_{31} & X_{32} \\\\\n\\end{bmatrix}, \\quad\n\\begin{bmatrix}\nX_{41} & X_{42} \\\\\nX_{51} & X_{52} \\\\\n                \\end{bmatrix}\\]\nWe can use the index operator [] as follows:\n\nX = np.random.randint(10, size=(5,2))\nprint(X)\n\n[[9 7]\n [2 0]\n [7 7]\n [4 1]\n [4 9]]\n\n\n\nprint(X[:3]) # Get first 3 rows\n\n[[9 7]\n [2 0]\n [7 7]]\n\n\n\nprint(X[3:]) # Get the rest of the rows\n\n[[4 1]\n [4 9]]"
+    "text": "Question 8\nIf we want to split a matrix by its rows in numpy as follow:\n\\[\n\\mathbf{X} =\n\\begin{bmatrix} X_{11} & X_{12} \\\\\nX_{21} & X_{22} \\\\\nX_{31} & X_{32} \\\\\nX_{41} & X_{42} \\\\\nX_{51} & X_{52} \\\\\n                \\end{bmatrix}\\longrightarrow \\begin{bmatrix} X_{11} & X_{12} \\\\\nX_{21} & X_{22} \\\\\nX_{31} & X_{32} \\\\\n\\end{bmatrix}, \\quad\n\\begin{bmatrix}\nX_{41} & X_{42} \\\\\nX_{51} & X_{52} \\\\\n                \\end{bmatrix}\\]\nWe can use the index operator [] as follows:\n\nX = np.random.randint(10, size=(5,2))\nprint(X)\n\n[[8 8]\n [1 9]\n [1 9]\n [2 7]\n [7 6]]\n\n\n\nprint(X[:3]) # Get first 3 rows\n\n[[8 8]\n [1 9]\n [1 9]]\n\n\n\nprint(X[3:]) # Get the rest of the rows\n\n[[2 7]\n [7 6]]"
   },
   {
     "objectID": "lecture10-normalization/notes.html",

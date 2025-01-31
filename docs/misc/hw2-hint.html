@@ -246,7 +246,7 @@ window.Quarto = {
 </header>
 
 
-<div id="c1fcd2a1" class="cell" data-execution_count="1">
+<div id="ef5212bf" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -262,7 +262,7 @@ window.Quarto = {
                 \vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots \\
                 X_{N1} &amp; X_{N2} &amp; \dots  &amp; X_{Nd} &amp; 1 \\  
                 \end{bmatrix}\]</span></p>
-<div id="3a8e8b20" class="cell" data-execution_count="2">
+<div id="c3758069" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Example 4x4 matrix</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.zeros((<span class="dv">4</span>,<span class="dv">4</span>))</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>X</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -273,7 +273,7 @@ window.Quarto = {
        [0., 0., 0., 0.]])</code></pre>
 </div>
 </div>
-<div id="0bea1d2a" class="cell" data-execution_count="3">
+<div id="dc5ae5b3" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Using np.concatenate</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>ones <span class="op">=</span> np.ones((X.shape[<span class="dv">0</span>], <span class="dv">1</span>))</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>Xaug <span class="op">=</span> np.concatenate([X, ones], axis<span class="op">=</span><span class="dv">1</span>)</span>
@@ -285,7 +285,7 @@ window.Quarto = {
        [0., 0., 0., 0., 1.]])</code></pre>
 </div>
 </div>
-<div id="4855093d" class="cell" data-execution_count="4">
+<div id="f6c40017" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Using np.pad</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>Xaug <span class="op">=</span> np.pad(X, [(<span class="dv">0</span>,<span class="dv">0</span>), (<span class="dv">0</span>,<span class="dv">1</span>)], constant_values<span class="op">=</span><span class="fl">1.</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>Xaug</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -297,7 +297,7 @@ window.Quarto = {
 </div>
 </div>
 <p>We could also use pad to add a 1 to a one-dimensional vector:</p>
-<div id="a5af64cb" class="cell" data-execution_count="5">
+<div id="eebdb887" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Example vector</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.zeros((<span class="dv">4</span>,))</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>xaug <span class="op">=</span> np.pad(x, [(<span class="dv">0</span>,<span class="dv">1</span>)], constant_values<span class="op">=</span><span class="fl">1.</span>)</span>
@@ -312,15 +312,15 @@ window.Quarto = {
 <section id="question-2" class="level2">
 <h2 class="anchored" data-anchor-id="question-2">Question 2</h2>
 <p>In order to plot a function with MatPlotLib, we need to provide the <code>np.plot</code> function with a set of inputs and outputs. For example, let’s say we want to plot the function <span class="math display">\[f(x) = \sin(x)\]</span> for inputs between <span class="math inline">\(0\)</span> and <span class="math inline">\(10\)</span> (we say we want to plot <span class="math inline">\(\sin(x)\)</span> on the range <span class="math inline">\([0,10]\)</span>). We first need a set of inputs between <span class="math inline">\(0\)</span> and <span class="math inline">\(10\)</span>. The <code>np.linspace(a, b, n)</code> function will give us <code>n</code> equally-spaced values between <code>a</code> and <code>b</code>. We can use this to define the inputs to our function.</p>
-<div id="c6eafd7b" class="cell" data-execution_count="6">
+<div id="336520ed" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then, we can compute the corresponding set of outputs:</p>
-<div id="64f4e802" class="cell" data-execution_count="7">
+<div id="ca47a7fa" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.sin(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Finally we can plot these values to <code>np.plot</code>, which will “connect-the-dots” to make a smooth plot.</p>
-<div id="a4686ac6" class="cell" data-execution_count="8">
+<div id="02cc58f4" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>plt.plot(x, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -331,7 +331,7 @@ window.Quarto = {
 </div>
 </div>
 <p>We can see more clearly what <code>np.plot</code> is doing if we lower the number of inputs that we use to plot our function and add markers at each point:</p>
-<div id="35b9a66e" class="cell" data-execution_count="9">
+<div id="69d95884" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">10</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.sin(x)</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>plt.plot(x, y, marker<span class="op">=</span><span class="st">'o'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -359,7 +359,7 @@ f(\mathbf{X}) =\mathbf{X}\mathbf{w}=
                 b
                 \end{bmatrix} \]</span></p>
 <p>In numpy, consider converting a range of inputs into a data matrix like the one above:</p>
-<div id="4320a977" class="cell" data-execution_count="10">
+<div id="1d72ca70" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">6</span>) <span class="co"># Get range of inputs</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> x[:, <span class="va">None</span>]             <span class="co"># Convert vector into an Nx1 matrix</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a column of 1s</span></span>
@@ -395,30 +395,30 @@ X_{41} &amp; X_{42} \\
 X_{51} &amp; X_{52} \\
                 \end{bmatrix}\]</span></p>
 <p>We can use the index operator <code>[]</code> as follows:</p>
-<div id="2cde38e1" class="cell" data-execution_count="11">
+<div id="e50ca6ff" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.random.randint(<span class="dv">10</span>, size<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">2</span>))</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[[9 7]
- [2 0]
- [7 7]
- [4 1]
- [4 9]]</code></pre>
+<pre><code>[[8 8]
+ [1 9]
+ [1 9]
+ [2 7]
+ [7 6]]</code></pre>
 </div>
 </div>
-<div id="c99868b2" class="cell" data-execution_count="12">
+<div id="518db44a" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X[:<span class="dv">3</span>]) <span class="co"># Get first 3 rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[[9 7]
- [2 0]
- [7 7]]</code></pre>
+<pre><code>[[8 8]
+ [1 9]
+ [1 9]]</code></pre>
 </div>
 </div>
-<div id="04dfd163" class="cell" data-execution_count="13">
+<div id="e5fd71c5" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X[<span class="dv">3</span>:]) <span class="co"># Get the rest of the rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[[4 1]
- [4 9]]</code></pre>
+<pre><code>[[2 7]
+ [7 6]]</code></pre>
 </div>
 </div>
 

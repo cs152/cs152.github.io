@@ -1,0 +1,60 @@
+---
+title: "Logistic regression visualization"
+format:
+    html:
+        toc: false
+---
+
+*Click on the heatmap to the right to change the regression function!*
+
+
+:::: {.columns}
+::: {.column width="62.5%"}
+```{=html}
+<div id="observablehq-funclabel-a56ea028"></div>
+<div id="observablehq-scatter-a56ea028"></div>
+```
+:::
+::: {.column width="37.5%"}
+```{=html}
+<div id="observablehq-losslabel-a56ea028"></div>
+<div id="observablehq-viewof-coords-a56ea028"></div>
+```
+:::
+::::
+
+:::: {.columns}
+::: {.column width="62.5%"}
+```{=html}
+<div id="observablehq-viewof-lr-a56ea028"></div>
+```
+:::
+::: {.column width="37.5%"}
+```{=html}
+<div id="observablehq-viewof-steps-a56ea028"></div>
+```
+:::
+::::
+
+```{=html}
+<div id="observablehq-histogram-a56ea028"></div>
+<div id="observablehq-mainPlot-a56ea028" style="display:none"></div>
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@observablehq/inspector@5/dist/inspector.css">
+<script type="module">
+import {Runtime, Inspector} from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@5/dist/runtime.js";
+import define from "https://api.observablehq.com/d/add466c86a48d3ee@1194.js?v=4";
+new Runtime().module(define, name => {
+  if (name === "funclabel") return new Inspector(document.querySelector("#observablehq-funclabel-a56ea028"));
+  if (name === "scatter") return new Inspector(document.querySelector("#observablehq-scatter-a56ea028"));
+  if (name === "losslabel") return new Inspector(document.querySelector("#observablehq-losslabel-a56ea028"));
+  if (name === "viewof coords") return new Inspector(document.querySelector("#observablehq-viewof-coords-a56ea028"));
+  if (name === "histogram") return new Inspector(document.querySelector("#observablehq-histogram-a56ea028"));
+  if (name === "viewof lr") return new Inspector(document.querySelector("#observablehq-viewof-lr-a56ea028"));
+  if (name === "viewof steps") return new Inspector(document.querySelector("#observablehq-viewof-steps-a56ea028"));
+  if (name === "mainPlot") return new Inspector(document.querySelector("#observablehq-mainPlot-a56ea028"));
+  return ["mlplot","losses","linedata","residuals","gdsteps","plotdata","optlinedata","pf"].includes(name);
+});
+</script>
+```

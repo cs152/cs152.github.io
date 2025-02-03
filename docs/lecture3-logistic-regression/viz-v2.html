@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>contributing – CS 152: Neural Networks</title>
+<title>Logistic regression visualization – CS 152: Neural Networks</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -70,7 +70,7 @@ ul.task-list li input[type="checkbox"] {
 
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -150,38 +150,68 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#before-you-contribute" id="toc-before-you-contribute" class="nav-link active" data-scroll-target="#before-you-contribute">Before you contribute</a></li>
-  <li><a href="#code-reviews" id="toc-code-reviews" class="nav-link" data-scroll-target="#code-reviews">Code reviews</a></li>
-  <li><a href="#the-small-print" id="toc-the-small-print" class="nav-link" data-scroll-target="#the-small-print">The small print</a></li>
-  </ul>
-</nav>
-    </div>
+    
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Logistic regression visualization</h1>
+</div>
 
 
 
-<p>Want to contribute? Great! First, read this page (including the small print at the end).</p>
-<section id="before-you-contribute" class="level3">
-<h3 class="anchored" data-anchor-id="before-you-contribute">Before you contribute</h3>
-<p>Before we can use your code, you must sign the [Google Individual Contributor License Agreement] (https://cla.developers.google.com/about/google-individual) (CLA), which you can do online. The CLA is necessary mainly because you own the copyright to your changes, even after your contribution becomes part of our codebase, so we need your permission to use and distribute your code. We also need to be sure of various other things—for instance that you’ll tell us if you know that your code infringes on other people’s patents. You don’t have to sign the CLA until after you’ve submitted your code for review and a member has approved it, but you must do it before we can put your code into our codebase. Before you start working on a larger contribution, you should get in touch with us first through the issue tracker with your idea so that we can help out and possibly guide you. Coordinating up front makes it much easier to avoid frustration later on.</p>
-</section>
-<section id="code-reviews" class="level3">
-<h3 class="anchored" data-anchor-id="code-reviews">Code reviews</h3>
-<p>All submissions, including submissions by project members, require review. We use Github pull requests for this purpose.</p>
-</section>
-<section id="the-small-print" class="level3">
-<h3 class="anchored" data-anchor-id="the-small-print">The small print</h3>
-<p>Contributions made by corporations are covered by a different agreement than the one above, the [Software Grant and Corporate Contributor License Agreement] (https://cla.developers.google.com/about/google-corporate).</p>
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
 
 
-</section>
+</header>
+
+
+<p><em>Click on the heatmap to the right to change the regression function!</em></p>
+<div class="columns">
+<div class="column" style="width:62.5%;">
+<div id="observablehq-funclabel-a56ea028"></div>
+<div id="observablehq-scatter-a56ea028"></div>
+</div><div class="column" style="width:37.5%;">
+<div id="observablehq-losslabel-a56ea028"></div>
+<div id="observablehq-viewof-coords-a56ea028"></div>
+</div>
+</div>
+<div class="columns">
+<div class="column" style="width:62.5%;">
+<div id="observablehq-viewof-lr-a56ea028"></div>
+</div><div class="column" style="width:37.5%;">
+<div id="observablehq-viewof-steps-a56ea028"></div>
+</div>
+</div>
+<div id="observablehq-histogram-a56ea028"></div>
+<div id="observablehq-mainPlot-a56ea028" style="display:none"></div>
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@observablehq/inspector@5/dist/inspector.css">
+<script type="module">
+import {Runtime, Inspector} from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@5/dist/runtime.js";
+import define from "https://api.observablehq.com/d/add466c86a48d3ee@1194.js?v=4";
+new Runtime().module(define, name => {
+  if (name === "funclabel") return new Inspector(document.querySelector("#observablehq-funclabel-a56ea028"));
+  if (name === "scatter") return new Inspector(document.querySelector("#observablehq-scatter-a56ea028"));
+  if (name === "losslabel") return new Inspector(document.querySelector("#observablehq-losslabel-a56ea028"));
+  if (name === "viewof coords") return new Inspector(document.querySelector("#observablehq-viewof-coords-a56ea028"));
+  if (name === "histogram") return new Inspector(document.querySelector("#observablehq-histogram-a56ea028"));
+  if (name === "viewof lr") return new Inspector(document.querySelector("#observablehq-viewof-lr-a56ea028"));
+  if (name === "viewof steps") return new Inspector(document.querySelector("#observablehq-viewof-steps-a56ea028"));
+  if (name === "mainPlot") return new Inspector(document.querySelector("#observablehq-mainPlot-a56ea028"));
+  return ["mlplot","losses","linedata","residuals","gdsteps","plotdata","optlinedata","pf"].includes(name);
+});
+</script>
+
+
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

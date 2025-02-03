@@ -85,6 +85,8 @@ class ComparisonVectorScene(LectureScene):
 
 # Classification
 
+**Interactive visualization for this lecture available [here](./viz-v2.qmd)**
+
 ## Functions with categorical outputs
 
 In the last lecture we considered approximating functions of the form:
@@ -99,7 +101,7 @@ In many real-world problems, the output we want to model is not a continuous val
 
 ![](pictures/catdogmouse.png)
 
-We call the prediction of categorical outputs **classification**. The output is often also called the *class* of the obserc
+We call the prediction of categorical outputs **classification**. The output is often also called the *class* of the observation.
 
 ## Binary outputs
 

@@ -7,7 +7,9 @@ title: "Course Updates TODO List"
 Translate slides into a cleaner, more consistant format. 
 - Make it more clear what to fill in and where
 - Release blank slides on calendar
-- Structured activities.
+- Structure times for students to interact with visualizations
+
+Lots of typos in the notes text that should be fixed
 
 ## Module 1 - Background
 

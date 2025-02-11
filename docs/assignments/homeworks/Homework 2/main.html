@@ -190,8 +190,14 @@ window.Quarto = {
  <span class="menu-text">Solutions</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-solutions">    
-        <li class="dropdown-header">Homework 1 Solutions</li>
-        <li class="dropdown-header">Homework 2 Solutions</li>
+        <li>
+    <a class="dropdown-item" href="../../../assignments/homeworks/Homework 1/solutions-AVPHKV.html">
+ <span class="dropdown-text">Homework 1 Solutions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../assignments/homeworks/Homework 2/solutions-QXP5GA.html">
+ <span class="dropdown-text">Homework 2 Solutions</span></a>
+  </li>  
         <li class="dropdown-header">Homework 3 Solutions</li>
         <li class="dropdown-header">Homework 4 Solutions</li>
         <li class="dropdown-header">Homework 5 Solutions</li>
@@ -316,11 +322,22 @@ window.Quarto = {
 </section>
 <section id="q3-10-points" class="level4">
 <h4 class="anchored" data-anchor-id="q3-10-points"><strong>Q3</strong> (10 points)</h4>
-<p>Using the gradient formula we derived in class, write a function that returns both the mean squared error <em>and</em> the gradient of the error with respect to <span class="math inline">\(\mathbf{w}\)</span>, given <span class="math inline">\(\mathbf{w}\)</span>, <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{y}\)</span>. <em>Hint: don’t forget to augment X when computing the gradient!</em></p>
+<p>Using the gradient formula we derived in class, write a function that returns both the mean squared error <em>and</em> the gradient of the error with respect to <span class="math inline">\(\mathbf{w}\)</span>, given <span class="math inline">\(\mathbf{w}\)</span>, <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{y}\)</span>.</p>
+<p>As you write each line of code, mark it with a comment specifying what shape you expect the output to be. For example:</p>
 <div id="cell-9" class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mse_and_grad(w, X, y):</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">### YOUR CODE HERE</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> mse, grad_w</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> np.zeros_like(X) <span class="co"># N x d </span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> np.<span class="bu">sum</span>(A, axis<span class="op">=</span><span class="dv">1</span>)     <span class="co"># N</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>A_AT <span class="op">=</span> np.dot(A, A.T)     <span class="co"># N x N</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> np.dot(A_AT, b)  <span class="co"># N</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> result.shape <span class="op">==</span> (A.shape[<span class="dv">0</span>],)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This will help you debug. If your code is not working as expected, try printing the shape of each intermediate array and verify that it matches your expectations.</p>
+<p><em>Hint: don’t forget to augment X when computing the gradient!</em></p>
+<div id="cell-11" class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mse_and_grad(w, X, y):</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">### YOUR CODE HERE</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> mse, grad_w</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Recall that we can use the <em>gradient descent</em> algorithm to find the input that minimizes a function, using the corresponding gradient function.</p>
 <p>Given an initial guess of the optimal input, <span class="math inline">\(\mathbf{w}^{(0)}\)</span>, gradient descent uses the following update to improve the guess: <span class="math display">\[\mathbf{w}^{(i+1)} \longleftarrow \mathbf{w}^{(i)} - \alpha \nabla f(\mathbf{w}),\]</span> where <span class="math inline">\(\alpha\)</span> is the <em>learning rate</em> or <em>step size</em>.</p>
@@ -329,71 +346,71 @@ window.Quarto = {
 <h4 class="anchored" data-anchor-id="q4-10-points"><strong>Q4</strong> (10 points)</h4>
 <p>Write a function to perform gradient descent. The function should take as input: - <code>value_and_grad</code>: A function that produces the output and gradient of the function to optimize (e.g.&nbsp;the <code>mse_and_grad</code>) - <code>w0</code>: An inital guess <span class="math inline">\(\mathbf{w}^{(0)}\)</span> - <code>lr</code>: The learning rate <span class="math inline">\((\alpha)\)</span> - <code>niter</code>: The number of updates to perform - <code>*args</code>: Any additional argumets to pass to <code>value_and_grad</code> (e.g.&nbsp;<code>X</code> and <code>y</code>)</p>
 <p>The function should return: - <code>w</code>: The final guess - <code>losses</code>: A list (or array) that tracks the value of the function at each update</p>
-<div id="cell-11" class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gradient_descent(value_and_grad, w0, lr, niter, <span class="op">*</span>args):</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get the inital loss</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    initial_loss, _ <span class="op">=</span> value_and_grad(w0, <span class="op">*</span>args)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    losses <span class="op">=</span> []</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">### YOUR CODE HERE</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> w, losses</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-13" class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gradient_descent(value_and_grad, w0, lr, niter, <span class="op">*</span>args):</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get the inital loss</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    initial_loss, _ <span class="op">=</span> value_and_grad(w0, <span class="op">*</span>args)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    losses <span class="op">=</span> []</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">### YOUR CODE HERE</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> w, losses</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
 <section id="part-2-applications-to-real-data" class="level2">
 <h2 class="anchored" data-anchor-id="part-2-applications-to-real-data">Part 2: Applications to real data</h2>
 <p>Now that we’ve setup a full implementation of linear regression, let’s test it on a real dataset. We’ll use the MPG dataset that we saw in class. The following code will load the data and rescale it.</p>
-<div id="cell-13" class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> np.genfromtxt(<span class="st">'auto-mpg.csv'</span>, delimiter<span class="op">=</span><span class="st">','</span>, missing_values<span class="op">=</span>[<span class="st">'?'</span>], filling_values<span class="op">=</span>[<span class="dv">0</span>])</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Uncomment if on Colab!</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># import urllib.request</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># link = 'https://gist.githubusercontent.com/gabehope/4df286bbd9a672ce7731d52afe3ca07e/raw/65026711d71affaafb9713ddf5b6ef29125ba0fb/auto.csv'</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># data = np.genfromtxt(urllib.request.urlopen(link), delimiter=',', missing_values=['?'], filling_values=[0])</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># MPG is the output value</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>target <span class="op">=</span> <span class="st">'MPG'</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> data[:, <span class="dv">0</span>]</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co"># The other variables are inputs in the order listed</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>features <span class="op">=</span> [<span class="st">'displacement'</span>, <span class="st">'weight'</span>, <span class="st">'acceleration'</span>, <span class="st">'year'</span>]</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> data[:, [<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>]]</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> (X <span class="op">-</span> X.mean(axis<span class="op">=</span><span class="dv">0</span>)) <span class="op">/</span> X.std(axis<span class="op">=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-15" class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> np.genfromtxt(<span class="st">'auto-mpg.csv'</span>, delimiter<span class="op">=</span><span class="st">','</span>, missing_values<span class="op">=</span>[<span class="st">'?'</span>], filling_values<span class="op">=</span>[<span class="dv">0</span>])</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Uncomment if on Colab!</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># import urllib.request</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># link = 'https://gist.githubusercontent.com/gabehope/4df286bbd9a672ce7731d52afe3ca07e/raw/65026711d71affaafb9713ddf5b6ef29125ba0fb/auto.csv'</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># data = np.genfromtxt(urllib.request.urlopen(link), delimiter=',', missing_values=['?'], filling_values=[0])</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># MPG is the output value</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>target <span class="op">=</span> <span class="st">'MPG'</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> data[:, <span class="dv">0</span>]</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># The other variables are inputs in the order listed</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>features <span class="op">=</span> [<span class="st">'displacement'</span>, <span class="st">'weight'</span>, <span class="st">'acceleration'</span>, <span class="st">'year'</span>]</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> data[:, [<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>]]</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> (X <span class="op">-</span> X.mean(axis<span class="op">=</span><span class="dv">0</span>)) <span class="op">/</span> X.std(axis<span class="op">=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s start by fitting a model that just uses the feature <code>weight</code>.</p>
 <section id="q5-5-points" class="level4">
 <h4 class="anchored" data-anchor-id="q5-5-points"><strong>Q5</strong> (5 points)</h4>
 <p>Use the <code>gradient_descent</code> and <code>mse_and_grad</code> functions you wrote above to fit a linear regression model that takes in a car’s weight and predicts its MPG rating. Start with the weights equal to <code>0</code> and perform <code>100</code> updates of gradient descent with a learning rate of <code>0.1</code>. Plot the loss (MSE) as a function of the number of updates.</p>
-<div id="cell-15" class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>Xweight <span class="op">=</span> X[:, <span class="dv">1</span>:<span class="dv">2</span>]</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>w0 <span class="op">=</span> np.zeros((<span class="dv">2</span>,))</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">### YOUR CODE HERE</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>w, losses <span class="op">=</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">### PLOTTING CODE HERE</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-17" class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>Xweight <span class="op">=</span> X[:, <span class="dv">1</span>:<span class="dv">2</span>]</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>w0 <span class="op">=</span> np.zeros((<span class="dv">2</span>,))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">### YOUR CODE HERE</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>w, losses <span class="op">=</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">### PLOTTING CODE HERE</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="q6-5-points" class="level4">
 <h4 class="anchored" data-anchor-id="q6-5-points"><strong>Q6</strong> (5 points)</h4>
 <p>Plot a scatterplot of weight vs.&nbsp;MPG. Then on the same plot, plot the prediction function for the linear regression model you just fit on the input range <span class="math inline">\([-3, 3]\)</span>.</p>
-<div id="cell-17" class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">### PLOTTING CODE HERE</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-19" class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">### PLOTTING CODE HERE</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="q7-5-points" class="level4">
 <h4 class="anchored" data-anchor-id="q7-5-points"><strong>Q7</strong> (5 points)</h4>
 <p>Repeat <strong>Q5</strong> using all 4 features and compare the final loss to the final loss using only <code>weight</code> as an input. Describe any differences you observe.</p>
-<div id="cell-19" class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>w0 <span class="op">=</span> np.zeros((<span class="dv">5</span>,))</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">### YOUR CODE HERE</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>w, losses <span class="op">=</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">### PLOTTING CODE HERE</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-21" class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>w0 <span class="op">=</span> np.zeros((<span class="dv">5</span>,))</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">### YOUR CODE HERE</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>w, losses <span class="op">=</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">### PLOTTING CODE HERE</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>DESCRIBE RESULTS HERE</strong></p>
 <p>In machine learning we are typically less interested in how our model predicts the data we’ve already seen than we are in how well it makes predictions for <em>new</em> data. One way to estimate how well our model our model will generalize to new data is to <em>hold out</em> data while fitting our model. To do this we will split our dataset into two smaller datasets: a <em>training dataset</em> that we will use to fit our model, and a <em>test</em> or <em>held-out</em> dataset that we will only use to evaluate our model. By computing the loss on this test dataset, we can get a sense of how well our model will make prediction for new data.</p>
@@ -405,38 +422,16 @@ window.Quarto = {
 <section id="q8-5-points" class="level4">
 <h4 class="anchored" data-anchor-id="q8-5-points"><strong>Q8</strong> (5 points)</h4>
 <p>Split the MPG dataset into <em>training</em> and <em>test</em> datasets. Use 70% of the observations for training and 30% for test. Then repeat <strong>Q5</strong> to fit a linear regression model on <em>just the training dataset</em> using only the <code>weight</code> feature (you don’t need to plot the loss for this question). Report the final loss (MSE) on the training dataset and on the test dataset.</p>
-<div id="cell-22" class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">### CODE TO SPLIT DATASET HERE</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>Xweight_train <span class="op">=</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>y_train <span class="op">=</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>Xweight_test <span class="op">=</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>y_test <span class="op">=</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">### CODE TO FIT MODEL HERE</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>w0 <span class="op">=</span> np.zeros((<span class="dv">2</span>,))</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>w, losses <span class="op">=</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co">### CODE TO EVALUATE MODEL HERE</span></span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>mse_train <span class="op">=</span></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>mse_test <span class="op">=</span></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Loss on training data: </span><span class="sc">%.4f</span><span class="st">, loss on test data: </span><span class="sc">%.4f</span><span class="st">'</span> <span class="op">%</span> (mse_train, mse_test))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="q9-5-points" class="level4">
-<h4 class="anchored" data-anchor-id="q9-5-points"><strong>Q9</strong> (5 points)</h4>
-<p>Repeat <strong>Q8</strong> using the all 4 features. Compare the results to the model using only <code>weight</code>.</p>
 <div id="cell-24" class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">### CODE TO SPLIT DATASET HERE</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>X_train <span class="op">=</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>Xweight_train <span class="op">=</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>y_train <span class="op">=</span></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>X_test <span class="op">=</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>Xweight_test <span class="op">=</span></span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>y_test <span class="op">=</span></span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">### CODE TO FIT MODEL HERE</span></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>w0 <span class="op">=</span> np.zeros((<span class="dv">5</span>,))</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>w0 <span class="op">=</span> np.zeros((<span class="dv">2</span>,))</span>
 <span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>w, losses <span class="op">=</span></span>
 <span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co">### CODE TO EVALUATE MODEL HERE</span></span>
@@ -444,6 +439,28 @@ window.Quarto = {
 <span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>mse_test <span class="op">=</span></span>
 <span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Loss on training data: </span><span class="sc">%.4f</span><span class="st">, loss on test data: </span><span class="sc">%.4f</span><span class="st">'</span> <span class="op">%</span> (mse_train, mse_test))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="q9-5-points" class="level4">
+<h4 class="anchored" data-anchor-id="q9-5-points"><strong>Q9</strong> (5 points)</h4>
+<p>Repeat <strong>Q8</strong> using the all 4 features. Compare the results to the model using only <code>weight</code>.</p>
+<div id="cell-26" class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">### CODE TO SPLIT DATASET HERE</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>X_train <span class="op">=</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>y_train <span class="op">=</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>X_test <span class="op">=</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>y_test <span class="op">=</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">### CODE TO FIT MODEL HERE</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>w0 <span class="op">=</span> np.zeros((<span class="dv">5</span>,))</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>w, losses <span class="op">=</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co">### CODE TO EVALUATE MODEL HERE</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>mse_train <span class="op">=</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>mse_test <span class="op">=</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Loss on training data: </span><span class="sc">%.4f</span><span class="st">, loss on test data: </span><span class="sc">%.4f</span><span class="st">'</span> <span class="op">%</span> (mse_train, mse_test))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>DESCRIBE RESULTS HERE</strong></p>
 </section>
@@ -465,23 +482,23 @@ p(y\mid \mu, \sigma) = \frac{1}{\sigma \sqrt{2 \pi}} \text{exp}\bigg(-\frac{1}{2
 <p>A natural question about the above model is: why choose the Normal distribution? In principal, we could define a linear model using <em>any</em> distribution over the real numbers <span class="math inline">\(\mathbb{R}\)</span>. Let’s explore an alternative choice: the <em>Laplace distribution</em> (<a href="https://en.wikipedia.org/wiki/Laplace_distribution">Wiki</a>). The Laplace distribution <span class="math inline">\(L(\mu, a)\)</span> has the following PDF:</p>
 <p><span class="math display">\[p(y\mid \mu, a) = \frac{1}{2a} \exp\bigg(- \frac{|y-\mu|}{a} \bigg) \]</span></p>
 <p>As for the normal distribution <span class="math inline">\(\mu\)</span> is the mean, while <span class="math inline">\(a\)</span> defines the “width” of the distribution (analogous to variance for the Normal). We can compare the two distributions visually:</p>
-<div id="cell-28" class="cell" data-outputid="85da6454-19e7-44c1-c048-745dec06a0ba">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>ylp <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">200</span>)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>mu, sigma2_or_a <span class="op">=</span> <span class="dv">0</span>, <span class="dv">1</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>p_y_normal <span class="op">=</span> (<span class="dv">1</span> <span class="op">/</span> np.sqrt(sigma2_or_a <span class="op">*</span> <span class="dv">2</span> <span class="op">*</span> np.pi)) <span class="op">*</span> np.exp(<span class="op">-</span> (<span class="fl">0.5</span> <span class="op">/</span> sigma2_or_a) <span class="op">*</span> (ylp <span class="op">-</span> mu) <span class="op">**</span> <span class="dv">2</span>)</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>p_y_laplace <span class="op">=</span> (<span class="dv">1</span> <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> sigma2_or_a)) <span class="op">*</span> np.exp(<span class="op">-</span> (<span class="dv">1</span> <span class="op">/</span> sigma2_or_a) <span class="op">*</span> np.<span class="bu">abs</span>(ylp <span class="op">-</span> mu))</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">4</span>,<span class="dv">3</span>))</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>plt.plot(ylp, p_y_normal, label<span class="op">=</span><span class="vs">r"Normal PDF"</span>)</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>plt.plot(ylp, p_y_laplace, label<span class="op">=</span><span class="vs">r"Laplace PDF"</span>)</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'$y$'</span>)</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'$p(y)$'</span>)</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="cf">pass</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-30" class="cell" data-outputid="85da6454-19e7-44c1-c048-745dec06a0ba">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>ylp <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">200</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>mu, sigma2_or_a <span class="op">=</span> <span class="dv">0</span>, <span class="dv">1</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>p_y_normal <span class="op">=</span> (<span class="dv">1</span> <span class="op">/</span> np.sqrt(sigma2_or_a <span class="op">*</span> <span class="dv">2</span> <span class="op">*</span> np.pi)) <span class="op">*</span> np.exp(<span class="op">-</span> (<span class="fl">0.5</span> <span class="op">/</span> sigma2_or_a) <span class="op">*</span> (ylp <span class="op">-</span> mu) <span class="op">**</span> <span class="dv">2</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>p_y_laplace <span class="op">=</span> (<span class="dv">1</span> <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> sigma2_or_a)) <span class="op">*</span> np.exp(<span class="op">-</span> (<span class="dv">1</span> <span class="op">/</span> sigma2_or_a) <span class="op">*</span> np.<span class="bu">abs</span>(ylp <span class="op">-</span> mu))</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">4</span>,<span class="dv">3</span>))</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>plt.plot(ylp, p_y_normal, label<span class="op">=</span><span class="vs">r"Normal PDF"</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>plt.plot(ylp, p_y_laplace, label<span class="op">=</span><span class="vs">r"Laplace PDF"</span>)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'$y$'</span>)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'$p(y)$'</span>)</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="cf">pass</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="main_files/figure-html/cell-13-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="main_files/figure-html/cell-14-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -504,62 +521,71 @@ y_i \sim L\big(\mathbf{x}_i^T \mathbf{w},\ a\big)
 <section id="q12-5-points" class="level4">
 <h4 class="anchored" data-anchor-id="q12-5-points"><strong>Q12</strong> (5 points)</h4>
 <p>Using the formula you just derived, write a function that returns both the negative log-likelihood <em>and</em> the gradient of the negative log-likelihood with respect to <span class="math inline">\(\mathbf{w}\)</span>, given <span class="math inline">\(\mathbf{w}\)</span>, <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{y}\)</span> (assume that <span class="math inline">\(a=1\)</span>). We’ll divide both outputs by <span class="math inline">\(N\)</span> to make our results more comparable to MSE. <em>Hint: <code>np.sign</code> will compute the sign function descibed above.</em></p>
-<div id="cell-35" class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> nll_and_grad(w, X, y):</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    N <span class="op">=</span> X.shape[<span class="dv">0</span>]</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">### YOUR CODE HERE</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> nll <span class="op">/</span> N, grad_w <span class="op">/</span> N</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-37" class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> nll_and_grad(w, X, y):</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    N <span class="op">=</span> X.shape[<span class="dv">0</span>]</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">### YOUR CODE HERE</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> nll <span class="op">/</span> N, grad_w <span class="op">/</span> N</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="q13-5-points" class="level4">
 <h4 class="anchored" data-anchor-id="q13-5-points"><strong>Q13</strong> (5 points)</h4>
 <p>Use the <code>gradient_descent</code> and <code>nll_and_grad</code> functions you wrote above to fit a linear regression model that takes in a car’s weight and predicts its MPG rating. Start with the weights equal to <code>0</code> and perform <code>100</code> updates of gradient descent with a learning rate of <code>1.0</code>. Plot the loss (NLL) as a function of the number of updates. <em>Use the full dataset as in <strong>Q5</strong> and note the change in learning rate!</em></p>
-<div id="cell-37" class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>Xweight <span class="op">=</span> X[:, <span class="dv">1</span>:<span class="dv">2</span>]</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>w0 <span class="op">=</span> np.zeros((<span class="dv">2</span>,))</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co">### YOUR CODE HERE</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>w_laplace, losses_laplace <span class="op">=</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">### PLOTTING CODE HERE</span></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-39" class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>Xweight <span class="op">=</span> X[:, <span class="dv">1</span>:<span class="dv">2</span>]</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>w0 <span class="op">=</span> np.zeros((<span class="dv">2</span>,))</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">### YOUR CODE HERE</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>w_laplace, losses_laplace <span class="op">=</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co">### PLOTTING CODE HERE</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="q14-5-points" class="level4">
 <h4 class="anchored" data-anchor-id="q14-5-points"><strong>Q14</strong> (5 points)</h4>
 <p>Plot a scatterplot of weight vs.&nbsp;MPG. Then on the same plot, plot the prediction function for the linear regression model you just fit on the input range <span class="math inline">\([-3, 3]\)</span>. Finally, copy your code from <strong>Q5</strong> to once again find the optimal <span class="math inline">\(\mathbf{w}\)</span> using the MSE loss and plot this function on the same plot in a different color. Describe any differences you see between the two models</p>
-<div id="cell-39" class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">### CODE FROM Q5 HERE</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>w_mse, losses_mse <span class="op">=</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">### PLOTTING CODE HERE</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-41" class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">### CODE FROM Q5 HERE</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>w_mse, losses_mse <span class="op">=</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co">### PLOTTING CODE HERE</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>WRITTEN ANSWER HERE</strong></p>
 </section>
 <section id="q15-10-points" class="level4">
 <h4 class="anchored" data-anchor-id="q15-10-points"><strong>Q15</strong> (10 points)</h4>
 <p>Using the parameters that you just found, plot the Laplace NLL loss as a function of the first entry in <code>w</code> (<code>w1</code> below), holding the other (the bias) constant. Plot this loss on the range <span class="math inline">\([-10, 0]\)</span>. Then, in a separate cell, plot the MSE loss as a function of the first entry in <code>w</code> on the same range.</p>
-<div id="cell-42" class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example of deconstructing and reconstructing the parameter vector.</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>w1, b <span class="op">=</span> w</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>wi <span class="op">=</span> np.array([w1, b])</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co">### PLOTTING CODE FOR NLL HERE</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-44" class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example of deconstructing and reconstructing the parameter vector.</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>w1, b <span class="op">=</span> w</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>wi <span class="op">=</span> np.array([w1, b])</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">### PLOTTING CODE FOR NLL HERE</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-43" class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">### PLOTTING CODE FOR MSE HERE</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-45" class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">### PLOTTING CODE FOR MSE HERE</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Q15 Hint</strong></p>
+<p>Note that the loss function for linear regression as function of <span class="math inline">\(w\)</span> and <span class="math inline">\(b\)</span> is a paraboloid. Here we’re asking you to plot a 2-d slice of this paraboloid with <span class="math inline">\(b\)</span> fixed at the optimal value.</p>
+<p>You can visualize this in 3-d conceptually using the figure below. The red paraboloid is the loss, the plane is the set of points with fixed <span class="math inline">\(b\)</span> and the blue curve is what we want to plot for both linear and Laplace regression.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="main_files/figure-html/cell-46-1-image.png" class="img-fluid figure-img"></p>
+<figcaption>image.png</figcaption>
+</figure>
 </div>
 <p>In the cells below, copy your code for <strong>Q5</strong> and <strong>Q13</strong>. Try out different learning rates and and numbers of iterations. Observe what happens to the loss plot in each case.</p>
-<div id="cell-45" class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">### COPY Q5 CODE HERE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-48" class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">### COPY Q5 CODE HERE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-46" class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">### COPY Q13 CODE HERE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-49" class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">### COPY Q13 CODE HERE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Based on what you’ve obsevered above and in the previous questions, why might you choose the Normal distribution or the Laplace distribution for linear regression? What effect does the learning rate have (what happens if it’s set too high or too low)?</p>
 <p><strong>YOUR ANSWER HERE</strong></p>

@@ -190,8 +190,14 @@ window.Quarto = {
  <span class="menu-text">Solutions</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-solutions">    
-        <li class="dropdown-header">Homework 1 Solutions</li>
-        <li class="dropdown-header">Homework 2 Solutions</li>
+        <li>
+    <a class="dropdown-item" href="../../../assignments/homeworks/Homework 1/solutions-AVPHKV.html">
+ <span class="dropdown-text">Homework 1 Solutions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../assignments/homeworks/Homework 2/solutions-QXP5GA.html">
+ <span class="dropdown-text">Homework 2 Solutions</span></a>
+  </li>  
         <li class="dropdown-header">Homework 3 Solutions</li>
         <li class="dropdown-header">Homework 4 Solutions</li>
         <li class="dropdown-header">Homework 5 Solutions</li>
@@ -250,7 +256,7 @@ window.Quarto = {
 </header>
 
 
-<div id="cell-2" class="cell" data-execution_count="35">
+<div id="cell-2" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run me first!</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -273,7 +279,7 @@ window.Quarto = {
 </section>
 <section id="answer" class="level4">
 <h4 class="anchored" data-anchor-id="answer">Answer</h4>
-<div id="cell-6" class="cell" data-execution_count="36">
+<div id="cell-6" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test inputs</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="op">-</span><span class="dv">3</span>, <span class="dv">5</span>])</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> np.array([<span class="op">-</span><span class="dv">1</span>, <span class="dv">2</span>, <span class="fl">0.5</span>, <span class="dv">2</span>])</span>
@@ -303,7 +309,7 @@ window.Quarto = {
 </section>
 <section id="answer-1" class="level4">
 <h4 class="anchored" data-anchor-id="answer-1">Answer</h4>
-<div id="cell-9" class="cell" data-execution_count="37">
+<div id="cell-9" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test inputs</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> np.array([<span class="fl">0.5</span>, <span class="dv">2</span>])</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -333,7 +339,7 @@ window.Quarto = {
 </section>
 <section id="answer-2" class="level4">
 <h4 class="anchored" data-anchor-id="answer-2">Answer</h4>
-<div id="cell-12" class="cell" data-execution_count="38">
+<div id="cell-12" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mse_and_grad(w, X, y):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    error <span class="op">=</span> linear_regression(X, w) <span class="op">-</span> y</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    mse <span class="op">=</span> np.mean(error <span class="op">**</span> <span class="dv">2</span>)</span>
@@ -350,7 +356,7 @@ window.Quarto = {
 </section>
 <section id="answer-3" class="level4">
 <h4 class="anchored" data-anchor-id="answer-3">Answer</h4>
-<div id="cell-15" class="cell" data-execution_count="39">
+<div id="cell-15" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gradient_descent(value_and_grad, w0, lr, niter, <span class="op">*</span>args):</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get the inital loss</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    initial_loss, grad <span class="op">=</span> value_and_grad(w0, <span class="op">*</span>args)</span>
@@ -368,7 +374,7 @@ window.Quarto = {
 <section id="part-2-applications-to-real-data" class="level2">
 <h2 class="anchored" data-anchor-id="part-2-applications-to-real-data">Part 2: Applications to real data</h2>
 <p>Now that we’ve setup a full implementation of linear regression, let’s test it on a real dataset. We’ll use the MPG dataset that we saw in class. The following code will load the data and rescale it.</p>
-<div id="cell-17" class="cell" data-execution_count="40">
+<div id="cell-17" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> np.genfromtxt(<span class="st">'auto-mpg.csv'</span>, delimiter<span class="op">=</span><span class="st">','</span>, missing_values<span class="op">=</span>[<span class="st">'?'</span>], filling_values<span class="op">=</span>[<span class="dv">0</span>])</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Uncomment if on Colab!</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># import urllib.request</span></span>
@@ -391,7 +397,7 @@ window.Quarto = {
 </section>
 <section id="answer-4" class="level4">
 <h4 class="anchored" data-anchor-id="answer-4">Answer</h4>
-<div id="cell-20" class="cell" data-execution_count="41">
+<div id="cell-20" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>Xweight <span class="op">=</span> X[:, <span class="dv">1</span>:<span class="dv">2</span>]</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>w0 <span class="op">=</span> np.zeros((<span class="dv">2</span>,))</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -419,7 +425,7 @@ window.Quarto = {
 </section>
 <section id="answer-5" class="level4">
 <h4 class="anchored" data-anchor-id="answer-5">Answer</h4>
-<div id="cell-23" class="cell" data-execution_count="42">
+<div id="cell-23" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>plt.scatter(Xweight.flatten(), y)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -440,7 +446,7 @@ window.Quarto = {
 </section>
 <section id="answer-6" class="level4">
 <h4 class="anchored" data-anchor-id="answer-6">Answer</h4>
-<div id="cell-26" class="cell" data-execution_count="43">
+<div id="cell-26" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>w0 <span class="op">=</span> np.zeros((<span class="dv">5</span>,))</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>w, losses <span class="op">=</span> gradient_descent(mse_and_grad, w0, <span class="fl">0.1</span>, <span class="dv">50</span>, X, y)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -471,20 +477,26 @@ window.Quarto = {
 </section>
 <section id="answer-7" class="level4">
 <h4 class="anchored" data-anchor-id="answer-7">Answer</h4>
-<div id="cell-30" class="cell" data-execution_count="44">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>Xweight_train <span class="op">=</span> Xweight[:<span class="bu">int</span>(X.shape[<span class="dv">0</span>] <span class="op">*</span> <span class="fl">.7</span>)]</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>y_train <span class="op">=</span> y[:<span class="bu">int</span>(X.shape[<span class="dv">0</span>] <span class="op">*</span> <span class="fl">.7</span>)]</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>Xweight_test <span class="op">=</span> Xweight[<span class="bu">int</span>(X.shape[<span class="dv">0</span>] <span class="op">*</span> <span class="fl">.7</span>):]</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>y_test <span class="op">=</span> y[<span class="bu">int</span>(X.shape[<span class="dv">0</span>] <span class="op">*</span> <span class="fl">.7</span>):]</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>w0 <span class="op">=</span> np.zeros((<span class="dv">2</span>,))</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>w, losses <span class="op">=</span> gradient_descent(mse_and_grad, w0, <span class="fl">0.1</span>, <span class="dv">50</span>, Xweight_train, y_train)</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>mse_train, _ <span class="op">=</span> mse_and_grad(w, Xweight_train, y_train)</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>mse_test, _ <span class="op">=</span> mse_and_grad(w, Xweight_test, y_test)</span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Loss on training data: </span><span class="sc">%.4f</span><span class="st">, loss on test data: </span><span class="sc">%.4f</span><span class="st">'</span> <span class="op">%</span> (mse_train, mse_test))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-30" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>Xweight_train.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>(278, 1)</code></pre>
+</div>
+</div>
+<div id="cell-31" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>Xweight_train <span class="op">=</span> Xweight[:<span class="bu">int</span>(X.shape[<span class="dv">0</span>] <span class="op">*</span> <span class="fl">.7</span>)]</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>y_train <span class="op">=</span> y[:<span class="bu">int</span>(X.shape[<span class="dv">0</span>] <span class="op">*</span> <span class="fl">.7</span>)]</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>Xweight_test <span class="op">=</span> Xweight[<span class="bu">int</span>(X.shape[<span class="dv">0</span>] <span class="op">*</span> <span class="fl">.7</span>):]</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>y_test <span class="op">=</span> y[<span class="bu">int</span>(X.shape[<span class="dv">0</span>] <span class="op">*</span> <span class="fl">.7</span>):]</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>w0 <span class="op">=</span> np.zeros((<span class="dv">2</span>,))</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>w, losses <span class="op">=</span> gradient_descent(mse_and_grad, w0, <span class="fl">0.1</span>, <span class="dv">50</span>, Xweight_train, y_train)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>mse_train, _ <span class="op">=</span> mse_and_grad(w, Xweight_train, y_train)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>mse_test, _ <span class="op">=</span> mse_and_grad(w, Xweight_test, y_test)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Loss on training data: </span><span class="sc">%.4f</span><span class="st">, loss on test data: </span><span class="sc">%.4f</span><span class="st">'</span> <span class="op">%</span> (mse_train, mse_test))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Loss on training data: 8.4172, loss on test data: 60.1368</code></pre>
 </div>
@@ -496,20 +508,20 @@ window.Quarto = {
 </section>
 <section id="answer-8" class="level4">
 <h4 class="anchored" data-anchor-id="answer-8">Answer</h4>
-<div id="cell-33" class="cell" data-execution_count="45">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>X_train <span class="op">=</span> X[:<span class="bu">int</span>(X.shape[<span class="dv">0</span>] <span class="op">*</span> <span class="fl">.7</span>)]</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>y_train <span class="op">=</span> y[:<span class="bu">int</span>(X.shape[<span class="dv">0</span>] <span class="op">*</span> <span class="fl">.7</span>)]</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>X_test <span class="op">=</span> X[<span class="bu">int</span>(X.shape[<span class="dv">0</span>] <span class="op">*</span> <span class="fl">.7</span>):]</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>y_test <span class="op">=</span> y[<span class="bu">int</span>(X.shape[<span class="dv">0</span>] <span class="op">*</span> <span class="fl">.7</span>):]</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>w0 <span class="op">=</span> np.zeros((<span class="dv">5</span>,))</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>w, losses <span class="op">=</span> gradient_descent(mse_and_grad, w0, <span class="fl">0.1</span>, <span class="dv">50</span>, X_train, y_train)</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>mse_train, _ <span class="op">=</span> mse_and_grad(w, X_train, y_train)</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>mse_test, _ <span class="op">=</span> mse_and_grad(w, X_test, y_test)</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Loss on training data: </span><span class="sc">%.4f</span><span class="st">, loss on test data: </span><span class="sc">%.4f</span><span class="st">'</span> <span class="op">%</span> (mse_train, mse_test))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-34" class="cell" data-execution_count="45">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>X_train <span class="op">=</span> X[:<span class="bu">int</span>(X.shape[<span class="dv">0</span>] <span class="op">*</span> <span class="fl">.7</span>)]</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>y_train <span class="op">=</span> y[:<span class="bu">int</span>(X.shape[<span class="dv">0</span>] <span class="op">*</span> <span class="fl">.7</span>)]</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>X_test <span class="op">=</span> X[<span class="bu">int</span>(X.shape[<span class="dv">0</span>] <span class="op">*</span> <span class="fl">.7</span>):]</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>y_test <span class="op">=</span> y[<span class="bu">int</span>(X.shape[<span class="dv">0</span>] <span class="op">*</span> <span class="fl">.7</span>):]</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>w0 <span class="op">=</span> np.zeros((<span class="dv">5</span>,))</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>w, losses <span class="op">=</span> gradient_descent(mse_and_grad, w0, <span class="fl">0.1</span>, <span class="dv">50</span>, X_train, y_train)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>mse_train, _ <span class="op">=</span> mse_and_grad(w, X_train, y_train)</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>mse_test, _ <span class="op">=</span> mse_and_grad(w, X_test, y_test)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Loss on training data: </span><span class="sc">%.4f</span><span class="st">, loss on test data: </span><span class="sc">%.4f</span><span class="st">'</span> <span class="op">%</span> (mse_train, mse_test))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Loss on training data: 7.5947, loss on test data: 43.7603</code></pre>
 </div>
@@ -534,23 +546,23 @@ p(y\mid \mu, \sigma) = \frac{1}{\sigma \sqrt{2 \pi}} \text{exp}\bigg(-\frac{1}{2
 <p>A natural question about the above model is: why choose the Normal distribution? In principal, we could define a linear model using <em>any</em> distribution over the real numbers <span class="math inline">\(\mathbb{R}\)</span>. Let’s explore an alternative choice: the <em>Laplace distribution</em> (<a href="https://en.wikipedia.org/wiki/Laplace_distribution">Wiki</a>). The Laplace distribution <span class="math inline">\(L(\mu, a)\)</span> has the following PDF:</p>
 <p><span class="math display">\[p(y\mid \mu, a) = \frac{1}{2a} \exp\bigg(- \frac{|y-\mu|}{a} \bigg) \]</span></p>
 <p>As for the normal distribution <span class="math inline">\(\mu\)</span> is the mean, while <span class="math inline">\(a\)</span> defines the “width” of the distribution (analogous to variance for the Normal). We can compare the two distributions visually:</p>
-<div id="cell-37" class="cell" data-outputid="85da6454-19e7-44c1-c048-745dec06a0ba" data-execution_count="46">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>ylp <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">200</span>)</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>mu, sigma2_or_a <span class="op">=</span> <span class="dv">0</span>, <span class="dv">1</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>p_y_normal <span class="op">=</span> (<span class="dv">1</span> <span class="op">/</span> np.sqrt(sigma2_or_a <span class="op">*</span> <span class="dv">2</span> <span class="op">*</span> np.pi)) <span class="op">*</span> np.exp(<span class="op">-</span> (<span class="fl">0.5</span> <span class="op">/</span> sigma2_or_a) <span class="op">*</span> (ylp <span class="op">-</span> mu) <span class="op">**</span> <span class="dv">2</span>)</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>p_y_laplace <span class="op">=</span> (<span class="dv">1</span> <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> sigma2_or_a)) <span class="op">*</span> np.exp(<span class="op">-</span> (<span class="dv">1</span> <span class="op">/</span> sigma2_or_a) <span class="op">*</span> np.<span class="bu">abs</span>(ylp <span class="op">-</span> mu))</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">4</span>,<span class="dv">3</span>))</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>plt.plot(ylp, p_y_normal, label<span class="op">=</span><span class="vs">r"Normal PDF"</span>)</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>plt.plot(ylp, p_y_laplace, label<span class="op">=</span><span class="vs">r"Laplace PDF"</span>)</span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'$y$'</span>)</span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'$p(y)$'</span>)</span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="cf">pass</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-38" class="cell" data-outputid="85da6454-19e7-44c1-c048-745dec06a0ba" data-execution_count="46">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>ylp <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">200</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>mu, sigma2_or_a <span class="op">=</span> <span class="dv">0</span>, <span class="dv">1</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>p_y_normal <span class="op">=</span> (<span class="dv">1</span> <span class="op">/</span> np.sqrt(sigma2_or_a <span class="op">*</span> <span class="dv">2</span> <span class="op">*</span> np.pi)) <span class="op">*</span> np.exp(<span class="op">-</span> (<span class="fl">0.5</span> <span class="op">/</span> sigma2_or_a) <span class="op">*</span> (ylp <span class="op">-</span> mu) <span class="op">**</span> <span class="dv">2</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>p_y_laplace <span class="op">=</span> (<span class="dv">1</span> <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> sigma2_or_a)) <span class="op">*</span> np.exp(<span class="op">-</span> (<span class="dv">1</span> <span class="op">/</span> sigma2_or_a) <span class="op">*</span> np.<span class="bu">abs</span>(ylp <span class="op">-</span> mu))</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">4</span>,<span class="dv">3</span>))</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>plt.plot(ylp, p_y_normal, label<span class="op">=</span><span class="vs">r"Normal PDF"</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>plt.plot(ylp, p_y_laplace, label<span class="op">=</span><span class="vs">r"Laplace PDF"</span>)</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'$y$'</span>)</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'$p(y)$'</span>)</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="cf">pass</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="solutions-QXP5GA_files/figure-html/cell-13-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="solutions-QXP5GA_files/figure-html/cell-14-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -586,16 +598,16 @@ y_i \sim L\big(\mathbf{x}_i^T \mathbf{w},\ a\big)
 </section>
 <section id="answer-11" class="level4">
 <h4 class="anchored" data-anchor-id="answer-11">Answer</h4>
-<div id="cell-51" class="cell" data-execution_count="47">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> nll_and_grad(w, X, y):</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    N <span class="op">=</span> X.shape[<span class="dv">0</span>]</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    error <span class="op">=</span> linear_regression(X, w) <span class="op">-</span> y</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    mae <span class="op">=</span> np.<span class="bu">sum</span>(np.<span class="bu">abs</span>(error))</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    nll <span class="op">=</span> mae <span class="op">+</span> np.log(<span class="dv">2</span>) </span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    Xaug <span class="op">=</span> np.pad(X, [(<span class="dv">0</span>, <span class="dv">0</span>), (<span class="dv">0</span>, <span class="dv">1</span>)], constant_values<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    grad_w <span class="op">=</span> np.dot(np.sign(error), Xaug)</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> nll <span class="op">/</span> N, grad_w <span class="op">/</span> N</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-52" class="cell" data-execution_count="47">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> nll_and_grad(w, X, y):</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    N <span class="op">=</span> X.shape[<span class="dv">0</span>]</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    error <span class="op">=</span> linear_regression(X, w) <span class="op">-</span> y</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    mae <span class="op">=</span> np.<span class="bu">sum</span>(np.<span class="bu">abs</span>(error))</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    nll <span class="op">=</span> mae <span class="op">+</span> np.log(<span class="dv">2</span>) </span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    Xaug <span class="op">=</span> np.pad(X, [(<span class="dv">0</span>, <span class="dv">0</span>), (<span class="dv">0</span>, <span class="dv">1</span>)], constant_values<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    grad_w <span class="op">=</span> np.dot(np.sign(error), Xaug)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> nll <span class="op">/</span> N, grad_w <span class="op">/</span> N</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="q13" class="level4">
@@ -604,31 +616,31 @@ y_i \sim L\big(\mathbf{x}_i^T \mathbf{w},\ a\big)
 </section>
 <section id="answer-12" class="level4">
 <h4 class="anchored" data-anchor-id="answer-12">Answer</h4>
-<div id="cell-54" class="cell" data-execution_count="48">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>y.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-55" class="cell" data-execution_count="48">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>y.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="48">
 <pre><code>(398,)</code></pre>
 </div>
 </div>
-<div id="cell-55" class="cell" data-execution_count="49">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>Xweight <span class="op">=</span> X[:, <span class="dv">1</span>:<span class="dv">2</span>]</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>w0 <span class="op">=</span> np.zeros(<span class="dv">2</span>,)</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>w, losses <span class="op">=</span> gradient_descent(nll_and_grad, w0, <span class="fl">0.1</span>, <span class="dv">500</span>, Xweight, y)</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>wmse, mselosses <span class="op">=</span> gradient_descent(mse_and_grad, w0, <span class="fl">0.1</span>, <span class="dv">50</span>, Xweight, y)</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>plt.plot(losses, label<span class="op">=</span><span class="st">'Laplace NLL'</span>)</span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>plt.plot(mselosses, label<span class="op">=</span><span class="st">'Mean squared error'</span>)</span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(losses[<span class="op">-</span><span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-56" class="cell" data-execution_count="49">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>Xweight <span class="op">=</span> X[:, <span class="dv">1</span>:<span class="dv">2</span>]</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>w0 <span class="op">=</span> np.zeros(<span class="dv">2</span>,)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>w, losses <span class="op">=</span> gradient_descent(nll_and_grad, w0, <span class="fl">0.1</span>, <span class="dv">500</span>, Xweight, y)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>wmse, mselosses <span class="op">=</span> gradient_descent(mse_and_grad, w0, <span class="fl">0.1</span>, <span class="dv">50</span>, Xweight, y)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>plt.plot(losses, label<span class="op">=</span><span class="st">'Laplace NLL'</span>)</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>plt.plot(mselosses, label<span class="op">=</span><span class="st">'Mean squared error'</span>)</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(losses[<span class="op">-</span><span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>3.262693397826824</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="solutions-QXP5GA_files/figure-html/cell-16-output-2.png" class="img-fluid figure-img"></p>
+<p><img src="solutions-QXP5GA_files/figure-html/cell-17-output-2.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -640,20 +652,20 @@ y_i \sim L\big(\mathbf{x}_i^T \mathbf{w},\ a\big)
 </section>
 <section id="answer-13" class="level4">
 <h4 class="anchored" data-anchor-id="answer-13">Answer</h4>
-<div id="cell-58" class="cell" data-execution_count="50">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>plt.scatter(Xweight[:,<span class="dv">0</span>], y)</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>plt.plot(np.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">200</span>), linear_regression(np.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">200</span>).reshape((<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)), w), label<span class="op">=</span><span class="st">'Laplace NLL weights'</span>)</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>Xweight <span class="op">=</span> X[:, <span class="dv">1</span>:<span class="dv">2</span>]</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>w0 <span class="op">=</span> np.zeros((<span class="dv">2</span>,))</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>(w, losses) <span class="op">=</span> gradient_descent(mse_and_grad, w0, <span class="fl">0.1</span>, <span class="dv">50</span>, Xweight, y)</span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>plt.plot(np.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">200</span>), linear_regression(np.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">200</span>).reshape((<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)), wmse), label<span class="op">=</span><span class="st">'MSE weights'</span>)</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>plt.legend()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-59" class="cell" data-execution_count="50">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>plt.scatter(Xweight[:,<span class="dv">0</span>], y)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>plt.plot(np.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">200</span>), linear_regression(np.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">200</span>).reshape((<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)), w), label<span class="op">=</span><span class="st">'Laplace NLL weights'</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>Xweight <span class="op">=</span> X[:, <span class="dv">1</span>:<span class="dv">2</span>]</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>w0 <span class="op">=</span> np.zeros((<span class="dv">2</span>,))</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>(w, losses) <span class="op">=</span> gradient_descent(mse_and_grad, w0, <span class="fl">0.1</span>, <span class="dv">50</span>, Xweight, y)</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>plt.plot(np.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">200</span>), linear_regression(np.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">200</span>).reshape((<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)), wmse), label<span class="op">=</span><span class="st">'MSE weights'</span>)</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>plt.legend()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="solutions-QXP5GA_files/figure-html/cell-17-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="solutions-QXP5GA_files/figure-html/cell-18-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -665,28 +677,28 @@ y_i \sim L\big(\mathbf{x}_i^T \mathbf{w},\ a\big)
 </section>
 <section id="answer-14" class="level4">
 <h4 class="anchored" data-anchor-id="answer-14">Answer</h4>
-<div id="cell-61" class="cell" data-execution_count="51">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example of deconstructing and reconstructing the parameter vector.</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>w1, b <span class="op">=</span> w</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>wi <span class="op">=</span> np.array([w1, b])</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>losses <span class="op">=</span> [nll_and_grad(np.array([wi, b]), Xweight, y)[<span class="dv">0</span>] <span class="cf">for</span> wi <span class="kw">in</span> np.linspace(<span class="op">-</span><span class="dv">10</span>, <span class="dv">0</span>)]</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>mse_losses <span class="op">=</span> [mse_and_grad(np.array([wi, b]), Xweight, y)[<span class="dv">0</span>] <span class="cf">for</span> wi <span class="kw">in</span> np.linspace(<span class="op">-</span><span class="dv">10</span>, <span class="dv">0</span>)]</span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>plt.plot(mse_losses, label<span class="op">=</span><span class="st">'Mean squared error'</span>)</span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>plt.plot(losses, label<span class="op">=</span><span class="st">'Laplace NLL'</span>)</span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
-<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'$w_1$'</span>)</span>
-<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Loss'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-62" class="cell" data-execution_count="51">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example of deconstructing and reconstructing the parameter vector.</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>w1, b <span class="op">=</span> w</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>wi <span class="op">=</span> np.array([w1, b])</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>losses <span class="op">=</span> [nll_and_grad(np.array([wi, b]), Xweight, y)[<span class="dv">0</span>] <span class="cf">for</span> wi <span class="kw">in</span> np.linspace(<span class="op">-</span><span class="dv">10</span>, <span class="dv">0</span>)]</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>mse_losses <span class="op">=</span> [mse_and_grad(np.array([wi, b]), Xweight, y)[<span class="dv">0</span>] <span class="cf">for</span> wi <span class="kw">in</span> np.linspace(<span class="op">-</span><span class="dv">10</span>, <span class="dv">0</span>)]</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>plt.plot(mse_losses, label<span class="op">=</span><span class="st">'Mean squared error'</span>)</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>plt.plot(losses, label<span class="op">=</span><span class="st">'Laplace NLL'</span>)</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'$w_1$'</span>)</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Loss'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="51">
 <pre><code>Text(0.5, 0, 'Loss')</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="solutions-QXP5GA_files/figure-html/cell-18-output-2.png" class="img-fluid figure-img"></p>
+<p><img src="solutions-QXP5GA_files/figure-html/cell-19-output-2.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>

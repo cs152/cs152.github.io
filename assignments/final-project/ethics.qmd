@@ -6,7 +6,7 @@ format:
         toc-depth: 3
 ---
 
-## **Due Wednesday 2/8 11:59pm**
+## **Due Wednesday 3/27 11:59pm**
 
 In this assignment you will read and reflect on a fictional case study regarding the ethical implications of AI tools. While these cases are fictional, they are inspired by real issues. You may find yourself confronting similar scenerios in your future career, so it's worth thinking about how to address ethical concerns now! 
 
@@ -14,7 +14,7 @@ For your final project report, you will also be asked to discuss what real-world
 
 ## Part 1: Form project groups
 
-Form a group of 2-4 students (ideally 3). This will also be your group for the final project. Create your group on Gradescope for the [Ethics and AI assignment](https://www.gradescope.com/courses/710173/assignments/4013515). 
+Form a group of 2-4 students (ideally 3). This will also be your group for the final project. Create your group on Gradescope for the [Ethics and AI assignment](https://www.gradescope.com/courses/960105/assignments/5632485). 
 
 *The writeups for this assignment should be done by the group members, however you are welcome (and encouraged) to involve anyone in the discussions!*
 

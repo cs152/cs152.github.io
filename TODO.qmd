@@ -1,0 +1,39 @@
+---
+title: "Course Updates TODO List"
+---
+
+## General
+
+Translate slides into a cleaner, more consistant format. 
+- Make it more clear what to fill in and where
+- Release blank slides on calendar
+- Structured activities.
+
+## Module 1 - Background
+
+- Add materials on numpy broadcasting to prequisites background page.
+- Add solutions to updated question 7 in homework
+- Swap solutions to updated ones
+
+## Module 2 - Linear regression
+
+- Remove train-test split from Homework 2
+- Consider removing Q15 from homework 2
+- Update notation to specify "augmented" vectors
+- Incorporate hints into main assignment.
+- Add unit tests to the homework.
+- Add static visualizations for MLE
+
+## Module 3 - Logistic regression
+
+- Add improved geometric interpretation visualization to the lecture notes
+- Update link to support code for Colab
+- Replace visualizer with updated version
+
+## Module 4 - Feature transforms
+
+- Point out that augmentation is a feature transform
+- Replace OJS with static visualizations and a separate visualizer page.
+
+
+

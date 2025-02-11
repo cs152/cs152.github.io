@@ -5,7 +5,6 @@ project:
     - assignments/homeworks/Homework*/submission.ipynb
     - assignments/homeworks/Homework*/requirements.txt
     - assignments/homeworks/Homework*/*.py
-    - playground
 
 
 website:
@@ -31,9 +30,9 @@ website:
       - text: Solutions
         menu:
           - text: Homework 1 Solutions
-            # href: assignments/homeworks/Homework 1/solutions-AVPHKV.ipynb
+            href: assignments/homeworks/Homework 1/solutions-AVPHKV.ipynb
           - text: Homework 2 Solutions
-            # href: assignments/homeworks/Homework 2/solutions-QXP5GA.ipynb
+            href: assignments/homeworks/Homework 2/solutions-QXP5GA.ipynb
           - text: Homework 3 Solutions
             # href: assignments/homeworks/Homework 3/solutions-NVLZ0K.ipynb
           - text: Homework 4 Solutions

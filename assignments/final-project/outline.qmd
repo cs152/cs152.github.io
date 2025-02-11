@@ -6,14 +6,14 @@ format:
         toc-depth: 3
 ---
 
-## Ethics Discussion (**Due Wednesday 2/8 11:59pm**)
+## Ethics Discussion (**Due Wednesday 3/27 11:59pm**)
 The first step for the project will be to form a group and participate in a discussion about the potential ethical issues that arise when applying machine learning models in the real world. For this stage you should:
 
 -   Form a group of 2-4 students and choose a cool team name. If you would like help finding a group, please email me! If you would like to work individually, you must get prior approval from the professor.
 
 -   Complete the [ethics and AI assignment](./ethics.qmd) as a group.
 
-## Proposal (**Due Thursday 4/4 11:59pm**)
+## Proposal (**Due Thursday 4/10 11:59pm**)
 
 The next step for the project will be to formally propose a project topic, for this milestone you should:
 
@@ -28,7 +28,7 @@ The next step for the project will be to formally propose a project topic, for t
 
 -   A one paragraph description of how you will evaluate success for your application.
 
-## Check-in (**Due Monday 4/22 11:59pm**)
+## Check-in (**Due Monday 4/24 11:59pm**)
 
 As a progress report you and your team will submit a short (1 page) summery of progress on Gradescope. This summary will include: 
 
@@ -40,7 +40,7 @@ As a progress report you and your team will submit a short (1 page) summery of p
 
 - A brief description of the contributions made by each team member.
 
-## Final deliverables (**Due 5/3, 11:59pm**)
+## Final deliverables (**Due 5/9, 11:59pm**)
 
 Please see the final project template [here](./CS152_Project_Template.pdf), which includes instructions and guidelines for what to submit. Submissions will be through gradescope.
 

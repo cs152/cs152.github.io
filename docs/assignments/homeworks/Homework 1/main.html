@@ -190,8 +190,14 @@ window.Quarto = {
  <span class="menu-text">Solutions</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-solutions">    
-        <li class="dropdown-header">Homework 1 Solutions</li>
-        <li class="dropdown-header">Homework 2 Solutions</li>
+        <li>
+    <a class="dropdown-item" href="../../../assignments/homeworks/Homework 1/solutions-AVPHKV.html">
+ <span class="dropdown-text">Homework 1 Solutions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../assignments/homeworks/Homework 2/solutions-QXP5GA.html">
+ <span class="dropdown-text">Homework 2 Solutions</span></a>
+  </li>  
         <li class="dropdown-header">Homework 3 Solutions</li>
         <li class="dropdown-header">Homework 4 Solutions</li>
         <li class="dropdown-header">Homework 5 Solutions</li>
@@ -371,16 +377,20 @@ window.Quarto = {
 \vdots \\
 \frac{\partial e^{(k)}}{\partial x^{(k)}_n}
 \end{bmatrix}\]</span></p>
+<p>We could just compute each entry separately using the formula you just derived, but ideally we’d like to be able to write it in the more compact matrix-vector notation that we’ve seen.</p>
+<p>Recall that we can write the error formulation as: <span class="math display">\[e^{(k)} = \|A\mathbf{x}^{(k)} - \mathbf{b}\|_2^2 = (A\mathbf{x}^{(k)} - \mathbf{b})^T(A\mathbf{x}^{(k)} - \mathbf{b})\]</span></p>
 </section>
 <section id="q7-10-points" class="level4">
 <h4 class="anchored" data-anchor-id="q7-10-points"><strong>Q7</strong> (10 points)</h4>
-<p>Using the formula you just derived, write the formula for the vector of all partial derivatives in the compact matrix/vector notation (e.g.&nbsp;<span class="math inline">\(A\mathbf{x}=\mathbf{b}\)</span>).</p>
+<p>In the equation above, imagine the case where the variables are all scalars, so <span class="math inline">\(A \rightarrow a\)</span>, <span class="math inline">\(\mathbf{b} \rightarrow b\)</span> and <span class="math inline">\(\mathbf{x} \rightarrow x\)</span>. In this case we can write the error as: <span class="math display">\[e^{(k)} = (ax^{(k)} - b)(ax^{(k)} - b) = (ax^{(k)} - b)^2\]</span></p>
+<p>Take the derivate of the above expression with respect to <span class="math inline">\(x^{(k)}\)</span>, then substitute back in the matrix-vector notation: <span class="math inline">\(a \rightarrow A\)</span>, <span class="math inline">\(b \rightarrow \mathbf{b}\)</span> and <span class="math inline">\(x \rightarrow \mathbf{x}\)</span>.</p>
+<p><em>Note that while scalar multiplication is communative (<span class="math inline">\(ax = xa\)</span>), matrix-vector multiplication is <strong>not</strong> (<span class="math inline">\(A\mathbf{x} \neq \mathbf{x}^T A\)</span>). If you maintain the order of multiplications in your derivative, this should give you the correct answer.</em></p>
 <p><strong>EDIT THIS CELL WITH YOUR ANSWER</strong></p>
-<p><span class="math display">\[\frac{\partial e^{(k)}}{\partial \mathbf{x}^{(k)}}= \]</span></p>
+<p><span class="math display">\[\frac{d e^{(k)}}{d \mathbf{x}^{(k)}}= \]</span></p>
 </section>
 <section id="q8-5-points" class="level4">
 <h4 class="anchored" data-anchor-id="q8-5-points"><strong>Q8</strong> (5 points)</h4>
-<p>Do you notice any relationship between this result and the Richardson iteration algorithm above? (1-2 sentences) <em>We will discuss this more in class!</em></p>
+<p>Expand the above expression at index 1 and show that we get the same answer as <strong>Q6</strong>.</p>
 <p>WRITE YOUR ANSWER HERE</p>
 </section>
 </section>

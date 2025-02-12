@@ -5,6 +5,7 @@ project:
     - assignments/homeworks/Homework*/submission.ipynb
     - assignments/homeworks/Homework*/requirements.txt
     - assignments/homeworks/Homework*/*.py
+    - assignments/homeworks/Homework*/*.npz
 
 
 website:

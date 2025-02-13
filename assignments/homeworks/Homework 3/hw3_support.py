@@ -4,6 +4,12 @@ import time
 import tqdm as tqdm
 from sklearn.datasets import make_moons, make_blobs
 from sklearn.inspection import DecisionBoundaryDisplay
+import requests
+import io
+
+response = requests.get('https://cs152.github.io/assignments/homeworks/Homework%203/data.npz')
+response.raise_for_status()
+data = np.load(io.BytesIO(response.content))  
 
 def linear_function(X, w):
     # Returns a linear function of X (and adds bias)
@@ -109,7 +115,12 @@ class MultinomialLogisticRegression(LogisticRegression):
         self.weights = np.zeros((classes, dims + 1,))
 
 def get_dataset(name):
-    data = np.load('data.npz')
+    try:
+        data = np.load('data.npz')
+    except:
+        response = requests.get('https://cs152.github.io/assignments/homeworks/Homework%203/data.npz')
+        response.raise_for_status()
+        data = np.load(io.BytesIO(response.content))  
     hhimages, hhlabels, hhlabel_names = data['hhimages'], data['hhlabels'], data['hhlabel_names']
     mnistimages, mnistlabels, mnistlabel_names = data['mnistimages'], data['mnistlabels'], data['mnistlabel_names']
     images, labels, label_names = None, None, list(map(str, range(10)))

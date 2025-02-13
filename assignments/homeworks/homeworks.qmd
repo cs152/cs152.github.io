@@ -22,6 +22,7 @@ title: "Homeworks"
 - [**Requirements.txt**](/assignments/homeworks/Homework%203/requirements.txt)
 - [**Notebook**](https://cs152.github.io/assignments/homeworks/Homework 3/submission.ipynb)
 - [**Support code**](/assignments/homeworks/Homework%203/hw3_support.py)
+- [**Data**](/assignments/homeworks/Homework%203/data.npz)
 
 ## Homework 4
 

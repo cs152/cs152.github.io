@@ -190,8 +190,14 @@ window.Quarto = {
  <span class="menu-text">Solutions</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-solutions">    
-        <li class="dropdown-header">Homework 1 Solutions</li>
-        <li class="dropdown-header">Homework 2 Solutions</li>
+        <li>
+    <a class="dropdown-item" href="../../../assignments/homeworks/Homework 1/solutions-AVPHKV.html">
+ <span class="dropdown-text">Homework 1 Solutions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../assignments/homeworks/Homework 2/solutions-QXP5GA.html">
+ <span class="dropdown-text">Homework 2 Solutions</span></a>
+  </li>  
         <li class="dropdown-header">Homework 3 Solutions</li>
         <li class="dropdown-header">Homework 4 Solutions</li>
         <li class="dropdown-header">Homework 5 Solutions</li>
@@ -322,7 +328,7 @@ window.Quarto = {
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ExponentialRegression(LogisticRegression):</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> nll(<span class="va">self</span>, X, y):</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        xw <span class="op">=</span> linear_function(X, <span class="va">self</span>.weights)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="op">-</span>np.<span class="bu">sum</span>(np.exp(<span class="op">-</span>xw))</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> np.<span class="bu">sum</span>(np.exp(<span class="op">-</span>(<span class="dv">2</span> <span class="op">*</span> y <span class="op">-</span> <span class="dv">1</span>) <span class="op">*</span> xw))</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> nll_gradient(<span class="va">self</span>, X, y):</span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>      <span class="co"># YOUR CODE HERE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -387,7 +393,8 @@ window.Quarto = {
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>test_softmax(softmax)</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>test_predict_probability(multiclass_predict_probability)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>test_predict_probability(multiclass_predict_probability)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>MultinomialLogisticRegression.predict_probability <span class="op">=</span> multiclass_predict_probability</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div style="page-break-after: always; visibility: hidden">
 
@@ -434,7 +441,7 @@ window.Quarto = {
 <section id="q12" class="level4">
 <h4 class="anchored" data-anchor-id="q12"><strong>Q12</strong></h4>
 <div id="cell-35" class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> nll_gradient(<span class="va">self</span>, X, y, c):</span>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> nll_gradient(<span class="va">self</span>, X, y):</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">## YOUR CODE HERE</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    W <span class="op">=</span> <span class="va">self</span>.weights</span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>

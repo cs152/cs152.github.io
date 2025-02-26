@@ -265,7 +265,7 @@ window.Quarto = {
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Uncomment and run if using Colab!</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#import urllib.request</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#remote_url = 'https://gist.githubusercontent.com/gabehope/a206e1de74c5c09f3c718da07f8145dd/raw/57807d579030d5e3094315b68105c7c7bffadaec/hw3_support.py'</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#remote_url = 'https://cs152.github.io/assignments/homeworks/Homework%203/hw3_support.py'</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#with urllib.request.urlopen(remote_url) as remote, open('hw3_support.py', 'w') as local:</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  [local.write(str(line, encoding='utf-8')) for line in remote]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -567,7 +567,7 @@ window.Quarto = {
 <section id="part-3-multinomial-logistic-regression" class="level1">
 <h1>Part 3: Multinomial logistic regression</h1>
 <p>In this part, we will look at implementing <strong>multinomial logistic regression</strong>. Recall that this model extends logistic regression to the cases where there may be more than 2 possible labels, so <span class="math inline">\(y\in\{1,...,C\}\)</span>, where <span class="math inline">\(C\)</span> is the number of <em>classes</em> (possible outputs).</p>
-<p>We saw that rather than having a single weight vector, this model has a weight vector for <em>each class</em>, <span class="math inline">\(\mathbf{w}_1,...,\mathbf{w}_C\)</span>. We can view these together as the <em>rows</em> of a weight matrix <span class="math inline">\(\mathbf{W}\)</span>: <span class="math display">\[\mathbf{W} = \begin{bmatrix} \mathbf{w}_1^T \\ \mathbf{w}_2^T \\ \vdots \\ \mathbf{w}_C^T \end{bmatrix}\]</span></p>
+<p>We saw that rather than having a single weight vector, this model has a weight vector for <em>each class</em>, <span class="math inline">\(\mathbf{w}_1,...,\mathbf{w}_C\)</span>. We can view these together as the <em>rows</em> of a weight matrix <span class="math inline">\(\mathbf{W}\)</span>: <span class="math display">\[\mathbf{W} = \begin{bmatrix} \mathbf{w}_1^T \\ \mathbf{w}_2^T \\ \vdots \\ \mathbf{w}_C^T \end{bmatrix} \qquad \mathbf{W}: (C \times d) \text{  Matrix}\]</span></p>
 <p>We saw that the prediction function for this model was: <span class="math display">\[f(\mathbf{x}) = \underset{c\in \{1,...,C\}}{\text{argmax}}\ \mathbf{x}^T\mathbf{w}_c\]</span></p>
 <p>The probabilistic model was defined as: <span class="math display">\[
 p(y_i=c \mid \mathbf{x}, \mathbf{W}) = \text{softmax}(\mathbf{x}^T\mathbf{W})_c=\frac{e^{\mathbf{x}^T\mathbf{w}_c}}{\sum_{j=1}^Ce^{\mathbf{x}^T\mathbf{w}_j}}
@@ -644,7 +644,7 @@ p(y_i=c \mid \mathbf{x}, \mathbf{W}) = \text{softmax}(\mathbf{x}^T\mathbf{W})_c=
 <span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
 <span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="co">        X (array): An N x d matrix of observations.</span></span>
 <span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
-<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="co">        probs (array): A length N x d matrix of predicted class probabilities</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="co">        probs (array): A length N x C matrix of predicted class probabilities</span></span>
 <span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a><span class="co">    '''</span></span>
 <span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">## YOUR CODE HERE</span></span>
 <span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a></span>

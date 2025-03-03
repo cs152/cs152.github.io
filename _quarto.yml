@@ -35,11 +35,11 @@ website:
           - text: Homework 2 Solutions
             href: assignments/homeworks/Homework 2/solutions-QXP5GA.ipynb
           - text: Homework 3 Solutions
-            # href: assignments/homeworks/Homework 3/solutions-NVLZ0K.ipynb
+            href: assignments/homeworks/Homework 3/solutions-NVLZ0K.ipynb
           - text: Homework 4 Solutions
-            # href: assignments/homeworks/Homework 4/solutions-S4MH4K.ipynb
+            href: assignments/homeworks/Homework 4/solutions-S4MH4K.ipynb
           - text: Homework 5 Solutions
-            # href: assignments/homeworks/Homework 5/solutions-CCLQOR.ipynb
+            href: assignments/homeworks/Homework 5/solutions-CCLQOR.ipynb
           - text: Homework 6 Solutions
             # href: assignments/homeworks/Homework 6/solutions-M7GY1X.ipynb
           - text: Homework 7 Solutions

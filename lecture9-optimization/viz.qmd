@@ -651,8 +651,12 @@ viewof steps = Inputs.range([1, 100], {value: 1, step: 1, label: "  Steps"})
 ```
 ```{ojs}
 //| echo : false
-viewof threed = Inputs.toggle({value: false, label: "Show 3D"})
-viewof distribution = Inputs.toggle({value: false, label: "Show Dist."})
+viewof inputshift = Inputs.range([-3, 3], {value: 0., step: 0.01, label: "  Shift"})
+viewof inputscale = Inputs.range([0.01, 3], {value: 1., step: 0.01, label: "  Scale"})
+//viewof threed = Inputs.toggle({value: false, label: "Show 3D"})
+//viewof distribution = Inputs.toggle({value: false, label: "Show Dist."})
+threed = false;
+distribution = false
 ```
 :::
 
@@ -765,8 +769,8 @@ df = df.astype(float).dropna().values
 
 
 x, y = df[:, :1], df[:, 1:]
-x = Tensor((x - x.mean()) / x.std())
-y = Tensor((y - y.mean()) / y.std())
+x = Tensor((x - x.mean() + float(${inputshift})) / x.std() * float(${inputscale}))
+y = Tensor((y - y.mean() + float(${inputshift})) / y.std() * float(${inputscale}))
 
 def get_batch(batchsize, x, y):
   batchinds = tf.randomUniformInt((batchsize,), 0, x.shape[0])

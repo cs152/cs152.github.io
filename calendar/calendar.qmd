@@ -46,3 +46,7 @@ cal = pl.read_excel('Calendar.xlsx').select(pl.col('Date'), pl.col('Event'), pl.
     )
 )
 ```
+
+```{python}
+
+```

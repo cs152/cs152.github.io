@@ -193,11 +193,26 @@ window.Quarto = {
  <span class="menu-text">Solutions</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-solutions">    
-        <li class="dropdown-header">Homework 1 Solutions</li>
-        <li class="dropdown-header">Homework 2 Solutions</li>
-        <li class="dropdown-header">Homework 3 Solutions</li>
-        <li class="dropdown-header">Homework 4 Solutions</li>
-        <li class="dropdown-header">Homework 5 Solutions</li>
+        <li>
+    <a class="dropdown-item" href="../../../assignments/homeworks/Homework 1/solutions-AVPHKV.html">
+ <span class="dropdown-text">Homework 1 Solutions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../assignments/homeworks/Homework 2/solutions-QXP5GA.html">
+ <span class="dropdown-text">Homework 2 Solutions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../assignments/homeworks/Homework 3/solutions-NVLZ0K.ipynb">
+ <span class="dropdown-text">Homework 3 Solutions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../assignments/homeworks/Homework 4/solutions-S4MH4K.html">
+ <span class="dropdown-text">Homework 4 Solutions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../assignments/homeworks/Homework 5/solutions-CCLQOR.html">
+ <span class="dropdown-text">Homework 5 Solutions</span></a>
+  </li>  
         <li class="dropdown-header">Homework 6 Solutions</li>
         <li class="dropdown-header">Homework 7 Solutions</li>
         <li class="dropdown-header">Homework 8 Solutions</li>
@@ -689,7 +704,7 @@ Validation dataset shape : torch.Size([10000, 28, 28])</code></pre>
 <section id="answer-1" class="level4">
 <h4 class="anchored" data-anchor-id="answer-1">Answer</h4>
 <p>We can use the following property: <span class="math display">\[\text{Var}\left[L^{(100)}\right] = E \left[L^{(100)^2}\right] - E\left[L^{(100)}\right]^2\]</span></p>
-<p><span class="math display">\[=E \left[((-10)^2 \cdot 0.75 + 20^2 \cdot 0.25)\right] - (-2.5)^2 = 75 + 100 -6.25=171.25\]</span></p>
+<p><span class="math display">\[=100 E \left[((-10)^2 \cdot 0.75 + 20^2 \cdot 0.25)\right] - (-2.5)^2 =100( 75 + 100 - 6.25)=100(168.75) = 16875\]</span></p>
 </section>
 </section>
 <section id="part-2-optimizers" class="level1">
@@ -1061,7 +1076,8 @@ Validation dataset shape : torch.Size([10000, 28, 28])</code></pre>
 <h4 class="anchored" data-anchor-id="q12"><strong>Q12</strong></h4>
 <p>Now let’s try a <em>Batch Normalization</em>.</p>
 <p>Assume we have the same data matrix <span class="math inline">\(\mathbf{X} \in \mathbb{R}^{N \times d}\)</span> described above.</p>
-<p>We can define batch normalization as a function that normalizes the <em>columns</em> of this matrix. We can define this function element-wise as: <span class="math display">\[\text{BatchNorm}(\mathbf{X})_{ij} = \frac{\mathbf{X}_{ij} - \mathbf{\bar{x}}_j}{\sqrt{\mathbf{s}^2_{j} + \epsilon}}\]</span> <span class="math display">\[\mathbf{\bar{x}}_j = \frac{1}{d} \sum_{k=1}^d \mathbf{X}_{kj}, \quad \mathbf{s}^2_{j} = \frac{1}{d-1}\sum_{k=1}^d \big( \mathbf{X}_{kj} - \mathbf{\bar{x}}_j \big)^2\]</span> Recall that at <em>training time</em> we will also update running estimates of the batch mean and variance: <span class="math display">\[\mathbf{\bar{\mu}}_j^{(k+1)} \longleftarrow \beta \mathbf{\bar{\mu}}^{(k)}_j + (1-\beta) \mathbf{\bar{x}}_j\]</span> <span class="math display">\[\mathbf{\bar{\sigma}}_j^{2(k+1)} \longleftarrow \beta \mathbf{\bar{\sigma}}^{2(k)}_j + (1-\beta) \mathbf{\bar{s}}^2_j\]</span> At <em>test/evaluation</em> time we will use these estimates: <span class="math display">\[\underset{\text{Test}}{\text{BatchNorm}}(\mathbf{X})_{ij} = \frac{\mathbf{X}_{ij} - \mathbf{\bar{x}}_j}{\sqrt{\mathbf{s}^2_{j} + \epsilon}}\]</span></p>
+<p><em>For a batch of data this would be a <span class="math inline">\(B \times d\)</span> matrix, but this distinction is not important from the perspective of our batch norm layer.</em></p>
+<p>We can define batch normalization as a function that normalizes the <em>columns</em> of this matrix. We can define this function element-wise as: <span class="math display">\[\text{BatchNorm}(\mathbf{X})_{ij} = \frac{\mathbf{X}_{ij} - \mathbf{\bar{x}}_j}{\sqrt{\mathbf{s}^2_{j} + \epsilon}}\]</span> <span class="math display">\[\mathbf{\bar{x}}_j = \frac{1}{N} \sum_{k=1}^N \mathbf{X}_{kj}, \quad \mathbf{s}^2_{j} = \frac{1}{N-1}\sum_{k=1}^N \big( \mathbf{X}_{kj} - \mathbf{\bar{x}}_j \big)^2\]</span> Recall that at <em>training time</em> we will also update running estimates of the batch mean and variance: <span class="math display">\[\mathbf{\bar{\mu}}_j^{(k+1)} \longleftarrow \beta \mathbf{\bar{\mu}}^{(k)}_j + (1-\beta) \mathbf{\bar{x}}_j\]</span> <span class="math display">\[\mathbf{\bar{\sigma}}_j^{2(k+1)} \longleftarrow \beta \mathbf{\bar{\sigma}}^{2(k)}_j + (1-\beta) \mathbf{\bar{s}}^2_j\]</span> At <em>test/evaluation</em> time we will use these estimates: <span class="math display">\[\underset{\text{Test}}{\text{BatchNorm}}(\mathbf{X})_{ij} = \frac{\mathbf{X}_{ij} - \mathbf{\bar{\mu}}_j}{\sqrt{\mathbf{\bar{\sigma}}^2_{j} + \epsilon}}\]</span></p>
 <p>Complete the implementation of Batch Normalization below:</p>
 </section>
 <section id="answer-11" class="level4">

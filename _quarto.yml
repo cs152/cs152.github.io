@@ -41,13 +41,13 @@ website:
           - text: Homework 5 Solutions
             href: assignments/homeworks/Homework 5/solutions-CCLQOR.ipynb
           - text: Homework 6 Solutions
-            # href: assignments/homeworks/Homework 6/solutions-M7GY1X.ipynb
+            href: assignments/homeworks/Homework 6/solutions-M7GY1X.ipynb
           - text: Homework 7 Solutions
-            # href: assignments/homeworks/Homework 7/solutions-TOLGQV.ipynb
+            href: assignments/homeworks/Homework 7/solutions-TOLGQV.ipynb
           - text: Homework 8 Solutions
-            # href: assignments/homeworks/Homework 8/solutions-ED50PD.ipynb
+            href: assignments/homeworks/Homework 8/solutions-ED50PD.ipynb
           - text: Homework 9 Solutions
-            # href: assignments/homeworks/Homework 9/solutions-MTCMFU.ipynb
+            href: assignments/homeworks/Homework 9/solutions-MTCMFU.ipynb
           - text: Homework 10 Solutions
             # href: assignments/homeworks/Homework 10/solutions-RMZHDS.ipynb
 

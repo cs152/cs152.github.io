@@ -16,6 +16,8 @@ So far we've seen how train neural-networks with gradient descent. Recall that t
 
 We subtract the gradient of the loss with respect to $\mathbf{w}$ from the current estimate of $\mathbf{w}$. An important consideration for this algorithm is how to set the initial guess $\mathbf{w}^{(0)}$. We call this process **initialization**.
 
+
+
 ## Symmetry-breaking
 
 In neural networks, we typically initialize parameters *randomly*. One important reason for random initialization is to make sure that different parameters have different starting values. To see why this is needed, let's consider the prediction function for a simple neural network that takes in 1-dimensional inputs:

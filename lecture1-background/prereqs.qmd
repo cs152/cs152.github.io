@@ -1150,6 +1150,8 @@ $$
 
 Meaning that there is a 50% chance of observing an outcome of $heads$. Remember that the under the axioms of probability, probabilities must be positive and the probabilities for all possible outcomes must sum to $1$.
 
+The most straightforward interpreation of the probability of an event is as the *proprotion* of times we would get that outcome if we were to repeat an idential random trial many times. For example, if we were to flip a fair coin many times, we should see that 50% of the outcomes are heads. This is known as the **frequentist interpretation** of probability.
+
 ## Distributions
 
 A **distribution** is a function that maps possible outcomes to their probability. For example if we have two possible outcomes $\{heads, tails\}$ or more abstractly $\{0,1\}$, we can define a distribution as follows:
@@ -1160,7 +1162,7 @@ $$
 
 This particular example where there are 2 possible values for $x$ is called a **Bernoulli distribution**. In this case we've defined our distribution using what's called a **probability mass function** $p(x)$; the function we defined directly outputs the probability for any given outcome. This is reasonable for what we call **discrete probability distributions**, cases where we can enumerate all of the possible outcomes (though they may be infinite). In general we call the set of outcomes for which the probabilities is non-zero the **support** of the distribution.
 
-For some distributions, the set of possible outcomes might be the real numbers $x\in\mathbb{R}$. We call these **continuous distributions**. In this case there are unaccountably many possible outcomes, so the probability of any given output is $0$, even though we expect to get *some* value. In this case we can define our distribution via a **cumulative distribution function**,\$F(x)\$ which maps to the probability that our outcome is less than or equal a given value:
+For some distributions, the set of possible outcomes might be the real numbers $x\in\mathbb{R}$. We call these **continuous distributions**. In this case there are unaccountably many possible outcomes, so the probability of any given output is $0$, even though we expect to get *some* value. In this case we can define our distribution via a **cumulative distribution function**, $F(x)$ which maps to the probability that our outcome is less than or equal a given value:
 
 $$
 F(x) = Pr\big[ X \leq x \big]
